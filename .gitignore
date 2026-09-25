@@ -2,3 +2,6 @@
 data_raw_IIC/*
 # Se conserva el inventario detallado enlazado desde inventario_IIC_relaciones.md
 !data_raw_IIC/inventario_detallado_IIC.csv
+!data_raw_IIC/inventario_detallado_IIC_excel.csv
+# Paquetes comprimidos de datos (almacenamiento externo)
+*.zip

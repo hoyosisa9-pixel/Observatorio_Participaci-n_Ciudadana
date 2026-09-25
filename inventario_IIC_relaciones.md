@@ -694,7 +694,7 @@ Hay 535 colecciones (página o carpeta de origen). El detalle archivo por archiv
 - **Duplicados:** el portal de la Alcaldía publica algunos archivos con y sin prefijo numérico. Se eliminó la duplicación exacta por nombre dentro de cada subcarpeta, pero pueden persistir versiones del mismo documento en páginas distintas, y se conservaron para no perder trazabilidad.
 - **Enlaces rotos en origen (2):** `DECRETO PLUSVALIA ENVIGADO 2018.pdf` (URL mal formada en el portal) y un enlace interno `file://mercurio/...` de la Contraloría. No se pudieron descargar.
 - **Certificado TLS:** los portales `*.envigado.gov.co` sirven una cadena de certificados incompleta, así que las descargas se hicieron omitiendo la verificación TLS (solo lectura de documentos públicos).
-- **Tamaño:** el directorio `data_raw_IIC/` ocupa unos 7.3 GB. Por su tamaño no es apto para versionarse directamente en Git/GitHub. Se sugiere Git LFS o almacenamiento externo, conservando este inventario y el CSV en el repositorio.
+- **Tamaño:** el directorio `data_raw_IIC/` ocupa unos 7.8 GB. Por su tamaño no es apto para versionarse directamente en Git/GitHub. Se sugiere Git LFS o almacenamiento externo, conservando este inventario y el CSV en el repositorio.
 
 ### Método de recolección (reproducibilidad)
 
