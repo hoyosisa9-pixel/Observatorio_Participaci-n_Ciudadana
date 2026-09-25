@@ -1,0 +1,4 @@
+# Datos crudos del IIC (~7.8 GB): no se versionan en Git
+data_raw_IIC/*
+# Se conserva el inventario detallado enlazado desde inventario_IIC_relaciones.md
+!data_raw_IIC/inventario_detallado_IIC.csv
