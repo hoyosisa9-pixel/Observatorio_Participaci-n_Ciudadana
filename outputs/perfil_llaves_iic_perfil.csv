@@ -1,0 +1,10 @@
+llave,fuente,columna,filtro_territorial,filas_origen,filas_tras_filtro,nulos,pct_nulos,valores_unicos,filas_duplicadas,longitud_min_max,patrones_top3
+numero_de_contrato,SECOP I Procesos,numero_de_contrato,municipio_entidad=Envigado,2531,2531,1,0.04,2283,247,8-32,AAA-99-99-9999-99 (1135); AAA-99-99-999-99 (435); 99-99-99-99-999-99 (346)
+codigo_bpin,SECOP I Procesos,codigo_bpin,municipio_entidad=Envigado,2531,2531,2307,91.15,63,161,13-13,9999999999999 (224)
+referencia_del_contrato,SECOP II Contratos,referencia_del_contrato,ciudad=Envigado,25854,25854,0,0.0,25549,305,1-167,AAA-99-99-9999-99 (9025); AAAAAA-999-99-999-99 (3582); 99-9-99999-99 (2722)
+id_contrato,SECOP II Contratos,id_contrato,ciudad=Envigado,25854,25854,0,0.0,25854,0,17-18,AA9.AAAAAA.9999999 (23322); AA9.AAAAAA.999999 (2532)
+numero_del_contrato,SECOP Integrado,numero_del_contrato,municipio_entidad=Envigado,58464,57536,0,0.0,47819,9717,9-18,AA9.AAAAAA.9999999 (30848); 99-99-9999999 (13895); 99-9-9999999 (3034)
+bpin,CUIPO Ejecucion Gastos,bpin,nombre_entidad=Envigado,62413,62413,19700,31.56,450,42263,6-15,9999999999999 (42346); 999999999999999 (165); 99999999999999 (148)
+numero contrato PPP 2022 (regex ENV-dd-dd-dddd-dd),PPP 2022 (PDF),Numero contrato,ninguno (documento municipal de Envigado),52,52,0,0.0,14,38,17-17,AAA-99-99-9999-99 (52)
+CODIGO_PROYECTO seguimiento 2023 (T3+T4),seguimientoproyectosdeinversion*2023.xlsx,CODIGO_PROYECTO,ninguno (documento municipal de Envigado),419,419,0,0.0,217,202,2-3,999 (360); 99 (59)
+CODIGO_PROYECTO proyectosdeinversion2024,proyectosdeinversion2024.xlsx,CODIGO_PROYECTO,ninguno (documento municipal de Envigado),207,207,0,0.0,207,0,2-3,999 (181); 99 (26)

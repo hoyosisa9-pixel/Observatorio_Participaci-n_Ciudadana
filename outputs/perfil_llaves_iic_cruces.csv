@@ -1,0 +1,17 @@
+par,llave_A,llave_B,unicos_A,unicos_B,interseccion_unicos,pct_unicos_A_en_B,pct_unicos_B_en_A,filas_A_no_nulas,pct_filas_A_con_match
+PPP 2022 <-> SECOP I numero_de_contrato (exacto),PPP numero contrato,numero_de_contrato,14,2283,1,7.14,0.04,52,23.08
+PPP 2022 <-> SECOP II referencia_del_contrato (exacto),PPP numero contrato,referencia_del_contrato,14,25549,11,78.57,0.04,52,71.15
+"PPP 2022 <-> SECOP II referencia_del_contrato (base ENV, sin sufijo)",PPP base ENV,referencia_del_contrato base ENV,14,9105,12,85.71,0.13,52,73.08
+PPP 2022 <-> SECOP II id_contrato (exacto),PPP numero contrato,id_contrato,14,25854,0,0.0,0.0,52,0.0
+PPP 2022 <-> SECOP Integrado numero_del_contrato (exacto),PPP numero contrato,numero_del_contrato,14,47819,0,0.0,0.0,52,0.0
+PPP 2022 <-> SECOP Integrado numero_del_contrato (base ENV),PPP base ENV,numero_del_contrato base ENV,14,0,0,0.0,,52,0.0
+SECOP I codigo_bpin <-> CUIPO bpin (exacto),codigo_bpin,bpin,63,450,5,7.94,1.11,224,2.68
+SECOP I numero_de_contrato <-> SECOP II referencia_del_contrato (exacto),numero_de_contrato,referencia_del_contrato,2283,25549,3,0.13,0.01,2530,0.12
+SECOP I numero_de_contrato <-> SECOP Integrado numero_del_contrato (exacto),numero_de_contrato,numero_del_contrato,2283,47819,0,0.0,0.0,2530,0.0
+SECOP II referencia_del_contrato <-> SECOP Integrado numero_del_contrato (exacto),referencia_del_contrato,numero_del_contrato,25549,47819,819,3.21,1.71,25854,3.17
+SECOP II id_contrato <-> SECOP Integrado numero_del_contrato (exacto),id_contrato,numero_del_contrato,25854,47819,23478,90.81,49.1,25854,90.81
+CODIGO_PROYECTO seguimiento 2023 <-> BPIN CUIPO (exacto),CODIGO_PROYECTO,bpin,217,450,0,0.0,0.0,419,0.0
+CODIGO_PROYECTO seguimiento 2023 <-> sufijo local de BPIN CUIPO (exploratorio),CODIGO_PROYECTO,bpin[-4:] sin ceros,217,225,55,25.35,24.44,419,26.01
+CODIGO_PROYECTO 2024 <-> sufijo local de BPIN CUIPO (exploratorio),CODIGO_PROYECTO 2024,bpin[-4:] sin ceros,207,225,51,24.64,22.67,207,24.64
+SECOP I codigo_bpin <-> sufijo local de BPIN CUIPO (control),codigo_bpin[-4:],bpin[-4:] sin ceros,59,225,46,77.97,20.44,224,62.5
+CODIGO_PROYECTO seguimiento 2023 <-> CODIGO_PROYECTO 2024,CODIGO_PROYECTO 2023,CODIGO_PROYECTO 2024,217,207,194,89.4,93.72,419,88.78

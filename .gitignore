@@ -5,3 +5,5 @@ data_raw_IIC/*
 !data_raw_IIC/inventario_detallado_IIC_excel.csv
 # Paquetes comprimidos de datos (almacenamiento externo)
 *.zip
+
+__pycache__/
