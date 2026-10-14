@@ -324,7 +324,8 @@ TILDES = {
     'pequeno': 'pequeño', 'tamano': 'tamaño', 'espanol': 'español', 'compania': 'compañía', 'campana': 'campaña',
     'enfasis': 'énfasis', 'sintesis': 'síntesis', 'hipotesis': 'hipótesis', 'cronologico': 'cronológico',
     'logistica': 'logística', 'demografico': 'demográfico', 'proposito': 'propósito', 'parametro': 'parámetro', 'parametros': 'parámetros', 'termino': 'término',
-    'terminos': 'términos', 'genero': 'género', 'publicacion': 'publicación',
+    'victimas': 'víctimas', 'victima': 'víctima', 'etnicos': 'étnicos', 'etnico': 'étnico', 'etnicas': 'étnicas',
+    'etnica': 'étnica', 'terminos': 'términos', 'genero': 'género', 'publicacion': 'publicación',
 }
 RE_PALABRA = re.compile(r'[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+')
 # 'publica' es adjetivo tras estos sustantivos; en otro caso es verbo ("el PDM no publica")
