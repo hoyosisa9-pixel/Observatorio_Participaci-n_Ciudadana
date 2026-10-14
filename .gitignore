@@ -5,5 +5,7 @@ data_raw_IIC/*
 !data_raw_IIC/inventario_detallado_IIC_excel.csv
 # Paquetes comprimidos de datos (almacenamiento externo)
 *.zip
+# Excepción: paquete del informe para Overleaf (pequeño, regenerable con scripts/generar_informe_latex.py)
+!outputs/disponibilidad/informe_disponibilidad_overleaf.zip
 
 __pycache__/

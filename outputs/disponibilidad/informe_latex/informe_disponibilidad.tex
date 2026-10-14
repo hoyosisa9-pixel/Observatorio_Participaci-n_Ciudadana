@@ -1,0 +1,765 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[spanish,es-noshorthands,es-tabla]{babel}
+\usepackage[margin=2.5cm,headheight=14pt]{geometry}
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+\usepackage{xltabular}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage[hidelinks,breaklinks=true]{hyperref}
+\usepackage{url}
+
+\definecolor{cverde}{RGB}{214,240,214}
+\definecolor{camarillo}{RGB}{255,243,191}
+\definecolor{cnaranja}{RGB}{255,222,184}
+\definecolor{crojo}{RGB}{248,212,212}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\emergencystretch}{3em}
+\setlist{itemsep=2pt,topsep=4pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small OCE -- Disponibilidad y brecha de información}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyhead[R]{\small\thepage}}
+
+\hypersetup{pdftitle={Sistema de indicadores del Observatorio Ciudadano de Envigado: disponibilidad y brecha de información},pdfauthor={Isabella Hoyos Álvarez}}
+
+\begin{document}
+
+
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\centering
+\vspace*{3cm}
+{\LARGE\bfseries Sistema de indicadores del Observatorio Ciudadano de Envigado: disponibilidad y brecha de información\par}
+\vspace{1.5cm}
+{\large Documento de trabajo preliminar\par}
+\vspace{2cm}
+{\large Isabella Hoyos Álvarez\par}
+\vspace{0.5cm}
+{\large Observatorio Ciudadano de Envigado (OCE)\par}
+\vspace{2cm}
+{\large Dirigido a: profesores Francisco Correa y Eber\par}
+\vfill
+{\large 14 de octubre de 2026\par}
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\tableofcontents
+\clearpage
+
+
+\section{Resumen ejecutivo}
+
+Se revisaron 39 variables y 23 indicadores e índices de los cuatro sistemas de la matriz, para 2024, 2025 y lo publicado de 2026. Ningún valor está validado: todas las cifras tienen estado \emph{Pendiente}.
+
+\begin{center}\small\begin{tabular}{lcccccc}\toprule
+
+\textbf{Sistema} & \textbf{\cellcolor{cverde}Disponible} & \textbf{\cellcolor{camarillo}Construible} & \textbf{\cellcolor{camarillo}Parcial} & \textbf{\cellcolor{cnaranja}Proxy} & \textbf{\cellcolor{crojo}No disponible} & \textbf{Total} \\ \midrule
+
+Control social & 2 & 3 & 3 & 0 & 0 & 8 \\
+Participación ciudadana & 1 & 0 & 11 & 0 & 0 & 12 \\
+Cumplimiento del PDM & 7 & 1 & 3 & 2 & 1 & 14 \\
+Presupuesto participativo & 0 & 3 & 2 & 0 & 0 & 5 \\ \midrule
+
+\textbf{Total} & \textbf{10} & \textbf{7} & \textbf{19} & \textbf{2} & \textbf{1} & \textbf{39} \\ \bottomrule\end{tabular}\end{center}
+
+\noindent\textbf{Veredicto de los indicadores e índices:}\par\smallskip\centerline{\colorbox{cverde}{Viable: 1}\quad \colorbox{camarillo}{Viable con ajuste: 10}\quad \colorbox{crojo}{No viable por ahora: 12}}
+
+\paragraph{Hallazgos principales}
+
+\begin{enumerate}
+
+\item \textbf{Hay pocos valores observados publicados.} De los 10 datos clasificados como Disponible, 7 son metas del PDM a 2027 y solo 3 son valores observados (CS.PCS.EE, CS.PCS.EP, PC.I2.V2). La mayor parte de las variables es Parcial (19) o Construible (7).
+
+\item \textbf{La ejecución presupuestal del presupuesto participativo 2025 es reconstruible:} 98,83~\% (apropiación \$20.928.690.218, obligaciones \$20.684.427.720), cruzando el plan de acción con el listado de la EFPC. Es una cifra \textbf{preliminar, por validar}; entregas (CEP) y metas de atención (CMA) siguen sin soporte.
+
+\item \textbf{Los índices quedan bloqueados.} 3 de los 4 índices no son calculables por ahora (PC.ISPC, PDM.ICPD-6, PP.IREPP), porque alguna de sus entradas no tiene dato y la Guía no redistribuye pesos. En participación ciudadana falta un inventario oficial de procesos participativos.
+
+\end{enumerate}
+
+\section{Metodología}
+\subsection{Insumos}
+\begin{itemize}
+\item \textbf{Matriz de los profesores} (\emph{Matriz de información de indicadores del observatorio ciudadano}, hojas Guía, Matriz, Registro, PP\_Proyectos y Resultados): 39 variables y 23 indicadores e índices en cuatro sistemas. No se modificó; se trabajó sobre copias.
+\item \textbf{Bases recolectadas por el Observatorio}: 2.787 archivos de portales públicos (Alcaldía, Concejo, Contraloría, EFPC, datos.gov.co, DNP), catalogados en \texttt{\footnotesize inventario\_\allowbreak{}detallado\_\allowbreak{}IIC.\allowbreak{}csv}.
+\item \textbf{Fuentes externas} nombradas por la matriz o halladas en la búsqueda: MinSalud, Medicina Legal (Forensis), ANSV, ICFES, DANE, TerriData, Área Metropolitana del Valle de Aburrá, entre otras (catálogo completo en el Anexo~\ref{anexo:fuentes}).
+\end{itemize}
+Periodo objetivo: 2024, 2025 y lo publicado de 2026. Territorio: Municipio de Envigado, con 13 zonas cuando hay desagregación.
+
+\subsection{Escala de disponibilidad}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{L{3cm}Y}
+\toprule \textbf{Categoría} & \textbf{Definición} \\ \midrule
+\cellcolor{cverde}Disponible & Publicado, con la unidad y la definición del indicador, para al menos un año entre 2024 y 2026. \\
+\cellcolor{camarillo}Construible & No está publicado como cifra, pero se puede contar o calcular con documentos que ya se tienen. \\
+\cellcolor{camarillo}Parcial & Existe, pero faltan años, la desagregación o el soporte exigido, o la definición difiere de la matriz. \\
+\cellcolor{cnaranja}Proxy & Solo hay un dato parecido, con otra definición, unidad o universo. \\
+\cellcolor{crojo}No disponible & No está en el repositorio ni en fuentes públicas; hay que pedirlo a la Alcaldía. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{Reglas}
+\begin{itemize}
+\item Cada hallazgo lleva evidencia: ruta del archivo o URL, más página, tabla u hoja. Lo que no se pudo abrir se marca ``sin verificar''.
+\item Ningún valor se marca como validado: esa decisión corresponde al responsable de la matriz. Los valores encontrados quedan en estado \emph{Pendiente}.
+\item Ninguna variable se dejó como Proxy o No disponible sin buscar antes en las fuentes primarias.
+\item Las clasificaciones pasaron por una revisión crítica que unificó criterios entre los cuatro sistemas.
+\end{itemize}
+
+
+\section{Resultados por sistema}
+
+\subsection{Control social (CS)}
+
+8 variables: 2 disponible, 3 construible, 3 parcial. 5 indicadores e índices.
+
+\subsubsection*{Variables}
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{1.9cm}YL{1.9cm}YY}
+\toprule
+\textbf{ID} & \textbf{Variable} & \textbf{Categoría} & \textbf{Fuente} & \textbf{Brecha} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Variable} & \textbf{Categoría} & \textbf{Fuente} & \textbf{Brecha} \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+CS.DSI.MD & Número de metas seleccionadas con valor observado publicado para la vigencia & \cellcolor{camarillo}Construible & Plan Indicativo de Productos con evaluacion definitiva al 2T-2026 (DAP) y evaluaciones PDM IV trimestre 2024\ldots{} & La lista de metas seleccionadas (MS) no esta definida por los docentes. Las evaluaciones PDM publicadas (IV trim. 2024 y 2025) solo cubren\ldots{} \\
+CS.DSI.MS & Número total de metas incluidas previamente en la selección de seguimiento & \cellcolor{camarillo}Construible & Apendice 9.1 Plan Indicativo (universo de donde seleccionar) - no existe lista aprobada & Falta la decision de los docentes sobre cuales son las metas y cuantas (la Matriz sugiere 10). No es un dato publicable por la Alcaldia. \\
+CS.PCS.EE & Número de estrategias de promoción del control social ejecutadas y reportadas en el periodo & \cellcolor{cverde}Disponible & Plan Indicativo de Productos, evaluacion definitiva 2T-2026: consecutivo 544 (5.1.2.1.2) Servicio de\ldots{} & Dato autodeclarado por la dependencia. El DAP anoto "Sí, pero con observaciones" sobre evidencias 2024 y 2025 y reparos de coherencia con\ldots{} \\
+CS.PCS.EP & Número de estrategias de promoción del control social programadas oficialmente para el mismo periodo & \cellcolor{cverde}Disponible & Plan Indicativo de Productos: META PROGRAMADA por anio del consecutivo 544; meta total 4 & La Matriz advierte "no asumir una por año"; la programacion oficial si es 1 por anio, por lo que la advertencia queda resuelta. No se\ldots{} \\
+CS.VRC.EV & Número de eventos municipales de rendición de cuentas realizados con presencia documentada de veedurías & \cellcolor{camarillo}Parcial & (a) Plan Indicativo consecutivo 545 (5.1.2.1.3) Eventos de rendicion publica de cuentas con veedurias\ldots{} & Las actas de Salud dicen que "se anexan listados de asistencia" pero los listados no estan en el repo; sin ellos la presencia es mencion\ldots{} \\
+CS.VRC.ET & Número total de eventos municipales de rendición de cuentas realizados en el periodo & \cellcolor{camarillo}Construible & Plan Indicativo consec. 546 (5.1.2.1.4) Eventos de rendicion publica de cuentas realizados; actas, Q\&A y\ldots{} & No hay un balance publicado que fije el universo de "eventos municipales"; la cifra depende de la definicion (1 a 8 por anio). Fechas\ldots{} \\
+CS.RPO.OR & Número de observaciones ciudadanas del universo evaluado con respuesta de fondo publicada al corte & \cellcolor{camarillo}Parcial & Cuadros/documentos de preguntas y respuestas por evento (Alcalde 2024 y 2025, 100 dias, Salud 2025 y 2026\ldots{} & Falta la clasificacion de cada respuesta como "de fondo" vs acuse (lectura manual) y del universo evaluado (¿solo Alcalde o tambien\ldots{} \\
+CS.RPO.OT & Número total de observaciones ciudadanas sobre el PDM registradas públicamente en ejercicios cerrados de rendición de\ldots{} & \cellcolor{camarillo}Parcial & Mismos documentos de preguntas y respuestas & Los cuadros no distinguen "sobre el PDM"; hay que excluir felicitaciones y temas ajenos. El cuadro del Alcalde 2025 trae solo 3\ldots{} \\
+\end{xltabular}
+}
+
+\subsubsection*{Indicadores e índices}
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{1.9cm}L{3.4cm}L{2.1cm}Y}
+\toprule
+\textbf{Código} & \textbf{Indicador} & \textbf{Veredicto} & \textbf{Ajuste propuesto} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Código} & \textbf{Indicador} & \textbf{Veredicto} & \textbf{Ajuste propuesto} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+CS.DSI & Disponibilidad de información de seguimiento & \cellcolor{camarillo}Viable con ajuste & Definir ex ante la lista de \textasciitilde{}10 metas (recomendado: resultados del Apéndice 9.1.2 alineados con PDM.CS-CD) y aceptar como "valor publicado" cifras oficiales externas (MinSalud, Forensis, POT); documentar la lista en Observaciones. \\
+CS.PCS & Cumplimiento de la promoción del control social & \cellcolor{cverde}Viable & Ninguno de cálculo; registrar en Observaciones la anotación del DAP "Sí, pero con observaciones" y que es autorreporte. \\
+CS.VRC & Presencia de veedurías en la rendición de cuentas & \cellcolor{camarillo}Viable con ajuste & Fijar el universo de eventos (opción mínima: audiencia del Alcalde + rendiciones sectoriales con acta publicada) y pedir listados de asistencia o aceptar la mención en acta como acreditación. \\
+CS.RPO & Respuesta pública a observaciones ciudadanas & \cellcolor{camarillo}Viable con ajuste & Restringir el universo a la audiencia pública del Alcalde, excluir felicitaciones, definir "respuesta de fondo" con una rúbrica de 2 lectores y solicitar el acta integral 2025. \\
+CS.ICRCS & Índice de Condiciones y Respuesta para el Control Social & \cellcolor{camarillo}Viable con ajuste & Adoptar las cuatro definiciones anteriores antes de medir (Guía 17); sin ellas ICRCS = N/D. Calcula con todas sus entradas solo en 2024. \\
+\end{xltabular}
+}
+
+\subsection{Participación ciudadana (PC)}
+
+12 variables: 1 disponible, 11 parcial. 7 indicadores e índices.
+
+\subsubsection*{Variables}
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{1.9cm}YL{1.9cm}YY}
+\toprule
+\textbf{ID} & \textbf{Variable} & \textbf{Categoría} & \textbf{Fuente} & \textbf{Brecha} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Variable} & \textbf{Categoría} & \textbf{Fuente} & \textbf{Brecha} \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+PC.I1.V1 & Número de procesos participativos cerrados que incorporaron al menos un aporte ciudadano en una decisión formal & \cellcolor{camarillo}Parcial & Informes de gestión 2024 y 2025 (DAP), plan indicativo 2T-2026, comunicados de PP, rendiciones con preguntas\ldots{} & No hay inventario oficial de procesos cerrados ni registro que vincule el aporte con la decisión formal; la matriz exige esa vinculación\ldots{} \\
+PC.I1.V2 & Número total de procesos participativos cerrados en los que se recibieron aportes ciudadanos & \cellcolor{camarillo}Parcial & Mismas que PC.I1.V1; el universo es el mismo inventario de procesos con aportes recibidos. & Falta definición oficial de "proceso participativo cerrado"; riesgo alto de subconteo (consultas sectoriales, comités, instancias no están\ldots{} \\
+PC.I2.V1 & Número de zonas con al menos una actividad participativa realizada para su comunidad & \cellcolor{camarillo}Parcial & Cronogramas y reportes de asambleas zonales: formulación del PDM 2024 (13 zonas), asambleas PP 2024 y 2025\ldots{} & La matriz exige acreditar fecha, zona y acta o asistencia; el repo solo tiene cronogramas y reportes agregados, no actas ni listados por\ldots{} \\
+PC.I2.V2 & Número total de zonas oficiales del municipio & \cellcolor{cverde}Disponible & Plan de Desarrollo 2024-2027: "13 zonas establecidas" (12 comités zonales; zona 1 pendiente de conformar\ldots{} & No se obtuvo el texto del Acuerdo 007 de 2025 ni del acto que crea las zonas (sin verificar). El Acuerdo 033 de 2022 no arrojó coincidencia\ldots{} \\
+PC.I3.V1 & Número de acciones formativas programadas para la ciudadanía que se realizaron & \cellcolor{camarillo}Parcial & Informe de gestión 2025: "se culminaron 3 diplomados, 9 seminarios y 9 cursos" (21 acciones); informe de\ldots{} & El reporte público oficial (plan indicativo) cuenta personas formadas (95 en 2024; 186 en 2025), no acciones. Las 21 acciones de 2025\ldots{} \\
+PC.I3.V2 & Número total de acciones formativas programadas para la ciudadanía con finalización prevista en el periodo & \cellcolor{camarillo}Parcial & Informe de gestión 2025 (no ejecución de 1 diplomado y 3 seminarios planeados) combinado con las acciones\ldots{} & No hay programación oficial de acciones formativas (la meta oficial está en personas); el 25 es una reconstrucción que supone que los\ldots{} \\
+PC.I4.V1 & Número de procesos participativos cerrados con resultados publicados y consultables & \cellcolor{camarillo}Parcial & Documentos de resultados por proceso en el repo: resumen de iniciativas PP (88 y 90), listados de proyectos\ldots{} & Universo de procesos sin inventario oficial; no se auditó si cada publicación comunica decisiones o respuestas; enlaces públicos no\ldots{} \\
+PC.I4.V2 & Número total de procesos participativos cerrados & \cellcolor{camarillo}Parcial & Mismo inventario exploratorio que PC.I1.V2 (todos los procesos cerrados, con o sin aportes). & Igual que PC.I1.V2; I1.V2 debe ser subconjunto de I4.V2, pero ambos comparten un universo no definido. \\
+PC.I5.V1 & Número de sesiones previstas de las instancias seleccionadas que se realizaron & \cellcolor{camarillo}Parcial & Plan de acción en salud (PPSS, Res. 2063/2017) con programación y seguimiento de sesiones de COPACO y CMSSS\ldots{} & La matriz exige seleccionar las instancias antes de medir; solo hay cifras de dos instancias sectoriales. Sin calendario de sesiones del\ldots{} \\
+PC.I5.V2 & Número total de sesiones previstas de esas mismas instancias para el periodo & \cellcolor{camarillo}Parcial & Plan de acción en salud 2025 (PROGRAMACIÓN): 4 reuniones ordinarias trimestrales programadas por instancia. & Programación solo de dos instancias del sector salud y solo 2025; no existe programación consolidada de las instancias de participación\ldots{} \\
+PC.I6.V1 & Número de actividades participativas realizadas que habilitaron un canal virtual para intervenir & \cellcolor{camarillo}Parcial & (a) Rendición de cuentas 2024 del alcalde: cuadro de preguntas con filas de participantes virtuales; (b)\ldots{} & No hay relación de actividades con canal virtual para intervenir ni evidencia de funcionamiento por actividad. El portal envigado.gov.co no\ldots{} \\
+PC.I6.V2 & Número total de actividades participativas realizadas & \cellcolor{camarillo}Parcial & Informes de gestión 2024 y 2025, plan indicativo 2T-2026 y calendario 2024 de la Subdirección de\ldots{} & No hay registro único de actividades participativas realizadas; el calendario 2024 es programación, no ejecución; para 2025 y 2026 no hay\ldots{} \\
+\end{xltabular}
+}
+
+\subsubsection*{Indicadores e índices}
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{1.9cm}L{3.4cm}L{2.1cm}Y}
+\toprule
+\textbf{Código} & \textbf{Indicador} & \textbf{Veredicto} & \textbf{Ajuste propuesto} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Código} & \textbf{Indicador} & \textbf{Veredicto} & \textbf{Ajuste propuesto} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+PC.I1 & Incorporación de aportes ciudadanos & \cellcolor{crojo}No viable por ahora & Solicitar a Participación el inventario anual de procesos cerrados con su acto de decisión; mientras tanto, si los docentes aceptan un universo cerrado ex ante (PP, PDM/POT, rendición), reportarlo como exploratorio. \\
+PC.I2 & Cobertura territorial de la participación & \cellcolor{camarillo}Viable con ajuste & Aceptar el reporte oficial de asambleas por zona como soporte o pedir actas; decidir el trato de la zona 1 (sin comité): mantener 13 en el denominador y declarar el tope de 12 del PP. \\
+PC.I3 & Cumplimiento de la oferta formativa & \cellcolor{camarillo}Viable con ajuste & Opción A: medir en personas con el producto 521 del plan indicativo (programado vs ejecutado). Opción B: pedir a la EFPC la programación fechada de acciones para ciudadanía. \\
+PC.I4 & Publicación de resultados participativos & \cellcolor{crojo}No viable por ahora & Mismo inventario que I1, con enlace público por proceso; auditar con lista de chequeo (identifica proceso, sintetiza aportes, comunica decisión). \\
+PC.I5 & Cumplimiento de sesiones de participación & \cellcolor{camarillo}Viable con ajuste & Seleccionar ex ante las instancias (mínimo CMPC y CTP además de las de salud) y solicitar su calendario y actas; mientras tanto, reportar I5 acotado a COPACO y CMSSS. \\
+PC.I6 & Disponibilidad de participación virtual & \cellcolor{crojo}No viable por ahora & Pedir a Participación y a la EFPC una relación anual de actividades con modalidad y evidencia; empezar con 2026. \\
+PC.ISPC & Índice Simplificado de Participación Ciudadana & \cellcolor{crojo}No viable por ahora & Resolver el inventario de procesos (ajuste de I1 e I4); I2 e I3 pueden publicarse como indicadores sueltos. \\
+\end{xltabular}
+}
+
+\subsection{Cumplimiento del PDM (PDM)}
+
+14 variables: 7 disponible, 1 construible, 3 parcial, 2 proxy, 1 no disponible. 7 indicadores e índices.
+
+\subsubsection*{Variables}
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{1.9cm}YL{1.9cm}YY}
+\toprule
+\textbf{ID} & \textbf{Variable} & \textbf{Categoría} & \textbf{Fuente} & \textbf{Brecha} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Variable} & \textbf{Categoría} & \textbf{Fuente} & \textbf{Brecha} \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+PDM.CS.O & Cobertura porcentual observada del aseguramiento en el régimen subsidiado & \cellcolor{cnaranja}Proxy & MinSalud, Cifras de afiliación en salud (CoberturaMunicipio) y TerriData (DNP). El PDM cita como fuente\ldots{} & La cifra con el método del plan (99,5 en 2022; BDUA-ADRES/SisMaster, probablemente afiliados RS sobre población objetivo Sisbén) no está\ldots{} \\
+PDM.CS.M & Cobertura meta del aseguramiento en el régimen subsidiado & \cellcolor{cverde}Disponible & PDM 2024-2027 (Acuerdo 017 de 2024), DTS modificado 22-dic-2025 y Apéndice 9.1.2 (27-may-2024) & Solo meta final 2027; el PDM no publica metas anuales de resultado, así que la lectura anual de la Guía (punto 9) carece de meta intermedia\ldots{} \\
+PDM.CM.O & Tasa anual observada de mortalidad vial por 100.000 habitantes & \cellcolor{camarillo}Parcial & INMLCF Forensis 2024 (muertes por eventos de transporte); Policía Nacional/MinDefensa vía datos.gov.co\ldots{} & Falta 2025 y 2026 de INMLCF/ANSV (Forensis 2025 aún no publicado; el sitio ANSV expiró por tiempo desde el Codespace). Las series difieren\ldots{} \\
+PDM.CM.M & Tasa meta de mortalidad vial por 100.000 habitantes & \cellcolor{cverde}Disponible & PDM 2024-2027 (Acuerdo 017 de 2024), DTS modificado 22-dic-2025 y Apéndice 9.1.2 (27-may-2024) & Solo meta final 2027; el PDM no publica metas anuales de resultado, así que la lectura anual de la Guía (punto 9) carece de meta intermedia\ldots{} \\
+PDM.CA.O & Espacio público verde observado, en metros cuadrados por habitante & \cellcolor{camarillo}Parcial & Diagnóstico de la revisión del POT de Envigado (Secretaría/DAP con DESur), dimensión funcional espacio\ldots{} & No se reconcilia la base del plan (3,88 en 2023) con la AMVA 2022 (4,66) ni con el POT 2024 (5,75): definición de área o versión de\ldots{} \\
+PDM.CA.M & Meta de espacio público verde, en metros cuadrados por habitante & \cellcolor{cverde}Disponible & PDM 2024-2027 (Acuerdo 017 de 2024), DTS modificado 22-dic-2025 y Apéndice 9.1.2 (27-may-2024) & Solo meta final 2027; el PDM no publica metas anuales de resultado, así que la lectura anual de la Guía (punto 9) carece de meta intermedia\ldots{} \\
+PDM.CP.O & Porcentaje observado de implementación de procesos de participación ciudadana, según el método oficial & \cellcolor{crojo}No disponible & No hallada. Revisados: informes de gestión por dependencias 2024 y 2025, seguimiento 2025 DAP, rendición\ldots{} & No hay cifra ni método oficial. El PDM usa dos magnitudes distintas: un índice numérico (3,23 en 2022, p. 561) y un porcentaje (75, base\ldots{} \\
+PDM.CP.M & Porcentaje meta de implementación de esos procesos & \cellcolor{cverde}Disponible & PDM 2024-2027 (Acuerdo 017 de 2024), DTS modificado 22-dic-2025 y Apéndice 9.1.2 (27-may-2024) & Solo meta final 2027; el PDM no publica metas anuales de resultado, así que la lectura anual de la Guía (punto 9) carece de meta intermedia\ldots{} \\
+PDM.CD.O & Cobertura porcentual observada de los servicios deportivos incluidos en el resultado & \cellcolor{cnaranja}Proxy & Informe de gestión por dependencias 2025 (dato de producto del Índer, no del resultado). Informes del Índer\ldots{} & El indicador de resultado es una cobertura porcentual de servicios deportivos (base 5,3 \%, meta 6 \%); lo hallado es la oferta de\ldots{} \\
+PDM.CD.M & Cobertura porcentual meta de esos servicios deportivos & \cellcolor{cverde}Disponible & PDM 2024-2027 (Acuerdo 017 de 2024), DTS modificado 22-dic-2025 y Apéndice 9.1.2 (27-may-2024) & Solo meta final 2027; el PDM no publica metas anuales de resultado, así que la lectura anual de la Guía (punto 9) carece de meta intermedia\ldots{} \\
+PDM.ILE.A & Cobertura observada de atención integral de niños y niñas de 0 a 6 años & \cellcolor{camarillo}Construible & Balance PDM 2024 de Educación (ppt) e informe de gestión por dependencias 2025 (numerador del producto "Niños\ldots{} & El \% de cobertura no está publicado. Hay que dividir el numerador por la población DANE de 0 a 6 años (no descargada) y confirmar que ese\ldots{} \\
+PDM.ILE.MA & Meta de cobertura de atención integral inicial & \cellcolor{cverde}Disponible & PDM 2024-2027 (Acuerdo 017 de 2024), DTS modificado 22-dic-2025 y Apéndice 9.1.2 (27-may-2024) & Solo meta final 2027; el PDM no publica metas anuales de resultado, así que la lectura anual de la Guía (punto 9) carece de meta intermedia\ldots{} \\
+PDM.ILE.S & Porcentaje observado de instituciones oficiales que mejoran su categoría en Saber 11 & \cellcolor{camarillo}Parcial & Balance PDM 2024 de Educación e informe de gestión 2025 (menciones de I.E. que mejoran en Saber 11); la\ldots{} & Falta la clasificación por plantel (A+, A, B, C, D) 2023-2025 de las I.E. oficiales de Envigado y el total de I.E. oficiales. Los "Cuadros\ldots{} \\
+PDM.ILE.MS & Meta de instituciones oficiales que mejoran su categoría en Saber 11 & \cellcolor{cverde}Disponible & PDM 2024-2027 (Acuerdo 017 de 2024), DTS modificado 22-dic-2025 y Apéndice 9.1.2 (27-may-2024) & Solo meta final 2027; el PDM no publica metas anuales de resultado, así que la lectura anual de la Guía (punto 9) carece de meta intermedia\ldots{} \\
+\end{xltabular}
+}
+
+\subsubsection*{Indicadores e índices}
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{1.9cm}L{3.4cm}L{2.1cm}Y}
+\toprule
+\textbf{Código} & \textbf{Indicador} & \textbf{Veredicto} & \textbf{Ajuste propuesto} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Código} & \textbf{Indicador} & \textbf{Veredicto} & \textbf{Ajuste propuesto} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+PDM.CS & Logro de la cobertura de aseguramiento subsidiado & \cellcolor{crojo}No viable por ahora & Solicitar a Salud la cobertura RS con la fuente de la línea base (BDUA/SisMaster, población objetivo); no sustituir con TerriData ($\approx$12 \%). \\
+PDM.CM & Logro de la reducción de mortalidad vial & \cellcolor{camarillo}Viable con ajuste & Adoptar INMLCF (Forensis) como fuente oficial y una serie DANE de población; 2025 cuando se publique Forensis 2025 o ANSV. \\
+PDM.CA & Logro del mantenimiento de espacio público verde & \cellcolor{camarillo}Viable con ajuste & Pedir a Medio Ambiente el valor anual con el inventario de la línea base; si los docentes aceptan el POT, rotularlo como serie distinta. \\
+PDM.CP & Logro de implementación de procesos participativos & \cellcolor{crojo}No viable por ahora & Solicitar al DAP la ficha técnica y el cálculo anual; si no existe, redefinir el resultado con PC.I3 o PC.I2 como insumo. \\
+PDM.CD & Logro de cobertura de servicios deportivos & \cellcolor{crojo}No viable por ahora & Solicitar al Índer la cobertura (usuarios únicos / población) con el método de la base 5,3 \%. \\
+PDM.ILE & Índice de Logro Educativo & \cellcolor{crojo}No viable por ahora & Descargar la clasificación de planteles ICFES 2023-2025 y fijar el total de I.E. oficiales; confirmar con Educación el denominador de LA. \\
+PDM.ICPD-6 & Índice de cumplimiento de resultados seleccionados del PDM & \cellcolor{crojo}No viable por ahora & Obtener CP y CD (solicitudes) o redefinir esas dimensiones; CM y CA pueden publicarse sueltos. \\
+\end{xltabular}
+}
+
+\subsection{Presupuesto participativo (PP)}
+
+5 variables: 3 construible, 2 parcial. 4 indicadores e índices.
+
+\subsubsection*{Variables}
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{1.9cm}YL{1.9cm}YY}
+\toprule
+\textbf{ID} & \textbf{Variable} & \textbf{Categoría} & \textbf{Fuente} & \textbf{Brecha} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Variable} & \textbf{Categoría} & \textbf{Fuente} & \textbf{Brecha} \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+PP.EPP.OPP & Valor de las obligaciones presupuestales registradas con cargo a recursos de presupuesto participativo & \cellcolor{camarillo}Construible & Plan de acción (hoja ROCA, obligación acumulada por proyecto y BPIN) 2025 y 2026; ejecución de egresos de\ldots{} & No existe marcador de PP en las fuentes: el universo se reconstruye cruzando el catálogo EFPC con los códigos de proyecto del plan de\ldots{} \\
+PP.EPP.APP & Valor de la apropiación definitiva de recursos de presupuesto participativo & \cellcolor{camarillo}Construible & Plan de acción (APROPIACIÓN DEFINITIVA por proyecto) y hoja ROCA; ejecución de egresos de Hacienda; catálogo\ldots{} & Mismas que OPP: sin marcador PP; universo reconstruido; 2024 sin plan de acción por proyecto; dos fuentes de valor (catálogo = valor del\ldots{} \\
+PP.CEP.PEC & Número de proyectos con todas las entregas exigibles completas y verificadas al corte & \cellcolor{camarillo}Parcial & Plan de acción 2025 (ejecución física neta anual por indicador de producto, autorreportada); 35 PDF de avance\ldots{} & El indicador exige entrega exigible completa y verificada con acta de recibo, informe final o supervisión. No se encontró ninguno publicado\ldots{} \\
+PP.CEP.PE & Número total de proyectos financiados con entrega exigible en la vigencia & \cellcolor{camarillo}Construible & Listados EFPC de proyectos PP 2024 y 2025 (zona, proyecto, objetivo, valor); plan de acción 2026 (66\ldots{} & Falta definir "entrega exigible en la vigencia" (los 61 de 2025 son "en ejecución"; la entrega exigible puede ser parcial o cruzar\ldots{} \\
+PP.CMA.NA & Número de proyectos con meta de atención aplicable en el universo completo y verificado & \cellcolor{camarillo}Parcial & Objetivos en catálogos EFPC; plan de acción (indicadores en actividades/porcentaje, no en personas únicas)\ldots{} & Falta la ficha del proyecto con meta anual de personas por proyecto. El plan de acción mide actividades, porcentajes y paquetes, no\ldots{} \\
+\end{xltabular}
+}
+
+\subsubsection*{Indicadores e índices}
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{1.9cm}L{3.4cm}L{2.1cm}Y}
+\toprule
+\textbf{Código} & \textbf{Indicador} & \textbf{Veredicto} & \textbf{Ajuste propuesto} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Código} & \textbf{Indicador} & \textbf{Veredicto} & \textbf{Ajuste propuesto} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+PP.EPP & Ejecución presupuestal del presupuesto participativo & \cellcolor{camarillo}Viable con ajuste & Adoptar la regla de identificación (listado EFPC $\times$ plan de acción), excluir el proyecto 0553 y pedir a Planeación que confirme la lista de códigos PP; registrar como Pendiente, no Validado. \\
+PP.CEP & Cumplimiento de entrega de proyectos & \cellcolor{crojo}No viable por ahora & Solicitar a las unidades ejecutoras el estado de entrega con soporte; alternativa explícita: CEP provisional con autorreporte y regla de agregación fija, rotulado. \\
+PP.CMA & Cumplimiento de metas de atención & \cellcolor{crojo}No viable por ahora & Solicitar fichas MGA o de operador con meta de personas; clasificar ex ante proyectos aplicables (excluir infraestructura y medios). \\
+PP.IREPP & Índice de Resultados de Ejecución del Presupuesto Participativo & \cellcolor{crojo}No viable por ahora & Publicar EPP suelto con la alerta de que CEP y CMA no tienen soporte; coincide con la conclusión previa del profesor. \\
+\end{xltabular}
+}
+
+\section{Ejecución presupuestal del presupuesto participativo 2025}
+
+\begin{center}\fcolorbox{red!60!black}{crojo}{\parbox{0.92\linewidth}{\centering\bfseries PRELIMINAR, POR VALIDAR}}\end{center}
+
+\subsection{Método}
+Ninguna fuente pública marca los recursos del presupuesto participativo (PP). Por eso la lista de proyectos se reconstruye:
+\begin{enumerate}
+\item Del plan de acción del IV trimestre de 2025 (Departamento Administrativo de Planeación, corte 7 de enero de 2026) se toman los proyectos con ``ZONA \emph{n}'' en el nombre, con su apropiación definitiva (APP) y su obligación (OPP).
+\item Se excluye el proyecto 0553, \emph{Implementación del presupuesto participativo}, que es el costo del proceso y no un proyecto priorizado.
+\item Se contrasta con el listado de proyectos PP 2025 de la Escuela de Formación para la Participación Ciudadana (EFPC): misma cantidad de proyectos por zona y valores que coinciden al peso, salvo los que tuvieron adiciones.
+\item $\mathrm{EPP} = 100 \times \mathrm{OPP} / \mathrm{APP}$, por zona y para el consolidado municipal.
+\end{enumerate}
+El cálculo es reproducible con \texttt{scripts/epp\_pp\_2025.py}.
+
+
+\subsection{Resultados por zona}
+
+\begin{center}\footnotesize\begin{tabular}{lrrrrr}\toprule
+
+\textbf{Nivel} & \textbf{Proy. plan} & \textbf{Proy. EFPC} & \textbf{APP (\$)} & \textbf{OPP (\$)} & \textbf{EPP} \\ \midrule
+
+Zona 2 & 7 & 7 & 1.475.002.700 & 1.436.299.907 & 97,38~\% \\
+Zona 3 & 6 & 6 & 2.025.400.785 & 2.021.909.532 & 99,83~\% \\
+Zona 4 & 4 & 4 & 1.115.536.510 & 1.101.017.167 & 98,70~\% \\
+Zona 5 & 3 & 3 & 1.118.572.760 & 1.108.917.164 & 99,14~\% \\
+Zona 6 & 6 & 6 & 3.294.857.896 & 3.251.989.801 & 98,70~\% \\
+Zona 7 & 5 & 5 & 2.977.933.111 & 2.971.171.891 & 99,77~\% \\
+Zona 8 & 5 & 5 & 1.855.252.954 & 1.846.066.028 & 99,50~\% \\
+Zona 9 & 6 & 6 & 2.809.659.342 & 2.734.256.520 & 97,32~\% \\
+Zona 10 & 5 & 5 & 658.027.155 & 647.489.065 & 98,40~\% \\
+Zona 11 & 5 & 5 & 1.116.527.774 & 1.095.411.285 & 98,11~\% \\
+Zona 12 & 5 & 5 & 1.082.975.350 & 1.073.434.698 & 99,12~\% \\
+Zona 13 & 4 & 4 & 1.398.943.881 & 1.396.464.662 & 99,82~\% \\ \midrule
+
+\textbf{Municipio} & \textbf{61} & \textbf{61} & \textbf{20.928.690.218} & \textbf{20.684.427.720} & \textbf{98,83~\%} \\ \bottomrule\end{tabular}\end{center}
+
+Total municipal: EPP 2025 de \textbf{98,83~\%}. Por zona va de 97,32~\% (zona 9) a 99,83~\% (zona 3).
+
+\paragraph{Pendientes antes de usar la cifra}
+
+\begin{enumerate}
+\item Planeación debe confirmar la lista de proyectos PP.
+\item Hay que decidir si se incluye el proyecto 0553 (costo del proceso).
+\item Las cifras de 2024 y 2026 son aproximadas: 2024 se reconstruye desde el informe de Hacienda con correspondencias parciales, y 2026 no tiene cierre anual (obligaciones al 30 de junio).
+\end{enumerate}
+
+\section{Inconsistencias encontradas en la matriz}
+
+\begin{itemize}
+
+\item \textbf{Páginas del PDM:} las páginas citadas "de la copia del Concejo" (518, 599, 607\ldots{}) no corresponden a los documentos. Las correctas están en \texttt{\footnotesize notas\_\allowbreak{}PDM.\allowbreak{}md}.
+
+\item \textbf{Programa de mortalidad vial:} la Matriz lo ubica en el programa 3.2.2; probablemente es el 3.2.3.
+
+\item \textbf{Códigos repetidos:} "CS" es a la vez el sistema de control social y PDM.CS. "MS" son las metas seleccionadas y también la meta Saber.
+
+\item \textbf{Periodicidad de PP:} se declara trimestral, pero las listas de periodo no admiten trimestres.
+
+\item \textbf{Territorio:} no hay catálogo de zonas en Registro, PP\_Proyectos ni Resultados.
+
+\item \textbf{Fecha de corte:} Resultados exige corte exacto al 31-dic.
+
+\item \textbf{Estados:} la lista de estados ("No evaluable", "No aplica") no está definida en la Guía.
+
+\item \textbf{Nombre de PP.CMA.NA:} difiere entre la Matriz y Registro.
+
+\item \textbf{Cofinanciación en EPP:} la regla de excluirla es inverificable, porque ninguna fuente marca recursos PP.
+
+\item \textbf{Documentos ausentes:} faltan en el repo los 4 anexos Word metodológicos y el DOCX OPCEN.
+
+\item \textbf{Advertencia de PCS:} dice "no asumir una por año", pero el plan indicativo sí programa 1 por año.
+
+\end{itemize}
+
+\section{Decisiones que se necesitan de los profesores}
+
+\begin{enumerate}
+
+\item \textbf{PP:} ¿aceptan EPP reconstruido (listado EFPC $\times$ plan de acción) como "Construible, Pendiente" y la exclusión del proyecto 0553? ¿Quién en Planeación puede confirmar la lista de códigos PP de 2024-2026?
+
+\item \textbf{PP.CEP:} ¿se admite un CEP provisional con autorreporte del plan de acción (y con qué regla de agregación), o se exige acta de recibo/informe final y CEP queda N/D?
+
+\item \textbf{Universos de control social:} ¿qué es "evento municipal de rendición de cuentas" (1 a 8 por año según el criterio)? ¿la mención de veedurías en un acta acredita presencia o se exige lista de asistencia? ¿cuáles son las \textasciitilde{}10 metas de DSI? ¿qué es "respuesta de fondo"?
+
+\item \textbf{Procesos participativos (I1, I4):} ¿se solicita el inventario oficial o se fija un universo cerrado ex ante (PP, PDM/POT, rendición) aceptando el riesgo de subconteo?
+
+\item \textbf{Metas 2027 en años intermedios:} ¿evaluar 2024-2026 contra la meta 2027 o pedir metas anuales al DAP?
+
+\item \textbf{Fuentes con otra definición:} ¿se acepta Forensis para CM, el POT (5,75, no reconciliable con 3,88) para CA? ¿se descarta TerriData para CS?
+
+\item \textbf{PDM.CP y PDM.CD:} ¿se redefinen (no hay método ni cifra) o se solicitan al DAP y al Índer?
+
+\item \textbf{PC.I3:} ¿personas formadas (dato oficial) o acciones formativas (requiere programación de la EFPC)?
+
+\item \textbf{Cortes:} ¿cómo tratar datos con corte distinto al 31-dic (MinSalud mensual, ICFES por calendario) y 2026 sin cierre? ¿se presentan cifras provisionales de 2026?
+
+\item \textbf{Inconsistencias a consultar con la Alcaldía:} personas capacitadas 2025 (65 vs 170), fecha de la audiencia del Alcalde 2024 (20 vs 26-nov), fecha de la rendición de PP 2024 (12-ene vs 12-feb-2025).
+
+\end{enumerate}
+
+\section{Solicitudes de información a la Alcaldía}
+
+\begingroup\sloppy
+
+32 solicitudes, agrupadas en 19 dependencias.
+
+\subsection*{Bienestar Social}
+
+\begin{itemize}
+
+\item \textbf{CS.VRC.ET:} Fecha de la rendicion de Victimas 2024 y listas de eventos del Comite de Discapacidad y Grupos Etnicos (2024-2026)
+
+\end{itemize}
+
+\subsection*{Departamento Administrativo de Planeación}
+
+\begin{itemize}
+
+\item \textbf{CS.VRC.ET:} Calendario o balance anual de la estrategia de rendicion de cuentas con la lista de eventos realizados (Alcalde, sectoriales, instancias), incluido el evento del Alcalde 2025 con su fecha (2024-2026)
+
+\item \textbf{PC.I1.V2; PC.I4.V1:} Informes del Observatorio de Participación Ciudadana (producto 536), incluido el del semestre II-2025 (2024, 2025)
+
+\item \textbf{PC.I2.V2:} Acto administrativo vigente de zonificación (Acuerdo 007 de 2025 y su antecedente) y confirmación de la situación de la zona 1 (Vigente)
+
+\item \textbf{PDM.CS.M, PDM.CM.M, PDM.CA.M, PDM.CP.M, PDM.CD.M, PDM.ILE.MA, PDM.ILE.MS:} Acuerdo de aprobación del proyecto 059 de 2025 y metas anuales de resultado (si existen) o confirmación de que solo hay meta 2027 (2024 a 2027)
+
+\end{itemize}
+
+\subsection*{Departamento Administrativo de Planeación - Dirección de Planeación}
+
+\begin{itemize}
+
+\item \textbf{CS.DSI.MD:} Valores observados 2024 y 2025 de los indicadores de resultado del PDM (no solo de producto) y su fecha de publicacion (2024-2025)
+
+\end{itemize}
+
+\subsection*{Departamento Administrativo de Planeación - Subdirección de Participación Ciudadana}
+
+\begin{itemize}
+
+\item \textbf{CS.PCS.EE:} Soportes de ejecucion del producto 5.1.2.1.2: documento Estrategia para el fortalecimiento del control social (2024) e informe de ciclos de formacion en control social (2025), y avance 2026 al 31-dic (2024-2026)
+
+\item \textbf{CS.VRC.EV:} Actas, memorias y listas de asistencia (sin datos personales: conteo de veedurias presentes) del evento de rendicion con veedurias del 12-dic-2024 y del equivalente de 2025 y 2026 (2024-2026)
+
+\item \textbf{PC.I1.V1; PC.I1.V2; PC.I4.V1; PC.I4.V2:} Inventario de procesos participativos cerrados (fecha de cierre, producto de cierre, enlace público, y acta/decreto/acuerdo donde se incorporó el aporte), con el criterio de universo usado (2024, 2025 y 2026 a la fecha)
+
+\item \textbf{PC.I2.V1:} Actas o listados de asistencia (sin datos personales: solo conteos) de las asambleas zonales de PDM, POT y PP, con fecha y zona (2024, 2025, 2026)
+
+\item \textbf{PC.I6.V1; PC.I6.V2:} Registro de actividades participativas realizadas con fecha, zona, modalidad (presencial, virtual, híbrida), canal habilitado para intervenir y evidencia (2024, 2025, 2026)
+
+\item \textbf{PDM.CP.O:} Ficha técnica del indicador "Implementación de los procesos de participación ciudadana" y su valor (2023, 2024, 2025 y 2026)
+
+\item \textbf{PP.CEP.PE:} Listado oficial de proyectos PP 2026 y definición de "entrega exigible en la vigencia" por proyecto (cronograma) (2026)
+
+\item \textbf{PP.EPP.OPP; PP.EPP.APP:} Lista oficial de códigos de proyecto que financian el presupuesto participativo por vigencia de ejecución, indicando si el proyecto es 100 \% PP y si incluye cofinanciación o el costo del proceso (proyecto 0553) (2024, 2025, 2026)
+
+\end{itemize}
+
+\subsection*{Departamento Administrativo de Planeación / Oficina Asesora de Comunicaciones}
+
+\begin{itemize}
+
+\item \textbf{CS.RPO.OT:} Matriz completa de preguntas y observaciones recibidas (presenciales, QR, YouTube, formulario previo) en las audiencias del Alcalde 2025 y 2026, con estado de respuesta y fecha (2025-2026)
+
+\end{itemize}
+
+\subsection*{Escuela de Formación para la Participación Ciudadana (EFPC) / Subdirección de Participación}
+
+\begin{itemize}
+
+\item \textbf{PC.I3.V1; PC.I3.V2:} Plan de formación aprobado y relación de acciones formativas (curso, diplomado, seminario, cátedra) con fechas de inicio y fin, público (ciudadanía o servidores), cupos y certificados (2024, 2025, 2026)
+
+\end{itemize}
+
+\subsection*{Oficina Asesora de Comunicaciones}
+
+\begin{itemize}
+
+\item \textbf{PC.I6.V1:} Informes públicos de rendición de cuentas 2024 y 2025 y evidencia de los canales virtuales de preguntas (2024, 2025)
+
+\end{itemize}
+
+\subsection*{Oficina Asesora de Planeación / Secretaría de Gobierno (SECOP II)}
+
+\begin{itemize}
+
+\item \textbf{PP.CEP.PEC:} Relación contrato-proyecto PP (referencia de contrato y código de proyecto) y estado de liquidación (2024, 2025, 2026)
+
+\end{itemize}
+
+\subsection*{Personería de Envigado}
+
+\begin{itemize}
+
+\item \textbf{CS.VRC.EV:} Corte actualizado del registro de veedurias vigentes y estado (activa/inactiva) por anio, sin datos personales (2024-2026)
+
+\end{itemize}
+
+\subsection*{Secretaría de Educación}
+
+\begin{itemize}
+
+\item \textbf{PDM.ILE.A:} Cobertura de atención integral de 0 a 6 años: numerador, población de referencia y porcentaje (2024 y 2025)
+
+\item \textbf{PDM.ILE.S:} Listado de I.E. oficiales con categoría ICFES 2023, 2024 y 2025 y número de las que mejoran (2023, 2024 y 2025)
+
+\end{itemize}
+
+\subsection*{Secretaría de Hacienda}
+
+\begin{itemize}
+
+\item \textbf{PP.EPP.OPP:} Ejecución de egresos por código de proyecto (apropiación definitiva, compromisos y obligaciones) al 31-dic-2024, 31-dic-2025 y 31-dic-2026 (2024, 2025, 2026)
+
+\end{itemize}
+
+\subsection*{Secretaría de Medio Ambiente y Desarrollo Agropecuario (con DAP)}
+
+\begin{itemize}
+
+\item \textbf{PDM.CA.O:} Ficha del indicador "Espacio público verde" (m²/hab), método de la base 3,88 y valores actualizados (2023, 2024 y 2025)
+
+\end{itemize}
+
+\subsection*{Secretaría de Movilidad (con Secretaría de Salud, Gestión del conocimiento)}
+
+\begin{itemize}
+
+\item \textbf{PDM.CM.O:} Serie anual de muertes por siniestros viales, la fuente y la población usadas para la línea base 10,2 y la tasa por 100.000 (2023, 2024, 2025 y 2026 a la fecha)
+
+\end{itemize}
+
+\subsection*{Secretaría de Salud}
+
+\begin{itemize}
+
+\item \textbf{CS.RPO.OR:} Cuadros de preguntas y respuestas de las rendiciones 2024-01 y 2024-02 (2024)
+
+\item \textbf{CS.VRC.EV:} Listados de asistencia anexos a las actas de rendicion 2024-01, 2024-02, 2025-01 y 2026-01, con indicacion de la veeduria representada (2024-2026)
+
+\item \textbf{PC.I5.V1:} Soportes de sesiones de COPACO y CMSSS 2024 (las evidencias son carpetas SharePoint privadas) (2024)
+
+\end{itemize}
+
+\subsection*{Secretaría de Salud - Dirección de Aseguramiento}
+
+\begin{itemize}
+
+\item \textbf{PDM.CS.O:} Cifra oficial de cobertura del aseguramiento del régimen subsidiado con el método del plan (fórmula, numerador, denominador y fuente BDUA/SisMaster) (31-dic-2024, 31-dic-2025 y último corte 2026)
+
+\end{itemize}
+
+\subsection*{Subdirección de Participación Ciudadana / unidades ejecutoras (INDER, Bienestar Social, Salud, Educación, Cultura, Medio Ambiente, Desarrollo Económico, OOPP, DAP)}
+
+\begin{itemize}
+
+\item \textbf{PP.CEP.PEC:} Actas de recibo, informes finales, informes de supervisión y actas de liquidación por proyecto PP (2024, 2025)
+
+\end{itemize}
+
+\subsection*{Subdirección de Participación Ciudadana; secretarías técnicas de las instancias (CMPC, CTP, comités zonales)}
+
+\begin{itemize}
+
+\item \textbf{PC.I5.V1; PC.I5.V2:} Calendario aprobado de sesiones y actas (o certificación de sesiones con quórum) de las instancias que se seleccionen (2024, 2025, 2026)
+
+\end{itemize}
+
+\subsection*{Unidades ejecutoras de los proyectos PP}
+
+\begin{itemize}
+
+\item \textbf{PP.CMA.NA; PA; MP:} Ficha técnica con meta anual de personas por atender e informe de personas únicas atendidas por proyecto (2024, 2025, 2026)
+
+\end{itemize}
+
+\subsection*{Índer Envigado}
+
+\begin{itemize}
+
+\item \textbf{PDM.CD.O:} Ficha, numerador, denominador y valor de la "cobertura de servicios deportivos de disciplinas tradicionales, nuevas tendencias y adaptadas" (2023, 2024, 2025 y 2026)
+
+\end{itemize}
+
+\endgroup
+
+\section{Limitaciones y próximos pasos}
+
+\subsection{Documentos que no se pudieron consultar o leer}
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{3.6cm}YL{3cm}L{3cm}}
+\toprule
+\textbf{Documento} & \textbf{Enlace} & \textbf{Variable que cambiaría} & \textbf{Motivo} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Documento} & \textbf{Enlace} & \textbf{Variable que cambiaría} & \textbf{Motivo} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+Clasificación de planteles ICFES (nota 10 años) & \texttt{\footnotesize \href{https://www.icfes.gov.co/wp-content/uploads/2026/08/2.-Nota-Clasificacion-de-planteles-10-años.pdf}{https:/\allowbreak{}}\allowbreak{}\href{https://www.icfes.gov.co/wp-content/uploads/2026/08/2.-Nota-Clasificacion-de-planteles-10-años.pdf}{/\allowbreak{}}\allowbreak{}\href{https://www.icfes.gov.co/wp-content/uploads/2026/08/2.-Nota-Clasificacion-de-planteles-10-años.pdf}{www.\allowbreak{}icfes.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.icfes.gov.co/wp-content/uploads/2026/08/2.-Nota-Clasificacion-de-planteles-10-años.pdf}{wp-\allowbreak{}content/\allowbreak{}}\allowbreak{}\href{https://www.icfes.gov.co/wp-content/uploads/2026/08/2.-Nota-Clasificacion-de-planteles-10-años.pdf}{uploads/\allowbreak{}}\allowbreak{}\href{https://www.icfes.gov.co/wp-content/uploads/2026/08/2.-Nota-Clasificacion-de-planteles-10-años.pdf}{2026/\allowbreak{}}\allowbreak{}\href{https://www.icfes.gov.co/wp-content/uploads/2026/08/2.-Nota-Clasificacion-de-planteles-10-años.pdf}{08/\allowbreak{}}\allowbreak{}\href{https://www.icfes.gov.co/wp-content/uploads/2026/08/2.-Nota-Clasificacion-de-planteles-10-años.pdf}{2.\allowbreak{}-\allowbreak{}Nota-\allowbreak{}Clasificacion-\allowbreak{}de-\allowbreak{}planteles-\allowbreak{}10-\allowbreak{}años.\allowbreak{}pdf}}; \newline \texttt{\footnotesize \href{https://www.icfes.gov.co/analisis-de-datos/}{https:/\allowbreak{}}\allowbreak{}\href{https://www.icfes.gov.co/analisis-de-datos/}{/\allowbreak{}}\allowbreak{}\href{https://www.icfes.gov.co/analisis-de-datos/}{www.\allowbreak{}icfes.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.icfes.gov.co/analisis-de-datos/}{analisis-\allowbreak{}de-\allowbreak{}datos/\allowbreak{}}} & PDM.ILE.S: Parcial a Construible; desbloquea PDM.ILE y una entrada de ICPD-6 & La URL respondió 404 \\
+Cifras de aseguramiento MinSalud (tablero Tableau histórico, dic-2024) y método de la línea base (BDUA/SisMaster) de la Secretaría de Salud & \texttt{\footnotesize \href{https://minsalud.gov.co/Proteccion-Social/Paginas/cifras-aseguramiento-salud.aspx}{https:/\allowbreak{}}\allowbreak{}\href{https://minsalud.gov.co/Proteccion-Social/Paginas/cifras-aseguramiento-salud.aspx}{/\allowbreak{}}\allowbreak{}\href{https://minsalud.gov.co/Proteccion-Social/Paginas/cifras-aseguramiento-salud.aspx}{minsalud.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://minsalud.gov.co/Proteccion-Social/Paginas/cifras-aseguramiento-salud.aspx}{Proteccion-\allowbreak{}Social/\allowbreak{}}\allowbreak{}\href{https://minsalud.gov.co/Proteccion-Social/Paginas/cifras-aseguramiento-salud.aspx}{Paginas/\allowbreak{}}\allowbreak{}\href{https://minsalud.gov.co/Proteccion-Social/Paginas/cifras-aseguramiento-salud.aspx}{cifras-\allowbreak{}aseguramiento-\allowbreak{}salud.\allowbreak{}aspx}} & PDM.CS.O: Proxy a Parcial/Disponible si aparece el denominador de población objetivo & El tablero Tableau no es accesible desde el entorno; el método de la línea base no está publicado \\
+Observatorio de la ANSV (mortalidad vial 2025) y Forensis 2025 & \texttt{\footnotesize \href{https://ansv.gov.co}{https:/\allowbreak{}}\allowbreak{}\href{https://ansv.gov.co}{/\allowbreak{}}\allowbreak{}\href{https://ansv.gov.co}{ansv.\allowbreak{}gov.\allowbreak{}co}}; \newline \texttt{\footnotesize \href{https://www.medicinalegal.gov.co/}{https:/\allowbreak{}}\allowbreak{}\href{https://www.medicinalegal.gov.co/}{/\allowbreak{}}\allowbreak{}\href{https://www.medicinalegal.gov.co/}{www.\allowbreak{}medicinalegal.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}} & PDM.CM.O: 2025 pasa a Disponible; PDM.CM calculable en 2025 & El sitio de la ANSV expiró por tiempo (timeout); Forensis 2025 aún no está publicado \\
+Rendición de cuentas de la Alcaldía (página y balance de eventos 2024-2025) & \texttt{\footnotesize \href{https://www.envigado.gov.co/rendicion-de-cuentas}{https:/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/rendicion-de-cuentas}{/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/rendicion-de-cuentas}{www.\allowbreak{}envigado.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/rendicion-de-cuentas}{rendicion-\allowbreak{}de-\allowbreak{}cuentas}}; \newline \texttt{\footnotesize \href{https://www.envigado.gov.co/descripcion-general/625-rendicion-de-cuentas}{https:/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/descripcion-general/625-rendicion-de-cuentas}{/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/descripcion-general/625-rendicion-de-cuentas}{www.\allowbreak{}envigado.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/descripcion-general/625-rendicion-de-cuentas}{descripcion-\allowbreak{}general/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/descripcion-general/625-rendicion-de-cuentas}{625-\allowbreak{}rendicion-\allowbreak{}de-\allowbreak{}cuentas}} & CS.VRC.ET, CS.VRC.EV, CS.RPO.OT y CS.RPO.OR (universo de eventos y acta integral 2025); PC.I6.V1 & Error de certificado TLS en el portal \\
+Rendición de Cuentas 2025 (p. 61) & \texttt{\footnotesize \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002947/147324_rc2025.pdf}{https:/\allowbreak{}}\allowbreak{}\href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002947/147324_rc2025.pdf}{/\allowbreak{}}\allowbreak{}\href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002947/147324_rc2025.pdf}{alcaldia-\allowbreak{}municipal-\allowbreak{}de-\allowbreak{}envigado-\allowbreak{}en-\allowbreak{}antioquia.\allowbreak{}micolombiadi\allowbreak{}gital.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002947/147324_rc2025.pdf}{sites/\allowbreak{}}\allowbreak{}\href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002947/147324_rc2025.pdf}{alcaldia-\allowbreak{}municipal-\allowbreak{}de-\allowbreak{}envigado-\allowbreak{}en-\allowbreak{}antioquia/\allowbreak{}}\allowbreak{}\href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002947/147324_rc2025.pdf}{content/\allowbreak{}}\allowbreak{}\href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002947/147324_rc2025.pdf}{files/\allowbreak{}}\allowbreak{}\href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002947/147324_rc2025.pdf}{002947/\allowbreak{}}\allowbreak{}\href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002947/147324_rc2025.pdf}{147324\_\allowbreak{}rc2025.\allowbreak{}pdf}} & PP.EPP.APP 2026 y PP.CEP.PE 2026 (confirmación); posible fuente de PE/entregas & Verificada por el profesor Francisco; no fue reabierta en esta tarea \\
+Acta 096 de 2026 del Concejo (p. 3) & \texttt{\footnotesize \href{https://www.concejoenvigado.gov.co/wp-content/uploads/2026/09/Acta-096-de-2026.pdf}{https:/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2026/09/Acta-096-de-2026.pdf}{/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2026/09/Acta-096-de-2026.pdf}{www.\allowbreak{}concejoenvigado.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2026/09/Acta-096-de-2026.pdf}{wp-\allowbreak{}content/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2026/09/Acta-096-de-2026.pdf}{uploads/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2026/09/Acta-096-de-2026.pdf}{2026/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2026/09/Acta-096-de-2026.pdf}{09/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2026/09/Acta-096-de-2026.pdf}{Acta-\allowbreak{}096-\allowbreak{}de-\allowbreak{}2026.\allowbreak{}pdf}} & PP.CEP.PEC y PP.CMA.NA (lo que el profesor leyó como N/D); contraste de EPP & No fue abierta en la Fase 2 \\
+Acuerdo 007 de 2025 & \texttt{\footnotesize \href{https://www.concejoenvigado.gov.co/wp-content/uploads/2025/02/Acuerdo-007-de-2025.pdf}{https:/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2025/02/Acuerdo-007-de-2025.pdf}{/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2025/02/Acuerdo-007-de-2025.pdf}{www.\allowbreak{}concejoenvigado.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2025/02/Acuerdo-007-de-2025.pdf}{wp-\allowbreak{}content/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2025/02/Acuerdo-007-de-2025.pdf}{uploads/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2025/02/Acuerdo-007-de-2025.pdf}{2025/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2025/02/Acuerdo-007-de-2025.pdf}{02/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2025/02/Acuerdo-007-de-2025.pdf}{Acuerdo-\allowbreak{}007-\allowbreak{}de-\allowbreak{}2025.\allowbreak{}pdf}} & PC.I2.V2 (acto oficial de las 13 zonas); regla de PP para EPP/CEP & Responde HTTP 200 pero no fue leído \\
+Sección Observatorio Ciudadano de la EFPC (informes del producto 536) & \texttt{\footnotesize \href{https://efpc.envigado.gov.co/observatorio-ciudadano/}{https:/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/observatorio-ciudadano/}{/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/observatorio-ciudadano/}{efpc.\allowbreak{}envigado.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/observatorio-ciudadano/}{observatorio-\allowbreak{}ciudadano/\allowbreak{}}} & PC.I1 y PC.I4 (posible inventario de procesos y publicaciones de resultados) & La URL respondió 404 \\
+\end{xltabular}
+}
+
+\subsection{Próximos pasos}
+\begin{enumerate}
+\item Tomar las decisiones de la sección anterior, en especial los universos de conteo.
+\item Enviar las solicitudes de información a la Alcaldía.
+\item Descargar manualmente los documentos de la tabla anterior y reclasificar las variables afectadas.
+\item Validar con Planeación la lista de proyectos del presupuesto participativo.
+\item Volver a generar la matriz de disponibilidad y este informe con los scripts del repositorio.
+\end{enumerate}
+
+\appendix
+
+\section{Catálogo de fuentes}\label{anexo:fuentes}
+
+66 fuentes consultadas.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{2.8cm}YL{1.6cm}Y}
+\toprule
+\textbf{Emisor} & \textbf{Documento} & \textbf{Formato} & \textbf{Enlace o ruta} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Emisor} & \textbf{Documento} & \textbf{Formato} & \textbf{Enlace o ruta} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+Alcaldia de Envigado - DAP & Plan Indicativo de Productos - evaluacion definitiva 2T-2026 & XLSX & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}informe-\allowbreak{}de-\allowbreak{}gestion-\allowbreak{}alcaldia-\allowbreak{}de-\allowbreak{}envigado/\allowbreak{}evaluacionde\allowbreak{}finitivaplan\allowbreak{}indicativopr\allowbreak{}oductos2026s\allowbreak{}egundotrimes\allowbreak{}tre20260730.\allowbreak{}xlsx}; \newline \texttt{\footnotesize \href{https://www.envigado.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{https:/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{www.\allowbreak{}envigado.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{sites/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{alcaldia-\allowbreak{}municipal-\allowbreak{}de-\allowbreak{}envigado-\allowbreak{}en-\allowbreak{}antioquia/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{content/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{files/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{003611/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{180505\_\allowbreak{}evaluacionde\allowbreak{}finitivaplan\allowbreak{}indicativopr\allowbreak{}oductos2026s\allowbreak{}egundotrimes\allowbreak{}tre20260730.\allowbreak{}xlsx}} \\
+Alcaldia de Envigado - DAP & Evaluacion PDM IV trim.\allowbreak{} 2024 y IV trim.\allowbreak{} 2025 & PDF de presentacion (19 p.\allowbreak{} c/\allowbreak{}u, graficos con poco texto) & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}plan-\allowbreak{}de-\allowbreak{}desarrollo-\allowbreak{}20242027/\allowbreak{}evaluacionpl\allowbreak{}andesarrollo\allowbreak{}municipalcua\allowbreak{}rtotrimestre\allowbreak{}202431032025.\allowbreak{}pdf}; \newline .\allowbreak{}.\allowbreak{}.\allowbreak{}cuartotrimestre202525022026.\allowbreak{}pdf \\
+Alcaldia de Envigado & Apendice 9.\allowbreak{}1 Plan Indicativo (27-may-2024) & XLSX & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}05\_\allowbreak{}fuentes\_\allowbreak{}externas\_\allowbreak{}y\_\allowbreak{}pot/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}plan-\allowbreak{}de-\allowbreak{}desarrollo-\allowbreak{}20242027/\allowbreak{}apendice91pl\allowbreak{}anindicativo\allowbreak{}27052024.\allowbreak{}xlsx} \\
+Alcaldia de Envigado - Secretaria de Salud & Actas, informes y Q\&A de rendicion de la Secretaria de Salud (2024-01, 2024-02, 2025-01, 2026-01) & PDF (texto) y XLSX de evaluacion & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}03\_\allowbreak{}actas\_\allowbreak{}y\_\allowbreak{}comites\_\allowbreak{}tecnicos/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}acta-\allowbreak{}audiencia-\allowbreak{}publica-\allowbreak{}de-\allowbreak{}rendicion-\allowbreak{}de-\allowbreak{}cuentas-\allowbreak{}2024/\allowbreak{}}; \newline \texttt{\footnotesize audiencia-\allowbreak{}publica-\allowbreak{}de-\allowbreak{}rendicion-\allowbreak{}de-\allowbreak{}cuentas-\allowbreak{}202501-\allowbreak{}secretaria/\allowbreak{}}; \newline \texttt{\footnotesize 02\_\allowbreak{}ejecucion.\allowbreak{}.\allowbreak{}.\allowbreak{}/\allowbreak{}plan-\allowbreak{}territoral-\allowbreak{}de-\allowbreak{}salud-\allowbreak{}2024-\allowbreak{}2027-\allowbreak{}en-\allowbreak{}envigado-\allowbreak{}vamos/\allowbreak{}}; \newline \texttt{\footnotesize primera-\allowbreak{}rendicion-\allowbreak{}de-\allowbreak{}cuentas-\allowbreak{}de-\allowbreak{}la-\allowbreak{}secretaria-\allowbreak{}de-\allowbreak{}salud/\allowbreak{}} \\
+Alcaldia de Envigado & Audiencia publica de rendicion de cuentas del Alcalde 2024 (Q\&A, evaluacion de jornada, plan de mejoramiento) & PDF y XLSX & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}03\_\allowbreak{}actas\_\allowbreak{}y\_\allowbreak{}comites\_\allowbreak{}tecnicos/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}audiencia-\allowbreak{}publica-\allowbreak{}de-\allowbreak{}rendicion-\allowbreak{}de-\allowbreak{}cuentas-\allowbreak{}2024-\allowbreak{}alcalde/\allowbreak{}129738\_\allowbreak{}preguntasyre\allowbreak{}comendacione\allowbreak{}srendicionde\allowbreak{}cuentas2024.\allowbreak{}pdf}; \newline \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}03\_\allowbreak{}actas\_\allowbreak{}y\_\allowbreak{}comites\_\allowbreak{}tecnicos/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}audiencia-\allowbreak{}publica-\allowbreak{}de-\allowbreak{}rendicion-\allowbreak{}de-\allowbreak{}cuentas-\allowbreak{}2024-\allowbreak{}alcalde/\allowbreak{}evaluacionjo\allowbreak{}rnadarendici\allowbreak{}ondecuentas2\allowbreak{}024.\allowbreak{}xlsx} \\
+Alcaldia de Envigado & Rendicion del Alcalde: 100 primeros dias (10-abr-2024) y 2025 (Q\&A) & PDF & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}preguntas-\allowbreak{}y-\allowbreak{}respuestas-\allowbreak{}de-\allowbreak{}la-\allowbreak{}rendicion-\allowbreak{}de-\allowbreak{}cuentas-\allowbreak{}100/\allowbreak{}}; \newline \texttt{\footnotesize rendicion-\allowbreak{}de-\allowbreak{}cuentas-\allowbreak{}2025-\allowbreak{}envigado-\allowbreak{}vamos-\allowbreak{}adelante/\allowbreak{}} \\
+Alcaldia de Envigado - Bienestar Social /\allowbreak{} DAP & Rendiciones sectoriales: Victimas, Grupos Etnicos, Comite Municipal de Discapacidad (2024-2026), Presupuesto Participativo 2024 & PDF & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}rendicion-\allowbreak{}de-\allowbreak{}cuentas-\allowbreak{}de-\allowbreak{}la-\allowbreak{}politica-\allowbreak{}publica-\allowbreak{}de-\allowbreak{}victimas/\allowbreak{}}; \newline \texttt{\footnotesize .\allowbreak{}.\allowbreak{}.\allowbreak{}/\allowbreak{}rendicion-\allowbreak{}de-\allowbreak{}cuentas-\allowbreak{}de-\allowbreak{}la-\allowbreak{}poblacion-\allowbreak{}afro-\allowbreak{}indigena-\allowbreak{}y/\allowbreak{}}; \newline \texttt{\footnotesize 03\_\allowbreak{}actas.\allowbreak{}.\allowbreak{}.\allowbreak{}/\allowbreak{}rendicion-\allowbreak{}de-\allowbreak{}cuentas-\allowbreak{}*discapacidad*/\allowbreak{}}; \newline \texttt{\footnotesize 01\_\allowbreak{}propuestas.\allowbreak{}.\allowbreak{}.\allowbreak{}/\allowbreak{}rendicion-\allowbreak{}de-\allowbreak{}cuentas-\allowbreak{}presupuesto-\allowbreak{}participativo-\allowbreak{}2024/\allowbreak{}} \\
+Personeria de Envigado (Datos Abiertos Colombia) & Registro de veedurias ciudadanas - Personeria de Envigado (datos.\allowbreak{}gov.\allowbreak{}co jju5-br3w) & CSV /\allowbreak{} API Socrata & \texttt{\footnotesize \href{https://www.datos.gov.co/resource/jju5-br3w.csv}{https:/\allowbreak{}}\allowbreak{}\href{https://www.datos.gov.co/resource/jju5-br3w.csv}{/\allowbreak{}}\allowbreak{}\href{https://www.datos.gov.co/resource/jju5-br3w.csv}{www.\allowbreak{}datos.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.datos.gov.co/resource/jju5-br3w.csv}{resource/\allowbreak{}}\allowbreak{}\href{https://www.datos.gov.co/resource/jju5-br3w.csv}{jju5-\allowbreak{}br3w.\allowbreak{}csv}}; \newline \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}03\_\allowbreak{}actas\_\allowbreak{}y\_\allowbreak{}comites\_\allowbreak{}tecnicos/\allowbreak{}datos\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}datosgov\_\allowbreak{}jju5-\allowbreak{}br3w\_\allowbreak{}Veedurias\_\allowbreak{}Ciudadanas\_\allowbreak{}Personeria\_\allowbreak{}Envigado.\allowbreak{}csv} \\
+Alcaldia de Envigado - EFPC & Material EFPC de control social (Escuela de Formacion para la Participacion) & PDF /\allowbreak{} sitio WordPress & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}03\_\allowbreak{}actas\_\allowbreak{}y\_\allowbreak{}comites\_\allowbreak{}tecnicos/\allowbreak{}efpc\_\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}efpc\_\allowbreak{}2025-\allowbreak{}03/\allowbreak{}}; \newline \texttt{\footnotesize \href{https://efpc.envigado.gov.co/}{https:/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/}{/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/}{efpc.\allowbreak{}envigado.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}} \\
+Alcaldia de Envigado & Portal de la Alcaldia (micrositio de rendicion de cuentas, seccion 6.\allowbreak{}2.\allowbreak{}5, noticias) & Web (aplicacion JavaScript) & \texttt{\footnotesize \href{https://www.envigado.gov.co/rendicion-de-cuentas}{https:/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/rendicion-de-cuentas}{/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/rendicion-de-cuentas}{www.\allowbreak{}envigado.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/rendicion-de-cuentas}{rendicion-\allowbreak{}de-\allowbreak{}cuentas}}; \newline \texttt{\footnotesize \href{https://www.envigado.gov.co/descripcion-general/625-rendicion-de-cuentas}{https:/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/descripcion-general/625-rendicion-de-cuentas}{/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/descripcion-general/625-rendicion-de-cuentas}{www.\allowbreak{}envigado.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/descripcion-general/625-rendicion-de-cuentas}{descripcion-\allowbreak{}general/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/descripcion-general/625-rendicion-de-cuentas}{625-\allowbreak{}rendicion-\allowbreak{}de-\allowbreak{}cuentas}} \\
+Organismos de control & Contraloria /\allowbreak{} Personeria /\allowbreak{} Concejo de Envigado & Web & sin URL verificada \\
+Alcaldía de Envigado (Control Interno /\allowbreak{} DAP) & Informe de gestión por dependencias 2025 & PDF (304 p.\allowbreak{}, texto extraíble) & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}anon-\allowbreak{}2026/\allowbreak{}2025informeg\allowbreak{}estiondepend\allowbreak{}encias.\allowbreak{}pdf} \\
+Alcaldía de Envigado (Control Interno /\allowbreak{} DAP) & Informe de gestión por dependencias 2024 & PDF (198 p.\allowbreak{}) & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}ano-\allowbreak{}2025-\allowbreak{}298942/\allowbreak{}24informeges\allowbreak{}tionpordepen\allowbreak{}denciasalcal\allowbreak{}diamunicipal\allowbreak{}envigado2024.\allowbreak{}pdf} \\
+Alcaldía de Envigado (DAP) & Plan indicativo de productos del PDM, corte 2.\allowbreak{}º trim.\allowbreak{} 2026 & XLSX (hoja Plan-Indicativo-Productos) & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}informe-\allowbreak{}de-\allowbreak{}gestion-\allowbreak{}alcaldia-\allowbreak{}de-\allowbreak{}envigado/\allowbreak{}evaluacionde\allowbreak{}finitivaplan\allowbreak{}indicativopr\allowbreak{}oductos2026s\allowbreak{}egundotrimes\allowbreak{}tre20260730.\allowbreak{}xlsx} \\
+Alcaldía de Envigado (DAP) & Plan de acción IV trimestre 2025 (seguimiento a proyectos) & XLSX (hoja PlanAcción27.\allowbreak{}01.\allowbreak{}2026) & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}seguimiento-\allowbreak{}a-\allowbreak{}proyectos-\allowbreak{}2025/\allowbreak{}evaluacionde\allowbreak{}finitivaplan\allowbreak{}accionivtri.\allowbreak{}xlsx} \\
+Alcaldía de Envigado & Plan de Desarrollo Municipal 2024-2027 & PDF (807 p.\allowbreak{}) & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}05\_\allowbreak{}fuentes\_\allowbreak{}externas\_\allowbreak{}y\_\allowbreak{}pot/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}plan-\allowbreak{}de-\allowbreak{}desarrollo-\allowbreak{}20242027/\allowbreak{}plandesarrol\allowbreak{}lo20242027.\allowbreak{}pdf} \\
+Alcaldía de Envigado & Anteproyecto del PDM (29-feb-2024) & PDF (312 p.\allowbreak{}) & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}05\_\allowbreak{}fuentes\_\allowbreak{}externas\_\allowbreak{}y\_\allowbreak{}pot/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}plan-\allowbreak{}de-\allowbreak{}desarrollo-\allowbreak{}20242027/\allowbreak{}anteproyecto\allowbreak{}29022024.\allowbreak{}pdf} \\
+Alcaldía de Envigado & Cronograma de asambleas zonales del POT 2025 & PDF (1 p.\allowbreak{}) & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}03\_\allowbreak{}actas\_\allowbreak{}y\_\allowbreak{}comites\_\allowbreak{}tecnicos/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}programacion-\allowbreak{}de-\allowbreak{}las-\allowbreak{}asambleas-\allowbreak{}zonales-\allowbreak{}del-\allowbreak{}plan-\allowbreak{}de-\allowbreak{}ordenamiento/\allowbreak{}cronograma-\allowbreak{}asambleas-\allowbreak{}pot.\allowbreak{}pdf} \\
+Alcaldía de Envigado & Programación de asambleas zonales y puntos de votación PP 2027 (jul-2026) & PDF (3 p.\allowbreak{}) & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}03\_\allowbreak{}actas\_\allowbreak{}y\_\allowbreak{}comites\_\allowbreak{}tecnicos/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}programacion-\allowbreak{}de-\allowbreak{}las-\allowbreak{}asambleas-\allowbreak{}zonales-\allowbreak{}y-\allowbreak{}puntos-\allowbreak{}descentraliz\allowbreak{}ados/\allowbreak{}asambleas-\allowbreak{}zonales-\allowbreak{}y-\allowbreak{}puntos-\allowbreak{}descentraliz\allowbreak{}ados-\allowbreak{}pp2027.\allowbreak{}pdf} \\
+EFPC /\allowbreak{} Alcaldía de Envigado & Listados de proyectos de presupuesto participativo 2024 y 2025 & PDF & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}01\_\allowbreak{}propuestas\_\allowbreak{}y\_\allowbreak{}acuerdos/\allowbreak{}efpc\_\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}efpc\_\allowbreak{}2025-\allowbreak{}07/\allowbreak{}Proyectos\_\allowbreak{}PP\_\allowbreak{}2025.\allowbreak{}pdf} (y \_2024.\allowbreak{}pdf) \\
+Alcaldía de Envigado (DAP) & Comunicados de iniciativas ciudadanas PP (88 en 2024; 90 nuevas + 42 continuidad en 2025) & PDF (2 p.\allowbreak{} c/\allowbreak{}u) & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}01\_\allowbreak{}propuestas\_\allowbreak{}y\_\allowbreak{}acuerdos/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}88-\allowbreak{}iniciativas-\allowbreak{}ciudadanas-\allowbreak{}fueron-\allowbreak{}postuladas-\allowbreak{}para-\allowbreak{}el-\allowbreak{}515924/\allowbreak{}} y \texttt{\footnotesize .\allowbreak{}.\allowbreak{}.\allowbreak{}/\allowbreak{}90-\allowbreak{}iniciativas-\allowbreak{}ciudadanas-\allowbreak{}fueron-\allowbreak{}postuladas-\allowbreak{}para-\allowbreak{}el-\allowbreak{}694496/\allowbreak{}} \\
+Alcaldía de Envigado & Preguntas y respuestas de la rendición de cuentas 2024 (alcalde) & PDF (24 p.\allowbreak{}) & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}03\_\allowbreak{}actas\_\allowbreak{}y\_\allowbreak{}comites\_\allowbreak{}tecnicos/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}audiencia-\allowbreak{}publica-\allowbreak{}de-\allowbreak{}rendicion-\allowbreak{}de-\allowbreak{}cuentas-\allowbreak{}2024-\allowbreak{}alcalde/\allowbreak{}129738\_\allowbreak{}preguntasyre\allowbreak{}comendacione\allowbreak{}srendicionde\allowbreak{}cuentas2024.\allowbreak{}pdf} \\
+Alcaldía de Envigado & Preguntas y respuestas de la rendición de cuentas 2025 (alcalde) & PDF (5 p.\allowbreak{}) & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}rendicion-\allowbreak{}de-\allowbreak{}cuentas-\allowbreak{}2025-\allowbreak{}envigado-\allowbreak{}vamos-\allowbreak{}adelante/\allowbreak{}preguntas-\allowbreak{}y-\allowbreak{}respuestas\_\allowbreak{}rendicion-\allowbreak{}de-\allowbreak{}cuentas\_\allowbreak{}2025.\allowbreak{}pdf} \\
+Secretaría de Salud de Envigado & Plan de acción PPSS 2025 y soportes 2024 (participación social en salud) & XLSX (formato oficial Res.\allowbreak{} 2063/\allowbreak{}2017) & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}01\_\allowbreak{}propuestas\_\allowbreak{}y\_\allowbreak{}acuerdos/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}seguimiento-\allowbreak{}al-\allowbreak{}plan-\allowbreak{}de-\allowbreak{}accion-\allowbreak{}de-\allowbreak{}la-\allowbreak{}politica-\allowbreak{}de-\allowbreak{}participacion-\allowbreak{}596131/\allowbreak{}pps190ppps20\allowbreak{}251231mu0000\allowbreak{}00005266.\allowbreak{}xlsx} \\
+Alcaldía de Envigado (DAP) & Calendario anual de la Subdirección de Participación Ciudadana 2024 & PDF (26 p.\allowbreak{}) & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}calendario-\allowbreak{}anual-\allowbreak{}subdireccion-\allowbreak{}participacion-\allowbreak{}ciudadana/\allowbreak{}calendariopa\allowbreak{}rticipacionc\allowbreak{}iudadana2024.\allowbreak{}pdf} \\
+Alcaldía de Envigado & Formatos de consulta ciudadana de rendición de cuentas 2025 y 2026 & PDF/\allowbreak{}DOCX & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}envigado-\allowbreak{}invita-\allowbreak{}a-\allowbreak{}la-\allowbreak{}comunidad-\allowbreak{}a-\allowbreak{}proponer-\allowbreak{}temas-\allowbreak{}para/\allowbreak{}} y \texttt{\footnotesize .\allowbreak{}.\allowbreak{}.\allowbreak{}/\allowbreak{}envigado-\allowbreak{}abre-\allowbreak{}consulta-\allowbreak{}ciudadana-\allowbreak{}para-\allowbreak{}construir-\allowbreak{}la-\allowbreak{}rendicion/\allowbreak{}} \\
+Alcaldía de Envigado (EFPC) & Escuela de Formación para la Participación Ciudadana (sitio) & HTML & \texttt{\footnotesize \href{https://efpc.envigado.gov.co}{https:/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co}{/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co}{efpc.\allowbreak{}envigado.\allowbreak{}gov.\allowbreak{}co}} (oferta: /oferta-2025/; \newline catálogo: /\allowbreak{}catalogo/\allowbreak{}; \newline memorias: /\allowbreak{}memorias/\allowbreak{}) \\
+Alcaldía de Envigado (EFPC) & Campus virtual de la EFPC & HTML (Moodle) & \texttt{\footnotesize \href{https://campusvirtualefpc.envigado.gov.co}{https:/\allowbreak{}}\allowbreak{}\href{https://campusvirtualefpc.envigado.gov.co}{/\allowbreak{}}\allowbreak{}\href{https://campusvirtualefpc.envigado.gov.co}{campusvirtua\allowbreak{}lefpc.\allowbreak{}envigado.\allowbreak{}gov.\allowbreak{}co}} \\
+Alcaldía de Envigado & Portal de la Alcaldía de Envigado (noticias, rendición de cuentas, Subdirección de Participación) & HTML & \texttt{\footnotesize \href{https://www.envigado.gov.co}{https:/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co}{/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co}{www.\allowbreak{}envigado.\allowbreak{}gov.\allowbreak{}co}} \\
+Alcaldía de Envigado & Plataforma de presupuesto participativo (mi.\allowbreak{}envigado.\allowbreak{}gov.\allowbreak{}co) & HTML (plataforma web) & \texttt{\footnotesize \href{https://mi.envigado.gov.co}{https:/\allowbreak{}}\allowbreak{}\href{https://mi.envigado.gov.co}{/\allowbreak{}}\allowbreak{}\href{https://mi.envigado.gov.co}{mi.\allowbreak{}envigado.\allowbreak{}gov.\allowbreak{}co}} (URL citada en G25 p. 92) \\
+MinTIC /\allowbreak{} entidades & Datos Abiertos Colombia & CSV/\allowbreak{}API & \texttt{\footnotesize \href{https://www.datos.gov.co}{https:/\allowbreak{}}\allowbreak{}\href{https://www.datos.gov.co}{/\allowbreak{}}\allowbreak{}\href{https://www.datos.gov.co}{www.\allowbreak{}datos.\allowbreak{}gov.\allowbreak{}co}} \\
+Alcaldía de Envigado (DAP) & Observatorio de Participación Ciudadana (informes semestrales) & Desconocido & URL por buscar; \newline no hallada \\
+Alcaldía de Envigado & Documento Técnico de Soporte modificado (22-dic-2025), 841 p.\allowbreak{} & PDF & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}05\_\allowbreak{}fuentes\_\allowbreak{}externas\_\allowbreak{}y\_\allowbreak{}pot/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}plan-\allowbreak{}de-\allowbreak{}desarrollo-\allowbreak{}20242027/\allowbreak{}documentotec\allowbreak{}nicosoportep\allowbreak{}dm22122025.\allowbreak{}pdf} \\
+Alcaldía de Envigado & Expediente proyecto de acuerdo 059 de 2025 (modifica el Acuerdo 017) & PDF & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}05\_\allowbreak{}fuentes\_\allowbreak{}externas\_\allowbreak{}y\_\allowbreak{}pot/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}plan-\allowbreak{}de-\allowbreak{}desarrollo-\allowbreak{}20242027/\allowbreak{}expedienteco\allowbreak{}mpletoproyec\allowbreak{}toacuerdo059\allowbreak{}2025.\allowbreak{}pdf} \\
+Alcaldía de Envigado (DAP) & Evaluaciones trimestrales del PDM (T4-2024, T1-T3 2025, T4-2025 y provisional) & PDF (presentaciones) & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}plan-\allowbreak{}de-\allowbreak{}desarrollo-\allowbreak{}20242027/\allowbreak{}evaluacionpl\allowbreak{}andesarrollo\allowbreak{}municipalcua\allowbreak{}rtotrimestre\allowbreak{}202431032025.\allowbreak{}pdf}; \newline \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}plan-\allowbreak{}de-\allowbreak{}desarrollo-\allowbreak{}20242027/\allowbreak{}evaluacionpl\allowbreak{}andesarrollo\allowbreak{}municipalcua\allowbreak{}rtotrimestre\allowbreak{}202525022026.\allowbreak{}pdf}; \newline \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}informe-\allowbreak{}de-\allowbreak{}gestion-\allowbreak{}alcaldia-\allowbreak{}de-\allowbreak{}envigado/\allowbreak{}} (otros 6) \\
+Alcaldía de Envigado (Control Interno) & Informe de gestión por dependencias 2025 (304 p.\allowbreak{}) y 2024 (198 p.\allowbreak{}) & PDF & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}anon-\allowbreak{}2026/\allowbreak{}2025informeg\allowbreak{}estiondepend\allowbreak{}encias.\allowbreak{}pdf}; \newline \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}ano-\allowbreak{}2025-\allowbreak{}298942/\allowbreak{}24informeges\allowbreak{}tionpordepen\allowbreak{}denciasalcal\allowbreak{}diamunicipal\allowbreak{}envigado2024.\allowbreak{}pdf} \\
+Secretaría de Educación & Balance PDM 2024 Educación (ppt, 106 p.\allowbreak{}) & PDF & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}05\_\allowbreak{}fuentes\_\allowbreak{}externas\_\allowbreak{}y\_\allowbreak{}pot/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}secretaria-\allowbreak{}de-\allowbreak{}educacion-\allowbreak{}426550/\allowbreak{}ppt-\allowbreak{}balance-\allowbreak{}pdm-\allowbreak{}2024\_\allowbreak{}educacion\_\allowbreak{}oficial.\allowbreak{}pdf} \\
+Alcaldía de Envigado & Seguimiento planes 2025 (DAP, Movilidad, Medio Ambiente, Educación) y rendiciones de Salud 2024-2026 y del alcalde 2024 & PDF & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}ano-\allowbreak{}2025-\allowbreak{}298942/\allowbreak{}}; \newline \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}plan-\allowbreak{}territoral-\allowbreak{}de-\allowbreak{}salud-\allowbreak{}2024-\allowbreak{}2027-\allowbreak{}en-\allowbreak{}envigado-\allowbreak{}vamos/\allowbreak{}}; \newline \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}2024-\allowbreak{}-\allowbreak{}2027-\allowbreak{}raul-\allowbreak{}cardona-\allowbreak{}gonzalez/\allowbreak{}rendiciondec\allowbreak{}uentas2024di\allowbreak{}gital.\allowbreak{}pdf} \\
+Ministerio de Salud y Protección Social & Cifras de afiliación en salud (zips mensuales) & XLSX en ZIP & \texttt{\footnotesize \href{https://minsalud.gov.co/Proteccion-Social/Paginas/cifras-aseguramiento-salud.aspx}{https:/\allowbreak{}}\allowbreak{}\href{https://minsalud.gov.co/Proteccion-Social/Paginas/cifras-aseguramiento-salud.aspx}{/\allowbreak{}}\allowbreak{}\href{https://minsalud.gov.co/Proteccion-Social/Paginas/cifras-aseguramiento-salud.aspx}{minsalud.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://minsalud.gov.co/Proteccion-Social/Paginas/cifras-aseguramiento-salud.aspx}{Proteccion-\allowbreak{}Social/\allowbreak{}}\allowbreak{}\href{https://minsalud.gov.co/Proteccion-Social/Paginas/cifras-aseguramiento-salud.aspx}{Paginas/\allowbreak{}}\allowbreak{}\href{https://minsalud.gov.co/Proteccion-Social/Paginas/cifras-aseguramiento-salud.aspx}{cifras-\allowbreak{}aseguramiento-\allowbreak{}salud.\allowbreak{}aspx}} \\
+MinSalud vía datos.\allowbreak{}gov.\allowbreak{}co & Número de afiliados por departamento, municipio y régimen (hn4i-593p) & API JSON/\allowbreak{}CSV & \texttt{\footnotesize \href{https://www.datos.gov.co/resource/hn4i-593p.json}{https:/\allowbreak{}}\allowbreak{}\href{https://www.datos.gov.co/resource/hn4i-593p.json}{/\allowbreak{}}\allowbreak{}\href{https://www.datos.gov.co/resource/hn4i-593p.json}{www.\allowbreak{}datos.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.datos.gov.co/resource/hn4i-593p.json}{resource/\allowbreak{}}\allowbreak{}\href{https://www.datos.gov.co/resource/hn4i-593p.json}{hn4i-\allowbreak{}593p.\allowbreak{}json}} \\
+ADRES & BDUA /\allowbreak{} ADRES & Consulta individual & \texttt{\footnotesize \href{https://adres.gov.co/entidades-territoriales/bdua}{https:/\allowbreak{}}\allowbreak{}\href{https://adres.gov.co/entidades-territoriales/bdua}{/\allowbreak{}}\allowbreak{}\href{https://adres.gov.co/entidades-territoriales/bdua}{adres.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://adres.gov.co/entidades-territoriales/bdua}{entidades-\allowbreak{}territoriales/\allowbreak{}}\allowbreak{}\href{https://adres.gov.co/entidades-territoriales/bdua}{bdua}} \\
+DNP & TerriData -- Envigado (05266) & TXT (delimitado por \textbar{}) en ZIP & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}05\_\allowbreak{}fuentes\_\allowbreak{}externas\_\allowbreak{}y\_\allowbreak{}pot/\allowbreak{}dnp\_\allowbreak{}terridata/\allowbreak{}TerriData05266f.\allowbreak{}txt.\allowbreak{}zip} \\
+DANE & Proyecciones de población municipal DANE (post-COVID 2020-2035 y serie 2018-2042 VP) & XLSX & \texttt{\footnotesize \href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{https:/\allowbreak{}}\allowbreak{}\href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{/\allowbreak{}}\allowbreak{}\href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{www.\allowbreak{}dane.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{files/\allowbreak{}}\allowbreak{}\href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{censo2018/\allowbreak{}}\allowbreak{}\href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{proyecciones-\allowbreak{}de-\allowbreak{}poblacion/\allowbreak{}}\allowbreak{}\href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{Municipal/\allowbreak{}}\allowbreak{}\href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{DCD-\allowbreak{}area-\allowbreak{}proypoblacion-\allowbreak{}Mun-\allowbreak{}2020-\allowbreak{}2035-\allowbreak{}ActPostCOVID-\allowbreak{}19.\allowbreak{}xlsx}}; \newline \texttt{\footnotesize \href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/PPED-AreaMun-2018-2042_VP.xlsx}{https:/\allowbreak{}}\allowbreak{}\href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/PPED-AreaMun-2018-2042_VP.xlsx}{/\allowbreak{}}\allowbreak{}\href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/PPED-AreaMun-2018-2042_VP.xlsx}{www.\allowbreak{}dane.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/PPED-AreaMun-2018-2042_VP.xlsx}{files/\allowbreak{}}\allowbreak{}\href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/PPED-AreaMun-2018-2042_VP.xlsx}{censo2018/\allowbreak{}}\allowbreak{}\href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/PPED-AreaMun-2018-2042_VP.xlsx}{proyecciones-\allowbreak{}de-\allowbreak{}poblacion/\allowbreak{}}\allowbreak{}\href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/PPED-AreaMun-2018-2042_VP.xlsx}{Municipal/\allowbreak{}}\allowbreak{}\href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/PPED-AreaMun-2018-2042_VP.xlsx}{PPED-\allowbreak{}AreaMun-\allowbreak{}2018-\allowbreak{}2042\_\allowbreak{}VP.\allowbreak{}xlsx}} \\
+Instituto Nacional de Medicina Legal y Ciencias Forenses & Forensis 2024 -- Datos para la vida & PDF (590 p.\allowbreak{}) & \texttt{\footnotesize \href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{https:/\allowbreak{}}\allowbreak{}\href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{/\allowbreak{}}\allowbreak{}\href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{www.\allowbreak{}medicinalegal.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{documents/\allowbreak{}}\allowbreak{}\href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{20143/\allowbreak{}}\allowbreak{}\href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{1269218/\allowbreak{}}\allowbreak{}\href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{Forensis\_\allowbreak{}2024.\allowbreak{}pdf}} \\
+Policía Nacional /\allowbreak{} MinDefensa vía datos.\allowbreak{}gov.\allowbreak{}co & Homicidio en accidente de tránsito (uav5-b85g) & API JSON/\allowbreak{}CSV & \texttt{\footnotesize \href{https://www.datos.gov.co/resource/uav5-b85g.json}{https:/\allowbreak{}}\allowbreak{}\href{https://www.datos.gov.co/resource/uav5-b85g.json}{/\allowbreak{}}\allowbreak{}\href{https://www.datos.gov.co/resource/uav5-b85g.json}{www.\allowbreak{}datos.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.datos.gov.co/resource/uav5-b85g.json}{resource/\allowbreak{}}\allowbreak{}\href{https://www.datos.gov.co/resource/uav5-b85g.json}{uav5-\allowbreak{}b85g.\allowbreak{}json}} \\
+Agencia Nacional de Seguridad Vial & Observatorio Nacional de Seguridad Vial (ANSV) & Tablero web & \texttt{\footnotesize \href{https://ansv.gov.co}{https:/\allowbreak{}}\allowbreak{}\href{https://ansv.gov.co}{/\allowbreak{}}\allowbreak{}\href{https://ansv.gov.co}{ansv.\allowbreak{}gov.\allowbreak{}co}} \\
+Alcaldía de Envigado (DAP) /\allowbreak{} DESur & Diagnóstico de la revisión del POT (14 archivos) y síntesis & PDF & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}05\_\allowbreak{}fuentes\_\allowbreak{}externas\_\allowbreak{}y\_\allowbreak{}pot/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}documento-\allowbreak{}diagnostico-\allowbreak{}pot/\allowbreak{}8-\allowbreak{}dimension-\allowbreak{}funcional-\allowbreak{}\_\allowbreak{}-\allowbreak{}espacio-\allowbreak{}publico.\allowbreak{}pdf} \\
+Área Metropolitana del Valle de Aburrá & Plan Maestro de Espacios Públicos Verdes Urbanos (actualización AMVA - Instituto Humboldt) & No localizado & sin verificar (no hallado en la web) \\
+ICFES & Clasificación de planteles Saber 11 /\allowbreak{} Cuadros de salida & XLSX (agregados); por plantel sin verificar & \texttt{\footnotesize \href{https://www.icfes.gov.co/analisis-de-datos/}{https:/\allowbreak{}}\allowbreak{}\href{https://www.icfes.gov.co/analisis-de-datos/}{/\allowbreak{}}\allowbreak{}\href{https://www.icfes.gov.co/analisis-de-datos/}{www.\allowbreak{}icfes.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.icfes.gov.co/analisis-de-datos/}{analisis-\allowbreak{}de-\allowbreak{}datos/\allowbreak{}}} \\
+Índer Envigado & Informes del Índer Envigado & No localizado & sin verificar \\
+Alcaldía de Envigado & Portal envigado.\allowbreak{}gov.\allowbreak{}co & Web & \texttt{\footnotesize \href{https://www.envigado.gov.co/}{https:/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/}{/\allowbreak{}}\allowbreak{}\href{https://www.envigado.gov.co/}{www.\allowbreak{}envigado.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}} \\
+Escuela de Formación Ciudadana (Alcaldía de Envigado) & Listado Proyectos PP 2025 (EFPC) & PDF con texto & \texttt{\footnotesize \href{https://efpc.envigado.gov.co/wp-content/uploads/2025/07/Proyectos_PP_2025.pdf}{https:/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/wp-content/uploads/2025/07/Proyectos_PP_2025.pdf}{/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/wp-content/uploads/2025/07/Proyectos_PP_2025.pdf}{efpc.\allowbreak{}envigado.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/wp-content/uploads/2025/07/Proyectos_PP_2025.pdf}{wp-\allowbreak{}content/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/wp-content/uploads/2025/07/Proyectos_PP_2025.pdf}{uploads/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/wp-content/uploads/2025/07/Proyectos_PP_2025.pdf}{2025/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/wp-content/uploads/2025/07/Proyectos_PP_2025.pdf}{07/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/wp-content/uploads/2025/07/Proyectos_PP_2025.pdf}{Proyectos\_\allowbreak{}PP\_\allowbreak{}2025.\allowbreak{}pdf}}; \newline \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}01\_\allowbreak{}propuestas\_\allowbreak{}y\_\allowbreak{}acuerdos/\allowbreak{}efpc\_\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}efpc\_\allowbreak{}2025-\allowbreak{}07/\allowbreak{}Proyectos\_\allowbreak{}PP\_\allowbreak{}2025.\allowbreak{}pdf} \\
+Escuela de Formación Ciudadana & Listado Proyectos PP 2024 (EFPC) & PDF con texto & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}01\_\allowbreak{}propuestas\_\allowbreak{}y\_\allowbreak{}acuerdos/\allowbreak{}efpc\_\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}efpc\_\allowbreak{}2025-\allowbreak{}07/\allowbreak{}Proyectos\_\allowbreak{}PP\_\allowbreak{}2024.\allowbreak{}pdf}; \newline \texttt{\footnotesize \href{https://efpc.envigado.gov.co/wp-content/uploads/2025/07/Proyectos_PP_2024.pdf}{https:/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/wp-content/uploads/2025/07/Proyectos_PP_2024.pdf}{/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/wp-content/uploads/2025/07/Proyectos_PP_2024.pdf}{efpc.\allowbreak{}envigado.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/wp-content/uploads/2025/07/Proyectos_PP_2024.pdf}{wp-\allowbreak{}content/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/wp-content/uploads/2025/07/Proyectos_PP_2024.pdf}{uploads/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/wp-content/uploads/2025/07/Proyectos_PP_2024.pdf}{2025/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/wp-content/uploads/2025/07/Proyectos_PP_2024.pdf}{07/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/wp-content/uploads/2025/07/Proyectos_PP_2024.pdf}{Proyectos\_\allowbreak{}PP\_\allowbreak{}2024.\allowbreak{}pdf}} \\
+Concejo de Envigado & Acuerdo 007 de 2025 & PDF & \texttt{\footnotesize \href{https://www.concejoenvigado.gov.co/wp-content/uploads/2025/02/Acuerdo-007-de-2025.pdf}{https:/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2025/02/Acuerdo-007-de-2025.pdf}{/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2025/02/Acuerdo-007-de-2025.pdf}{www.\allowbreak{}concejoenvigado.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2025/02/Acuerdo-007-de-2025.pdf}{wp-\allowbreak{}content/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2025/02/Acuerdo-007-de-2025.pdf}{uploads/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2025/02/Acuerdo-007-de-2025.pdf}{2025/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2025/02/Acuerdo-007-de-2025.pdf}{02/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2025/02/Acuerdo-007-de-2025.pdf}{Acuerdo-\allowbreak{}007-\allowbreak{}de-\allowbreak{}2025.\allowbreak{}pdf}} \\
+Alcaldía de Envigado & Rendición de Cuentas 2025 de la Alcaldía, p.\allowbreak{} 61 & PDF & \texttt{\footnotesize \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002947/147324_rc2025.pdf}{https:/\allowbreak{}}\allowbreak{}\href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002947/147324_rc2025.pdf}{/\allowbreak{}}\allowbreak{}\href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002947/147324_rc2025.pdf}{alcaldia-\allowbreak{}municipal-\allowbreak{}de-\allowbreak{}envigado-\allowbreak{}en-\allowbreak{}antioquia.\allowbreak{}micolombiadi\allowbreak{}gital.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002947/147324_rc2025.pdf}{sites/\allowbreak{}}\allowbreak{}\href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002947/147324_rc2025.pdf}{alcaldia-\allowbreak{}municipal-\allowbreak{}de-\allowbreak{}envigado-\allowbreak{}en-\allowbreak{}antioquia/\allowbreak{}}\allowbreak{}\href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002947/147324_rc2025.pdf}{content/\allowbreak{}}\allowbreak{}\href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002947/147324_rc2025.pdf}{files/\allowbreak{}}\allowbreak{}\href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002947/147324_rc2025.pdf}{002947/\allowbreak{}}\allowbreak{}\href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002947/147324_rc2025.pdf}{147324\_\allowbreak{}rc2025.\allowbreak{}pdf}} \\
+Concejo de Envigado & Acta 096 de 2026 del Concejo, p.\allowbreak{} 3 & PDF & \texttt{\footnotesize \href{https://www.concejoenvigado.gov.co/wp-content/uploads/2026/09/Acta-096-de-2026.pdf}{https:/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2026/09/Acta-096-de-2026.pdf}{/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2026/09/Acta-096-de-2026.pdf}{www.\allowbreak{}concejoenvigado.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2026/09/Acta-096-de-2026.pdf}{wp-\allowbreak{}content/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2026/09/Acta-096-de-2026.pdf}{uploads/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2026/09/Acta-096-de-2026.pdf}{2026/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2026/09/Acta-096-de-2026.pdf}{09/\allowbreak{}}\allowbreak{}\href{https://www.concejoenvigado.gov.co/wp-content/uploads/2026/09/Acta-096-de-2026.pdf}{Acta-\allowbreak{}096-\allowbreak{}de-\allowbreak{}2026.\allowbreak{}pdf}} \\
+Alcaldía de Envigado & Plan de acción (evaluación definitiva) II trimestre 2026 con hoja ROCA & XLSX & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}seguimiento-\allowbreak{}a-\allowbreak{}proyectos-\allowbreak{}2026/\allowbreak{}evaluacionde\allowbreak{}finitivaplan\allowbreak{}accion2026se\allowbreak{}gundotrimest\allowbreak{}re20260730.\allowbreak{}xlsx} \\
+Secretaría de Hacienda, Envigado & Ejecución presupuestal de egresos al 31-dic-2024, 31-dic-2025 y 30-jun-2026 & PDF con texto (98-109 págs.\allowbreak{}) & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}ano-\allowbreak{}2024-\allowbreak{}325557/\allowbreak{}ejecucion-\allowbreak{}presupuestal-\allowbreak{}egresos-\allowbreak{}al-\allowbreak{}31122024.\allowbreak{}pdf}; \newline \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}ano-\allowbreak{}2025-\allowbreak{}576917/\allowbreak{}ejecucion-\allowbreak{}presupuestal-\allowbreak{}egresos-\allowbreak{}4-\allowbreak{}al-\allowbreak{}31122025.\allowbreak{}pdf}; \newline \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}ano-\allowbreak{}2026-\allowbreak{}358126/\allowbreak{}ejecucion-\allowbreak{}presupuestal-\allowbreak{}egresos-\allowbreak{}2-\allowbreak{}al-\allowbreak{}30062026.\allowbreak{}pdf} \\
+Alcaldía de Envigado & proyectosdeinversion2024.\allowbreak{}xlsx & XLSX & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}informe-\allowbreak{}de-\allowbreak{}gestion-\allowbreak{}alcaldia-\allowbreak{}de-\allowbreak{}envigado/\allowbreak{}proyectosdei\allowbreak{}nversion2024.\allowbreak{}xlsx} \\
+Unidades ejecutoras (INDER, TLS Inglés, Fundarte, Comfenalco, SMADA, CEFIT, Desarrollo Económico, OOPP) & Avance de ejecución PP 2024 (35 PDF por zona y operador) & PDF (presentaciones) & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}01\_\allowbreak{}propuestas\_\allowbreak{}y\_\allowbreak{}acuerdos/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}avance-\allowbreak{}de-\allowbreak{}ejecucion-\allowbreak{}de-\allowbreak{}presupuestos-\allowbreak{}participativos-\allowbreak{}2024/\allowbreak{}} \\
+Unidades ejecutoras & Rendición de cuentas PP 2024 (12 PDF por sector) & PDF & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}01\_\allowbreak{}propuestas\_\allowbreak{}y\_\allowbreak{}acuerdos/\allowbreak{}envigado\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}rendicion-\allowbreak{}de-\allowbreak{}cuentas-\allowbreak{}presupuesto-\allowbreak{}participativo-\allowbreak{}2024/\allowbreak{}} \\
+Colombia Compra Eficiente /\allowbreak{} Envigado & SECOP II Contratos Envigado (datos.\allowbreak{}gov.\allowbreak{}co jbjy-vk9h) & CSV & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}04\_\allowbreak{}datos\_\allowbreak{}abiertos\_\allowbreak{}y\_\allowbreak{}secop/\allowbreak{}datos\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}datosgov\_\allowbreak{}jbjy-\allowbreak{}vk9h\_\allowbreak{}SECOP\_\allowbreak{}II\_\allowbreak{}Contratos\_\allowbreak{}Envigado.\allowbreak{}csv}; \newline \texttt{\footnotesize \href{https://www.datos.gov.co/resource/jbjy-vk9h.json}{https:/\allowbreak{}}\allowbreak{}\href{https://www.datos.gov.co/resource/jbjy-vk9h.json}{/\allowbreak{}}\allowbreak{}\href{https://www.datos.gov.co/resource/jbjy-vk9h.json}{www.\allowbreak{}datos.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.datos.gov.co/resource/jbjy-vk9h.json}{resource/\allowbreak{}}\allowbreak{}\href{https://www.datos.gov.co/resource/jbjy-vk9h.json}{jbjy-\allowbreak{}vk9h.\allowbreak{}json}} \\
+Contaduría/\allowbreak{}Envigado & CUIPO Ejecución de Gastos (datos.\allowbreak{}gov.\allowbreak{}co 4f7r-epif) & CSV & \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}02\_\allowbreak{}ejecucion\_\allowbreak{}y\_\allowbreak{}presupuesto/\allowbreak{}datos\_\allowbreak{}gov\_\allowbreak{}co/\allowbreak{}datosgov\_\allowbreak{}4f7r-\allowbreak{}epif\_\allowbreak{}CUIPO\_\allowbreak{}Ejecucion\_\allowbreak{}Gastos\_\allowbreak{}Envigado.\allowbreak{}csv} \\
+Escuela de Formación Ciudadana & Página de proyectos EFPC & HTML & \texttt{\footnotesize \href{https://efpc.envigado.gov.co/proyectos/}{https:/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/proyectos/}{/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/proyectos/}{efpc.\allowbreak{}envigado.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://efpc.envigado.gov.co/proyectos/}{proyectos/\allowbreak{}}} \\
+MinTIC & Catálogo de datos abiertos datos.\allowbreak{}gov.\allowbreak{}co (búsqueda "presupuesto participativo") & API Socrata & \texttt{\footnotesize \href{https://api.us.socrata.com/api/catalog/v1?domains=www.datos.gov.co\&q=presupuesto\%20participativo}{https:/\allowbreak{}}\allowbreak{}\href{https://api.us.socrata.com/api/catalog/v1?domains=www.datos.gov.co\&q=presupuesto\%20participativo}{/\allowbreak{}}\allowbreak{}\href{https://api.us.socrata.com/api/catalog/v1?domains=www.datos.gov.co\&q=presupuesto\%20participativo}{api.\allowbreak{}us.\allowbreak{}socrata.\allowbreak{}com/\allowbreak{}}\allowbreak{}\href{https://api.us.socrata.com/api/catalog/v1?domains=www.datos.gov.co\&q=presupuesto\%20participativo}{api/\allowbreak{}}\allowbreak{}\href{https://api.us.socrata.com/api/catalog/v1?domains=www.datos.gov.co\&q=presupuesto\%20participativo}{catalog/\allowbreak{}}\allowbreak{}\href{https://api.us.socrata.com/api/catalog/v1?domains=www.datos.gov.co\&q=presupuesto\%20participativo}{v1?\allowbreak{}domains=\allowbreak{}www.\allowbreak{}datos.\allowbreak{}gov.\allowbreak{}co\&\allowbreak{}q=\allowbreak{}presupuesto\%20participativo}} \\
+DNP & MapaInversiones DNP /\allowbreak{} SUIFP (fichas por BPIN) & Web & \texttt{\footnotesize \href{https://mapainversiones.dnp.gov.co/}{https:/\allowbreak{}}\allowbreak{}\href{https://mapainversiones.dnp.gov.co/}{/\allowbreak{}}\allowbreak{}\href{https://mapainversiones.dnp.gov.co/}{mapainversiones.\allowbreak{}dnp.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}} \\
+\end{xltabular}
+}
+
+\end{document}

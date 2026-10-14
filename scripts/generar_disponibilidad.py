@@ -225,7 +225,10 @@ def escribir_hoja(wb, titulo, encabezados, filas, anchos, primera=False):
 def main():
     variables = []
     for s in SISTEMAS:
-        variables += leer_csv(TRABAJO / f'variables_{s}.csv')
+        filas_s = leer_csv(TRABAJO / f'variables_{s}.csv')
+        for f in filas_s:
+            f['sistema'] = s  # variables_CS.csv trae 'Control social'; se unifica al codigo del sistema
+        variables += filas_s
     assert len(variables) == 39, len(variables)
     n = aplicar_correcciones(variables)
     estados_validos(variables)
