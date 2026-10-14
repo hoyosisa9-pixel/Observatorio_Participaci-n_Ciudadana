@@ -60,7 +60,7 @@
 - Commit `9aca547` en `main`, subido a GitHub (origin/main): matriz B.1, informe LaTeX/TXT, `scripts/perfil_llaves_iic.py`, `scripts/limpieza_bpin_cuipo.py`, `outputs/` y `.gitignore` (`__pycache__/`).
 - Fuera de git: `.claude/`, `.memory/`, `CLAUDE.md`, `Documentos guias/` (ZIP + DOCX), `data_raw_IIC/` (datos crudos).
 
-## 12. Tarea "Disponibilidad y brecha del sistema de indicadores" (2026-10-14, EN CURSO)
+## 12. Tarea "Disponibilidad y brecha del sistema de indicadores" (2026-10-14, TERMINADA)
 - Encargo: para la reunión de los profesores Francisco Correa y Eber (entrega a la Alcaldía 15-oct), clasificar 39 variables y 23 indicadores/índices (4 sistemas: CS, PC, PDM, PP) por disponibilidad. NO calcula el IIC ni índices. **Punto de control autosuficiente: `outputs/disponibilidad/ESTADO.md` (leerlo primero; sección "Cómo retomar").**
 - Matriz de los profesores (no modificar): `Documentos guias/Matriz de informacion de indicadores del observatorio ciudadano.xlsx` (Guía, Matriz, Registro, PP_Proyectos, Resultados). Copia y volcados CSV/TXT en `outputs/disponibilidad/trabajo/`.
 - Escala: Disponible / Construible / Parcial / Proxy / No disponible. Valores siempre "Pendiente" (nunca "Validado"). Zonas = 13 (PDM p. 558; zona 1 sin comité).
@@ -70,3 +70,6 @@
 - Acceso: `www.envigado.gov.co` falla por certificado TLS (no eludir); solo bajan `/content/files/`. También fallan mi.envigado.gov.co, ANSV, Tableau MinSalud, ICFES por plantel, EFPC /observatorio-ciudadano/ (404).
 - Herramientas instaladas (pip, usuario): openpyxl, pdfplumber, pypdf, pymupdf. Sin pdftotext/pdftoppm.
 - Inventario: 5 evaluaciones del PDM 2024-2026 catalogadas con ventana "2022" (buscar por nombre).
+- Fases 3 y 4 TERMINADAS. Entregables en `outputs/disponibilidad/`: `disponibilidad_brecha_indicadores.xlsx` (Léeme, Variables 39, Indicadores 23, Fuentes 66, Solicitudes 32), `disponibilidad_variables.csv` y `_excel.csv`, `resumen_reunion.md`, `documentos_por_descargar.md`. Se regenera con `python3 -I scripts/generar_disponibilidad.py` (aplica las 20 correcciones de `trabajo/revision_fase3.md`; se detiene si el conteo no cuadra).
+- Conteo FINAL de las 39: Disponible 10 (7 metas), Construible 7, Parcial 19, Proxy 2 (PDM.CS.O, PDM.CD.O), No disponible 1 (PDM.CP.O). Indicadores: 1 Viable (CS.PCS), 10 Viable con ajuste, 12 No viable por ahora. Solo CS.ICRCS calculable (2024, tras definir universos); ISPC, ICPD-6 e IREPP bloqueados (Guía 15).
+- PP: EPP 2025 reconstruido (APP 20.928.690.218; OPP 20.684.427.720; ≈98,8 %), complemento a la revisión del profesor Francisco (que lo dejó N/D). Cálculo hecho con scripts temporales: falta script reproducible. Proxy PEC inestable (45-55 de 61 según agregación).

@@ -1,0 +1,14 @@
+# Documentos por descargar manualmente
+
+Corte: 14-oct-2026. Lista tomada de `trabajo/revision_fase3.md` §5 (URLs fallidas y documentos no revisados de las notas de la Fase 2). No se agregan URLs nuevas. Para cada documento se indica la variable cuya categoría cambiaría.
+
+| # | Documento | Link o nombre exacto y sitio | Variable que cambiaría | Por qué no se pudo descargar |
+|---|---|---|---|---|
+| 1 | Clasificación de planteles ICFES (nota 10 años) | `https://www.icfes.gov.co/wp-content/uploads/2026/08/2.-Nota-Clasificacion-de-planteles-10-años.pdf`; alternativa: `https://www.icfes.gov.co/analisis-de-datos/` | PDM.ILE.S: Parcial a Construible; desbloquea PDM.ILE y una entrada de ICPD-6 | La URL respondió 404 |
+| 2 | Cifras de aseguramiento MinSalud (tablero Tableau histórico, dic-2024) y método de la línea base (BDUA/SisMaster) de la Secretaría de Salud | `https://minsalud.gov.co/Proteccion-Social/Paginas/cifras-aseguramiento-salud.aspx` (tablero no consultado) | PDM.CS.O: Proxy a Parcial/Disponible si aparece el denominador de población objetivo | El tablero Tableau no es accesible desde el entorno; el método de la línea base no está publicado |
+| 3 | Observatorio de la ANSV (mortalidad vial 2025) y Forensis 2025 | `https://ansv.gov.co`; Forensis en `https://www.medicinalegal.gov.co/` (la edición 2024 está en `/documents/20143/1269218/Forensis_2024.pdf`) | PDM.CM.O: 2025 pasa a Disponible; PDM.CM calculable en 2025 | El sitio de la ANSV expiró por tiempo (timeout); Forensis 2025 aún no está publicado |
+| 4 | Rendición de cuentas de la Alcaldía (página y balance de eventos 2024-2025) | `https://www.envigado.gov.co/rendicion-de-cuentas` y `https://www.envigado.gov.co/descripcion-general/625-rendicion-de-cuentas` | CS.VRC.ET, CS.VRC.EV, CS.RPO.OT y CS.RPO.OR (universo de eventos y acta integral 2025); PC.I6.V1 | Error de certificado TLS en el portal |
+| 5 | Rendición de Cuentas 2025 (p. 61) | `https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002947/147324_rc2025.pdf` | PP.EPP.APP 2026 y PP.CEP.PE 2026 (confirmación); posible fuente de PE/entregas | Verificada por el profesor Francisco; no fue reabierta en esta tarea |
+| 6 | Acta 096 de 2026 del Concejo (p. 3) | `https://www.concejoenvigado.gov.co/wp-content/uploads/2026/09/Acta-096-de-2026.pdf` | PP.CEP.PEC y PP.CMA.NA (lo que el profesor leyó como N/D); contraste de EPP | No fue abierta en la Fase 2 |
+| 7 | Acuerdo 007 de 2025 | `https://www.concejoenvigado.gov.co/wp-content/uploads/2025/02/Acuerdo-007-de-2025.pdf` | PC.I2.V2 (acto oficial de las 13 zonas); regla de PP para EPP/CEP | Responde HTTP 200 pero no fue leído |
+| 8 | Sección Observatorio Ciudadano de la EFPC (informes del producto 536) | `https://efpc.envigado.gov.co/observatorio-ciudadano/` | PC.I1 y PC.I4 (posible inventario de procesos y publicaciones de resultados) | La URL respondió 404 |
