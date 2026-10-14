@@ -37,11 +37,17 @@ class Anadir(str):
     """Agrega texto al final del valor actual (separado por ' | ')."""
 
 
+class Prefijar(str):
+    """Agrega texto al inicio del valor actual."""
+
+
 class Sustituir:
     """Reemplaza todas las apariciones de 'viejo' por 'nuevo' en el valor actual."""
     def __init__(self, viejo, nuevo):
         self.viejo, self.nuevo = viejo, nuevo
 
+
+EPP_PRELIMINAR = '[PRELIMINAR, POR VALIDAR: lista de proyectos PP reconstruida; debe validarla el DAP. EPP 2025 = 98,83 % (APP $20.928.690.218; OPP $20.684.427.720), reproducible con scripts/epp_pp_2025.py]'
 
 # (id_variable, columna, valor_nuevo, motivo). str = reemplazo total; Anadir = agregar; Sustituir = reemplazo parcial.
 CORRECCIONES = [
@@ -96,6 +102,8 @@ CORRECCIONES = [
      Sustituir('(zip dic-2025: /sites/rid/Lists/BibliotecaDigital/RIDE/VP/DOA/cifras-afiliacion-salud-dic-2025.zip; zip ago-2026: /sites/rid/Lists/BibliotecaDigital/RIDE/VP/RBC/cifras-afiliacion-salud-agosto2026.zip)',
                '; zip dic-2025: /sites/rid/Lists/BibliotecaDigital/RIDE/VP/DOA/cifras-afiliacion-salud-dic-2025.zip ; zip ago-2026: /sites/rid/Lists/BibliotecaDigital/RIDE/VP/RBC/cifras-afiliacion-salud-agosto2026.zip'),
      'C18: formato (parentesis); valores separados por " ; "'),
+    ('PP.EPP.OPP', 'valor_encontrado', Prefijar(EPP_PRELIMINAR), 'C21 (usuaria): marcar la cifra EPP como preliminar, por validar'),
+    ('PP.EPP.APP', 'valor_encontrado', Prefijar(EPP_PRELIMINAR), 'C21 (usuaria): marcar la cifra EPP como preliminar, por validar'),
 ]
 # Valores previos esperados en cambios de categoria (si no coinciden, el script se detiene).
 PREVIO_DISPONIBILIDAD = {
@@ -131,7 +139,9 @@ def aplicar_correcciones(filas):
         actual = fila[col]
         if col == 'disponibilidad':
             assert actual == PREVIO_DISPONIBILIDAD[id_var], (id_var, actual)
-        if isinstance(nuevo, Anadir):
+        if isinstance(nuevo, Prefijar):
+            fila[col] = str(nuevo) + ' ' + actual
+        elif isinstance(nuevo, Anadir):
             fila[col] = (actual.rstrip() + ' | ' + nuevo) if actual.strip() else str(nuevo)
         elif isinstance(nuevo, Sustituir):
             assert nuevo.viejo in actual, (id_var, col, 'texto a sustituir no encontrado')
@@ -227,6 +237,9 @@ def main():
     indicadores = leer_csv(TRABAJO / 'indicadores_fase3.csv')
     assert len(indicadores) == 23, len(indicadores)
     campos_ind = list(indicadores[0].keys())
+    for r in indicadores:
+        if r['codigo'] == 'PP.EPP':
+            r['razon'] = EPP_PRELIMINAR + ' ' + r['razon']
     campos_fte, fuentes = consolidar_fuentes()
     campos_sol, solicitudes = consolidar_solicitudes()
 
@@ -238,8 +251,9 @@ def main():
         [f'Conteo de las 39 variables: ' + ' · '.join(f'{c} {conteo[c]}' for c in CATEGORIAS) + '.'],
         ['Todos los valores encontrados están en estado "Pendiente" (o "No disponible"): ninguno está validado por los docentes ni por la Alcaldía. Las cifras son exploratorias.'],
         ['Esta tarea no calcula el IIC ni ningún índice: solo documenta qué dato existe, dónde y cuál es la brecha.'],
-        ['Fuentes: Fases 1 a 3 del repositorio (outputs/disponibilidad/trabajo/: variables, fuentes, solicitudes, notas y revision_fase3.md). Las 20 correcciones de la revisión de la Fase 3 están aplicadas en la hoja Variables.'],
+        ['Fuentes: Fases 1 a 3 del repositorio (outputs/disponibilidad/trabajo/: variables, fuentes, solicitudes, notas y revision_fase3.md). Las 20 correcciones de la revisión de la Fase 3 están aplicadas en la hoja Variables, más la marca "preliminar, por validar" de EPP (C21).'],
         ['Hojas: Variables (39) · Indicadores (23, veredicto de viabilidad) · Fuentes (consolidadas por URL o ruta) · Solicitudes (por dependencia).'],
+        ['La ejecución presupuestal de PP 2025 (EPP ≈ 98,83 %) es PRELIMINAR, POR VALIDAR: la lista de proyectos PP se reconstruyó cruzando el plan de acción IV-trim-2025 con el listado EFPC y debe confirmarla el DAP. Cálculo: scripts/epp_pp_2025.py (detalle en epp_pp_2025*.csv/.md).'],
         ['Reproducible con: python3 -I scripts/generar_disponibilidad.py'],
     ]
     ws = escribir_hoja(wb, 'Léeme', ['Léeme'], leeme, [150], primera=True)
@@ -267,7 +281,7 @@ def main():
         for fila in csv.reader(fin):
             esc.writerow(fila)
 
-    print(f'Correcciones aplicadas: {n} operaciones sobre celdas (C1-C18; C19 validada; C20 es de documentacion)')
+    print(f'Correcciones aplicadas: {n} operaciones sobre celdas (C1-C18 y C21; C19 validada; C20 es de documentacion)')
     print('Conteo por disponibilidad:', conteo)
     print(f'Variables {len(filas_var)} · Indicadores {len(indicadores)} · Fuentes {len(fuentes)} · Solicitudes {len(solicitudes)}')
     print(f'Generado {destino}\nGenerado {csv_var}\nGenerado {csv_xl}')

@@ -37,10 +37,10 @@ De las 10 variables Disponibles, 7 son metas del PDM; solo 3 son valores observa
 ## 4. Reconstrucción de la EPP 2025 como complemento a la revisión del profesor Francisco
 La conclusión del profesor, con las cuatro fuentes que revisó, es que EPP es N/D; eso sigue siendo cierto con esas fuentes. Esta tarea aporta **una quinta fuente oficial** (plan de acción IV trimestre 2025 y ROCA del DAP) que permite construir la variable sin inferir nada: se suman dos columnas oficiales (apropiación definitiva y obligación) sobre 61 proyectos con "ZONA n" que cruzan 1:1 con el listado de la EFPC (56 con valor idéntico; todo de libre destinación, sin cofinanciación que excluir).
 
-- **Resultado exploratorio, Pendiente de validación por Planeación:** apropiación $20.928.690.218; obligación $20.684.427.720; EPP 2025 ≈ 98,8 % (98,83 sin el proyecto 0553; 98,86 con él). Se reprodujo al peso en la revisión.
+- **Resultado PRELIMINAR, POR VALIDAR (lo debe confirmar Planeación):** apropiación $20.928.690.218; obligación $20.684.427.720; EPP 2025 = 98,83 % sin el proyecto 0553 (98,86 % con él). El cálculo es reproducible con `scripts/epp_pp_2025.py` (detalle por zona y por proyecto en `epp_pp_2025_zonas.csv` y `epp_pp_2025_proyectos.csv`): 61 proyectos en ambas fuentes, misma cantidad por zona, 56 con valor idéntico al peso. Por zona, la EPP va de 97,32 % (zona 9) a 99,83 % (zona 3).
 - **Límites:** 2026 solo provisional (obligación al 30-jun-2026); 2024 aproximado (47 de 50 proyectos), por lo que es Parcial. CUIPO difiere en 3 %, sin explicar, y se usa solo como contraste.
 - **CEP y CMA siguen N/D, como concluyó el profesor**, y por tanto el IREPP no es calculable. El autorreporte de entrega de 2025 oscila entre 45 y 55 de 61 proyectos según la regla de agregación.
-- **Formulación sugerida:** "EPP 2025 reconstruible en 98,8 % (no validado); CEP y CMA sin soporte; IREPP no calculable".
+- **Formulación sugerida:** "EPP 2025 reconstruible en 98,83 % (preliminar, por validar); CEP y CMA sin soporte; IREPP no calculable".
 
 ## 5. Preguntas abiertas para los profesores
 1. PP: ¿se acepta el EPP reconstruido como "Construible, Pendiente" y la exclusión del proyecto 0553? ¿Quién en Planeación confirma los códigos PP 2024-2026?

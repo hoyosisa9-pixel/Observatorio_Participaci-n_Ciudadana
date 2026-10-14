@@ -69,11 +69,13 @@ Los profesores **Francisco Correa y Eber** definieron un sistema preliminar de i
 
 | Ruta | Contenido |
 |---|---|
-| `outputs/disponibilidad/disponibilidad_brecha_indicadores.xlsx` | Hojas Léeme, Variables (39 × 20), Indicadores (23), Fuentes (66, deduplicadas por URL o ruta) y Solicitudes (32, por dependencia). Verificado con openpyxl |
+| `outputs/disponibilidad/disponibilidad_brecha_indicadores.xlsx` | Hojas Léeme, Variables (39 × 20; EPP marcado "preliminar, por validar"), Indicadores (23), Fuentes (66, deduplicadas por URL o ruta) y Solicitudes (32, por dependencia). Verificado con openpyxl |
 | `outputs/disponibilidad/disponibilidad_variables.csv` | Hoja Variables en CSV (UTF-8, coma) |
 | `outputs/disponibilidad/disponibilidad_variables_excel.csv` | Ídem para Excel (`;`, UTF-8 con BOM) |
 | `outputs/disponibilidad/resumen_reunion.md` | Resumen de 1-2 páginas para los profesores: semáforo, viables, ajustes, EPP 2025, preguntas, documentos por descargar |
 | `outputs/disponibilidad/documentos_por_descargar.md` | 8 documentos a descargar o leer manualmente, con su link y la variable que cambiarían |
+| `outputs/disponibilidad/resumen_reunion.docx` | Versión Word del resumen (generada con `python3 scripts/md_a_docx.py outputs/disponibilidad/resumen_reunion.md`; sin `-I` porque python-docx está en el site-packages del usuario) |
+| `scripts/epp_pp_2025.py` → `outputs/disponibilidad/epp_pp_2025.md`, `epp_pp_2025_zonas.csv`, `epp_pp_2025_proyectos.csv` | Cálculo reproducible de EPP 2025, **preliminar, por validar**: 61 proyectos "ZONA n" del plan de acción IV-trim-2025 (sin el 0553) contrastados con el listado EFPC (61, misma cantidad por zona, 56 iguales al peso). APP $20.928.690.218; OPP $20.684.427.720; EPP 98,83 % (98,86 % con el 0553). Confirmó la cifra de la Fase 2 |
 | `scripts/generar_disponibilidad.py` | Regenera el Excel y los CSV desde `trabajo/` aplicando las 20 correcciones. Ejecutar con `python3 -I scripts/generar_disponibilidad.py`; se detiene si el conteo no cuadra |
 | `outputs/disponibilidad/trabajo/revision_fase3.md` | Fase 3: muestreo, 20 correcciones, veredictos, ajustes, preguntas, documentos y conteo final |
 | `outputs/disponibilidad/trabajo/indicadores_fase3.csv` | Veredicto de los 23 indicadores e índices |
@@ -244,5 +246,5 @@ Detalle completo en `trabajo/mapa_busqueda.md` §8.1.
 4. **Siguiente paso natural:**
    - incorporar las decisiones de los profesores (universos, aceptación de proxies, metas anuales) y los documentos descargados manualmente (`documentos_por_descargar.md`);
    - reclasificar y regenerar.
-5. **Pendiente de PP:** las cifras EPP se hicieron con scripts temporales no versionados. Antes de citarlas, deja el cálculo en un script reproducible (cruce de los proyectos "ZONA n" del plan de acción IV-trim-2025 con el listado EFPC 2025, excluyendo el proyecto 0553) y fija la regla de agregación del proxy de PEC (da entre 45 y 55 de 61).
+5. **PP:** EPP 2025 ya es reproducible (`python3 -I scripts/epp_pp_2025.py`) y está marcado "preliminar, por validar" en el Excel (C21 en `generar_disponibilidad.py`) y en el resumen. Falta: validación del DAP de la lista de proyectos, decisión sobre el 0553, script para 2024 y 2026, y fijar la regla de agregación del proxy de PEC (da entre 45 y 55 de 61).
 6. **Git:** la usuaria autorizó commit y push de `outputs/disponibilidad/` y `.memory/` para este punto de control. Para commits posteriores, confirmar con ella.
