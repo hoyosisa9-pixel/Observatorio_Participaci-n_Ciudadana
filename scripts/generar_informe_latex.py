@@ -20,7 +20,12 @@ import csv, datetime, re, zipfile
 from collections import Counter, defaultdict
 from pathlib import Path
 
+import sys
+
 import openpyxl
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import generar_disponibilidad as G  # noqa: E402  (misma limpieza de lenguaje y tildes que el Excel)
 
 RAIZ = Path(__file__).resolve().parent.parent
 DISP = RAIZ / 'outputs' / 'disponibilidad'
@@ -54,7 +59,28 @@ ESPECIALES = {'\\': r'\textbackslash{}', '&': r'\&', '%': r'\%', '$': r'\$', '#'
 UNICODE = {'≈': r'$\approx$', '≤': r'$\leq$', '≥': r'$\geq$', '→': r'$\rightarrow$', '←': r'$\leftarrow$',
            '↔': r'$\leftrightarrow$', '×': r'$\times$', '–': '--', '—': '---', '…': r'\ldots{}',
            '“': "``", '”': "''", '‘': '`', '’': "'", '•': r'\textbullet{}', '−': '-', ' ': '~',
-           '✓': 'sí', '≠': r'$\neq$'}
+           '✓': 'sí', '≠': r'$\neq$',
+           # signos que se escriben con ordenes LaTeX para no depender de la codificacion de la fuente
+           '¿': r'\textquestiondown{}', '¡': r'\textexclamdown{}', '²': r'\textsuperscript{2}',
+           '³': r'\textsuperscript{3}', 'º': r'\textsuperscript{o}', 'ª': r'\textsuperscript{a}',
+           '°': r'\textsuperscript{o}', '§': r'\S{}', '·': r'\textperiodcentered{}', '«': r'\guillemotleft{}',
+           '»': r'\guillemotright{}', '€': 'EUR', '´': "'"}
+# letras permitidas tal cual (utf8 + T1 en pdfLaTeX)
+LETRAS_OK = set('áéíóúÁÉÍÓÚñÑüÜàèìòùÀÈÌÒÙçÇ')
+ARCHIVO_LOCAL = 'Archivo local del Observatorio'
+NOTA_RECORTE = r'\par\smallskip{\footnotesize\emph{Texto resumido; el detalle completo está en el Excel adjunto (hoja Variables).}}\par'
+PAGINAS_PDM = ('Las páginas correctas, en el PDM 2024-2027 aprobado (y entre paréntesis en el documento técnico de '
+               'soporte de diciembre de 2025), son: aseguramiento subsidiado p. 602 (640); mortalidad vial p. 706 (738); '
+               'espacio público verde p. 717 (748); procesos participativos p. 742 (775); servicios deportivos p. 609 '
+               '(646); atención integral a la primera infancia p. 650 (683); Saber 11 p. 652 (685).')
+
+
+def texto_md(texto):
+    """Texto de los documentos de trabajo (Markdown) con la misma limpieza que el Excel y sin referencias a archivos."""
+    t = re.sub(r'Las correctas están en `?notas_PDM\.md`?\.?', PAGINAS_PDM, texto)
+    t = re.sub(r'\(?`?[\w.-]+\.(?:md|csv|py)`?\)?', 'el Excel adjunto', t)
+    t = re.sub(r'\s*Detalle completo en el Excel adjunto §[\d.]+\.?', '', t)
+    return G.limpiar(t)
 
 
 def esc(texto):
@@ -122,6 +148,10 @@ def ruta_o_enlaces(texto):
         m = re.match(r'(https?://\S+?)([\s(].*)?$', p)
         if m:
             res.append(enlace(m.group(1)) + (' ' + esc(m.group(2).strip()) if m.group(2) else ''))
+        elif p == G.SIN_URL or 'data_raw_IIC' in p:
+            res.append(esc(ARCHIVO_LOCAL))
+        elif p.startswith('(+'):
+            res.append(esc(p.replace('en la hoja Enlaces', 'en la hoja Enlaces del Excel adjunto')))
         else:
             # texto con rutas embebidas: cada palabra con '/' se compone como ruta divisible
             res.append(' '.join(ruta(w) if '/' in w and len(w) > 15 else esc_q(w) for w in p.split(' ')))
@@ -285,7 +315,7 @@ def construir():
 \vspace{0.5cm}
 {\large Observatorio Ciudadano de Envigado (OCE)\par}
 \vspace{2cm}
-{\large Dirigido a: profesores Francisco Correa y Eber\par}
+{\large Dirigido a: profesores Francisco Correa y Eber Gutiérrez\par}
 \vfill
 {\large ''' + fecha + r'''\par}
 \end{titlepage}
@@ -334,7 +364,7 @@ def construir():
 \subsection{Insumos}
 \begin{itemize}
 \item \textbf{Matriz de los profesores} (\emph{Matriz de información de indicadores del observatorio ciudadano}, hojas Guía, Matriz, Registro, PP\_Proyectos y Resultados): ''' + str(len(variables)) + ' variables y ' + str(len(indicadores)) + r''' indicadores e índices en cuatro sistemas. No se modificó; se trabajó sobre copias.
-\item \textbf{Bases recolectadas por el Observatorio}: 2.787 archivos de portales públicos (Alcaldía, Concejo, Contraloría, EFPC, datos.gov.co, DNP), catalogados en ''' + ruta('inventario_detallado_IIC.csv') + r'''.
+\item \textbf{Bases recolectadas por el Observatorio}: 2.787 archivos de portales públicos (Alcaldía, Concejo, Contraloría, EFPC, datos.gov.co, DNP), catalogados en un inventario con la URL de origen de cada uno.
 \item \textbf{Fuentes externas} nombradas por la matriz o halladas en la búsqueda: MinSalud, Medicina Legal (Forensis), ANSV, ICFES, DANE, TerriData, Área Metropolitana del Valle de Aburrá, entre otras (catálogo completo en el Anexo~\ref{anexo:fuentes}).
 \end{itemize}
 Periodo objetivo: 2024, 2025 y lo publicado de 2026. Territorio: Municipio de Envigado, con 13 zonas cuando hay desagregación.
@@ -347,7 +377,7 @@ Periodo objetivo: 2024, 2025 y lo publicado de 2026. Territorio: Municipio de En
 \cellcolor{camarillo}Construible & No está publicado como cifra, pero se puede contar o calcular con documentos que ya se tienen. \\
 \cellcolor{camarillo}Parcial & Existe, pero faltan años, la desagregación o el soporte exigido, o la definición difiere de la matriz. \\
 \cellcolor{cnaranja}Proxy & Solo hay un dato parecido, con otra definición, unidad o universo. \\
-\cellcolor{crojo}No disponible & No está en el repositorio ni en fuentes públicas; hay que pedirlo a la Alcaldía. \\
+\cellcolor{crojo}No disponible & No está en el archivo del Observatorio ni en fuentes públicas; hay que pedirlo a la Alcaldía. \\
 \bottomrule
 \end{tabularx}
 \end{center}
@@ -374,6 +404,9 @@ Periodo objetivo: 2024, 2025 y lo publicado de 2026. Territorio: Municipio de En
                     [[esc(v['id_variable']), esc(corto(v['nombre'], 120)),
                       celda_color(v['disponibilidad'], COLOR_CAT), esc(corto(v['fuente encontrada'], 110)),
                       esc(corto(v['brecha'], 140))] for v in vs], tam=r'\scriptsize'))
+        if any(len(' '.join(v[k].split())) > n for v in vs for k, n in (('nombre', 120), ('fuente encontrada', 110),
+                                                                      ('brecha', 140))):
+            a(NOTA_RECORTE)
         a(r'\subsubsection*{Indicadores e índices}')
         a(xltabular(r'L{1.9cm}L{3.4cm}L{2.1cm}Y', ['Código', 'Indicador', 'Veredicto', 'Ajuste propuesto'],
                     [[esc(i['codigo']), esc(i['nombre']), celda_color(i['veredicto'], COLOR_VER),
@@ -389,7 +422,6 @@ Ninguna fuente pública marca los recursos del presupuesto participativo (PP). P
 \item Se contrasta con el listado de proyectos PP 2025 de la Escuela de Formación para la Participación Ciudadana (EFPC): misma cantidad de proyectos por zona y valores que coinciden al peso, salvo los que tuvieron adiciones.
 \item $\mathrm{EPP} = 100 \times \mathrm{OPP} / \mathrm{APP}$, por zona y para el consolidado municipal.
 \end{enumerate}
-El cálculo es reproducible con \texttt{scripts/epp\_pp\_2025.py}.
 ''')
     filas_e = [[esc(z['nivel']), z['proyectos_plan'], z['proyectos_efpc'], num(z['APP']),
                 num(z['OPP']), pct(z['EPP'])] for z in filas_z]
@@ -412,13 +444,13 @@ El cálculo es reproducible con \texttt{scripts/epp\_pp\_2025.py}.
     a(r'\section{Inconsistencias encontradas en la matriz}')
     a(r'\begin{itemize}')
     for it in lista_md(estado, '### Inconsistencias de la matriz', numerada=False):
-        a(r'\item ' + md_inline(it))
+        a(r'\item ' + md_inline(texto_md(it)))
     a(r'\end{itemize}')
     # ---------------------------------------------------------------- 6. decisiones
     a(r'\section{Decisiones que se necesitan de los profesores}')
     a(r'\begin{enumerate}')
     for it in lista_md(revision, '## 4. Preguntas abiertas', numerada=True):
-        a(r'\item ' + md_inline(it))
+        a(r'\item ' + md_inline(texto_md(it)))
     a(r'\end{enumerate}')
     # ---------------------------------------------------------------- 7. solicitudes
     a(r'\section{Solicitudes de información a la Alcaldía}')
@@ -439,15 +471,16 @@ El cálculo es reproducible con \texttt{scripts/epp\_pp\_2025.py}.
     a(r'\section{Limitaciones y próximos pasos}')
     a(r'\subsection{Documentos que no se pudieron consultar o leer}')
     a(xltabular(r'L{3.6cm}YL{3cm}L{3cm}', ['Documento', 'Enlace', 'Variable que cambiaría', 'Motivo'],
-                [[md_inline(d[1]), ruta_o_enlaces(' ; '.join(re.findall(r'https?://[^`\s;)]+', d[2])) or d[2]),
-                  md_inline(d[3]), md_inline(d[4])] for d in docs], tam=r'\scriptsize'))
+                [[md_inline(texto_md(d[1])),
+                  ruta_o_enlaces(' ; '.join(re.findall(r'https?://[^`\s;)]+', d[2])) or texto_md(d[2])),
+                  md_inline(texto_md(d[3])), md_inline(texto_md(d[4]))] for d in docs], tam=r'\scriptsize'))
     a(r'''\subsection{Próximos pasos}
 \begin{enumerate}
 \item Tomar las decisiones de la sección anterior, en especial los universos de conteo.
 \item Enviar las solicitudes de información a la Alcaldía.
 \item Descargar manualmente los documentos de la tabla anterior y reclasificar las variables afectadas.
 \item Validar con Planeación la lista de proyectos del presupuesto participativo.
-\item Volver a generar la matriz de disponibilidad y este informe con los scripts del repositorio.
+\item Actualizar la matriz de disponibilidad y este informe con la información nueva.
 \end{enumerate}''')
     # ---------------------------------------------------------------- anexo A
     a(r'\appendix')
@@ -458,8 +491,8 @@ El cálculo es reproducible con \texttt{scripts/epp\_pp\_2025.py}.
                  for f in fuentes], tam=r'\scriptsize'))
     a(r'\end{document}')
     tex = '\n\n'.join(T) + '\n'
-    raros = sorted({ch for ch in tex if ord(ch) > 255})
-    assert not raros, f'caracteres fuera de Latin-1 sin traducir: {raros}'
+    raros = sorted({ch for ch in tex if ord(ch) > 127 and ch not in LETRAS_OK})
+    assert not raros, f'caracteres no ASCII sin traducir a LaTeX: {raros}'
     return tex, conteo, veredictos, epp
 
 
