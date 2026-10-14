@@ -116,7 +116,7 @@ def enlace(url):
 
 def ruta_o_enlaces(texto):
     """Rutas del repo o URLs separadas por ';' o ' | '."""
-    piezas = [p.strip() for p in re.split(r'\s*;\s*|\s+\|\s+', texto or '') if p.strip()]
+    piezas = [p.strip() for p in re.split(r'\s*;\s*|\s+\|\s+|\n', texto or '') if p.strip()]
     res = []
     for p in piezas:
         m = re.match(r'(https?://\S+?)([\s(].*)?$', p)
@@ -149,9 +149,17 @@ def celda_color(valor, colores):
 
 
 # --------------------------------------------------------------------------- lectura de datos
+# encabezados del Excel para los profesores -> claves internas de este script
+ALIAS = {'ID de la variable': 'id_variable', 'Nombre': 'nombre', 'Fuente encontrada': 'fuente encontrada',
+         'Brecha': 'brecha', 'Disponibilidad': 'disponibilidad', 'Sistema': 'sistema', 'Código': 'codigo',
+         'Tipo': 'tipo', 'Veredicto': 'veredicto', 'Ajuste propuesto': 'ajuste_propuesto', 'Emisor': 'emisor',
+         'Fuente': 'fuente', 'Formato': 'formato', 'Enlace (URL de origen)': 'url_o_ruta',
+         'Dependencia': 'dependencia', 'Dato a solicitar': 'dato_a_solicitar', 'Periodo': 'periodo'}
+
+
 def hoja(wb, nombre):
     filas = list(wb[nombre].iter_rows(values_only=True))
-    cab = [str(c) for c in filas[0]]
+    cab = [ALIAS.get(str(c), str(c)) for c in filas[0]]
     return [dict(zip(cab, ['' if v is None else str(v) for v in f])) for f in filas[1:] if any(f)]
 
 
@@ -205,13 +213,15 @@ def construir():
     docs = tabla_md(F_DOCS.read_text(encoding='utf-8'))
     assert len(variables) == 39 and len(indicadores) == 23, (len(variables), len(indicadores))
     for v in variables:
-        v['sistema'] = v['ID variable'].split('.')[0]
+        v['sistema'] = v['id_variable'].split('.')[0]
+    for i in indicadores:
+        i['sistema'] = i['codigo'].split('.')[0]
 
     conteo = Counter(v['disponibilidad'] for v in variables)
     conteo_sis = {s: Counter(v['disponibilidad'] for v in variables if v['sistema'] == s) for s, _ in SISTEMAS}
     veredictos = Counter(i['veredicto'] for i in indicadores)
     metas = [v for v in variables if v['disponibilidad'] == 'Disponible' and v['sistema'] == 'PDM'
-             and re.search(r'\.M[AS]?$', v['ID variable'])]
+             and re.search(r'\.M[AS]?$', v['id_variable'])]
     observados = [v for v in variables if v['disponibilidad'] == 'Disponible' and v not in metas]
     indices = [i for i in indicadores if i['tipo'] == 'Índice']
     indices_no = [i for i in indices if i['veredicto'] == 'No viable por ahora']
@@ -307,7 +317,7 @@ def construir():
     a(r'\begin{enumerate}')
     a(r'\item \textbf{Hay pocos valores observados publicados.} De los ' + str(conteo['Disponible'])
       + r' datos clasificados como Disponible, ' + str(len(metas)) + r' son metas del PDM a 2027 y solo '
-      + str(len(observados)) + ' son valores observados (' + ', '.join(esc(v['ID variable']) for v in observados)
+      + str(len(observados)) + ' son valores observados (' + ', '.join(esc(v['id_variable']) for v in observados)
       + r'). La mayor parte de las variables es Parcial (' + str(conteo['Parcial']) + ') o Construible ('
       + str(conteo['Construible']) + ').')
     a(r'\item \textbf{La ejecución presupuestal del presupuesto participativo 2025 es reconstruible:} '
@@ -361,7 +371,7 @@ Periodo objetivo: 2024, 2025 y lo publicado de 2026. Territorio: Municipio de En
           + f'. {len(ins)} indicadores e índices.')
         a(r'\subsubsection*{Variables}')
         a(xltabular(r'L{1.9cm}YL{1.9cm}YY', ['ID', 'Variable', 'Categoría', 'Fuente', 'Brecha'],
-                    [[esc(v['ID variable']), esc(corto(v['nombre'], 120)),
+                    [[esc(v['id_variable']), esc(corto(v['nombre'], 120)),
                       celda_color(v['disponibilidad'], COLOR_CAT), esc(corto(v['fuente encontrada'], 110)),
                       esc(corto(v['brecha'], 140))] for v in vs], tam=r'\scriptsize'))
         a(r'\subsubsection*{Indicadores e índices}')

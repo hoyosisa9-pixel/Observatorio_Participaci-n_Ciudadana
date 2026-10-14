@@ -69,7 +69,7 @@ Los profesores **Francisco Correa y Eber** definieron un sistema preliminar de i
 
 | Ruta | Contenido |
 |---|---|
-| `outputs/disponibilidad/disponibilidad_brecha_indicadores.xlsx` | Hojas Léeme, Variables (39 × 20; EPP marcado "preliminar, por validar"), Indicadores (23), Fuentes (66, deduplicadas por URL o ruta) y Solicitudes (32, por dependencia). Verificado con openpyxl |
+| `outputs/disponibilidad/disponibilidad_brecha_indicadores.xlsx` | Versión para los profesores: hojas Léeme, Indicadores, Variables (39), Fuentes (66), Solicitudes (32) y Enlaces (218 hipervínculos). Rutas internas reemplazadas por la URL de origen del inventario (ruta interna en columna aparte al final), lenguaje sin jerga, tildes, encabezados en español, sistema con nombre completo, estado de acceso y verificación normalizados, columna Resumen (≤ 200 caracteres), celdas ≤ 600 caracteres (excedente en Notas), colores por categoría y veredicto; EPP marcado "preliminar, por validar", Indicadores (23), Fuentes (66, deduplicadas por URL o ruta) y Solicitudes (32, por dependencia). Verificado con openpyxl |
 | `outputs/disponibilidad/disponibilidad_variables.csv` | Hoja Variables en CSV (UTF-8, coma) |
 | `outputs/disponibilidad/disponibilidad_variables_excel.csv` | Ídem para Excel (`;`, UTF-8 con BOM) |
 | `outputs/disponibilidad/resumen_reunion.md` | Resumen de 1-2 páginas para los profesores: semáforo, viables, ajustes, EPP 2025, preguntas, documentos por descargar |
