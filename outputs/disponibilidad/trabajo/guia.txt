@@ -1,0 +1,60 @@
+Hoja Guía de: Documentos guias/Matriz de informacion de indicadores del observatorio ciudadano.xlsx (volcado textual, solo lectura)
+
+ENVIGADO | matriz integrada de indicadores
+
+Cuatro sistemas · captura por variable y periodo · 2024–2027 · sin datos de ejecución precargados
+
+Ruta de trabajo y reglas
+
+1. Matriz :: Catálogo de 19 indicadores y cuatro índices. Conserva las ocho columnas metodológicas de los anexos y agrega sistema, código único, nombres completos de variables y ruta de captura. Use los filtros por sistema o tipo.
+
+2. Registro :: Ingrese el valor obtenido para cada variable, año, periodo y territorio. Hay 156 filas de referencia: 39 variables × cuatro años, para Municipio y Anual. Los valores observados están vacíos; las siete metas del PDM se repiten por contexto, con estado Pendiente.
+
+3. Evidencia mínima :: Para utilizar un valor: Estado = Validado; valor numérico no negativo; nombre de la fuente en K; fecha de corte aplicable en N. Añada enlace, página/tabla y fecha de consulta para que otra persona pueda verificarlo. Conteos enteros; porcentajes entre 0 y 100.
+
+4. Periodo y corte :: Resultados permite seleccionar año, periodo, territorio y horizonte de meta. El corte se edita en N4 y debe coincidir con la fecha de corte de cada dato utilizado. Para Anual use 31 de diciembre del año evaluado. El horizonte 2027 del PDM no es el año observado.
+
+5. Captura adicional :: Para otras zonas o periodos copie las filas de variables requeridas en las filas libres de Registro. Complete todos los campos y conserve una sola fila por variable/año/periodo/territorio. Hay fórmulas y validaciones hasta la fila 1005 (1000 registros). No escriba en R:S.
+
+6. Resultados :: Las columnas F:I muestran las entradas utilizadas; E explica su orden y unidad. J:K contienen componentes intermedios cuando corresponda. L calcula el puntaje sin redondear; M aplica el semáforo del anexo. Cambiar los selectores recalcula los cuatro sistemas.
+
+7. Sin dato / sin universo :: N/D = información faltante, no validada o fuera del corte. NE = base cero, sin universo evaluable. Revisar = claves duplicadas, numerador fuera del universo u otra inconsistencia. Ninguno recibe color de desempeño. Un cero observado y validado con base positiva sí produce 0 puntos.
+
+8. Metas del PDM :: Se precargan solamente las metas de formulación de los anexos: salud 99,5; movilidad 8; ambiente 3,88; participación 100; deporte 6; educación 19 y 14. Verifique modificaciones oficiales antes de validarlas. Registre en P el horizonte al que corresponde cada meta.
+
+9. Lectura del PDM :: Con horizonte 2027, los resultados son logro al corte frente a la meta final. No equivalen al cumplimiento de la programación anual. Para evaluación anual use metas oficiales comparables en todas las dimensiones y cambie el horizonte. El ICPD-6 cubre seis resultados seleccionados, no el plan completo.
+
+10. Educación y ambiente :: Educación combina cobertura de atención integral de 0 a 6 años y porcentaje de instituciones oficiales que mejoran su categoría Saber 11. No reemplazarlo por promedio de puntajes de estudiantes. Ambiente mide espacio público verde en m²/habitante. No inferir estos resultados desde número de actividades.
+
+11. Proyectos de PP :: En PP_Proyectos registre una fila por proyecto, año, periodo y territorio. Para proyectos aplicables: PA = personas atendidas únicas dentro del proyecto; MP = meta anual positiva; fuente, corte y estado Validado. Para proyectos no aplicables documente la exclusión en M y marque No. Capacidad: 300 filas.
+
+12. Universo para CMA :: En Registro capture PP.CMA.NA con el número de proyectos aplicables del universo completo y su soporte. CMA solo calcula cuando hay exactamente NA proyectos aplicables, únicos y calculables, sin casos pendientes o inconsistentes para el contexto. SC se calcula automáticamente; no se digita.
+
+13. PP municipal :: Prepare un universo municipal deduplicado y márquelo Municipio. No promedie porcentajes ni índices zonales; no duplique proyectos compartidos. EPP utiliza obligaciones y apropiación definitiva de recursos de PP, excluyendo cofinanciación. Entrega y atención consideran el proyecto completo.
+
+14. Ámbitos :: Control social y PDM se calculan para Municipio y periodo Anual. En participación, I2 e ISPC son municipales; los registros permiten desagregar otros indicadores cuando las fuentes lo admiten. I1 e ISPC son anuales; I3–I6 admiten seguimiento semestral si existen universos comparables. PP es anual, municipal o por zona.
+
+15. Índices y pesos :: ICRCS: cuatro indicadores al 25 %. ISPC: I1 30 %, I2 25 %, I3 20 %, I4 25 %; excluye I5 e I6. ICPD-6: seis dimensiones de igual peso, en dos grupos de tres. IREPP: EPP 20 %, CEP 40 %, CMA 40 %. Faltantes no cambian los pesos y bloquean el índice.
+
+16. Semáforos :: Se conservan los rangos particulares de cada anexo, con clasificación sin redondear. PDM: verde solo en 100; amarillo desde 75. PP: verde desde 90, amarillo desde 75, naranja desde 50, rojo inferior a 50. Los demás cortes están en Matriz. Son propuestas metodológicas, no calificaciones oficiales.
+
+17. Control social :: Los universos se definen antes de medir. Una convocatoria no acredita presencia de veedurías y un acuse no acredita respuesta de fondo. Cierre sustantivo al 31 de diciembre; búsqueda documental hasta el 31 de marzo siguiente. No contar respuestas posteriores al cierre para la vigencia anterior.
+
+18. Formatos y trazabilidad :: Digite 99,5 para 99,5 %, no 0,995. Resultados son puntos en escala 0–100, no fracciones de Excel. Fechas en día/mes/año y presupuestos en COP. Celdas amarillas con texto azul: captura; gris claro: cálculo. No se usan vínculos externos ni macros.
+
+19. Alcance de la captura :: Validado es una decisión del responsable de la matriz. Las fórmulas comprueban existencia de fuente, corte, estado, rangos y duplicados; no sustituyen la revisión del documento. Registre discrepancias, modificaciones, definiciones del universo y versiones de programación en Observaciones.
+
+20. Alertas de PP :: Aunque IREPP sea alto, CEP o CMA menor de 50 activa una alerta visible en Resultados. No compensar una entrega o atención débil con buena ejecución financiera. Compare siempre puntajes, cantidades y soporte.
+
+Fuente: Control social :: Matriz de indicadores de control social.docx
+Archivo adjunto utilizado como fuente metodológica. No se han cargado observaciones de ejecución ni se han verificado publicaciones adicionales.
+
+Fuente: Participación ciudadana :: Matriz de indicadores de participacion ciudadana Envigado.docx
+Archivo adjunto utilizado como fuente metodológica. No se han cargado observaciones de ejecución ni se han verificado publicaciones adicionales.
+
+Fuente: Cumplimiento del PDM :: Matriz de indicadores cumplimiento PDM Envigado.docx
+Archivo adjunto utilizado como fuente metodológica. No se han cargado observaciones de ejecución ni se han verificado publicaciones adicionales.
+
+Fuente: Presupuesto participativo :: Matriz de indicadores presupuesto participativo.docx
+Archivo adjunto utilizado como fuente metodológica. No se han cargado observaciones de ejecución ni se han verificado publicaciones adicionales.
+

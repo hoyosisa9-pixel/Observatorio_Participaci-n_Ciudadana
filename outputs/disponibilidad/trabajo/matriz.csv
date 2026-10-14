@@ -1,0 +1,544 @@
+Sistema,Código único,Categoría / ODS,Indicador / índice,Objetivo,Fórmula y metodología,Periodicidad,Fuentes y protocolo de consulta,Semáforo del anexo,Interpretación,Variables con nombres completos,Tipo,Registro requerido
+Control social,CS.DSI,"INFORMACIÓN
+ODS 16","Disponibilidad de información de seguimiento
+DSI
+2 variables",Identificar metas con cifras públicas utilizables para vigilar el plan.,"DSI = (100 × MD) / (MS)
+MD: número de metas seleccionadas con valor observado publicado para la vigencia.
+MS: número total de metas incluidas previamente en la selección de seguimiento.
+Iniciar con 10 metas como propuesta manejable; mantener la lista. Exigir código o nombre, valor observado, vigencia y unidad. La línea base no es ejecución.","Anual.
+
+Corte al 31 de diciembre.","PDM para identificar metas; informe público de seguimiento o evaluación para valores. Repositorio del PDM y actas del Concejo como rutas.
+
+Protocolo: revisar cada soporte completo. Ausencia verificada de cifra: permanece en MS, no en MD. Fuente inaccesible y no verificable: N/D.","Verde
+≥90 %
+Amarillo
+70 a <90 %
+Rojo
+<70 %
+Gris
+N/D","80 puntos con 10 metas significa que 8 tienen cifra pública utilizable.
+
+No significa 8 metas cumplidas ni revisadas por ciudadanos. La selección no representa estadísticamente todo el plan.","MD: Número de metas seleccionadas con valor observado publicado para la vigencia [Conteo]
+MS: Número total de metas incluidas previamente en la selección de seguimiento [Conteo]",Indicador,"Registro: una fila por variable, año, periodo y territorio."
+Control social,CS.PCS,"PROMOCIÓN
+ODS 16","Cumplimiento de la promoción del control social
+PCS
+2 variables",Seguir la ejecución de las estrategias de promoción previstas.,"PCS = (100 × EE) / (EP)
+Limitar el puntaje a 100.
+EE: número de estrategias de promoción del control social ejecutadas y reportadas en el periodo.
+EP: número de estrategias de promoción del control social programadas oficialmente para el mismo periodo.
+Contar estrategias reconocidas en el reporte del proyecto 5.1.2.1, no cada curso, pieza o sesión.","Anual.
+
+Mismo periodo para ejecución y programa.","Programación oficial y reporte público de ejecución de Planeación. PDM, proyecto 5.1.2.1, p. 633 de la copia del Concejo.
+
+Protocolo: confirmar programación anual y modificaciones. La oferta de la EFPC no prueba ejecución. Meta de formulación: 4 estrategias en el cuatrienio; no asumir una por año.","Verde
+≥75 %
+Amarillo
+50 a <75 %
+Rojo
+<50 %
+Gris
+N/D","Mide un producto institucional; no demuestra veedores activos o calidad de la vigilancia.
+
+Si EE supera EP, mostrar los conteos y explicar el exceso. Un PCS cuatrienal no entra al índice anual.","EE: Número de estrategias de promoción del control social ejecutadas y reportadas en el periodo [Conteo]
+EP: Número de estrategias de promoción del control social programadas oficialmente para el mismo periodo [Conteo]",Indicador,"Registro: una fila por variable, año, periodo y territorio."
+Control social,CS.VRC,"VEEDURÍAS
+ODS 16","Presencia de veedurías en la rendición de cuentas
+VRC
+2 variables",Medir la presencia documentada de veedurías en los eventos realizados.,"VRC = (100 × EV) / (ET)
+EV: número de eventos municipales de rendición de cuentas realizados con presencia documentada de veedurías.
+ET: número total de eventos municipales de rendición de cuentas realizados en el periodo.
+EV debe ser un subconjunto de ET. Cada evento cuenta una vez. Una convocatoria a veedores no acredita asistencia.","Anual.
+
+Eventos realizados en la vigencia.","Balance completo de rendición de cuentas de la Alcaldía y actas, memorias o informes de eventos.
+
+Protocolo: acreditar presencia y usar igual entidad, periodo y tipo de evento. Si hay casos con presencia desconocida, VRC = N/D. Los debates del Concejo no integran ET.","Verde
+≥75 %
+Amarillo
+50 a <75 %
+Rojo
+<50 %
+Gris
+N/D","100: presencia documentada en todos los eventos del universo. Mostrar EV de ET, incluso 1 de 1.
+
+No acredita suficientes espacios, diversidad o incidencia. La meta cuatrienal de 4 eventos con veedurías es contexto.","EV: Número de eventos municipales de rendición de cuentas realizados con presencia documentada de veedurías [Conteo]
+ET: Número total de eventos municipales de rendición de cuentas realizados en el periodo [Conteo]",Indicador,"Registro: una fila por variable, año, periodo y territorio."
+Control social,CS.RPO,"RESPUESTA
+ODS 16","Respuesta pública a observaciones ciudadanas
+RPO
+2 variables",Observar la devolución institucional publicada sobre asuntos del plan.,"RPO = (100 × OR) / (OT)
+OR: número de observaciones ciudadanas del universo evaluado con respuesta de fondo publicada al corte.
+OT: número total de observaciones ciudadanas sobre el PDM registradas públicamente en ejercicios cerrados de rendición de cuentas del periodo.
+Un acuse de recibo no cuenta como respuesta de fondo. Una respuesta negativa motivada sí puede contar.","Anual.
+
+Respuestas publicadas al 31 de diciembre.","Matriz pública de preguntas y respuestas, acta integral o evaluación de rendición de cuentas con todas las observaciones, incluidas pendientes.
+
+Protocolo: verificar que la respuesta atienda el asunto. Un listado solo de respuestas no permite conocer OT. Su disponibilidad requiere verificación.","Verde
+≥90 %
+Amarillo
+70 a <90 %
+Rojo
+<70 %
+Gris
+N/D","Mide devolución pública al corte.
+
+No acredita notificación personal, plazos legales, aceptación de propuestas o ejecución de mejoras. Es el indicador más condicionado por un registro público completo.","OR: Número de observaciones ciudadanas del universo evaluado con respuesta de fondo publicada al corte [Conteo]
+OT: Número total de observaciones ciudadanas sobre el PDM registradas públicamente en ejercicios cerrados de rendición de cuentas del periodo [Conteo]",Indicador,"Registro: una fila por variable, año, periodo y territorio."
+Control social,CS.ICRCS,"ÍNDICE GLOBAL
+ODS 16","Índice de Condiciones y Respuesta para el Control Social
+ICRCS
+4 entradas",Resumir las cuatro dimensiones documentales con igual peso.,"ICRCS =
+(DSI + PCS + VRC + RPO) / (4)
+DSI: puntaje de disponibilidad de información de seguimiento.
+PCS: puntaje de cumplimiento de la promoción del control social.
+VRC: puntaje de presencia de veedurías en la rendición de cuentas.
+RPO: puntaje de respuesta pública a observaciones ciudadanas.
+Peso de cada indicador: 25 %. La agregación no exige datos nuevos.","Anual.
+
+Cuatro puntajes con el mismo corte.","Puntajes derivados de los cuatro indicadores y sus soportes públicos.
+
+Protocolo: requiere las cuatro entradas válidas. Si falta una, hay base cero o cortes incompatibles, ICRCS = N/D. No sustituir indicadores ni redistribuir pesos. Validar pesos con la línea base.","Verde
+≥75
+Amarillo
+50 a <75
+Rojo
+<50
+Gris
+N/D","Resume condiciones y respuesta documentadas. Permite compensación entre dimensiones; mostrar debilidades de RPO aunque el índice sea alto.
+
+100 no demuestra incidencia, ausencia de corrupción o cumplimiento general del plan.",Disponibilidad de información de seguimiento (DSI); cumplimiento de la promoción del control social (PCS); presencia de veedurías en la rendición de cuentas (VRC); respuesta pública a observaciones ciudadanas (RPO). Cuatro puntajes calculados; 25 % cada uno.,Índice,Se calcula desde Resultados; no requiere captura adicional.
+Participación ciudadana,PC.I1,"INCIDENCIA
+ODS 16","I1 Incorporación de aportes ciudadanos
+Principal
+2 variables",Medir la incorporación documentada de aportes en decisiones formales.,"I1 = (100 × V1) / (V2)
+V1: número de procesos participativos cerrados que incorporaron al menos un aporte ciudadano en una decisión formal.
+V2: número total de procesos participativos cerrados en los que se recibieron aportes ciudadanos.
+Cada proceso se cuenta una vez. Una respuesta o compromiso verbal no prueba incorporación.",Anual.,"Informes de cierre, actas de instancias y decisiones de Participación y dependencias responsables. Actas del Concejo cuando corresponda.
+
+Protocolo: vincular el aporte con una decisión. Incluir todos los procesos elegibles; documentar vacíos de evidencia. Viabilidad estimada media.","Verde
+≥70 %
+Amarillo
+40 a <70 %
+Rojo
+<40 %
+Gris
+N/D","Un porcentaje mayor indica más procesos con alguna incorporación.
+
+No mide cantidad, importancia o ejecución de los aportes. Describir los cambios relevantes.","V1: Número de procesos participativos cerrados que incorporaron al menos un aporte ciudadano en una decisión formal [Conteo]
+V2: Número total de procesos participativos cerrados en los que se recibieron aportes ciudadanos [Conteo]",Indicador,"Registro: una fila por variable, año, periodo y territorio."
+Participación ciudadana,PC.I2,"TERRITORIO
+ODS 16","I2 Cobertura territorial de la participación
+Principal
+2 variables",Identificar el alcance territorial de las actividades realizadas.,"I2 = (100 × V1) / (V2)
+V1: número de zonas con al menos una actividad participativa realizada para su comunidad.
+V2: número total de zonas oficiales del municipio.
+Cada zona cuenta una vez. La actividad debe permitir intervenir, proponer o deliberar. Validar el universo con Planeación.",Semestral y anual.,"Catálogo oficial de zonas y consolidado de Participación, comités zonales y organizadores, con fecha, zona y acta o asistencia.
+
+Protocolo: acreditar cada zona, incluso en eventos centrales o virtuales. Los planes zonales no prueban actividad. Viabilidad media alta si se identifica la zona.","Verde
+≥80 %
+Amarillo
+50 a <80 %
+Rojo
+<50 %
+Gris
+N/D","Un porcentaje mayor indica presencia en más zonas.
+
+No demuestra asistencia suficiente, diversidad de grupos o igualdad de influencia. Por zona: cobertura sí o no.","V1: Número de zonas con al menos una actividad participativa realizada para su comunidad [Conteo]
+V2: Número total de zonas oficiales del municipio [Conteo]",Indicador,"Registro: una fila por variable, año, periodo y territorio."
+Participación ciudadana,PC.I3,"FORMACIÓN
+ODS 4 y 16","I3 Cumplimiento de la oferta formativa
+Principal
+2 variables",Verificar la realización de la formación programada para la ciudadanía.,"I3 = (100 × V1) / (V2)
+V1: número de acciones formativas programadas para la ciudadanía que se realizaron.
+V2: número total de acciones formativas programadas para la ciudadanía con finalización prevista en el periodo.
+Contar cursos, diplomados o seminarios completos, finalizados dentro del periodo. No contar cada clase.",Semestral y anual.,"Programación fechada y reporte de ejecución de la Escuela o responsable, con soporte de finalización.
+
+Protocolo: V1 debe pertenecer a lo programado. Excluir formación exclusiva para servidores. Reportar acciones adicionales aparte. Viabilidad estimada media alta con consolidado.","Verde
+≥75 %
+Amarillo
+50 a <75 %
+Rojo
+<50 %
+Gris
+N/D","100 % indica realización de toda la oferta prevista.
+
+Mide cumplimiento, sin demostrar aprendizaje o personas únicas formadas. Publicar también el número de acciones.","V1: Número de acciones formativas programadas para la ciudadanía que se realizaron [Conteo]
+V2: Número total de acciones formativas programadas para la ciudadanía con finalización prevista en el periodo [Conteo]",Indicador,"Registro: una fila por variable, año, periodo y territorio."
+Participación ciudadana,PC.I4,"INFORMACIÓN
+ODS 16","I4 Publicación de resultados participativos
+Principal
+2 variables",Verificar la devolución pública de los resultados de procesos cerrados.,"I4 = (100 × V1) / (V2)
+V1: número de procesos participativos cerrados con resultados publicados y consultables.
+V2: número total de procesos participativos cerrados.
+Contar cada proceso una vez. La publicación debe identificarlo, sintetizar aportes y comunicar decisiones o respuestas.",Semestral y anual.,"Inventario de procesos cerrados y enlaces públicos en portales municipales, actas o informes de cierre.
+
+Protocolo: revisar enlaces al corte. Convocatorias y fotos no son resultados. Ausencia comprobada de publicación: incumplimiento. Viabilidad media alta con inventario completo.","Verde
+≥90 %
+Amarillo
+70 a <90 %
+Rojo
+<70 %
+Gris
+N/D","Un porcentaje mayor indica más procesos con devolución pública.
+
+No mide comprensión ni oportunidad de publicación. Puede diferir de I1: publicar un rechazo no acredita incorporar un aporte.","V1: Número de procesos participativos cerrados con resultados publicados y consultables [Conteo]
+V2: Número total de procesos participativos cerrados [Conteo]",Indicador,"Registro: una fila por variable, año, periodo y territorio."
+Participación ciudadana,PC.I5,"OPERACIÓN
+ODS 16","I5 Cumplimiento de sesiones de participación
+Complementario
+2 variables",Observar la operación regular de las instancias seleccionadas.,"I5 = (100 × V1) / (V2)
+V1: número de sesiones previstas de las instancias seleccionadas que se realizaron.
+V2: número total de sesiones previstas de esas mismas instancias para el periodo.
+Seleccionar las instancias previamente. Contar las sesiones con quórum cuando aplique; adicionales, aparte.",Semestral y anual.,"Calendarios y actas de las instancias y sus secretarías técnicas. Consejo Municipal de Participación como referencia.
+
+Protocolo: comprobar fecha y realización. Mantener la programación y documentar cambios. Viabilidad estimada media alta con soportes completos.","Verde
+≥75 %
+Amarillo
+50 a <75 %
+Rojo
+<50 %
+Gris
+N/D","100 % indica que se realizó toda la programación.
+
+No acredita calidad deliberativa o sostenibilidad financiera.
+
+Se publica aparte y no entra al índice.","V1: Número de sesiones previstas de las instancias seleccionadas que se realizaron [Conteo]
+V2: Número total de sesiones previstas de esas mismas instancias para el periodo [Conteo]",Complementario,"Registro: una fila por variable, año, periodo y territorio."
+Participación ciudadana,PC.I6,"ACCESO
+ODS 16","I6 Disponibilidad de participación virtual
+Complementario
+2 variables",Identificar actividades con canal virtual habilitado para intervenir.,"I6 = (100 × V1) / (V2)
+V1: número de actividades participativas realizadas que habilitaron un canal virtual para intervenir.
+V2: número total de actividades participativas realizadas.
+Contar actividades virtuales o híbridas que permitan preguntas, propuestas o deliberación. Una transmisión para observar no basta.",Semestral y anual.,"Relación de actividades realizadas y evidencia del canal habilitado, de Participación, Escuela y organizadores.
+
+Protocolo: verificar funcionamiento en cada actividad. La modalidad anunciada no prueba realización. Viabilidad estimada media.","Verde
+≥60 %
+Amarillo
+30 a <60 %
+Rojo
+<30 %
+Gris
+N/D","Mide disponibilidad del canal, sin demostrar uso efectivo, acceso universal o superación de barreras.
+
+Se publica aparte y no entra al índice.","V1: Número de actividades participativas realizadas que habilitaron un canal virtual para intervenir [Conteo]
+V2: Número total de actividades participativas realizadas [Conteo]",Complementario,"Registro: una fila por variable, año, periodo y territorio."
+Participación ciudadana,PC.ISPC,"ÍNDICE GLOBAL
+ODS 4 y 16","Índice Simplificado de Participación Ciudadana de Envigado
+Versión 2
+4 entradas","Sintetizar incorporación, cobertura, oferta formativa y devolución pública.","Índice = 0,30 × I1
++ 0,25 × I2 + 0,20 × I3
++ 0,25 × I4
+I1: porcentaje de procesos que incorporan aportes ciudadanos.
+I2: porcentaje de zonas con actividades participativas.
+I3: porcentaje de cumplimiento de la oferta formativa.
+I4: porcentaje de procesos con resultados publicados.
+Pesos propuestos: 30 %, 25 %, 20 % y 25 %. I5 e I6 no entran al cálculo.","Cierre anual.
+
+Actualizar registros cada semestre.","Cuatro puntajes principales y sus soportes.
+
+Protocolo: calcular solo con las cuatro entradas completas y mismo corte anual. No redistribuir pesos. Validar con línea base y comparar con pesos iguales antes de adoptar.","Verde
+≥75
+Amarillo
+50 a <75
+Rojo
+<50
+Gris
+N/D","Un puntaje alto resume mejores valores en los cuatro componentes.
+
+Mostrarlos junto al índice, especialmente I1. No es una evaluación integral de la democracia local.","Incorporación de aportes ciudadanos (I1, 30 %); cobertura territorial de la participación (I2, 25 %); cumplimiento de la oferta formativa (I3, 20 %); publicación de resultados participativos (I4, 25 %). I5 e I6 son complementarios.",Índice,Se calcula desde Resultados; no requiere captura adicional.
+Cumplimiento del PDM,PDM.CS,"SALUD
+ODS 3","Logro de la cobertura de aseguramiento subsidiado
+CS
+2 variables",Verificar el mantenimiento de la cobertura del régimen subsidiado frente a la meta del plan.,"CS = (100 × O) / (M)
+Máximo: 100 puntos.
+O: cobertura porcentual observada del aseguramiento en el régimen subsidiado.
+M: cobertura meta del aseguramiento en el régimen subsidiado.
+Meta de formulación: 99,5 %. Línea base: 99,5 % en 2022.","Anual.
+
+Último año completo disponible.","Reporte público de aseguramiento de Salud; fuente del plan: Ministerio de Salud. PDM 1.1.4, p. 518.
+
+Protocolo: conservar el universo del régimen subsidiado. No usar cobertura total del SGSSS ni ejecución presupuestal.","Verde
+100 sin redondear
+Amarillo
+75 a <100
+Rojo
+0 a <75
+Gris
+N/D sin dato","100 sin redondear: meta de cobertura mantenida o superada.
+
+Menor puntaje: cobertura inferior a la meta.
+
+No mide acceso efectivo a todos los servicios ni avance desde la línea base.","O: Cobertura porcentual observada del aseguramiento en el régimen subsidiado [Porcentaje (0–100)]
+M: Cobertura meta del aseguramiento en el régimen subsidiado [Porcentaje (0–100)]",Indicador,"Registro: una fila por variable, año, periodo y territorio."
+Cumplimiento del PDM,PDM.CM,"MOVILIDAD
+ODS 3 y 11","Logro de la reducción de mortalidad vial
+CM
+2 variables",Evaluar si la tasa anual de mortalidad por siniestros viales alcanza el máximo fijado por el plan.,"CM = (100 × M) / (O)
+Máximo: 100 puntos. Si O = 0 y la tasa anual es válida, CM = 100 sin dividir.
+O: tasa anual observada de mortalidad vial por 100.000 habitantes.
+M: tasa meta de mortalidad vial por 100.000 habitantes.
+Meta de formulación: 8. Línea base: 10,2, sin año en la fila del plan.","Anual.
+
+Tasa de año completo.","Informe público de seguridad vial o seguimiento del sector; responsable: Secretaría de Movilidad. PDM, programa 3.2.2, p. 599.
+
+Protocolo: comparar tasas con igual unidad y población. No usar conteos ni periodos parciales. Verificar lugar del siniestro o residencia de la víctima.","Verde
+100 sin redondear
+Amarillo
+75 a <100
+Rojo
+0 a <75
+Gris
+N/D sin dato","100 sin redondear: mortalidad igual o inferior a 8, sujeto a meta vigente.
+
+Menor puntaje: tasa superior a la meta.
+
+Mide logro del nivel objetivo, no porcentaje de reducción desde la línea base.","O: Tasa anual observada de mortalidad vial por 100.000 habitantes [Muertes / 100.000 hab.]
+M: Tasa meta de mortalidad vial por 100.000 habitantes [Muertes / 100.000 hab.]",Indicador,"Registro: una fila por variable, año, periodo y territorio."
+Cumplimiento del PDM,PDM.CA,"MEDIO AMBIENTE
+ODS 11 y 15","Logro del mantenimiento de espacio público verde
+CA
+2 variables",Verificar el mantenimiento de la disponibilidad de espacio público verde por habitante.,"CA = (100 × O) / (M)
+Máximo: 100 puntos.
+O: espacio público verde observado, en metros cuadrados por habitante.
+M: meta de espacio público verde, en metros cuadrados por habitante.
+Meta de formulación: 3,88 m²/hab. Línea base: 3,88 m²/hab. en 2023.","Anual.
+
+Último año completo disponible.","Informe ambiental o anexo de seguimiento; responsable: Secretaría de Medio Ambiente y Desarrollo Agropecuario. PDM, programa 3.3.2, p. 607.
+
+Protocolo: verificar inventario, territorio y población. No sustituir por espacio público efectivo total, árboles sembrados o hectáreas protegidas.","Verde
+100 sin redondear
+Amarillo
+75 a <100
+Rojo
+0 a <75
+Gris
+N/D sin dato","100 sin redondear: nivel verde por habitante mantenido o superado.
+
+Menor puntaje: disponibilidad inferior a la meta.
+
+No mide distribución, accesibilidad de áreas verdes ni toda la calidad ambiental.","O: Espacio público verde observado, en metros cuadrados por habitante [m² / habitante]
+M: Meta de espacio público verde, en metros cuadrados por habitante [m² / habitante]",Indicador,"Registro: una fila por variable, año, periodo y territorio."
+Cumplimiento del PDM,PDM.CP,"PARTICIPACIÓN CIUDADANA
+ODS 16","Logro de implementación de procesos participativos
+CP
+2 variables",Verificar el logro del porcentaje oficial de implementación de los procesos participativos.,"CP = (100 × O) / (M)
+Máximo: 100 puntos.
+O: porcentaje observado de implementación de procesos de participación ciudadana, según el método oficial.
+M: porcentaje meta de implementación de esos procesos.
+Meta de formulación: 100 %. Línea base: 75 %, sin año en la fila del plan.","Anual.
+
+Último año completo disponible.","Informe público de seguimiento del PDM o balance de participación con el resultado agregado; responsable: Planeación. Programa 5.1.1, p. 628.
+
+Protocolo: usar el porcentaje y su método oficial de evaluación. No inferirlo de reuniones, asistentes, cursos o actividades.","Verde
+100 sin redondear
+Amarillo
+75 a <100
+Rojo
+0 a <75
+Gris
+N/D sin dato","100 sin redondear: meta institucional alcanzada.
+
+Menor puntaje: implementación parcial frente a la meta.
+
+Es un resultado institucional intermedio; no demuestra incidencia de propuestas ciudadanas.","O: Porcentaje observado de implementación de procesos de participación ciudadana, según el método oficial [Porcentaje (0–100)]
+M: Porcentaje meta de implementación de esos procesos [Porcentaje (0–100)]",Indicador,"Registro: una fila por variable, año, periodo y territorio."
+Cumplimiento del PDM,PDM.CD,"DEPORTE
+ODS 3","Logro de cobertura de servicios deportivos
+CD
+2 variables","Evaluar el logro de cobertura en disciplinas tradicionales, nuevas tendencias y adaptadas.","CD = (100 × O) / (M)
+Máximo: 100 puntos.
+O: cobertura porcentual observada de los servicios deportivos incluidos en el resultado.
+M: cobertura porcentual meta de esos servicios deportivos.
+Meta de formulación: 6 %. Línea base: 5,3 % en 2023.","Anual.
+
+Último año completo disponible.","Informe público de gestión o seguimiento del Índer que publique la cobertura calculada. PDM, programa 1.2.1, pp. 522 a 523.
+
+Protocolo: mantener servicios y universo poblacional. No convertir inscripciones o asistencias en personas únicas. Un conteo aislado no sustituye la cobertura.","Verde
+100 sin redondear
+Amarillo
+75 a <100
+Rojo
+0 a <75
+Gris
+N/D sin dato","100 sin redondear: meta de cobertura alcanzada.
+
+Menor puntaje: cobertura inferior a la meta.
+
+No acredita mejoras en salud, calidad del servicio ni cobertura de toda la oferta deportiva.","O: Cobertura porcentual observada de los servicios deportivos incluidos en el resultado [Porcentaje (0–100)]
+M: Cobertura porcentual meta de esos servicios deportivos [Porcentaje (0–100)]",Indicador,"Registro: una fila por variable, año, periodo y territorio."
+Cumplimiento del PDM,PDM.ILE,"EDUCACIÓN
+ODS 4","Índice de Logro Educativo
+Acceso inicial y Saber 11
+ILE
+4 variables de base",Combinar el logro del acceso en primera infancia y la mejora de categoría institucional en Saber 11.,"LA = (100 × A) / (MA)
+LS = (100 × S) / (MS)
+ILE = (LA + LS) / (2)
+Limitar LA y LS a 100 antes de promediar. Son puntajes intermedios.
+A: cobertura observada de atención integral de niños y niñas de 0 a 6 años.
+MA: meta de cobertura de atención integral inicial.
+S: porcentaje observado de instituciones oficiales que mejoran su categoría en Saber 11.
+MS: meta de instituciones oficiales que mejoran su categoría en Saber 11.
+Metas de formulación: MA = 19 % y MS = 14 %.","Anual.
+
+Mismo año para ambos resultados.","Porcentajes agregados publicados por Educación; contraste con agregados y clasificación de planteles del ICFES. PDM, programas 2.1.1 y 2.1.2, pp. 553 a 554.
+
+Protocolo: preservar definición de atención, comparación de categorías y universo elegible. Si falta un componente, ILE = N/D.","Verde
+100 sin redondear
+Amarillo
+75 a <100
+Rojo
+0 a <75
+Gris
+N/D sin dato","100 sin redondear: ambos componentes alcanzan su meta.
+
+Un componente débil reduce el índice. Mostrar LA y LS.
+
+La mejora es institucional; no equivale al porcentaje de estudiantes con buenos resultados ni resume todo el sector.","A: Cobertura observada de atención integral de niños y niñas de 0 a 6 años [Porcentaje (0–100)]
+MA: Meta de cobertura de atención integral inicial [Porcentaje (0–100)]
+S: Porcentaje observado de instituciones oficiales que mejoran su categoría en Saber 11 [Porcentaje (0–100)]
+MS: Meta de instituciones oficiales que mejoran su categoría en Saber 11 [Porcentaje (0–100)]",Indicador,"Registro: una fila por variable, año, periodo y territorio."
+Cumplimiento del PDM,PDM.ICPD-6,"ÍNDICE GLOBAL
+ODS 3 4 11 15 16","Índice de cumplimiento de resultados seleccionados del PDM
+ICPD-6","Sintetizar los seis puntajes normalizados, con igual peso para cada dimensión.","IBS = (CS + ILE + CD) / (3)
+ITG = (CM + CA + CP) / (3)
+ICPD-6 = (IBS + ITG) / (2)
+IBS: subíndice de bienestar social.
+ITG: subíndice de territorio y gobernanza.
+CS: logro de aseguramiento subsidiado.
+ILE: índice de logro educativo.
+CD: logro de cobertura deportiva.
+CM: logro de reducción de mortalidad vial.
+CA: logro de espacio público verde por habitante.
+CP: logro de implementación de procesos participativos.
+Cada dimensión pesa 1/6. Cada grupo usa 3 entradas; el promedio final, 2.","Anual.
+
+Año común y metas con igual horizonte.","Puntajes calculados de las seis dimensiones y soportes públicos respectivos.
+
+Protocolo: verificar año común y comparabilidad. Si falta una dimensión o un componente educativo, ICPD-6 = N/D. No redistribuir pesos. Redondear solo el resultado final.","Verde
+100 sin redondear
+Amarillo
+75 a <100
+Rojo
+0 a <75
+Gris
+N/D sin dato","100 sin redondear: todas las metas seleccionadas alcanzadas.
+
+Un menor puntaje resume logro parcial. Mostrar las seis dimensiones.
+
+No representa todas las metas del plan ni ejecución presupuestal. Cada componente educativo pesa 1/12.","Subíndice de bienestar social (IBS): logro del aseguramiento subsidiado (CS), índice de logro educativo (ILE), logro de cobertura deportiva (CD). Subíndice de territorio y gobernanza (ITG): reducción de mortalidad vial (CM), espacio público verde (CA), implementación de procesos participativos (CP). Requiere seis puntajes; cada dimensión pesa 1/6.",Índice,Se calcula desde Resultados; no requiere captura adicional.
+Presupuesto participativo,PP.EPP,"GESTIÓN FINANCIERA
+ODS 16","Ejecución presupuestal del presupuesto participativo
+EPP
+2 variables",Medir qué proporción de los recursos disponibles de PP se convirtió en obligaciones presupuestales reconocidas.,"EPP = 100 × OPP / APP
+
+OPP: valor de las obligaciones presupuestales registradas con cargo a recursos de PP.
+
+APP: valor de la apropiación definitiva de recursos de PP.
+
+Misma vigencia, zona, corte y fuente de financiación.","Trimestral si hay reporte.
+
+Cierre anual.","Informe público de ejecución presupuestal y modificaciones aprobadas.
+
+Protocolo: identificar recursos de PP y distinguir obligaciones, compromisos y pagos. Separar cofinanciación y evitar sumar de nuevo transferencias al operador.","Verde
+90 a 100
+Amarillo
+75 a <90
+Naranja
+50 a <75
+Rojo
+0 a <50
+N/D o NE
+Sin puntaje","Alto: mayor uso presupuestal de los recursos disponibles.
+
+Bajo: recursos con baja ejecución por obligaciones.
+
+Por sí solo no demuestra entrega, calidad o impacto.","OPP: Valor de las obligaciones presupuestales registradas con cargo a recursos de presupuesto participativo [COP]
+APP: Valor de la apropiación definitiva de recursos de presupuesto participativo [COP]",Indicador,"Registro: una fila por variable, año, periodo y territorio."
+Presupuesto participativo,PP.CEP,"PRODUCTOS
+ODS 16","Cumplimiento de entrega de proyectos
+CEP
+2 variables",Medir la proporción de proyectos que completaron las entregas exigibles en la vigencia.,"CEP = 100 × PEC / PE
+
+PEC: número de proyectos con todas las entregas exigibles completas y verificadas al corte.
+
+PE: número total de proyectos financiados con entrega exigible en la vigencia.
+
+Cada proyecto tiene igual peso.","Trimestral si hay reporte.
+
+Cierre anual.","Catálogo y cronograma públicos; informes finales, actas de recibo o reportes de supervisión publicados.
+
+Protocolo: contrastar las entregas con el compromiso. Mantener en el denominador los no iniciados, suspendidos y atrasados cuya entrega era exigible.","Verde
+90 a 100
+Amarillo
+75 a <90
+Naranja
+50 a <75
+Rojo
+0 a <50
+N/D o NE
+Sin puntaje","Alto: mayor proporción de proyectos con entrega completa.
+
+Bajo: pendientes o entregas incompletas.
+
+La ejecución financiera del 100 % no acredita entrega. No mide el plazo original.","PEC: Número de proyectos con todas las entregas exigibles completas y verificadas al corte [Conteo]
+PE: Número total de proyectos financiados con entrega exigible en la vigencia [Conteo]",Indicador,"Registro: una fila por variable, año, periodo y territorio."
+Presupuesto participativo,PP.CMA,"ATENCIÓN A LA POBLACIÓN
+ODS 16","Cumplimiento de metas de atención
+CMA
+4 tipos de variables",Medir el cumplimiento promedio de la meta anual de personas atendidas en los proyectos aplicables.,"Por proyecto
+100 × mín(PA / MP; 1)
+CMA = SC / NA
+
+PA: número de personas efectivamente atendidas por proyecto.
+MP: meta anual de personas por atender del proyecto.
+SC: suma de los puntajes de cumplimiento de atención de los proyectos aplicables.
+NA: número de proyectos con meta de atención aplicable.
+
+Dos datos de base y dos agregados. MP debe ser positiva.","Trimestral si hay reporte.
+
+Cierre anual.","Fichas públicas con meta principal de atención e informes de ejecución de las unidades ejecutoras con personas atendidas.
+
+Protocolo: usar la misma unidad y periodo; verificar deduplicación dentro de cada proyecto. No sustituir personas por inscritos o asistencias ni sumar habitantes únicos entre proyectos.","Verde
+90 a 100
+Amarillo
+75 a <90
+Naranja
+50 a <75
+Rojo
+0 a <50
+N/D o NE
+Sin puntaje","Alto: mayor alcance promedio de las metas de atención.
+
+Bajo: menor atención frente a lo programado.
+
+Cada proyecto aplicable pesa igual. No acredita satisfacción, cambio de bienestar o impacto causal.","Personas efectivamente atendidas por proyecto (PA); meta anual de personas por atender del proyecto (MP); suma de puntajes de cumplimiento de atención de los proyectos aplicables (SC, calculada); número de proyectos con meta de atención aplicable (NA).",Indicador,Registro: NA. PP_Proyectos: personas atendidas y meta por proyecto.
+Presupuesto participativo,PP.IREPP,"SÍNTESIS DE EJECUCIÓN
+ODS 16","Índice de Resultados de Ejecución del Presupuesto Participativo
+IREPP
+3 variables","Resumir ejecución presupuestal, entrega y atención, dando 80 % del peso a las dos últimas dimensiones.","IREPP = 0,20 × EPP
++ 0,40 × CEP
++ 0,40 × CMA
+
+EPP: puntaje de ejecución presupuestal del presupuesto participativo.
+CEP: puntaje de cumplimiento de entrega de proyectos.
+CMA: puntaje de cumplimiento de metas de atención.
+
+Pesos constantes: 20 %, 40 % y 40 %. Escala de 0 a 100.","Anual.
+
+Avance provisional con igual corte.","Resultados calculados de EPP, CEP y CMA, con sus soportes públicos.
+
+Protocolo: verificar los tres puntajes y el corte común. Con un componente N/D o NE no calcular el índice ni redistribuir pesos. Publicar componentes y denominadores.","Verde
+90 a 100
+Amarillo
+75 a <90
+Naranja
+50 a <75
+Rojo
+0 a <50
+N/D o NE
+Sin puntaje","Resume el desempeño de ejecución.
+
+Señalar CEP o CMA inferior a 50, aunque el índice sea mayor.
+
+82 puntos no equivalen a 82 % de proyectos cumplidos ni de impacto social.","Ejecución presupuestal del presupuesto participativo (EPP, 20 %); cumplimiento de entrega de proyectos (CEP, 40 %); cumplimiento de metas de atención (CMA, 40 %). Tres puntajes calculados.",Índice,Se calcula desde Resultados; no requiere captura adicional.
