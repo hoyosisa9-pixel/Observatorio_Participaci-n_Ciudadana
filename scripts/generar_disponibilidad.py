@@ -106,6 +106,11 @@ CORRECCIONES = [
      Anadir('Comparabilidad con la meta 3,88 no verificada: con 5,75 el logro llegaria a 100 por tope sin que la serie sea la de la linea base.'),
      'C16: riesgo de puntaje artificial'),
     ('PP.CEP.PEC', 'desagregacion', Sustituir('Proxy', 'Parcial'), 'C17: consecuencia de C6'),
+    ('PP.CEP.PEC', 'notas',
+     Sustituir('Cambia frente a la Fase 1 (Parcial): se reclasifica como Proxy porque',
+               'Categoría final: Parcial, igual que en la clasificación preliminar (en la búsqueda se propuso Proxy; '
+               'la revisión crítica la dejó en Parcial por tratarse de autorreporte). Motivo de la brecha:'),
+     'C22 (QA): la nota decía Proxy y contradecía la categoría final'),
     ('PDM.CS.O', 'ruta_o_url',
      Sustituir('(zip dic-2025: /sites/rid/Lists/BibliotecaDigital/RIDE/VP/DOA/cifras-afiliacion-salud-dic-2025.zip; zip ago-2026: /sites/rid/Lists/BibliotecaDigital/RIDE/VP/RBC/cifras-afiliacion-salud-agosto2026.zip)',
                '; zip dic-2025: /sites/rid/Lists/BibliotecaDigital/RIDE/VP/DOA/cifras-afiliacion-salud-dic-2025.zip ; zip ago-2026: /sites/rid/Lists/BibliotecaDigital/RIDE/VP/RBC/cifras-afiliacion-salud-agosto2026.zip'),
@@ -211,6 +216,31 @@ def consolidar_solicitudes():
 # Solo cambia la forma: enlaces, lenguaje, ortografía, encabezados y formato. No toca categorías, cifras ni veredictos.
 F_INVENTARIO = RAIZ / 'data_raw_IIC' / 'inventario_detallado_IIC.csv'
 SIN_URL = 'Solo en archivo local del observatorio'
+# Documentos del portal de la Alcaldía: el dominio www.envigado.gov.co tiene la cadena de certificados incompleta;
+# los mismos archivos responden con certificado válido en el dominio espejo (verificado el 9-nov-2026: 36 de 36).
+PORTAL_ARCHIVOS = 'https://www.envigado.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/'
+ESPEJO_ARCHIVOS = ('https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co'
+                   '/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/')
+URL_REEMPLAZO = {  # enlaces que cambiaron de dirección (verificado el 9-nov-2026)
+    'https://adres.gov.co/entidades-territoriales/bdua': 'https://www.adres.gov.co/entidades-territoriales/bdua/reportes',
+}
+NOTAS_ENLACE = [  # (prefijo de URL, nota que acompaña al enlace)
+    ('https://www.envigado.gov.co', 'puede requerir abrirse desde otro navegador'),
+    ('https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf', 'verificar en navegador'),
+    ('https://www.adres.gov.co/entidades-territoriales/bdua/reportes',
+     'sección de consulta BDUA; enlace actualizado el 9-nov-2026 (la dirección anterior ya no existe)'),
+]
+
+
+def normalizar_url(u):
+    u = URL_REEMPLAZO.get(u.rstrip('/'), u)
+    if u.startswith(PORTAL_ARCHIVOS):
+        u = ESPEJO_ARCHIVOS + u[len(PORTAL_ARCHIVOS):]
+    return u
+
+
+def nota_enlace(u):
+    return next((nota for pref, nota in NOTAS_ENLACE if u.startswith(pref)), '')
 NOMBRE_SISTEMA = {'CS': 'Control social', 'PC': 'Participación ciudadana', 'PDM': 'Cumplimiento del PDM',
                   'PP': 'Presupuesto participativo'}
 MAX_CELDA = 600
@@ -398,12 +428,13 @@ def separar_enlaces(texto, inv):
         r = r.rstrip('.')
         rutas.append(r)
         u = url_de_ruta(r, inv)
+        u = normalizar_url(u) if u else u
         if u and u not in urls:
             urls.append(u)
         elif not u and SIN_URL not in urls:
             urls.append(SIN_URL)
     for u in RE_URL.findall(texto or ''):
-        u = u.rstrip('.')
+        u = normalizar_url(u.rstrip('.'))
         if u not in urls:
             urls.append(u)
     resto = RE_URL.sub('', RE_RUTA.sub('', texto or ''))
@@ -570,9 +601,13 @@ def presentar_enlaces(fila, campo, inv, hoja, ident, tabla_enlaces):
     urls, rutas, resto = separar_enlaces(fila[campo], inv)
     fila['enlace'] = lista_acotada(urls, 'enlaces más en la hoja Enlaces') if urls else SIN_URL
     fila['ruta_interna'] = '\n'.join(rutas)
+    notas = []
     for u in urls:
         if es_url(u):
-            tabla_enlaces.append([hoja, ident, u])
+            tabla_enlaces.append([hoja, ident, u, nota_enlace(u)])
+            if nota_enlace(u):
+                notas.append(f'Enlace {u}: {nota_enlace(u)}.')
+    fila['_notas_enlace'] = ' '.join(dict.fromkeys(notas))
     primera = next((u for u in urls if es_url(u)), None)
     return primera, resto
 
@@ -616,6 +651,8 @@ def main():
         extras = []
         if resto:
             extras.append('Fuente: ' + limpiar(resto))
+        if v['_notas_enlace']:
+            extras.append(v['_notas_enlace'])
         if detalle_ver.lower() not in ('verificado', 'sin verificar'):
             extras.append('Verificación: ' + detalle_ver)
         v['notas'] = ' | '.join(x for x in [v['notas']] + extras if x)
@@ -654,8 +691,8 @@ def main():
         f = dict(f)
         primera, resto = presentar_enlaces(f, 'url_o_ruta', inv, 'Fuentes', f['fuente'], tabla_enlaces)
         urls_desc = RE_URL.findall(f['descargable_o_manual'])
-        for u in urls_desc:
-            tabla_enlaces.append(['Fuentes', f['fuente'], u])
+        for u in map(normalizar_url, urls_desc):
+            tabla_enlaces.append(['Fuentes', f['fuente'], u, nota_enlace(u)])
         f['descargable_o_manual'] = RE_URL.sub('(ver enlace en la hoja Enlaces)', f['descargable_o_manual'])
         detalle_acc = limpiar(f['estado_acceso'])
         f['estado_acceso'] = estado_acceso(f['estado_acceso'], bool(f['ruta_interna']))
@@ -663,6 +700,8 @@ def main():
         extras = []
         if resto:
             extras.append('Referencia: ' + limpiar(resto))
+        if f['_notas_enlace']:
+            extras.append(f['_notas_enlace'])
         if detalle_acc and detalle_acc.lower().rstrip('.') not in ('accesible',):
             extras.append('Acceso: ' + detalle_acc)
         f['notas'] = ' | '.join(x for x in [f['notas']] + extras if x)
@@ -738,8 +777,9 @@ def main():
     escribir_hoja(wb, 'Fuentes', cab_fte, datos_fte, anch_fte,
                   enlaces={[c[0] for c in COLUMNAS_FTE].index('enlace'): links_fte})
     escribir_hoja(wb, 'Solicitudes', [c[1] for c in COLUMNAS_SOL], datos_sol, [c[2] for c in COLUMNAS_SOL])
-    escribir_hoja(wb, 'Enlaces', ['Hoja', 'Variable o fuente', 'Enlace'], [[h, limpiar(i), u] for h, i, u in tabla_enlaces],
-                  [12, 50, 90], enlaces={2: [u for _, _, u in tabla_enlaces]})
+    escribir_hoja(wb, 'Enlaces', ['Hoja', 'Variable o fuente', 'Enlace', 'Nota'],
+                  [[h, limpiar(i), u, n] for h, i, u, n in tabla_enlaces],
+                  [12, 46, 85, 40], enlaces={2: [u for _, _, u, _ in tabla_enlaces]})
     # el orden de hojas pone Indicadores antes de Variables (se recomienda empezar por ahí)
     wb.move_sheet('Indicadores', offset=-1)
     destino = SALIDA / 'disponibilidad_brecha_indicadores.xlsx'

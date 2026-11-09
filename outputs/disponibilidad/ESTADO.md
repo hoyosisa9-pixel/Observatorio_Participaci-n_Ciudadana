@@ -1,6 +1,6 @@
 # ESTADO – Disponibilidad y brecha de información del sistema de indicadores (OCE Envigado)
 
-**Punto de control:** 14-oct-2026 (actualizado tras la Fase 4: tarea completa) · Repositorio `/workspaces/Observatorio_Participaci-n_Ciudadana` · Rama `main`
+**Punto de control:** 14-oct-2026 (actualizado el 9-nov-2026: versión 1.1 tras el control de calidad) · Repositorio `/workspaces/Observatorio_Participaci-n_Ciudadana` · Rama `main`
 
 Este archivo es autosuficiente: explica la tarea, lo hecho, lo pendiente y cómo retomar.
 
@@ -25,9 +25,9 @@ Los profesores **Francisco Correa y Eber** definieron un sistema preliminar de i
 | 1. Plan y mapa de búsqueda | Analizador | **Terminada** → `trabajo/mapa_busqueda.md` |
 | 2. Búsqueda y evidencia por sistema (4 Ejecutores) | Ejecutor ×4 | **Terminada: 39/39 variables** |
 | 3. Revisión crítica y viabilidad de los 23 indicadores | Analizador | **Terminada** → `trabajo/revision_fase3.md`, `trabajo/indicadores_fase3.csv` (dos intentos previos se cortaron por límite de uso) |
-| 4. Entregables finales + verificación + memoria | Ejecutor + sesión principal | **Terminada** → Excel, CSV, `resumen_reunion.md`, `documentos_por_descargar.md`, `scripts/generar_disponibilidad.py` |
+| 4. Entregables finales + verificación + memoria | Ejecutor + sesión principal | **Terminada** → Excel, CSV, `resumen_reunion.md`, `interno/documentos_por_descargar.md`, `scripts/generar_disponibilidad.py` |
 
-**La tarea está completa.** Lo que queda abierto depende de los profesores (preguntas de §7) o de que la usuaria descargue manualmente los documentos de `documentos_por_descargar.md`.
+**La tarea está completa.** Lo que queda abierto depende de los profesores (preguntas de §7) o de que la usuaria descargue manualmente los documentos de `interno/documentos_por_descargar.md`.
 
 **PP (Fase 2) se hizo con la información adicional del profesor Francisco.**
 - **Fuentes verificadas por su revisión previa** (registradas en `fuentes_PP.csv`, sin volver a buscarlas):
@@ -49,6 +49,17 @@ Los profesores **Francisco Correa y Eber** definieron un sistema preliminar de i
 - **Cobertura territorial:** zona 1 sin proyectos; zonas 2 a 13 con la misma categoría que el consolidado municipal.
 - Detalle en `trabajo/notas_PP.md`. **La Fase 3 debe evaluar críticamente esta reconstrucción frente a la conclusión del profesor.**
 
+
+## 2b. Versión 1.1 (9-nov-2026): correcciones del control de calidad
+
+Sin cambios en clasificaciones, cifras ni veredictos (10/7/19/2/1; 1/10/12; EPP 98,83 %).
+- **Enlaces:** los documentos del portal de la Alcaldía (`www.envigado.gov.co/sites/.../content/files/...`) apuntan al dominio espejo `alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co`, con la misma ruta (36 de 36 responden con certificado válido; 38 enlaces espejo en total). Las 15 páginas de sección del portal, sin espejo, quedan con la nota "puede requerir abrirse desde otro navegador" (Excel: Notas y hoja Enlaces, columna Nota).
+- **ADRES:** `https://www.adres.gov.co/entidades-territoriales/bdua/reportes` reemplaza la dirección anterior (404). **Forensis 2024:** se mantiene, con la nota "verificar en navegador" (responde 403 a clientes automáticos).
+- **PP.CEP.PEC:** la nota ya no dice "se reclasifica como Proxy"; ahora indica que la categoría final es Parcial.
+- **Portada:** parámetros fijos en `generar_informe_latex.py` (`VERSION`, `FECHA_CORTE`): "Versión 1.1 – 9 de noviembre de 2026" y "Fecha de corte de la información: 14 de octubre de 2026".
+- **Documentos internos:** `resumen_reunion.md`, `resumen_reunion.docx` y `documentos_por_descargar.md` se movieron a `outputs/disponibilidad/interno/` (con `LEEME.md`); no se entregan. El informe formal sigue leyendo `interno/documentos_por_descargar.md` para su sección 8.1.
+- **Espacio:** los 5 ZIP originales están respaldados en Google Drive (carpeta Bases_Datos_IIC_Envigado); se eliminaron del Codespace el 9-nov-2026 por espacio.
+- **Entregables vigentes:** `disponibilidad_brecha_indicadores.xlsx`, `informe_disponibilidad.docx`, `informe_latex/informe_disponibilidad.pdf` e `informe_disponibilidad_overleaf.zip`.
 
 ## 3. Archivos generados
 
@@ -72,11 +83,11 @@ Los profesores **Francisco Correa y Eber** definieron un sistema preliminar de i
 | `outputs/disponibilidad/disponibilidad_brecha_indicadores.xlsx` | Versión para los profesores: hojas Léeme, Indicadores, Variables (39), Fuentes (66), Solicitudes (32) y Enlaces (218 hipervínculos). Rutas internas reemplazadas por la URL de origen del inventario (ruta interna en columna aparte al final), lenguaje sin jerga, tildes, encabezados en español, sistema con nombre completo, estado de acceso y verificación normalizados, columna Resumen (≤ 200 caracteres), celdas ≤ 600 caracteres (excedente en Notas), colores por categoría y veredicto; EPP marcado "preliminar, por validar", Indicadores (23), Fuentes (66, deduplicadas por URL o ruta) y Solicitudes (32, por dependencia). Verificado con openpyxl |
 | `outputs/disponibilidad/disponibilidad_variables.csv` | Hoja Variables en CSV (UTF-8, coma) |
 | `outputs/disponibilidad/disponibilidad_variables_excel.csv` | Ídem para Excel (`;`, UTF-8 con BOM) |
-| `outputs/disponibilidad/resumen_reunion.md` | Resumen de 1-2 páginas para los profesores: semáforo, viables, ajustes, EPP 2025, preguntas, documentos por descargar |
-| `outputs/disponibilidad/documentos_por_descargar.md` | 8 documentos a descargar o leer manualmente, con su link y la variable que cambiarían |
-| `outputs/disponibilidad/resumen_reunion.docx` | Versión Word del resumen (generada con `python3 scripts/md_a_docx.py outputs/disponibilidad/resumen_reunion.md`; sin `-I` porque python-docx está en el site-packages del usuario) |
+| `outputs/disponibilidad/interno/resumen_reunion.md` (interno, no se entrega) | Resumen de 1-2 páginas para los profesores: semáforo, viables, ajustes, EPP 2025, preguntas, documentos por descargar |
+| `outputs/disponibilidad/interno/documentos_por_descargar.md` (interno, no se entrega) | 8 documentos a descargar o leer manualmente, con su link y la variable que cambiarían |
+| `outputs/disponibilidad/interno/resumen_reunion.docx` (interno, no se entrega) | Versión Word del resumen (generada con `python3 scripts/md_a_docx.py outputs/disponibilidad/resumen_reunion.md`; sin `-I` porque python-docx está en el site-packages del usuario) |
 | `scripts/epp_pp_2025.py` → `outputs/disponibilidad/epp_pp_2025.md`, `epp_pp_2025_zonas.csv`, `epp_pp_2025_proyectos.csv` | Cálculo reproducible de EPP 2025, **preliminar, por validar**: 61 proyectos "ZONA n" del plan de acción IV-trim-2025 (sin el 0553) contrastados con el listado EFPC (61, misma cantidad por zona, 56 iguales al peso). APP $20.928.690.218; OPP $20.684.427.720; EPP 98,83 % (98,86 % con el 0553). Confirmó la cifra de la Fase 2 |
-| `outputs/disponibilidad/informe_latex/informe_disponibilidad.tex` (+ `.pdf` de control) y `informe_disponibilidad_overleaf.zip` | Informe formal en LaTeX para Overleaf (New Project → Upload Project). Lo genera `python3 -I scripts/generar_informe_latex.py` leyendo el Excel, `epp_pp_2025_zonas.csv`, `documentos_por_descargar.md`, este ESTADO.md (inconsistencias) y `trabajo/revision_fase3.md` §4 (decisiones). Compila sin errores con tectonic (XeTeX); compatible con pdfLaTeX |
+| `outputs/disponibilidad/informe_latex/informe_disponibilidad.tex` (+ `.pdf` de control) y `informe_disponibilidad_overleaf.zip` | Informe formal en LaTeX para Overleaf (New Project → Upload Project). Lo genera `python3 -I scripts/generar_informe_latex.py` leyendo el Excel, `epp_pp_2025_zonas.csv`, `interno/documentos_por_descargar.md`, este ESTADO.md (inconsistencias) y `trabajo/revision_fase3.md` §4 (decisiones). Compila sin errores con tectonic (XeTeX); compatible con pdfLaTeX |
 | `outputs/disponibilidad/informe_disponibilidad.docx` | Informe en Word para el informe a Envigado, mismo contenido que el PDF de LaTeX. Lo genera `python3 scripts/generar_informe_docx.py` (sin `-I`: python-docx está en ~/.local) traduciendo el mismo .tex que arma `generar_informe_latex.py`: estilos nativos, campo TOC, tablas nativas con colores del .tex, hipervínculos |
 | `scripts/generar_disponibilidad.py` | Regenera el Excel y los CSV desde `trabajo/` aplicando las 20 correcciones. Ejecutar con `python3 -I scripts/generar_disponibilidad.py`; se detiene si el conteo no cuadra |
 | `outputs/disponibilidad/trabajo/revision_fase3.md` | Fase 3: muestreo, 20 correcciones, veredictos, ajustes, preguntas, documentos y conteo final |
@@ -246,7 +257,7 @@ Detalle completo en `trabajo/mapa_busqueda.md` §8.1.
    - regenera con `python3 -I scripts/generar_disponibilidad.py`;
    - actualiza §4-§6 de este archivo.
 4. **Siguiente paso natural:**
-   - incorporar las decisiones de los profesores (universos, aceptación de proxies, metas anuales) y los documentos descargados manualmente (`documentos_por_descargar.md`);
+   - incorporar las decisiones de los profesores (universos, aceptación de proxies, metas anuales) y los documentos descargados manualmente (`interno/documentos_por_descargar.md`);
    - reclasificar y regenerar.
 5. **PP:** EPP 2025 ya es reproducible (`python3 -I scripts/epp_pp_2025.py`) y está marcado "preliminar, por validar" en el Excel (C21 en `generar_disponibilidad.py`) y en el resumen. Falta: validación del DAP de la lista de proyectos, decisión sobre el 0553, script para 2024 y 2026, y fijar la regla de agregación del proxy de PEC (da entre 45 y 55 de 61).
 6. **Git:** la usuaria autorizó commit y push de `outputs/disponibilidad/` y `.memory/` para este punto de control. Para commits posteriores, confirmar con ella.

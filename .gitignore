@@ -4,6 +4,7 @@ data_raw_IIC/*
 !data_raw_IIC/inventario_detallado_IIC.csv
 !data_raw_IIC/inventario_detallado_IIC_excel.csv
 # Paquetes comprimidos de datos (almacenamiento externo)
+# ZIP originales respaldados en Google Drive (carpeta Bases_Datos_IIC_Envigado); eliminados del Codespace el 9-nov-2026 por espacio
 *.zip
 # Excepción: paquete del informe para Overleaf (pequeño, regenerable con scripts/generar_informe_latex.py)
 !outputs/disponibilidad/informe_disponibilidad_overleaf.zip

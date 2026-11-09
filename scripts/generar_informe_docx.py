@@ -649,7 +649,8 @@ def construir_docx():
                     p.add_run(texto)
                     primera = False
                 else:
-                    p.paragraph_format.space_before = Pt(150 if texto[:1].isdigit() else 36)
+                    p.paragraph_format.space_before = Pt(150 if texto.startswith('Versión') else
+                                                         6 if texto.startswith('Fecha de corte') else 36)
                     r = p.add_run(texto)
                     r.font.size = Pt(14)
             doc.paragraphs[-1].runs[-1].add_break(WD_BREAK.PAGE)

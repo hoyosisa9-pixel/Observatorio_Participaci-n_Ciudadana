@@ -16,7 +16,7 @@ Salidas:
 Compatible con pdfLaTeX (por defecto en Overleaf): el script falla si queda algun caracter fuera de Latin-1
 sin traducir a una orden LaTeX.
 """
-import csv, datetime, re, zipfile
+import csv, re, zipfile
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -31,7 +31,7 @@ RAIZ = Path(__file__).resolve().parent.parent
 DISP = RAIZ / 'outputs' / 'disponibilidad'
 F_XLSX = DISP / 'disponibilidad_brecha_indicadores.xlsx'
 F_ZONAS = DISP / 'epp_pp_2025_zonas.csv'
-F_DOCS = DISP / 'documentos_por_descargar.md'
+F_DOCS = DISP / 'interno' / 'documentos_por_descargar.md'
 F_ESTADO = DISP / 'ESTADO.md'
 F_REVISION = DISP / 'trabajo' / 'revision_fase3.md'
 SALIDA = DISP / 'informe_latex'
@@ -49,8 +49,9 @@ VEREDICTOS = ['Viable', 'Viable con ajuste', 'No viable por ahora']
 COLOR_VER = {'Viable': 'cverde', 'Viable con ajuste': 'camarillo', 'No viable por ahora': 'crojo'}
 SISTEMAS = [('CS', 'Control social'), ('PC', 'Participación ciudadana'),
             ('PDM', 'Cumplimiento del PDM'), ('PP', 'Presupuesto participativo')]
-MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre',
-         'octubre', 'noviembre', 'diciembre']
+# Versión y fechas de la portada: parámetros fijos (no dependen del día en que se ejecute el script)
+VERSION = 'Versión 1.1 – 9 de noviembre de 2026'
+FECHA_CORTE = '14 de octubre de 2026'
 
 # --------------------------------------------------------------------------- escape LaTeX
 ESPECIALES = {'\\': r'\textbackslash{}', '&': r'\&', '%': r'\%', '$': r'\$', '#': r'\#', '_': r'\_',
@@ -260,8 +261,6 @@ def construir():
     zmin = min(filas_z, key=lambda z: float(z['EPP']))
     zmax = max(filas_z, key=lambda z: float(z['EPP']))
     epp = float(muni['EPP'])
-    hoy = datetime.date.today()
-    fecha = f'{hoy.day} de {MESES[hoy.month - 1]} de {hoy.year}'
 
     T = []
     a = T.append
@@ -317,7 +316,9 @@ def construir():
 \vspace{2cm}
 {\large Dirigido a: profesores Francisco Correa y Eber Gutiérrez\par}
 \vfill
-{\large ''' + fecha + r'''\par}
+{\large ''' + esc(VERSION) + r'''\par}
+\vspace{0.3cm}
+{\large Fecha de corte de la información: ''' + esc(FECHA_CORTE) + r'''\par}
 \end{titlepage}
 \hypersetup{pageanchor=true}
 

@@ -26,7 +26,8 @@
 - `analizador.md`: estrategia y auditoría metodológica (Opus). Diseña planes; no escribe código definitivo.
 - `ejecutor.md`: implementación de scripts y datos (Sonnet). Ejecuta los planes del Analizador.
 
-## 7. Estado de los ZIP en `Documentos guias/` (actualizado 2026-10-14)
+## 7. Estado de los ZIP en `Documentos guias/` (actualizado 2026-11-09)
+- **ZIP originales respaldados en Google Drive (carpeta Bases_Datos_IIC_Envigado); eliminados del Codespace el 9-nov-2026 por espacio.** Antes de borrar se verificó que las 2.787 entradas existen en `data_raw_IIC/` con el mismo tamaño; tras borrar, 2.787/2.787 archivos del inventario presentes con tamaño exacto. Lo que sigue es histórico.
 - Verificados (testzip OK, entradas y bytes coinciden 1:1 con `inventario_detallado_IIC.csv`: ruta_local sin prefijo `data_raw_IIC/` = nombre de entrada del ZIP): `01_propuestas_y_acuerdos.zip`, `03_actas_y_comites_tecnicos.zip`, `04_datos_abiertos_y_secop.zip`.
 - `02_ejecucion_y_presupuesto.zip` REPUESTO desde Google Drive (carpeta con ZIP 01-05 + 3 archivos de inventario): 2.840.613.915 B, 1.067 entradas, 3.322.769.994 B descomprimidos, 0 faltantes/sobrantes/diferencias. SHA-256 `194a5dfc7164889cbb8868e1c5a67ce1a21473da149e800aff47098b2307eda4`.
 - `05_fuentes_externas_y_pot.zip` REPUESTO desde Drive: 1.835.200.497 B, 571 entradas, 2.626.440.084 B descomprimidos, 0 diferencias. SHA-256 `8110571c695a851bd4735369b62992105df80310ad269d49d974b36f8a84f4d6`.
@@ -39,7 +40,7 @@
 - Verificación contra `inventario_detallado_IIC.csv`: 2.787/2.787 `ruta_local` existen con el tamaño exacto en `bytes`; 0 faltantes, 0 discrepancias.
 - Git: `data_raw_IIC/*` y `*.zip` siguen ignorados por `.gitignore`; sin commits.
 - Espacio libre en /workspaces tras extraer: ~5,2 GB (83% usado).
-- Los ZIP de `Documentos guias/` se conservan como respaldo; borrarlos liberaría ~6,3 GB (decisión pendiente de la usuaria). Los .truncado, el ZIP corrupto y duplicados ya fueron borrados (con autorización); la sección 7 sobre pendientes de borrado y extracción queda superada.
+- ZIP originales respaldados en Google Drive (carpeta Bases_Datos_IIC_Envigado); eliminados del Codespace el 9-nov-2026 por espacio. (Antes: se conservaban como respaldo, ~6,3 GB.) Los .truncado, el ZIP corrupto y duplicados ya habían sido borrados (con autorización).
 - Pendiente: DOCX OPCEN (`12022026_Observatorio_Participación_Ciudadana_OPCEN.docx`).
 
 ## 9. Llave SECOP I `codigo_bpin` y perfilado de llaves (2026-10-14)
@@ -58,7 +59,7 @@
 
 ## 11. Control de versiones (2026-10-14)
 - Commit `9aca547` en `main`, subido a GitHub (origin/main): matriz B.1, informe LaTeX/TXT, `scripts/perfil_llaves_iic.py`, `scripts/limpieza_bpin_cuipo.py`, `outputs/` y `.gitignore` (`__pycache__/`).
-- Fuera de git: `.claude/`, `.memory/`, `CLAUDE.md`, `Documentos guias/` (ZIP + DOCX), `data_raw_IIC/` (datos crudos).
+- Fuera de git: `.claude/`, `.memory/`, `CLAUDE.md`, `Documentos guias/` (DOCX de la propuesta y matriz; los ZIP se eliminaron el 9-nov-2026), `data_raw_IIC/` (datos crudos).
 
 ## 12. Tarea "Disponibilidad y brecha del sistema de indicadores" (2026-10-14, TERMINADA)
 - Encargo: para la reunión de los profesores Francisco Correa y Eber (entrega a la Alcaldía 15-oct), clasificar 39 variables y 23 indicadores/índices (4 sistemas: CS, PC, PDM, PP) por disponibilidad. NO calcula el IIC ni índices. **Punto de control autosuficiente: `outputs/disponibilidad/ESTADO.md` (leerlo primero; sección "Cómo retomar").**
@@ -77,3 +78,8 @@
 - Informe LaTeX/Overleaf: `python3 -I scripts/generar_informe_latex.py` → `outputs/disponibilidad/informe_latex/informe_disponibilidad.tex` + `informe_disponibilidad_overleaf.zip` (excepción en .gitignore). Compilador: tectonic 0.15 descargado al scratchpad de sesión (efímero; volver a bajar el binario musl de GitHub releases). `generar_disponibilidad.py` ahora unifica `sistema` al código (CS en vez de "Control social").
 - Excel para profesores (presentación pulida, reproducible en `generar_disponibilidad.py`: JERGA, TILDES, URL desde el inventario, hoja Enlaces). Encabezados nuevos en español ("ID de la variable", "Disponibilidad", "Veredicto"…); `generar_informe_latex.py` los traduce con ALIAS. Las notas históricas de PP.CEP.PEC aún dicen "se reclasifica como Proxy" aunque la categoría final es Parcial (texto heredado de la Fase 2).
 - Informe Word: `python3 scripts/generar_informe_docx.py` → `outputs/disponibilidad/informe_disponibilidad.docx` (traduce el .tex de `generar_informe_latex.construir()`; fuente única). LibreOffice (`soffice`, instalado con apt) + fuente Caladea (métrica de Cambria) sirven para previsualizar en PDF. Tectonic vive en el scratchpad y se pierde entre sesiones: volver a descargarlo antes de compilar (si no, el PDF queda viejo sin aviso).
+
+## 13. Versión 1.1 de los entregables (2026-11-09)
+- Correcciones del control de calidad, sin cambiar cifras: enlaces de archivos de la Alcaldía al espejo micolombiadigital (`normalizar_url` en `generar_disponibilidad.py`), ADRES BDUA -> `/entidades-territoriales/bdua/reportes`, notas de enlace (`NOTAS_ENLACE`), nota de PP.CEP.PEC corregida (C22), portada con `VERSION`/`FECHA_CORTE` fijos en `generar_informe_latex.py`.
+- Documentos internos (resumen_reunion, documentos_por_descargar) en `outputs/disponibilidad/interno/`; no se entregan.
+- Entregables vigentes: Excel, `informe_disponibilidad.docx`, PDF de LaTeX y zip de Overleaf. Orden de regeneración: `epp_pp_2025.py` -> `generar_disponibilidad.py` -> `generar_informe_latex.py` -> compilar con tectonic (descargarlo al scratchpad) -> `generar_informe_docx.py` (sin -I).
