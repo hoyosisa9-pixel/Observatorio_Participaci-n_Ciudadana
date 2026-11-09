@@ -9,6 +9,10 @@ Ejecutar siempre desde la raíz del repositorio y **sin `-I`** (PyYAML y openpyx
 2. `descargas.py` descarga a `data_raw_IIC/06_descargas_indicadores/` (DANE, MinSalud, Policía) y escribe `manifiesto.csv`.
    Forensis 2024 se deja a mano en `.../inmlcf/Forensis_2024.pdf`; sin el PDF se usa la cifra citada (7,25; p. 440) en estado Pendiente.
 3. Scripts por sistema (`cs_*.py`, `pc_*.py`, `pdm_*.py`, `pp_*.py`), que usan `comun.py`. `cs_icrcs.py` va al final.
+   Orden probado: `cs_pcs cs_dsi pdm_metas pdm_ca pdm_cm pdm_no_viables pc_i5 pc_i2 pc_i3 pc_no_viables pp_epp pp_no_viables`.
+   En PDM el orden importa: `pdm_metas.py` reescribe las filas de metas por código de indicador, y si se corre después de
+   `pdm_cm.py` o `pdm_no_viables.py` borra sus filas; en ese caso, volver a correr esos dos. `pp_epp.py` va antes que
+   `pp_no_viables.py` (este no toca `pp_proyectos`).
 4. `ensamblar.py` consolida los parciales en `outputs/indicadores/` (CSV `;` UTF-8 con BOM, `base_indicadores.xlsx`, `diccionario_datos`).
 5. `llenar_matriz.py` crea `outputs/indicadores/matriz_diligenciada.xlsx` (hojas Registro y PP_Proyectos, escenario por defecto).
    `--verificar` recalcula en LibreOffice una copia temporal "Validado" y compara Resultados con `resultados_indicadores`.

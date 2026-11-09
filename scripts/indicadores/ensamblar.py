@@ -181,6 +181,17 @@ def main() -> int:
         tablas[t] = filas
         C.escribir_csv(C.DIR_SALIDA / f"{t}.csv", filas, C.COLUMNAS[t])
         print(f"{t}: {len(filas)} filas ({', '.join(usados) or 'sin parciales'})")
+    # Tablas de clasificación (clasificacion_<tema>.csv): columnas libres; se publican tal cual, una por tema.
+    clasif = {}
+    for sis in C.SISTEMAS:
+        for p in sorted((C.DIR_PARCIALES / sis).glob("clasificacion_*.csv")) if (C.DIR_PARCIALES / sis).is_dir() else []:
+            filas = C.leer_csv(p)
+            if any(f.get(c) == "Validado" for f in filas for c in ("estado_informacion", "estado")):
+                raise SystemExit(f"ERROR {p.name}: estado Validado no permitido")
+            cols = list(filas[0].keys()) if filas else []
+            clasif[p.stem] = (cols, filas)
+            C.escribir_csv(C.DIR_SALIDA / p.name, filas, cols)
+            print(f"{p.stem}: {len(filas)} filas ({sis})")
     dicc = construir_diccionario()
     C.escribir_csv(C.DIR_SALIDA / "diccionario_datos.csv", dicc, HEAD_DICC)
     print(f"diccionario_datos: {len(dicc)} filas")
@@ -223,6 +234,8 @@ def main() -> int:
     leeme.column_dimensions["A"].width = 110
     for t in TABLAS:
         hoja(t, C.COLUMNAS[t], tablas[t], lambda c, v, t=t: _tipado(t, c, v) if isinstance(v, str) else v)
+    for nombre, (cols, filas) in clasif.items():
+        hoja(nombre.replace("clasificacion_", "clasif_"), cols, filas)
     hoja("diccionario_datos", HEAD_DICC, dicc)
     sup = C.cargar_supuestos()
     filas_sup = []

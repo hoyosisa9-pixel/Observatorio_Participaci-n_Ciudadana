@@ -83,3 +83,10 @@
 - Correcciones del control de calidad, sin cambiar cifras: enlaces de archivos de la Alcaldía al espejo micolombiadigital (`normalizar_url` en `generar_disponibilidad.py`), ADRES BDUA -> `/entidades-territoriales/bdua/reportes`, notas de enlace (`NOTAS_ENLACE`), nota de PP.CEP.PEC corregida (C22), portada con `VERSION`/`FECHA_CORTE` fijos en `generar_informe_latex.py`.
 - Documentos internos (resumen_reunion, documentos_por_descargar) en `outputs/disponibilidad/interno/`; no se entregan.
 - Entregables vigentes: Excel, `informe_disponibilidad.docx`, PDF de LaTeX y zip de Overleaf. Orden de regeneración: `epp_pp_2025.py` -> `generar_disponibilidad.py` -> `generar_informe_latex.py` -> compilar con tectonic (descargarlo al scratchpad) -> `generar_informe_docx.py` (sin -I).
+
+## 14. Etapa de indicadores: tanda 2 (9-nov-2026)
+- Hechos: CS.DSI (0/7 por defecto por la ventana documental; 28,6 con todo lo publicado), PC.I2 (100 / 92,3), PC.I3 2025 (83,3), PDM.CM 2024 (100, Forensis citado), variables de los no viables (PC.I1/I4/I6, PDM.CS/CP/CD/ILE, PP.CEP/CMA con `clasificacion_pp_entregas`).
+- Matriz: 42 comparados, 28 iguales, 14 diferencias esperadas (PP 2026 S1 y zona 1).
+- Orden de ejecución en `scripts/indicadores/README.md` (pdm_metas antes que pdm_cm y pdm_no_viables). Filtro de teléfonos de comun.py da falsos positivos con montos de 10 dígitos.
+- Por confirmar: PP 2024 tiene 51 proyectos con entrega exigible (no 50); entregas cumplidas 2025 en un rango de 45 a 50 (el 55 no se reproduce).
+- Siguiente: tanda 3 (CS.VRC, CS.RPO con muestra del 20 % para la usuaria; PP.EPP 2024).
