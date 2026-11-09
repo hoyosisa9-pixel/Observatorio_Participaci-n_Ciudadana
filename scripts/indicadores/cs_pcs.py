@@ -41,6 +41,21 @@ def main():
     url = C.normalizar_url(C.url_de_ruta(RUTA))
     assert url.startswith(C.ESPEJO), f"URL no normalizada: {url!r}"
     valores, resultados = [], []
+    # soporte: la fuente solo trae el total anual por año; no hay listado de estrategias (se deja constancia)
+    soporte = []
+    for anio in (2024, 2025, 2026):
+        ee, ep = datos[anio]
+        soporte.append(dict(
+            id_soporte=f"CS-PCS-{anio}-001", codigo_indicador=COD, id_variable="CS.PCS.EE;CS.PCS.EP", anio=anio,
+            escenario_id="defecto", elemento_tipo="agregado_anual", elemento_id=f"PCS-{anio}-AGREGADO",
+            descripcion=f"Total anual de estrategias de promoción del control social: ejecutadas={ee}, programadas={ep}",
+            documento="Plan Indicativo de Productos, evaluación definitiva 2T-2026 (Alcaldía de Envigado, DAP)",
+            ruta_local=RUTA, enlace=C.normalizar_url(C.url_de_ruta(RUTA)),
+            pagina=f"Hoja {HOJA}, fila {fila_x}, cols. {COL_EP[anio]} (programada) y {COL_EE[anio]} (ejecutada)",
+            clasificacion="total reportado", justificacion="La fuente reporta solo la cifra agregada del año; no lista las "
+            "estrategias una a una, así que no hay filas por estrategia", criterio="Cifra tal como la reporta el Plan Indicativo",
+            lector="ejecutor_CS", incluido="sí", cuenta_en_defecto=1 if anio < 2026 else 0))
+    C.escribir_parcial("CS", "soporte_conteos", soporte, codigos=[COD])
     for esc in C.escenarios(COD):
         p = esc["params"]
         trat = p["tratamiento_2026"]
@@ -65,6 +80,7 @@ def main():
                            documento_ruta_local=RUTA, enlace=url, fecha_corte=corte, fecha_corte_real=CORTE_ARCHIVO,
                            fecha_publicacion=PUBLICACION, script=SCRIPT, categoria_disponibilidad="Disponible",
                            horizonte_meta=str(anio), observaciones=obs_base)
+            comunes["ids_soporte"] = f"CS-PCS-{anio}-001"
             valores.append(C.fila_valor("CS", "CS.PCS.EE", anio, ee, "Número",
                 nombre_variable="Estrategias de promoción del control social ejecutadas",
                 pagina_tabla=f"Hoja {HOJA}, fila {fila_x}, col. {COL_EE[anio]} (AVANCE EJECUTADO {anio}), CONSECUTIVO {CONSEC}",

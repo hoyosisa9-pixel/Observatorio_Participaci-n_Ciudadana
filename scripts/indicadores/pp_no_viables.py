@@ -210,6 +210,18 @@ def main():
         return rel(uu["f_plan"]), P.enlace(uu["f_plan"]), \
             f"Hoja {uu['hoja']}: proyectos con 'ZONA n' en el nombre (sin 0553)", real
 
+    # ids de soporte explícitos (vinculan PP.CEP.PE con las filas de soporte_conteos por proyecto)
+    ids_pe, _n = {}, {}
+    for p in proy:
+        if not p["es_0553"]:
+            _n[p["anio"]] = _n.get(p["anio"], 0) + 1
+            ids_pe[(p["anio"], p["codigo"])] = f"PP-CEP-{p['anio']}-PE-{_n[p['anio']]:03d}"
+
+    def ids_de(anio, terr):
+        z = None if terr == "Municipio" else int(terr.split()[1])
+        return [ids_pe[(anio, p["codigo"])] for p in proy
+                if not p["es_0553"] and p["anio"] == anio and (z is None or p["zona"] == z)]
+
     filas_v = []
     for e in esc_cep:
         prm = e["params"]
@@ -239,7 +251,9 @@ def main():
                     "PP", "PP.CEP.PE", anio, vpe, "Conteo", e, nombre_variable="Proyectos con entrega exigible en la vigencia (PE)",
                     tipo_valor="construido", periodo="Anual", territorio=terr, fuente=doc, enlace=enl, pagina_tabla=pag,
                     fecha_corte=fc, fecha_corte_real=real, estado_informacion=est, categoria_disponibilidad=cat,
-                    provisional=True, script=SCRIPT, observaciones=obs))
+                    provisional=True, script=SCRIPT, observaciones=obs,
+                    ids_soporte=("" if zero1 else ",".join(ids_de(anio, terr))),
+                    n_elementos_soporte=(None if zero1 else len(ids_de(anio, terr)))))
                 # ---- PEC
                 regla = prm["pp_cep_regla_agregacion"]
                 if zero1:
@@ -325,14 +339,14 @@ def main():
         base = {"codigo_indicador": "PP.CEP", "anio": a, "periodo": "Anual", "territorio": terr, "escenario_id": "defecto",
                 "elemento_tipo": "proyecto", "elemento_id": p["codigo"], "descripcion": p["nombre"][:200], "documento": Path(doc).name,
                 "ruta_local": doc, "enlace": enl, "pagina": p["pagina"], "lector": "ejecutor_PP"}
-        filas_s.append({**base, "id_variable": "PP.CEP.PE", "banderas": f"zona={p['zona']};vigencia={a}"
+        filas_s.append({**base, "id_soporte": ids_pe[(a, p["codigo"])], "id_variable": "PP.CEP.PE", "banderas": f"zona={p['zona']};vigencia={a}"
                         + (";registro_dudoso=1" if p["dudoso"] else ""),
                         "clasificacion": "proyecto con entrega exigible",
                         "justificacion": "Proyecto financiado de la vigencia" + ("; valor sin signo '$' en el listado" if p["dudoso"] else ""),
                         "cuenta_en_defecto": 1})
         if a == 2025:
             pc = p["pec"]
-            filas_s.append({**base, "id_variable": "PP.CEP.PEC",
+            filas_s.append({**base, "id_soporte": ids_pe[(a, p["codigo"])].replace("-PE-", "-PEC-"), "id_variable": "PP.CEP.PEC",
                             "banderas": (f"todas_filas_dic_100={pc['pec_todas_filas_dic_100']};solo_31dic={pc['pec_solo_31dic']};"
                                          f"ultima_fila={pc['pec_ultima_fila']};n_filas_dic={pc['n_filas_dic']};"
                                          f"n_no_numericas={pc['n_filas_dic_no_numericas']}"),

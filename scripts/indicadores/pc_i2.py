@@ -93,6 +93,20 @@ def construir_soporte():
             "Asamblea zonal de revisión del POT (programada)", F_POT[z], False,
             "Solo cuenta si pc_i2_evidencia = incluye_programacion; en el defecto no entra porque no hay constancia de realización",
             "El archivo es un cronograma (publicado 14-feb-2025); no hay acta, informe ni asistencia de cada asamblea en el repositorio")
+    # Soporte de PC.I2.V2: las 13 zonas oficiales (PDM p. 558); una fila por zona y año
+    for anio in (2024, 2025):
+        for z in range(1, 14):
+            doc, ruta = DOCS["PDM"]
+            filas.append(dict(
+                id_soporte=f"PC-I2-{anio}-ZONA{z:02d}", codigo_indicador=IND, id_variable="PC.I2.V2", anio=anio,
+                territorio=f"Zona {z}", escenario_id="defecto", elemento_tipo="zona_oficial", elemento_id=f"ZONA{z:02d}",
+                descripcion=f"Zona {z} de las 13 zonas establecidas del municipio (denominador de PC.I2)",
+                fecha_elemento=None, documento=doc, ruta_local=ruta, enlace=enl("PDM"), pagina="p. 558",
+                banderas=f"zona={z};sin_comite_zonal={1 if z == 1 else 0}", clasificacion="zona oficial",
+                justificacion=("Zona 1: no tiene comité zonal (PDM p. 558); cuenta en el denominador de 13 y no en el de 12"
+                               if z == 1 else "13 zonas establecidas (12 comités zonales); falta el acto oficial que las fije"),
+                criterio="Cuenta si pertenece a las zonas del municipio (zonas_oficiales=13; 12_con_comite excluye la zona 1)",
+                lector="ejecutor_PC", incluido="sí", cuenta_en_defecto=1))
     return filas
 
 
@@ -103,7 +117,7 @@ def v1_escenario(soporte, params, anio):
     universo = set(range(1, 14)) if params["zonas_oficiales"] == "13" else set(range(2, 14))
     zonas, ids = set(), []
     for f in soporte:
-        if f["anio"] != anio:
+        if f["anio"] != anio or f["id_variable"] != "PC.I2.V1":
             continue
         b = dict(kv.split("=", 1) for kv in f["banderas"].split(";"))
         if b["evidencia"] == "ninguna":
@@ -150,7 +164,9 @@ def main():
                 estado_informacion="Pendiente", **{**comunes, "categoria_disponibilidad": "Disponible"},
                 fuente=DOCS["PDM"][0], documento_ruta_local=DOCS["PDM"][1], enlace=enl("PDM"),
                 pagina_tabla="p. 558 (13 zonas; 12 comités; zona 1 pendiente) y Plan Indicativo columnas C:O (ZONA 1 a ZONA 13)",
-                fecha_corte=fc, observaciones="Falta el acto oficial que fije las zonas en el repositorio; validar con Planeación"
+                fecha_corte=fc, n_elementos_soporte=v2,
+                ids_soporte=",".join(f"PC-I2-{anio}-ZONA{z:02d}" for z in (range(1, 14) if v2 == 13 else range(2, 14))),
+                observaciones="Falta el acto oficial que fije las zonas en el repositorio; validar con Planeación"
                 + ("" if v2 == 13 else ". Escenario 12_con_comite: solo zonas 2-13")))
             res = C.calcular(IND, [v1, v2])
             if res["disponibilidad"] != "Calculado" and v1 is None:

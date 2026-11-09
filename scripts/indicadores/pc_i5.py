@@ -25,7 +25,7 @@ D24 = "Seguimiento al Plan de Acción de la Política de Participación Social e
 CORTE_REAL = dt.date(2025, 12, 31)
 NOMBRES = {"PC.I5.V1": "Número de sesiones realizadas de las instancias seleccionadas",
            "PC.I5.V2": "Número de sesiones previstas de las instancias seleccionadas"}
-INSTANCIAS = [("CMSSS", "E5Ld", "M01", "A01", "Comité Municipal de Participación Social en Salud (CMSSS)"),
+INSTANCIAS = [("CMSSS", "E5Ld", "M01", "A01", "Consejo Municipal de Seguridad Social en Salud (CMSSS)"),
               ("COPACO", "E5Ld", "M02", "A01", "Comité de Participación Comunitaria en Salud (COPACO)")]
 ADICIONAL = ("COPACO", "E5Ld", "M02", "A02")
 

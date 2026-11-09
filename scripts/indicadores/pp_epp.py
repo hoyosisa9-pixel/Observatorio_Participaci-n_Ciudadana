@@ -367,7 +367,14 @@ def construir(e: dict, anio: int, u: dict, filas_v: list, filas_r: list, ctx_log
         entradas = [opp if opp is not None else "N/D", app if app is not None else "N/D"]
         filas_r.append(C.fila_resultado(
             "PP.EPP", anio, e, res, entradas, territorio=terr, periodo=periodo, fecha_corte_comun=fcorte,
-            alerta=alerta, script=SCRIPT, observaciones=obs_txt))
+            alerta=alerta, script=SCRIPT, observaciones=obs_txt,
+            nombre="Ejecución presupuestal del presupuesto participativo (EPP)", tipo="Indicador"))
+        if anio == 2026:
+            # E1: la Matriz solo prevé PP en periodo Anual; se conserva el puntaje pero no se asigna color
+            fr = filas_r[-1]
+            fr["semaforo"] = "Gris"
+            fr["alerta"] = ((fr.get("alerta") or "") + "; " if fr.get("alerta") else "") + \
+                "sin semáforo: periodo no previsto por la Matriz (PP solo Anual en Resultados)"
         # variables
         for idv, nombre, v in (("PP.EPP.OPP", "Obligaciones del presupuesto participativo (OPP)", opp),
                                ("PP.EPP.APP", "Apropiación definitiva del presupuesto participativo (APP)", app)):

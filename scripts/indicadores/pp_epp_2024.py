@@ -87,6 +87,33 @@ def leer_pi24() -> dict:
     return pi
 
 
+def leer_deficit_fiscal(f: Path, codigos: set) -> dict:
+    """Rubros 2.3.7.06 'Disminución de pasivos - Financiación de déficit fiscal' (47 dígitos que empiezan por 23706)
+    por proyecto: {codigo: {ap, ob}}. Solo para marcar `posible_no_pp`; no cambia el cálculo por defecto."""
+    import pymupdf
+    lineas = [l.strip() for pg in pymupdf.open(f) for l in pg.get_text().splitlines() if l.strip()]
+    out = {}
+    i = 0
+    while i < len(lineas):
+        if re.fullmatch(r"\d{40,}", lineas[i]) and i + 1 < len(lineas) and re.fullmatch(r"\d", lineas[i + 1]):
+            j = i + 2
+            if not P._MONEY.match(lineas[j]):
+                j += 1
+            vals = []
+            while j < len(lineas) and P._MONEY.match(lineas[j]) and len(vals) < 11:
+                vals.append(P._m(lineas[j]))
+                j += 1
+            cod = lineas[i][-4:]
+            if lineas[i].startswith("23706") and cod in codigos and len(vals) == 11:
+                o = out.setdefault(cod, {"ap": 0.0, "ob": 0.0})
+                o["ap"] += vals[5]
+                o["ob"] += vals[8]
+            i = j
+        else:
+            i += 1
+    return out
+
+
 def clasificar() -> dict:
     """Tabla de correspondencia EFPC24 <-> Hacienda. Devuelve {'filas': [...], 'hac': {...}, 'pi': {...}}."""
     import pp_no_viables as N      # lectura del listado EFPC 2024 (sin duplicar el parser)
@@ -95,6 +122,7 @@ def clasificar() -> dict:
         (len(efpc), sum(r["valor"] for r in efpc))
     pi = leer_pi24()
     hac = P.leer_hacienda(F_HAC24, set(pi))
+    deficit = leer_deficit_fiscal(F_HAC24, set(pi))
     cands = {c: h for c, h in hac.items() if h["ap"] > 0}
     asignado = {}                                        # índice EFPC -> (codigo, tipo, solape)
     usados = set()
@@ -147,7 +175,14 @@ def clasificar() -> dict:
             if tipo == "aproximada" and s < 0.60:
                 obs.append("Coincidencia de nombre baja; el objetivo del listado EFPC menciona el mismo componente "
                            "(revisar con Planeación)")
-            base.update({"tipo_coincidencia": tipo, "codigo_hacienda": c, "nombre_pi24x": p["nombre"],
+            d = deficit.get(c)
+            if d:
+                obs.append(f"posible_no_pp: incluye ${d['ap']:,.0f} (APP) de rubros 2.3.7.06 'Disminución de pasivos - "
+                           "Financiación de déficit fiscal' (pagos de vigencias anteriores); decisión de los profesores, "
+                           "no excluido por defecto".replace(",", "."))
+            base.update({"posible_no_pp": bool(d), "app_rubro_2_3_7_06": round(d["ap"]) if d else 0,
+                         "opp_rubro_2_3_7_06": round(d["ob"]) if d else 0,
+                         "tipo_coincidencia": tipo, "codigo_hacienda": c, "nombre_pi24x": p["nombre"],
                          "dependencia_pi24x": p["dependencia"], "app_hacienda": round(h["ap"]),
                          "opp_hacienda": round(h["ob"]), "compromiso_hacienda": round(h["comp"]),
                          "diferencia_app_vs_efpc": round(dif),
@@ -156,7 +191,8 @@ def clasificar() -> dict:
         else:
             mejor = max((_solape(r["nombre"], pi[c]["nombre"]) for c in cands
                          if c not in usados and pi[c]["zona"] == r["zona"]), default=None)
-            base.update({"tipo_coincidencia": "sin_correspondencia", "codigo_hacienda": "", "nombre_pi24x": "",
+            base.update({"posible_no_pp": False, "app_rubro_2_3_7_06": 0, "opp_rubro_2_3_7_06": 0,
+                         "tipo_coincidencia": "sin_correspondencia", "codigo_hacienda": "", "nombre_pi24x": "",
                          "dependencia_pi24x": "", "app_hacienda": None, "opp_hacienda": None,
                          "compromiso_hacienda": None, "diferencia_app_vs_efpc": None,
                          "diferencia_relativa_pct": None, "solape_nombre": round(mejor, 2) if mejor is not None else None,
@@ -166,7 +202,7 @@ def clasificar() -> dict:
         filas.append(base)
     codigos = [f["codigo_hacienda"] for f in filas if f["codigo_hacienda"]]
     assert len(codigos) == len(set(codigos)), "un código de Hacienda asignado a dos proyectos EFPC"
-    return {"filas": filas, "hac": hac, "pi": pi, "efpc": efpc}
+    return {"filas": filas, "hac": hac, "pi": pi, "efpc": efpc, "deficit": deficit}
 
 
 # ----------------------------------------------------------------------------------------------
@@ -240,6 +276,14 @@ def construir(e: dict, cl: dict, filas_v: list, filas_r: list, log: dict) -> Non
                 res = C.calcular("PP.EPP", ["N/D", "N/D"], {"periodo": "Anual", "territorio": "Municipio"})
             else:
                 res = C.agregar_municipal_epp([(opp, app)])
+            dfc = cl["deficit"]
+            d_ap = sum(dfc[c]["ap"] for c in todos if c in dfc)
+            d_ob = sum(dfc[c]["ob"] for c in todos if c in dfc)
+            if d_ap > 0 and opp != "N/D" and app - d_ap > 0:
+                d_txt = f"{d_ap:,.0f}".replace(",", ".")
+                obs.append(f"posible_no_pp: incluye ${d_txt} de rubros 2.3.7.06 'Disminución de pasivos - Financiación "
+                           f"de déficit fiscal' en {sum(1 for c in todos if c in dfc)} proyectos; sin ellos EPP = "
+                           f"{pct(100 * (opp - d_ob) / (app - d_ap))} (decisión de los profesores; no se excluye por defecto)")
             cob_m = sum(v[0] for v in u["cob"].values()) / sum(v[1] for v in u["cob"].values())
             obs.append(f"Cobertura en valor EFPC: {100 * cob_m:.1f} %")
         else:
@@ -268,6 +312,7 @@ def construir(e: dict, cl: dict, filas_v: list, filas_r: list, log: dict) -> Non
         filas_r.append(C.fila_resultado(
             "PP.EPP", 2024, e, res, [opp if opp is not None else "N/D", app if app is not None else "N/D"],
             territorio=terr, periodo="Anual", fecha_corte_comun=fcorte, alerta=alerta, script=SCRIPT,
+            nombre="Ejecución presupuestal del presupuesto participativo (EPP)", tipo="Indicador",
             observaciones=obs_txt))
         for idv, nombre, v in (("PP.EPP.OPP", "Obligaciones del presupuesto participativo (OPP)", opp),
                                ("PP.EPP.APP", "Apropiación definitiva del presupuesto participativo (APP)", app)):

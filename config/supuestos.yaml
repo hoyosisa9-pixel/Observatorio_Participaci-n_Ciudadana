@@ -529,8 +529,8 @@ parametros:
     id: pp_2024_metodo
     descripcion: Tratamiento de la correspondencia aproximada 2024
     opciones:
-      hacienda_correspondencia_completa: 47 de 50 proyectos (rotulado aproximado)
-      solo_exactos: 34 proyectos con correspondencia exacta
+      hacienda_correspondencia_completa: 50 de 51 proyectos (rotulado aproximado; 35 exactos + 15 aproximados)
+      solo_exactos: 35 proyectos con correspondencia exacta
       nd: EPP 2024 = N/D
     defecto: hacienda_correspondencia_completa
     estado: PROVISIONAL
@@ -558,7 +558,7 @@ parametros:
     opciones:
       todas_filas_dic_100: 'Todas las filas de diciembre con ejecucion fisica neta = 100 % (2025: 49)'
       solo_31dic: 'Solo filas del 31-dic (2025: 45)'
-      ultima_fila_por_indicador: 'Ultima fila por indicador (2025: 55)'
+      ultima_fila_por_indicador: 'Ultima fila por indicador (2025: 50)'
     defecto: todas_filas_dic_100
     estado: PROVISIONAL
     afecta:

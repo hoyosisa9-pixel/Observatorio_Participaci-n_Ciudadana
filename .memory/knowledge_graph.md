@@ -96,3 +96,9 @@
 - PP.EPP 2024 = 98,69 aproximado (50/51 proyectos cruzados con Hacienda; zona 10 Amarillo 82,58); solo exactos = 99,28. `pp_epp.py` importa `pp_epp_2024.py`.
 - Segunda lectura: `outputs/indicadores/segunda_lectura/` (4 VRC + 12 RPO, semilla 20261109), pendiente de la usuaria.
 - Matriz: 60 comparados, 46 iguales, 14 diferencias esperadas.
+
+## 16. Etapa de indicadores: tanda 4 y cierre (9-nov-2026, TERMINADA)
+- CS.ICRCS 2024 N/D por defecto (falta VRC); 65,2 / 68,2 en escenarios con VRC numérico; rango por componente 55,7-73,8 (2025: 42,5-57,1).
+- Revisión crítica del Analizador (`outputs/indicadores/revision/revision_critica.md`): 23/23 recalculados coinciden; 5 errores de presentación corregidos. PP 2026 S1 queda sin semáforo (Gris). CMSSS = Consejo Municipal de Seguridad Social en Salud.
+- PP 2024 incluye $627.204.058 del rubro 2.3.7.06 (déficit fiscal); sin él, 98,64. Marcado `posible_no_pp`; decisión de los profesores.
+- Entregable principal: `outputs/indicadores/resumen_calculos.md`. Pendientes: segunda lectura, Forensis, decisión sobre la v1.2 del Excel de disponibilidad (OPP 2026).
