@@ -99,11 +99,11 @@ Fuente: hoja Variables de `disponibilidad_brecha_indicadores.xlsx` (Fase 2 + 20 
 
 | Sistema | Disponible | Construible | Parcial | Proxy | No disponible | Total |
 |---|---|---|---|---|---|---|
-| CS | 0 | 0 | 0 | 0 | 0 | 0 |
-| PC | 0 | 0 | 0 | 0 | 0 | 0 |
-| PDM | 0 | 0 | 0 | 0 | 0 | 0 |
-| PP | 0 | 0 | 0 | 0 | 0 | 0 |
-| **Total** | **0** | **0** | **0** | **0** | **0** | **0** |
+| CS | 2 | 3 | 3 | 0 | 0 | 8 |
+| PC | 1 | 0 | 11 | 0 | 0 | 12 |
+| PDM | 7 | 1 | 3 | 2 | 1 | 14 |
+| PP | 0 | 3 | 2 | 0 | 0 | 5 |
+| **Total** | **10** | **7** | **19** | **2** | **1** | **39** |
 
 Cambios frente a la Fase 2 (D 10 · C 11 · P 15 · Proxy 2 · ND 1):
 - CS.RPO.OR y CS.RPO.OT: Construible → Parcial.

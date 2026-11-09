@@ -1,0 +1,597 @@
+# config/supuestos.yaml - Observatorio Ciudadano de Envigado (OCE)
+# Generado a partir de outputs/indicadores/plan/supuestos_borrador.yaml (Analizador, 2026-11-09).
+# Ningún valor por defecto es una decisión de los docentes: todos son PROVISIONAL y deben rotularse así en cada salida.
+# Para cambiar un supuesto: editar 'defecto' (debe estar entre las 'opciones') y volver a ejecutar los scripts.
+version: 1.0-provisional
+fecha: '2026-11-09'
+estado_global: PROVISIONAL
+decide: Profesores Francisco Correa y Eber Gutiérrez, con la usuaria
+estrategia_escenarios:
+  indicador_simple: factorial_completo
+  limite_factorial: 100
+  indices:
+  - defecto
+  - un_factor_a_la_vez
+  - envolvente_min
+  - envolvente_max
+  formato_escenario_id: defecto | param=opcion;param=opcion (solo desviaciones, orden alfabetico)
+convenciones:
+  territorios:
+  - Municipio
+  - Zona 1
+  - Zona 2
+  - Zona 3
+  - Zona 4
+  - Zona 5
+  - Zona 6
+  - Zona 7
+  - Zona 8
+  - Zona 9
+  - Zona 10
+  - Zona 11
+  - Zona 12
+  - Zona 13
+  periodos:
+  - Anual
+  - Semestre 1
+  - Semestre 2
+  estados_permitidos_en_salida:
+  - Pendiente
+  - No disponible
+  - No evaluable
+  - No aplica
+  csv:
+    separador: ;
+    codificacion: utf-8-sig
+    decimal: .
+    fechas: aaaa-mm-dd
+  url_espejo:
+    de: https://www.envigado.gov.co/sites/
+    a: https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/
+fuentes_referencia:
+  forensis_2024:
+    ruta_pdf_local: data_raw_IIC/06_descargas_indicadores/inmlcf/Forensis_2024.pdf
+    url: https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf
+    cifra_citada: 7.25
+    unidad: Muertes / 100.000 hab.
+    pagina_citada: p. 440 (tabla 14)
+    estado: Pendiente
+    regla: 'Si el PDF local existe se usa y se verifica la cifra; si no, se usa la cifra citada con la observación ''verificar contra PDF local''.
+      El sitio responde 403 a clientes automáticos: descarga manual de la usuaria.'
+    dominio_descarga_manual: inmlcf
+parametros:
+  corte_fecha_registro:
+    id: corte_fecha_registro
+    descripcion: Fecha de corte a escribir en Registro!N para datos de cierre de vigencia con corte real distinto del 31-dic
+    opciones:
+      real: Fecha de corte real (p. ej. 07/01/2026); la matriz los deja N/D porque N <> N4
+      normalizada_cierre_vigencia: 31/12 del anio; corte real en Observaciones y en fecha_corte_real
+    defecto: normalizada_cierre_vigencia
+    estado: PROVISIONAL
+    afecta:
+    - CS.DSI
+    - CS.PCS
+    - CS.VRC
+    - CS.RPO
+    - CS.ICRCS
+    - PC.I2
+    - PC.I3
+    - PC.I5
+    - PDM.CM
+    - PDM.CA
+    - PP.EPP
+    origen: revision_fase3 §4 pregunta 9; Guia 4
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  tratamiento_2026:
+    id: tratamiento_2026
+    descripcion: Como tratar 2026 sin cierre (corte 30-jun-2026)
+    opciones:
+      excluir: No se registra ni calcula 2026
+      semestre1_provisional: Registro periodo 'Semestre 1', corte 30/06/2026, rotulado provisional
+      anual_provisional: Anual con corte 30-jun (contradice Guia 4; solo sensibilidad)
+    defecto: semestre1_provisional
+    estado: PROVISIONAL
+    afecta:
+    - PP.EPP
+    - CS.PCS
+    - PC.I2
+    - PC.I3
+    origen: revision_fase3 §4 pregunta 9
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  regla_estado_calculo:
+    id: regla_estado_calculo
+    descripcion: Se calcula con valores en estado Pendiente
+    opciones:
+      estricta_matriz: Solo Validado (todo N/D en esta etapa)
+      preliminar_pendiente: Usa Pendiente, rotulado preliminar
+    defecto: preliminar_pendiente
+    estado: PROVISIONAL
+    afecta:
+    - todos
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+    nota: 'resultados_indicadores siempre trae ambas: puntaje (defecto) y puntaje_regla_matriz (estricta)'
+  zonas_oficiales:
+    id: zonas_oficiales
+    descripcion: Universo de zonas
+    opciones:
+      '13': 13 zonas (PDM p. 558; zona 1 sin comite)
+      12_con_comite: 12 zonas con comite zonal
+    defecto: '13'
+    estado: PROVISIONAL
+    afecta:
+    - PC.I2
+    - PP.EPP
+    origen: revision_fase3 §3.2 prioridad 8
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  poblacion_dane:
+    id: poblacion_dane
+    descripcion: Poblacion para tasas
+    opciones:
+      serie_publicada_por_fuente: Usar la tasa tal como la publica la fuente (Forensis 7,25 = pob. 248.304)
+      dane_postcovid_2020_2035: DANE DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19
+      dane_vp_2018_2042: DANE PPED-AreaMun-2018-2042_VP
+    defecto: serie_publicada_por_fuente
+    estado: PROVISIONAL
+    afecta:
+    - PDM.CM
+    - PDM.ILE.A
+    origen: revision_fase3 §4 pregunta 6; notas_PDM §4
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  horizonte_meta_pdm:
+    id: horizonte_meta_pdm
+    descripcion: Evaluar 2024-2026 contra la meta 2027 o contra metas anuales
+    opciones:
+      meta_2027: Logro al corte frente a la meta final (Guia 4 y 9)
+      metas_anuales: 'Metas anuales oficiales (no existen: N/D)'
+    defecto: meta_2027
+    estado: PROVISIONAL
+    afecta:
+    - PDM.CM
+    - PDM.CA
+    - PDM.CS
+    - PDM.CP
+    - PDM.CD
+    - PDM.ILE
+    - PDM.ICPD-6
+    origen: revision_fase3 §4 pregunta 5
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  ventana_documental_cs:
+    id: ventana_documental_cs
+    descripcion: Hasta cuando se aceptan publicaciones para la vigencia en control social
+    opciones:
+      guia_31mar_siguiente: 'Cierre 31-dic; busqueda hasta 31-mar siguiente; RPO: respuestas publicadas al 31-dic (Guia 17)'
+      hasta_fecha_consulta: Todo lo publicado hasta la fecha de consulta
+    defecto: guia_31mar_siguiente
+    estado: PROVISIONAL
+    afecta:
+    - CS.DSI
+    - CS.VRC
+    - CS.RPO
+    - CS.ICRCS
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+    nota: fecha_publicacion del inventario no es confiable; usar fecha interna del documento u orden de carpeta content/files
+  dsi_lista_metas:
+    id: dsi_lista_metas
+    descripcion: Metas que forman MS (denominador de CS.DSI). La Matriz sugiere iniciar con unas 10 metas; el defecto usa las 7 metas del ICPD-6
+      porque son las únicas con meta cuantitativa en el Apéndice 9.1.2. La lista definitiva la definen los profesores.
+    opciones:
+      icpd7: 7 resultados del ICPD-6 (Apendice 9.1.2 filas 16, 24, 71, 74, 119, 129, 146)
+      icpd7_mas3_gobernanza: Los 7 + filas 147 (percepción de claridad de la información), 148 (IDI) y 151 (Gobierno Digital); MS = 10. Alternativa
+        propuesta por el equipo técnico (el Analizador), NO por los profesores.
+      productos_plan_indicativo: Todos los productos con meta > 0 (DSI = 100 por construccion; solo control)
+    defecto: icpd7
+    estado: PROVISIONAL
+    afecta:
+    - CS.DSI
+    - CS.ICRCS
+    origen: revision_fase3 §4 pregunta 3
+    decision: 'Los profesores definen la lista de metas. Defecto de 7 metas: PROVISIONAL, adoptado por la usuaria.'
+    nota: 'El defecto (7 metas del ICPD-6) no es la lista definitiva: la matriz sugería unas 10 y la lista la definen los profesores. La alternativa
+      de 10 metas fue propuesta por el equipo, no por los profesores.'
+  dsi_fuente_valor:
+    id: dsi_fuente_valor
+    descripcion: Que cuenta como valor observado publicado (MD)
+    opciones:
+      solo_alcaldia: Solo publicaciones de la Alcaldia
+      oficial_misma_definicion: Alcaldia o entidad oficial (INMLCF, MinSalud, DANE, ICFES) con igual definicion y unidad que la meta
+      oficial_incluye_proxy: Incluye cifras oficiales de otra definicion
+    defecto: oficial_misma_definicion
+    estado: PROVISIONAL
+    afecta:
+    - CS.DSI
+    - CS.ICRCS
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  vrc_universo:
+    id: vrc_universo
+    descripcion: Que es un evento municipal de rendicion de cuentas
+    opciones:
+      alcalde: Solo audiencia publica del Alcalde (consecutivo 546)
+      institucional_pi_545_546: Audiencia del Alcalde + evento de veedurias (consecutivos 545 y 546)
+      alcalde_mas_sectoriales_con_acta: Audiencia del Alcalde + rendiciones sectoriales con acta o memoria publicada
+      amplio_todo_documento: Todo evento con documento propio en el archivo (1 a 8 por anio)
+    defecto: alcalde_mas_sectoriales_con_acta
+    estado: PROVISIONAL
+    afecta:
+    - CS.VRC
+    - CS.ICRCS
+    origen: revision_fase3 §3.2 prioridad 1 y §4 pregunta 3
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  vrc_acreditacion_presencia:
+    id: vrc_acreditacion_presencia
+    descripcion: La mencion de veedurias en el acta acredita presencia
+    opciones:
+      mencion_en_documento: 'Si: mencion textual en acta, memoria o carta'
+      lista_asistencia: 'Solo lista de asistencia (no publicadas: EV = N/D)'
+    defecto: mencion_en_documento
+    estado: PROVISIONAL
+    afecta:
+    - CS.VRC
+    - CS.ICRCS
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  vrc_evento_sin_mencion:
+    id: vrc_evento_sin_mencion
+    descripcion: Evento del universo cuyo documento no menciona veedurias
+    opciones:
+      nd_siempre: 'Presencia desconocida: VRC = N/D (lectura literal de la Matriz)'
+      cero_si_documento_integral: 'Acta o memoria integral con asistentes: ausencia; cuadro de preguntas o justificacion: desconocida (N/D)'
+      cero_siempre: Ausencia de mencion = no presencia
+    defecto: cero_si_documento_integral
+    estado: PROVISIONAL
+    afecta:
+    - CS.VRC
+    - CS.ICRCS
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  vrc_asignacion_anio:
+    id: vrc_asignacion_anio
+    descripcion: Evento que rinde la vigencia t realizado en t+1
+    opciones:
+      fecha_evento: 'Anio de realizacion (Matriz: eventos realizados en la vigencia)'
+      vigencia_rendida: Anio de la vigencia rendida
+    defecto: fecha_evento
+    estado: PROVISIONAL
+    afecta:
+    - CS.VRC
+    - CS.ICRCS
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  rpo_universo:
+    id: rpo_universo
+    descripcion: Ejercicios cuyas observaciones integran OT
+    opciones:
+      alcalde: Audiencia publica del Alcalde
+      alcalde_y_100dias: Alcalde + rendicion de 100 dias (abr-2024)
+      todos_los_cuadros: Alcalde, 100 dias, Salud, Comite de Discapacidad
+    defecto: alcalde
+    estado: PROVISIONAL
+    afecta:
+    - CS.RPO
+    - CS.ICRCS
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  rpo_filtro_pdm:
+    id: rpo_filtro_pdm
+    descripcion: Que es una observacion 'sobre el PDM'
+    opciones:
+      excluir_felicitaciones: Todas las preguntas, sugerencias u observaciones; excluye felicitaciones y agradecimientos
+      tematico_pdm: Solo las que remiten a un programa, meta o sector del PDM; excluye tramites individuales
+      todas: Todas las intervenciones
+    defecto: excluir_felicitaciones
+    estado: PROVISIONAL
+    afecta:
+    - CS.RPO
+    - CS.ICRCS
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  rpo_criterio_fondo:
+    id: rpo_criterio_fondo
+    descripcion: Que es respuesta de fondo
+    opciones:
+      estricto_rubrica: Atiende el asunto con dato, decision, compromiso fechado o negativa motivada; no cuentan acuse, agradecimiento, 'se tendra
+        en cuenta' ni remision sin contenido
+      laxo_texto_respuesta: Cualquier texto de respuesta salvo acuse explicito
+    defecto: estricto_rubrica
+    estado: PROVISIONAL
+    afecta:
+    - CS.RPO
+    - CS.ICRCS
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  rpo_registro_incompleto:
+    id: rpo_registro_incompleto
+    descripcion: 'Cuadro publicado claramente incompleto (Alcalde 2025: 3 intervenciones)'
+    opciones:
+      nd: N/D (un listado parcial no permite conocer OT)
+      calcular_con_publicado: Calcular con lo publicado, rotulado
+    defecto: nd
+    estado: PROVISIONAL
+    afecta:
+    - CS.RPO
+    - CS.ICRCS
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  pc_i2_actividades:
+    id: pc_i2_actividades
+    descripcion: Actividades que cubren una zona
+    opciones:
+      asambleas_pp: 'Solo asambleas zonales de PP (maximo 12: zonas 2-13)'
+      asambleas_pp_pdm_pot: Asambleas de PP, de formulacion del PDM (2024) y del POT (2025)
+    defecto: asambleas_pp_pdm_pot
+    estado: PROVISIONAL
+    afecta:
+    - PC.I2
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  pc_i2_evidencia:
+    id: pc_i2_evidencia
+    descripcion: Que acredita la actividad en la zona
+    opciones:
+      realizacion_reportada: Informe de gestion, anteproyecto o ejecucion del plan indicativo
+      incluye_programacion: Tambien cronogramas o programacion
+      acta_por_zona: 'Solo acta o asistencia por zona (no publicadas: N/D)'
+    defecto: realizacion_reportada
+    estado: PROVISIONAL
+    afecta:
+    - PC.I2
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  pc_i3_unidad:
+    id: pc_i3_unidad
+    descripcion: Unidad de I3
+    opciones:
+      acciones: Acciones formativas (cursos, diplomados, seminarios)
+      personas_producto_521: Personas programadas vs ejecutadas, plan indicativo consecutivo 521
+    defecto: acciones
+    estado: PROVISIONAL
+    afecta:
+    - PC.I3
+    origen: revision_fase3 §4 pregunta 8
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  pc_i3_excluir_servidores:
+    id: pc_i3_excluir_servidores
+    descripcion: Excluir formacion exclusiva para servidores (la Matriz lo exige)
+    opciones:
+      'true': Excluir
+      'false': Incluir
+    defecto: 'true'
+    estado: PROVISIONAL
+    afecta:
+    - PC.I3
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  pc_i3_v1_mayor_v2:
+    id: pc_i3_v1_mayor_v2
+    descripcion: Ejecucion mayor que la programacion
+    opciones:
+      revisar: Revisar (formula de Resultados)
+      tope_100: Limitar a 100
+    defecto: revisar
+    estado: PROVISIONAL
+    afecta:
+    - PC.I3
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  pc_i5_instancias:
+    id: pc_i5_instancias
+    descripcion: Instancias seleccionadas
+    opciones:
+      salud_copaco_cmsss: COPACO y CMSSS (unicas con programacion publicada)
+      ampliado_cmpc_ctp_comites: 'Consejo Municipal de Participacion, CTP y comites zonales (sin calendario: N/D)'
+    defecto: salud_copaco_cmsss
+    estado: PROVISIONAL
+    afecta:
+    - PC.I5
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  pc_universo_procesos:
+    id: pc_universo_procesos
+    descripcion: Universo de procesos participativos cerrados (solo variables; I1/I4/I6 no se calculan)
+    opciones:
+      exploratorio_pp_pdm_pot_rc: Universo exploratorio PP, PDM/POT y rendicion (3 en 2024; 5 en 2025)
+      inventario_oficial: 'Inventario oficial de Participacion (no existe: N/D)'
+    defecto: exploratorio_pp_pdm_pot_rc
+    estado: PROVISIONAL
+    afecta:
+    - PC.I1
+    - PC.I4
+    - PC.I6
+    origen: revision_fase3 §4 pregunta 4
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  pdm_cm_fuente:
+    id: pdm_cm_fuente
+    descripcion: Fuente de mortalidad vial
+    opciones:
+      inmlcf_forensis: INMLCF Forensis (muertes por transporte; tasa publicada)
+      policia_datosgov: 'Policia: homicidio en accidente de transito (otra definicion)'
+    defecto: inmlcf_forensis
+    estado: PROVISIONAL
+    afecta:
+    - PDM.CM
+    - CS.DSI
+    origen: revision_fase3 §4 pregunta 6
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  pdm_ca_fuente:
+    id: pdm_ca_fuente
+    descripcion: Espacio publico verde observado
+    opciones:
+      pot_epv_urbano: POT 2024 EPV urbano 5,75 m2/hab (serie distinta de la linea base 3,88)
+      pot_epv_total: POT 2024 EPV total 69,41 m2/hab
+      estricto_serie_linea_base: 'Solo serie comparable con la linea base (no existe: N/D)'
+    defecto: pot_epv_urbano
+    estado: PROVISIONAL
+    afecta:
+    - PDM.CA
+    - CS.DSI
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  pdm_cs_fuente:
+    id: pdm_cs_fuente
+    descripcion: Cobertura del regimen subsidiado (solo variables; PDM.CS no se calcula)
+    opciones:
+      metodo_plan: 'Metodo del plan (BDUA/SisMaster, poblacion objetivo): N/D'
+      minsalud_rs_sobre_pob_total: Afiliados RS / poblacion total (aprox. 12 %; otra definicion)
+      minsalud_cobertura_total: Cobertura total SGSSS (la Matriz lo prohibe)
+    defecto: metodo_plan
+    estado: PROVISIONAL
+    afecta:
+    - PDM.CS
+    - CS.DSI
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  pdm_ile_a_rango_edad:
+    id: pdm_ile_a_rango_edad
+    descripcion: Denominador de ILE.A
+    opciones:
+      '0_6': Poblacion DANE 0 a 6 anios
+      '0_5': Poblacion DANE 0 a 5 anios
+    defecto: '0_6'
+    estado: PROVISIONAL
+    afecta:
+    - PDM.ILE
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+    nota: 'Calibrar: 2.059 (2023) / poblacion 2023 debe dar aprox. 16,3 (linea base)'
+  pp_identificacion:
+    id: pp_identificacion
+    descripcion: Regla para identificar proyectos PP
+    opciones:
+      efpc_x_plan_accion: Listado EFPC cruzado con proyectos 'ZONA n' del plan de accion/ROCA
+      solo_plan_accion_zona: Solo proyectos con 'ZONA n' en el plan de accion
+    defecto: efpc_x_plan_accion
+    estado: PROVISIONAL
+    afecta:
+    - PP.EPP
+    - PP.CEP
+    - PP.CMA
+    origen: revision_fase3 §4 pregunta 1
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  pp_incluir_0553:
+    id: pp_incluir_0553
+    descripcion: Incluir el proyecto 0553 (costo del proceso)
+    opciones:
+      'false': Excluir
+      'true': Incluir
+    defecto: 'false'
+    estado: PROVISIONAL
+    afecta:
+    - PP.EPP
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  pp_fuente_calculo:
+    id: pp_fuente_calculo
+    descripcion: Fuente de APP y OPP
+    opciones:
+      plan_accion_roca: Plan de accion/ROCA del DAP (2025-2026)
+      hacienda: Ejecucion presupuestal de egresos (sufijo de rubro = codigo de proyecto)
+      cuipo: CUIPO por BPIN (solo contraste)
+    defecto: plan_accion_roca
+    estado: PROVISIONAL
+    afecta:
+    - PP.EPP
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+    nota: 2024 solo admite hacienda
+  pp_2024_metodo:
+    id: pp_2024_metodo
+    descripcion: Tratamiento de la correspondencia aproximada 2024
+    opciones:
+      hacienda_correspondencia_completa: 47 de 50 proyectos (rotulado aproximado)
+      solo_exactos: 34 proyectos con correspondencia exacta
+      nd: EPP 2024 = N/D
+    defecto: hacienda_correspondencia_completa
+    estado: PROVISIONAL
+    afecta:
+    - PP.EPP
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  pp_2026_opp_fuente:
+    id: pp_2026_opp_fuente
+    descripcion: Fuente de OPP 2026 al corte
+    opciones:
+      hacienda_30jun: Hacienda al 30-jun-2026 (11.555.041.247)
+      plan_accion_xlsx: Plan de accion 2T-2026 xlsx (corte anterior; 5.702.528.148)
+    defecto: hacienda_30jun
+    estado: PROVISIONAL
+    afecta:
+    - PP.EPP
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  pp_cep_regla_agregacion:
+    id: pp_cep_regla_agregacion
+    descripcion: Regla del proxy de PEC (solo variable; CEP no se calcula)
+    opciones:
+      todas_filas_dic_100: 'Todas las filas de diciembre con ejecucion fisica neta = 100 % (2025: 49)'
+      solo_31dic: 'Solo filas del 31-dic (2025: 45)'
+      ultima_fila_por_indicador: 'Ultima fila por indicador (2025: 55)'
+    defecto: todas_filas_dic_100
+    estado: PROVISIONAL
+    afecta:
+    - PP.CEP
+    origen: revision_fase3 §4 pregunta 2
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  pp_cma_aplicabilidad:
+    id: pp_cma_aplicabilidad
+    descripcion: Columna '¿Aplica meta de atencion?' de PP_Proyectos
+    opciones:
+      pendiente: Pendiente para todos (tipologia sugerida solo en Observaciones)
+      tipologia_sugerida: Infraestructura y medios = No (con motivo); servicios a personas = Si
+    defecto: pendiente
+    estado: PROVISIONAL
+    afecta:
+    - PP.CMA
+    origen: Plan de cálculo del Analizador (§3.1)
+    decision: Defecto propuesto por el Analizador y adoptado por la usuaria (PROVISIONAL); la decisión final corresponde a los profesores Francisco
+      Correa y Eber Gutiérrez.
+  pp_zona1_tratamiento:
+    id: pp_zona1_tratamiento
+    descripcion: Tratamiento de la Zona 1 en las variables y el indicador de presupuesto participativo (EPP por zona).
+    opciones:
+      NE: 'No evaluable: APP = 0 y ningún proyecto PP se asigna a la Zona 1 (denominador cero, Guía 7)'
+      N/D: 'Dato no disponible: no se puede afirmar que APP sea cero hasta confirmarlo'
+    defecto: NE
+    estado: PROVISIONAL
+    afecta:
+    - PP.EPP
+    - PP.CEP
+    - PP.CMA
+    origen: Decisión de la usuaria; PDM 2024-2027 p. 558
+    decision: Defecto fijado por la usuaria (PROVISIONAL). La Guía exige confirmarlo con Planeación.
+    nota: 'Soporte del defecto NE: PDM 2024-2027 p. 558 (la zona 1 no tiene comité zonal; pendiente de conformar) y ninguna fuente le asigna proyectos
+      de PP. La Guía exige confirmarlo.'

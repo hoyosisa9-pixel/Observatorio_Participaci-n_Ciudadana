@@ -1,0 +1,374 @@
+# Borrador de config/supuestos.yaml - Observatorio Ciudadano de Envigado (OCE)
+# Generado por el Agente Analizador el 2026-11-09 (plan: outputs/indicadores/plan/plan_calculo.md).
+# REGLA: ninguna opcion "defecto" es una decision de los docentes (Francisco Correa, Eber Gutierrez) ni de la usuaria.
+# Todas estan en estado PROVISIONAL y deben rotularse asi en cada salida. Se calcula con todas las opciones.
+
+version: "0.1-borrador"
+fecha: "2026-11-09"
+estado_global: PROVISIONAL
+decide: "Docentes (F. Correa, E. Gutierrez) y usuaria"
+
+estrategia_escenarios:
+  indicador_simple: factorial_completo        # si > 100 combinaciones, un_factor_a_la_vez
+  limite_factorial: 100
+  indices: [defecto, un_factor_a_la_vez, envolvente_min, envolvente_max]
+  formato_escenario_id: "defecto | param=opcion;param=opcion (solo desviaciones, orden alfabetico)"
+
+convenciones:
+  territorios: ["Municipio", "Zona 1", "Zona 2", "Zona 3", "Zona 4", "Zona 5", "Zona 6", "Zona 7",
+                "Zona 8", "Zona 9", "Zona 10", "Zona 11", "Zona 12", "Zona 13"]
+  periodos: ["Anual", "Semestre 1", "Semestre 2"]
+  estados_permitidos_en_salida: ["Pendiente", "No disponible", "No evaluable", "No aplica"]  # nunca "Validado"
+  csv: {separador: ";", codificacion: "utf-8-sig", decimal: ".", fechas: "aaaa-mm-dd"}
+  url_espejo:
+    de: "https://www.envigado.gov.co/sites/"
+    a: "https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/"
+
+parametros:
+
+  # ---------------- Globales ----------------
+  corte_fecha_registro:
+    pregunta: "Fecha de corte a escribir en Registro!N para datos de cierre de vigencia con corte real distinto del 31-dic"
+    opciones:
+      real: "Fecha de corte real (p. ej. 07/01/2026); la matriz los deja N/D porque N <> N4"
+      normalizada_cierre_vigencia: "31/12 del anio; corte real en Observaciones y en fecha_corte_real"
+    defecto: normalizada_cierre_vigencia
+    estado: PROVISIONAL
+    afecta: [CS.DSI, CS.PCS, CS.VRC, CS.RPO, CS.ICRCS, PC.I2, PC.I3, PC.I5, PDM.CM, PDM.CA, PP.EPP]
+    origen: "revision_fase3 §4 pregunta 9; Guia 4"
+
+  tratamiento_2026:
+    pregunta: "Como tratar 2026 sin cierre (corte 30-jun-2026)"
+    opciones:
+      excluir: "No se registra ni calcula 2026"
+      semestre1_provisional: "Registro periodo 'Semestre 1', corte 30/06/2026, rotulado provisional"
+      anual_provisional: "Anual con corte 30-jun (contradice Guia 4; solo sensibilidad)"
+    defecto: semestre1_provisional
+    estado: PROVISIONAL
+    afecta: [PP.EPP, CS.PCS, PC.I2, PC.I3]
+    origen: "revision_fase3 §4 pregunta 9"
+
+  regla_estado_calculo:
+    pregunta: "Se calcula con valores en estado Pendiente"
+    opciones:
+      estricta_matriz: "Solo Validado (todo N/D en esta etapa)"
+      preliminar_pendiente: "Usa Pendiente, rotulado preliminar"
+    defecto: preliminar_pendiente
+    estado: PROVISIONAL
+    afecta: [todos]
+    nota: "resultados_indicadores siempre trae ambas: puntaje (defecto) y puntaje_regla_matriz (estricta)"
+
+  zonas_oficiales:
+    pregunta: "Universo de zonas"
+    opciones:
+      "13": "13 zonas (PDM p. 558; zona 1 sin comite)"
+      "12_con_comite": "12 zonas con comite zonal"
+    defecto: "13"
+    estado: PROVISIONAL
+    afecta: [PC.I2, PP.EPP]
+    origen: "revision_fase3 §3.2 prioridad 8"
+
+  poblacion_dane:
+    pregunta: "Poblacion para tasas"
+    opciones:
+      serie_publicada_por_fuente: "Usar la tasa tal como la publica la fuente (Forensis 7,25 = pob. 248.304)"
+      dane_postcovid_2020_2035: "DANE DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19"
+      dane_vp_2018_2042: "DANE PPED-AreaMun-2018-2042_VP"
+    defecto: serie_publicada_por_fuente
+    estado: PROVISIONAL
+    afecta: [PDM.CM, PDM.ILE.A]
+    origen: "revision_fase3 §4 pregunta 6; notas_PDM §4"
+
+  horizonte_meta_pdm:
+    pregunta: "Evaluar 2024-2026 contra la meta 2027 o contra metas anuales"
+    opciones:
+      meta_2027: "Logro al corte frente a la meta final (Guia 4 y 9)"
+      metas_anuales: "Metas anuales oficiales (no existen: N/D)"
+    defecto: meta_2027
+    estado: PROVISIONAL
+    afecta: [PDM.CM, PDM.CA, PDM.CS, PDM.CP, PDM.CD, PDM.ILE, PDM.ICPD-6]
+    origen: "revision_fase3 §4 pregunta 5"
+
+  ventana_documental_cs:
+    pregunta: "Hasta cuando se aceptan publicaciones para la vigencia en control social"
+    opciones:
+      guia_31mar_siguiente: "Cierre 31-dic; busqueda hasta 31-mar siguiente; RPO: respuestas publicadas al 31-dic (Guia 17)"
+      hasta_fecha_consulta: "Todo lo publicado hasta la fecha de consulta"
+    defecto: guia_31mar_siguiente
+    estado: PROVISIONAL
+    afecta: [CS.DSI, CS.VRC, CS.RPO, CS.ICRCS]
+    nota: "fecha_publicacion del inventario no es confiable; usar fecha interna del documento u orden de carpeta content/files"
+
+  # ---------------- Control social ----------------
+  dsi_lista_metas:
+    pregunta: "Metas que forman MS (la Matriz sugiere iniciar con 10)"
+    opciones:
+      icpd7: "7 resultados del ICPD-6 (Apendice 9.1.2 filas 16, 24, 71, 74, 119, 129, 146)"
+      icpd7_mas3_gobernanza: "Los 7 + filas 147 (percepcion claridad informacion), 148 (IDI) y 151 (Gobierno Digital); MS = 10; propuesta del Analizador"
+      productos_plan_indicativo: "Todos los productos con meta > 0 (DSI = 100 por construccion; solo control)"
+    defecto: icpd7
+    estado: PROVISIONAL
+    afecta: [CS.DSI, CS.ICRCS]
+    origen: "revision_fase3 §4 pregunta 3"
+
+  dsi_fuente_valor:
+    pregunta: "Que cuenta como valor observado publicado (MD)"
+    opciones:
+      solo_alcaldia: "Solo publicaciones de la Alcaldia"
+      oficial_misma_definicion: "Alcaldia o entidad oficial (INMLCF, MinSalud, DANE, ICFES) con igual definicion y unidad que la meta"
+      oficial_incluye_proxy: "Incluye cifras oficiales de otra definicion"
+    defecto: oficial_misma_definicion
+    estado: PROVISIONAL
+    afecta: [CS.DSI, CS.ICRCS]
+
+  vrc_universo:
+    pregunta: "Que es un evento municipal de rendicion de cuentas"
+    opciones:
+      alcalde: "Solo audiencia publica del Alcalde (consecutivo 546)"
+      institucional_pi_545_546: "Audiencia del Alcalde + evento de veedurias (consecutivos 545 y 546)"
+      alcalde_mas_sectoriales_con_acta: "Audiencia del Alcalde + rendiciones sectoriales con acta o memoria publicada"
+      amplio_todo_documento: "Todo evento con documento propio en el archivo (1 a 8 por anio)"
+    defecto: alcalde_mas_sectoriales_con_acta
+    estado: PROVISIONAL
+    afecta: [CS.VRC, CS.ICRCS]
+    origen: "revision_fase3 §3.2 prioridad 1 y §4 pregunta 3"
+
+  vrc_acreditacion_presencia:
+    pregunta: "La mencion de veedurias en el acta acredita presencia"
+    opciones:
+      mencion_en_documento: "Si: mencion textual en acta, memoria o carta"
+      lista_asistencia: "Solo lista de asistencia (no publicadas: EV = N/D)"
+    defecto: mencion_en_documento
+    estado: PROVISIONAL
+    afecta: [CS.VRC, CS.ICRCS]
+
+  vrc_evento_sin_mencion:
+    pregunta: "Evento del universo cuyo documento no menciona veedurias"
+    opciones:
+      nd_siempre: "Presencia desconocida: VRC = N/D (lectura literal de la Matriz)"
+      cero_si_documento_integral: "Acta o memoria integral con asistentes: ausencia; cuadro de preguntas o justificacion: desconocida (N/D)"
+      cero_siempre: "Ausencia de mencion = no presencia"
+    defecto: cero_si_documento_integral
+    estado: PROVISIONAL
+    afecta: [CS.VRC, CS.ICRCS]
+
+  vrc_asignacion_anio:
+    pregunta: "Evento que rinde la vigencia t realizado en t+1"
+    opciones:
+      fecha_evento: "Anio de realizacion (Matriz: eventos realizados en la vigencia)"
+      vigencia_rendida: "Anio de la vigencia rendida"
+    defecto: fecha_evento
+    estado: PROVISIONAL
+    afecta: [CS.VRC, CS.ICRCS]
+
+  rpo_universo:
+    pregunta: "Ejercicios cuyas observaciones integran OT"
+    opciones:
+      alcalde: "Audiencia publica del Alcalde"
+      alcalde_y_100dias: "Alcalde + rendicion de 100 dias (abr-2024)"
+      todos_los_cuadros: "Alcalde, 100 dias, Salud, Comite de Discapacidad"
+    defecto: alcalde
+    estado: PROVISIONAL
+    afecta: [CS.RPO, CS.ICRCS]
+
+  rpo_filtro_pdm:
+    pregunta: "Que es una observacion 'sobre el PDM'"
+    opciones:
+      excluir_felicitaciones: "Todas las preguntas, sugerencias u observaciones; excluye felicitaciones y agradecimientos"
+      tematico_pdm: "Solo las que remiten a un programa, meta o sector del PDM; excluye tramites individuales"
+      todas: "Todas las intervenciones"
+    defecto: excluir_felicitaciones
+    estado: PROVISIONAL
+    afecta: [CS.RPO, CS.ICRCS]
+
+  rpo_criterio_fondo:
+    pregunta: "Que es respuesta de fondo"
+    opciones:
+      estricto_rubrica: "Atiende el asunto con dato, decision, compromiso fechado o negativa motivada; no cuentan acuse, agradecimiento, 'se tendra en cuenta' ni remision sin contenido"
+      laxo_texto_respuesta: "Cualquier texto de respuesta salvo acuse explicito"
+    defecto: estricto_rubrica
+    estado: PROVISIONAL
+    afecta: [CS.RPO, CS.ICRCS]
+
+  rpo_registro_incompleto:
+    pregunta: "Cuadro publicado claramente incompleto (Alcalde 2025: 3 intervenciones)"
+    opciones:
+      nd: "N/D (un listado parcial no permite conocer OT)"
+      calcular_con_publicado: "Calcular con lo publicado, rotulado"
+    defecto: nd
+    estado: PROVISIONAL
+    afecta: [CS.RPO, CS.ICRCS]
+
+  # ---------------- Participacion ciudadana ----------------
+  pc_i2_actividades:
+    pregunta: "Actividades que cubren una zona"
+    opciones:
+      asambleas_pp: "Solo asambleas zonales de PP (maximo 12: zonas 2-13)"
+      asambleas_pp_pdm_pot: "Asambleas de PP, de formulacion del PDM (2024) y del POT (2025)"
+    defecto: asambleas_pp_pdm_pot
+    estado: PROVISIONAL
+    afecta: [PC.I2]
+
+  pc_i2_evidencia:
+    pregunta: "Que acredita la actividad en la zona"
+    opciones:
+      realizacion_reportada: "Informe de gestion, anteproyecto o ejecucion del plan indicativo"
+      incluye_programacion: "Tambien cronogramas o programacion"
+      acta_por_zona: "Solo acta o asistencia por zona (no publicadas: N/D)"
+    defecto: realizacion_reportada
+    estado: PROVISIONAL
+    afecta: [PC.I2]
+
+  pc_i3_unidad:
+    pregunta: "Unidad de I3"
+    opciones:
+      acciones: "Acciones formativas (cursos, diplomados, seminarios)"
+      personas_producto_521: "Personas programadas vs ejecutadas, plan indicativo consecutivo 521"
+    defecto: acciones
+    estado: PROVISIONAL
+    afecta: [PC.I3]
+    origen: "revision_fase3 §4 pregunta 8"
+
+  pc_i3_excluir_servidores:
+    pregunta: "Excluir formacion exclusiva para servidores (la Matriz lo exige)"
+    opciones: {"true": "Excluir", "false": "Incluir"}
+    defecto: "true"
+    estado: PROVISIONAL
+    afecta: [PC.I3]
+
+  pc_i3_v1_mayor_v2:
+    pregunta: "Ejecucion mayor que la programacion"
+    opciones:
+      revisar: "Revisar (formula de Resultados)"
+      tope_100: "Limitar a 100"
+    defecto: revisar
+    estado: PROVISIONAL
+    afecta: [PC.I3]
+
+  pc_i5_instancias:
+    pregunta: "Instancias seleccionadas"
+    opciones:
+      salud_copaco_cmsss: "COPACO y CMSSS (unicas con programacion publicada)"
+      ampliado_cmpc_ctp_comites: "Consejo Municipal de Participacion, CTP y comites zonales (sin calendario: N/D)"
+    defecto: salud_copaco_cmsss
+    estado: PROVISIONAL
+    afecta: [PC.I5]
+
+  pc_universo_procesos:
+    pregunta: "Universo de procesos participativos cerrados (solo variables; I1/I4/I6 no se calculan)"
+    opciones:
+      exploratorio_pp_pdm_pot_rc: "Universo exploratorio PP, PDM/POT y rendicion (3 en 2024; 5 en 2025)"
+      inventario_oficial: "Inventario oficial de Participacion (no existe: N/D)"
+    defecto: exploratorio_pp_pdm_pot_rc
+    estado: PROVISIONAL
+    afecta: [PC.I1, PC.I4, PC.I6]
+    origen: "revision_fase3 §4 pregunta 4"
+
+  # ---------------- Cumplimiento del PDM ----------------
+  pdm_cm_fuente:
+    pregunta: "Fuente de mortalidad vial"
+    opciones:
+      inmlcf_forensis: "INMLCF Forensis (muertes por transporte; tasa publicada)"
+      policia_datosgov: "Policia: homicidio en accidente de transito (otra definicion)"
+    defecto: inmlcf_forensis
+    estado: PROVISIONAL
+    afecta: [PDM.CM, CS.DSI]
+    origen: "revision_fase3 §4 pregunta 6"
+
+  pdm_ca_fuente:
+    pregunta: "Espacio publico verde observado"
+    opciones:
+      pot_epv_urbano: "POT 2024 EPV urbano 5,75 m2/hab (serie distinta de la linea base 3,88)"
+      pot_epv_total: "POT 2024 EPV total 69,41 m2/hab"
+      estricto_serie_linea_base: "Solo serie comparable con la linea base (no existe: N/D)"
+    defecto: pot_epv_urbano
+    estado: PROVISIONAL
+    afecta: [PDM.CA, CS.DSI]
+
+  pdm_cs_fuente:
+    pregunta: "Cobertura del regimen subsidiado (solo variables; PDM.CS no se calcula)"
+    opciones:
+      metodo_plan: "Metodo del plan (BDUA/SisMaster, poblacion objetivo): N/D"
+      minsalud_rs_sobre_pob_total: "Afiliados RS / poblacion total (aprox. 12 %; otra definicion)"
+      minsalud_cobertura_total: "Cobertura total SGSSS (la Matriz lo prohibe)"
+    defecto: metodo_plan
+    estado: PROVISIONAL
+    afecta: [PDM.CS, CS.DSI]
+
+  pdm_ile_a_rango_edad:
+    pregunta: "Denominador de ILE.A"
+    opciones:
+      "0_6": "Poblacion DANE 0 a 6 anios"
+      "0_5": "Poblacion DANE 0 a 5 anios"
+    defecto: "0_6"
+    estado: PROVISIONAL
+    afecta: [PDM.ILE]
+    nota: "Calibrar: 2.059 (2023) / poblacion 2023 debe dar aprox. 16,3 (linea base)"
+
+  # ---------------- Presupuesto participativo ----------------
+  pp_identificacion:
+    pregunta: "Regla para identificar proyectos PP"
+    opciones:
+      efpc_x_plan_accion: "Listado EFPC cruzado con proyectos 'ZONA n' del plan de accion/ROCA"
+      solo_plan_accion_zona: "Solo proyectos con 'ZONA n' en el plan de accion"
+    defecto: efpc_x_plan_accion
+    estado: PROVISIONAL
+    afecta: [PP.EPP, PP.CEP, PP.CMA]
+    origen: "revision_fase3 §4 pregunta 1"
+
+  pp_incluir_0553:
+    pregunta: "Incluir el proyecto 0553 (costo del proceso)"
+    opciones: {"false": "Excluir", "true": "Incluir"}
+    defecto: "false"
+    estado: PROVISIONAL
+    afecta: [PP.EPP]
+
+  pp_fuente_calculo:
+    pregunta: "Fuente de APP y OPP"
+    opciones:
+      plan_accion_roca: "Plan de accion/ROCA del DAP (2025-2026)"
+      hacienda: "Ejecucion presupuestal de egresos (sufijo de rubro = codigo de proyecto)"
+      cuipo: "CUIPO por BPIN (solo contraste)"
+    defecto: plan_accion_roca
+    estado: PROVISIONAL
+    afecta: [PP.EPP]
+    nota: "2024 solo admite hacienda"
+
+  pp_2024_metodo:
+    pregunta: "Tratamiento de la correspondencia aproximada 2024"
+    opciones:
+      hacienda_correspondencia_completa: "47 de 50 proyectos (rotulado aproximado)"
+      solo_exactos: "34 proyectos con correspondencia exacta"
+      nd: "EPP 2024 = N/D"
+    defecto: hacienda_correspondencia_completa
+    estado: PROVISIONAL
+    afecta: [PP.EPP]
+
+  pp_2026_opp_fuente:
+    pregunta: "Fuente de OPP 2026 al corte"
+    opciones:
+      hacienda_30jun: "Hacienda al 30-jun-2026 (11.555.041.247)"
+      plan_accion_xlsx: "Plan de accion 2T-2026 xlsx (corte anterior; 5.702.528.148)"
+    defecto: hacienda_30jun
+    estado: PROVISIONAL
+    afecta: [PP.EPP]
+
+  pp_cep_regla_agregacion:
+    pregunta: "Regla del proxy de PEC (solo variable; CEP no se calcula)"
+    opciones:
+      todas_filas_dic_100: "Todas las filas de diciembre con ejecucion fisica neta = 100 % (2025: 49)"
+      solo_31dic: "Solo filas del 31-dic (2025: 45)"
+      ultima_fila_por_indicador: "Ultima fila por indicador (2025: 55)"
+    defecto: todas_filas_dic_100
+    estado: PROVISIONAL
+    afecta: [PP.CEP]
+    origen: "revision_fase3 §4 pregunta 2"
+
+  pp_cma_aplicabilidad:
+    pregunta: "Columna '¿Aplica meta de atencion?' de PP_Proyectos"
+    opciones:
+      pendiente: "Pendiente para todos (tipologia sugerida solo en Observaciones)"
+      tipologia_sugerida: "Infraestructura y medios = No (con motivo); servicios a personas = Si"
+    defecto: pendiente
+    estado: PROVISIONAL
+    afecta: [PP.CMA]
