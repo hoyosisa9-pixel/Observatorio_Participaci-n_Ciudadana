@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PP.EPP (ejecución presupuestal del presupuesto participativo): 2025 y 2026 (Semestre 1, provisional).
+"""PP.EPP (ejecución presupuestal del presupuesto participativo): 2025, 2026 (Semestre 1, provisional) y 2024 (aproximado).
 
 EPP = 100 x OPP / APP. Municipal = Σ OPP / Σ APP (nunca el promedio de zonas, Guía 13). Zona 1 según
 `pp_zona1_tratamiento` (NE / N/D). Todo es PROVISIONAL: variables "Pendiente", resultados "Provisional".
@@ -11,8 +11,10 @@ Reutiliza la lógica validada de scripts/epp_pp_2025.py (se importa; no se modif
 2026: plan de acción II-trim-2026 (66 proyectos "ZONA n"); OPP según `pp_2026_opp_fuente`.
 Fuentes alternas por `pp_fuente_calculo`: Hacienda (sufijo del rubro = código de proyecto) y CUIPO (por BPIN).
 
+2024: lo calcula `pp_epp_2024.py` (se importa desde main) y se escribe junto, para no pisar las filas de 2025-2026.
+
 Escribe SOLO en outputs/indicadores/parciales/PP/ (valores_variables, resultados_indicadores con codigos=["PP.EPP"],
-y pp_proyectos).
+pp_proyectos y clasificacion_pp_2024).
 """
 from __future__ import annotations
 
@@ -475,10 +477,17 @@ def main():
     for c, p in u26["pp"].items():     # por proyecto, Hacienda = ROCA dentro de $1
         assert p["hac_ob"] is not None and abs(p["hac_ob"] - p["plan_ob"]) <= 1, (c, p["hac_ob"], p["plan_ob"])
 
+    # --- 2024 (aproximado; correspondencia EFPC x Hacienda): se escribe junto con 2025-2026 ------------
+    import pp_epp_2024 as P24
+    r24 = P24.construir_todo(esc_list)
+    filas_v += r24["filas_v"]
+    filas_r += r24["filas_r"]
+
     ruta_v = C.escribir_parcial("PP", "valores_variables", filas_v, codigos=["PP.EPP"])
     ruta_r = C.escribir_parcial("PP", "resultados_indicadores", filas_r, codigos=["PP.EPP"])
     pj = filas_proyectos(u25, d["params"]) + filas_proyectos(u26, d["params"])
-    ruta_p = C.escribir_parcial("PP", "pp_proyectos", pj)
+    ruta_p = C.escribir_parcial("PP", "pp_proyectos", r24["pj"] + pj)
+    ruta_c = C.escribir_parcial("PP", "clasificacion_pp_2024", r24["clasif"])
 
     # --- resumen --------------------------------------------------------------------------------
     print(f"\nProyectos PP: 2025 = {n25} (+0553), 2026 = {n26} (+0553); filas pp_proyectos = {len(pj)}")
@@ -494,7 +503,8 @@ def main():
             z1 = res.get("Zona 1")
             print(f"{e['escenario_id']:<48} {anio} {mun['periodo']:<10} Mun={pct(mun['puntaje']) if mun['puntaje'] not in (None, '') else mun['disponibilidad']:<9}"
                   f" zonas={pct(min(z)) + '-' + pct(max(z)) if z else 'N/D'} Z1={z1['disponibilidad'] if z1 else '-'}")
-    print("\nEscrito:", rel(ruta_v), rel(ruta_r), rel(ruta_p), sep="\n  ")
+    P24.imprimir(r24, esc_list)
+    print("\nEscrito:", rel(ruta_v), rel(ruta_r), rel(ruta_p), rel(ruta_c), sep="\n  ")
 
 
 if __name__ == "__main__":

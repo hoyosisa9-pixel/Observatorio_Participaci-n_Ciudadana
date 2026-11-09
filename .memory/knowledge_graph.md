@@ -90,3 +90,9 @@
 - Orden de ejecución en `scripts/indicadores/README.md` (pdm_metas antes que pdm_cm y pdm_no_viables). Filtro de teléfonos de comun.py da falsos positivos con montos de 10 dígitos.
 - Por confirmar: PP 2024 tiene 51 proyectos con entrega exigible (no 50); entregas cumplidas 2025 en un rango de 45 a 50 (el 55 no se reproduce).
 - Siguiente: tanda 3 (CS.VRC, CS.RPO con muestra del 20 % para la usuaria; PP.EPP 2024).
+
+## 15. Etapa de indicadores: tanda 3 (9-nov-2026)
+- CS.RPO 2024 = 94,1 (16/17); 2025 N/D (cuadro incompleto). CS.VRC = N/D por defecto en 2024 y 2025 (la audiencia del Alcalde solo tiene cuadro de preguntas: presencia desconocida); con `cero_siempre`, 66,7 / 20. Por eso ICRCS 2024 es N/D por defecto.
+- PP.EPP 2024 = 98,69 aproximado (50/51 proyectos cruzados con Hacienda; zona 10 Amarillo 82,58); solo exactos = 99,28. `pp_epp.py` importa `pp_epp_2024.py`.
+- Segunda lectura: `outputs/indicadores/segunda_lectura/` (4 VRC + 12 RPO, semilla 20261109), pendiente de la usuaria.
+- Matriz: 60 comparados, 46 iguales, 14 diferencias esperadas.
