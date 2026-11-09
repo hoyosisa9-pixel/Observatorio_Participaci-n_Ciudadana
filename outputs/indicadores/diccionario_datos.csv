@@ -1,0 +1,123 @@
+﻿tabla;columna;tipo;obligatoria;descripcion
+valores_variables;sistema;texto;sí;Sistema: Control social / Participación ciudadana / Cumplimiento del PDM / Presupuesto participativo
+valores_variables;codigo_indicador;texto;sí;Indicador al que pertenece la variable (CS.DSI, PDM.CM...)
+valores_variables;id_variable;texto;sí;"ID de la Matriz (CS.VRC.ET) o auxiliar AUX.<SIS>.<IND>.<NOMBRE>; siempre el ID completo"
+valores_variables;nombre_variable;texto;no;Nombre completo de la variable (Registro col. D)
+valores_variables;unidad;texto;no;Conteo, Porcentaje (0–100), COP, Muertes / 100.000 hab., m² / habitante u otra para auxiliares
+valores_variables;tipo_valor;texto;no;observado, meta, construido, proxy o auxiliar
+valores_variables;anio;entero;sí;Año del dato
+valores_variables;periodo;texto;sí;Anual, Semestre 1 o Semestre 2
+valores_variables;territorio;texto;sí;Municipio o Zona 1 ... Zona 13
+valores_variables;escenario_id;texto;sí;"'defecto' o lista alfabética de desviaciones param=opcion separadas por ';'"
+valores_variables;es_defecto;bool;no;True solo en el escenario por defecto (PROVISIONAL)
+valores_variables;parametros;texto;no;"Juego completo de parámetros aplicables, clave=valor;..."
+valores_variables;valor;decimal;no;"Valor sin redondear; vacío si no hay dato"
+valores_variables;estado_informacion;texto;sí;Pendiente, No disponible, No evaluable o No aplica. Nunca Validado
+valores_variables;categoria_disponibilidad;texto;no;Disponible, Construible, Parcial, Proxy o No disponible
+valores_variables;fuente;texto;sí;Publicación o fuente (Registro col. K)
+valores_variables;documento_ruta_local;texto;no;Ruta bajo data_raw_IIC/ (columna interna)
+valores_variables;enlace;texto;sí;URL de la evidencia (dominio espejo para documentos de la Alcaldía)
+valores_variables;pagina_tabla;texto;sí;Página, tabla, hoja o celda (Registro col. M)
+valores_variables;fecha_corte;fecha;sí;Fecha de corte escrita en el Registro, según corte_fecha_registro
+valores_variables;fecha_corte_real;fecha;no;Corte real del dato
+valores_variables;fecha_publicacion;fecha;no;Fecha interna de publicación del documento
+valores_variables;fecha_consulta;fecha;no;Fecha de ejecución del script
+valores_variables;horizonte_meta;entero;no;Horizonte de la meta (2027)
+valores_variables;n_elementos_soporte;entero;no;Filas de soporte que suman el valor
+valores_variables;ids_soporte;texto;no;IDs de soporte_conteos separados por coma
+valores_variables;provisional;bool;no;Siempre True mientras existan parámetros PROVISIONAL
+valores_variables;script;texto;no;Script que generó la fila
+valores_variables;observaciones;texto;no;Brechas, discrepancias y alternativas
+resultados_indicadores;sistema;texto;no;Sistema del indicador
+resultados_indicadores;codigo;texto;sí;Código único del indicador o índice
+resultados_indicadores;nombre;texto;no;Nombre del indicador
+resultados_indicadores;tipo;texto;no;Indicador, Complementario o Índice
+resultados_indicadores;anio;entero;sí;Año observado
+resultados_indicadores;periodo;texto;no;Anual, Semestre 1 o Semestre 2
+resultados_indicadores;territorio;texto;sí;Municipio o Zona n
+resultados_indicadores;escenario_id;texto;sí;Ver valores_variables.escenario_id
+resultados_indicadores;es_defecto;bool;no;Escenario por defecto
+resultados_indicadores;parametros;texto;no;"Parámetros aplicables clave=valor;..."
+resultados_indicadores;entrada_1_id;texto;no;ID de la entrada 1 (orden de Resultados F:I)
+resultados_indicadores;entrada_2_id;texto;no;ID de la entrada 2
+resultados_indicadores;entrada_3_id;texto;no;ID de la entrada 3
+resultados_indicadores;entrada_4_id;texto;no;ID de la entrada 4
+resultados_indicadores;entrada_1;decimal;no;Valor de la entrada 1 o N/D, Revisar
+resultados_indicadores;entrada_2;decimal;no;Valor de la entrada 2
+resultados_indicadores;entrada_3;decimal;no;Valor de la entrada 3
+resultados_indicadores;entrada_4;decimal;no;Valor de la entrada 4
+resultados_indicadores;variables_usadas;texto;no;"IDs de las variables usadas, separados por ';'"
+resultados_indicadores;intermedio_1;decimal;no;LA (ILE) o IBS (ICPD-6)
+resultados_indicadores;intermedio_2;decimal;no;LS (ILE) o ITG (ICPD-6)
+resultados_indicadores;puntaje;decimal;no;"Puntaje 0-100 sin redondear (regla preliminar_pendiente); vacío si no se calcula"
+resultados_indicadores;puntaje_1d;decimal;no;Puntaje redondeado a 1 decimal, solo para mostrar
+resultados_indicadores;semaforo;texto;sí;Verde, Amarillo, Naranja, Rojo o Gris (umbrales de la Matriz)
+resultados_indicadores;disponibilidad;texto;no;Calculado, NE, N/D o Revisar
+resultados_indicadores;motivo_nd;texto;no;Por qué no hay puntaje
+resultados_indicadores;puntaje_regla_matriz;texto;no;Lo que mostraría la hoja Resultados con estados Pendiente (N/D)
+resultados_indicadores;fecha_corte_comun;fecha;no;Corte común de las entradas
+resultados_indicadores;estado;texto;sí;Siempre Provisional
+resultados_indicadores;provisional;bool;no;True
+resultados_indicadores;alerta;texto;no;Alertas, p. ej. CEP o CMA < 50 (Guía 20)
+resultados_indicadores;no_calculado_por_etapa;bool;no;True para indicadores No viables: solo variables
+resultados_indicadores;script;texto;no;Script que generó la fila
+resultados_indicadores;observaciones;texto;no;Notas
+pp_proyectos;anio;entero;sí;Año
+pp_proyectos;periodo;texto;no;Anual o Semestre 1
+pp_proyectos;territorio;texto;no;Municipio
+pp_proyectos;zona;entero;sí;Zona del proyecto (2-13)
+pp_proyectos;codigo_proyecto;texto;sí;Código único del proyecto (4 dígitos)
+pp_proyectos;bpin;texto;no;Código BPIN
+pp_proyectos;nombre_proyecto;texto;sí;Nombre del proyecto
+pp_proyectos;unidad_ejecutora;texto;no;Dependencia ejecutora
+pp_proyectos;en_listado_efpc;bool;no;Aparece en el listado de la EFPC
+pp_proyectos;valor_listado_efpc;decimal;no;Valor del listado EFPC (COP)
+pp_proyectos;tipo_correspondencia;texto;no;exacta, aproximada o sin_correspondencia
+pp_proyectos;apropiacion_definitiva;decimal;no;APP del proyecto (COP)
+pp_proyectos;compromiso;decimal;no;Compromiso (COP)
+pp_proyectos;obligacion;decimal;no;OPP del proyecto (COP)
+pp_proyectos;fuente_valor;texto;no;plan_accion_roca, hacienda o cuipo
+pp_proyectos;fecha_corte;fecha;no;Corte registrado
+pp_proyectos;fecha_corte_real;fecha;no;Corte real
+pp_proyectos;es_0553;bool;no;Proyecto 0553 (costo del proceso)
+pp_proyectos;incluido_epp_defecto;bool;no;Entra en el EPP del escenario por defecto
+pp_proyectos;ejecucion_fisica_neta_dic;decimal;no;Ejecución física neta a diciembre
+pp_proyectos;pec_todas_filas_dic_100;entero;no;Proxy PEC regla todas_filas_dic_100 (0/1)
+pp_proyectos;pec_solo_31dic;entero;no;Proxy PEC regla solo_31dic (0/1)
+pp_proyectos;pec_ultima_fila;entero;no;Proxy PEC regla ultima_fila_por_indicador (0/1)
+pp_proyectos;tipologia_sugerida;texto;no;servicio a personas, infraestructura, medios u otro
+pp_proyectos;aplica_meta_atencion;texto;no;Sí, No o Pendiente
+pp_proyectos;motivo_exclusion;texto;no;Motivo de exclusión
+pp_proyectos;personas_atendidas_PA;entero;no;"Personas atendidas (vacío; sin datos personales)"
+pp_proyectos;meta_atencion_MP;entero;no;Meta de atención (vacío)
+pp_proyectos;estado_informacion;texto;no;"Pendiente u otro; nunca Validado"
+pp_proyectos;fuente;texto;no;Fuente del registro
+pp_proyectos;enlace;texto;no;Enlace a la evidencia
+pp_proyectos;pagina_hoja;texto;no;Página u hoja
+pp_proyectos;observaciones;texto;no;Notas
+soporte_conteos;id_soporte;texto;sí;<SIS>-<IND>-<aaaa>-<nnn>
+soporte_conteos;sistema;texto;no;Sistema
+soporte_conteos;codigo_indicador;texto;no;Indicador
+soporte_conteos;id_variable;texto;sí;Variable que alimenta el elemento
+soporte_conteos;anio;entero;sí;Año
+soporte_conteos;periodo;texto;no;Periodo
+soporte_conteos;territorio;texto;no;Territorio
+soporte_conteos;escenario_id;texto;sí;Escenario al que se refiere la fila
+soporte_conteos;elemento_tipo;texto;no;evento, observacion, meta, accion_formativa, sesion, zona_actividad, proceso, proyecto, actividad_virtual
+soporte_conteos;elemento_id;texto;sí;Identificador estable del elemento
+soporte_conteos;descripcion;texto;no;Asunto resumido, sin datos personales
+soporte_conteos;fecha_elemento;fecha;no;Fecha del elemento
+soporte_conteos;documento;texto;sí;Documento fuente
+soporte_conteos;ruta_local;texto;no;Ruta local bajo data_raw_IIC/
+soporte_conteos;enlace;texto;no;URL (espejo)
+soporte_conteos;pagina;texto;sí;Página o tabla
+soporte_conteos;fecha_publicacion_doc;fecha;no;Fecha de publicación verificada del documento
+soporte_conteos;banderas;texto;no;"clave=valor;... atributos que usan los parámetros"
+soporte_conteos;clasificacion;texto;no;Etiqueta legible de la clasificación
+soporte_conteos;justificacion;texto;no;Por qué se clasificó así
+soporte_conteos;criterio;texto;no;Criterio aplicado para incluir o excluir
+soporte_conteos;lector;texto;no;Quién clasificó
+soporte_conteos;cuenta_en_defecto;entero;no;1 si entra en el conteo del escenario por defecto
+soporte_conteos;incluido;texto;no;sí / no, equivalente legible de cuenta_en_defecto
+matriz_diligenciada.Registro;A:Q;texto;no;"Sistema, indicador, ID, nombre, unidad (A:E); año, periodo, territorio (F:H); valor (I); estado (J); fuente (K); enlace (L); página (M); corte (N); consulta (O); horizonte (P); observaciones (Q). R:S son fórmulas y no se tocan."
+matriz_diligenciada.PP_Proyectos;A:M;texto;no;Año, periodo, territorio, código, nombre, ¿aplica meta?, PA, MP, fuente, enlace, corte, estado y observaciones/soporte. N:P son fórmulas y no se tocan.

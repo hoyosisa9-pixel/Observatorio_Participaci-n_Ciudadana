@@ -153,6 +153,11 @@ def llenar(wb, valores: list[dict], proyectos: list[dict], validado: bool = Fals
 
     pp = wb["PP_Proyectos"]
     filas = [p for p in proyectos if p.get("territorio", "Municipio") == "Municipio"]
+    # Proyectos sin zona (p. ej. 0553, costo del proceso, zona "N/A") no son proyectos zonales priorizados:
+    # quedan fuera de PP_Proyectos (el escenario por defecto los excluye de EPP).
+    sin_zona = [p["codigo_proyecto"] for p in filas if not str(p.get("zona", "")).strip().isdigit()]
+    filas = [p for p in filas if str(p.get("zona", "")).strip().isdigit()]
+    est["pp_sin_zona_omitidos"] = sorted(set(sin_zona))
     filas.sort(key=lambda p: (int(p["anio"]), p.get("periodo", ""), int(p["zona"] or 0), p["codigo_proyecto"]))
     vistos, utiles = set(), []
     for p in filas:

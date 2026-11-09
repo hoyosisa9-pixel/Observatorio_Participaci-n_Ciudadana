@@ -347,8 +347,8 @@ parametros:
   pp_2026_opp_fuente:
     pregunta: "Fuente de OPP 2026 al corte"
     opciones:
-      hacienda_30jun: "Hacienda al 30-jun-2026 (11.555.041.247)"
-      plan_accion_xlsx: "Plan de accion 2T-2026 xlsx (corte anterior; 5.702.528.148)"
+      hacienda_30jun: "Hacienda al 30-jun-2026 (5.702.528.148; corregido el 9-nov-2026, la cifra 11.555.041.247 citada en octubre no se reproduce con el informe de Hacienda al 30-jun-2026 ni con ROCA)"
+      plan_accion_xlsx: "Plan de accion 2T-2026 xlsx, hoja ROCA-2026-07-01 (5.702.528.148; coincide con Hacienda al 30-jun-2026)"
     defecto: hacienda_30jun
     estado: PROVISIONAL
     afecta: [PP.EPP]
