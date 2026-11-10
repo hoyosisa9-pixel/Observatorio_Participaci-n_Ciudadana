@@ -594,6 +594,23 @@ def construir():
     a('Cada fila es una decisión que cambia un resultado. Los rangos son del nivel municipal; el valor por defecto es el '
       'primero de cada rango. «Revisar» y N/D no tienen color de semáforo.')
     dec = L.tabla_md(seccion_md(d.md, '## 5.'))
+    # Casos dudosos de la segunda lectura (acuerdo con duda): decisiones adicionales, sin efecto en los escenarios calculados.
+    dec = dec + [
+        ['Carta de respuesta como prueba de presencia (VRC; de la segunda lectura)',
+         '¿Basta una carta de respuesta dirigida a una veeduría para acreditar que la veeduría estuvo presente en el evento, '
+         'o se exige acta o lista de asistencia?',
+         'Basta la carta / se exige acta o lista de asistencia',
+         'VRC, ICRCS',
+         'No cambia ningún resultado calculado: el caso (rendición del Comité Municipal de Discapacidad, segundo semestre '
+         'de 2024) solo entra en el universo amplio de eventos, que da N/D'],
+        ['Respuesta sin la fecha pedida (RPO; de la segunda lectura)',
+         '¿Una respuesta que da información sobre el asunto pero no contesta la fecha que pidió la persona («¿para cuándo?») '
+         'cuenta como respuesta de fondo?',
+         'Sí cuenta / no cuenta',
+         'RPO',
+         'No cambia ningún resultado calculado: el caso (carta del Comité Municipal de Discapacidad, primer semestre de '
+         '2025) solo entra en el universo de todos los cuadros de 2025, que da N/D'],
+    ]
     a(xltabular(r'L{2.6cm}L{3.1cm}L{2.5cm}L{2.4cm}Y',
                 ['Decisión', 'Pregunta', 'Opciones', 'Indicadores afectados', 'Rango de resultados'],
                 [[md_cel(r[0]), md_cel(r[1]), md_cel(r[2]), md_cel(r[3]), md_cel(r[4])] for r in dec], tam=r'\scriptsize'))
@@ -603,10 +620,16 @@ def construir():
     nv_, nr_ = len(d.vrc_muestra), len(d.rpo_muestra)
     forensis = next(v for v in d.V if v['id_variable'] == 'PDM.CM.O' and v['es_defecto'] == 'True')
     a(r'\begin{enumerate}')
-    a(r'\item \textbf{Segunda lectura de VRC y RPO (en curso).} La clasificación de eventos (' + str(len(d.clas_vrc))
-      + ') y de observaciones (' + str(len(d.clas_rpo)) + ') la hizo un solo lector. Se preparó una muestra aleatoria del 20~\\% '
-      f'({nv_} eventos del VRC y {nr_} observaciones del RPO) para que una segunda persona la lea de forma independiente; '
-      'hasta entonces, el VRC y el RPO son de un solo lector.')
+    ac_v = sum(1 for x in d.vrc_muestra if x.get('acuerdo_si_no', '').strip().lower() in ('si', 'sí'))
+    ac_r = sum(1 for x in d.rpo_muestra if x.get('acuerdo_si_no', '').strip().lower() in ('si', 'sí'))
+    assert (ac_v, nv_, ac_r, nr_) == (4, 4, 12, 12), (ac_v, nv_, ac_r, nr_)
+    a(r'\item \textbf{Segunda lectura de VRC y RPO (terminada).} Una segunda persona clasificó de forma independiente una muestra '
+      r'aleatoria del 20~\% de los eventos (' + str(len(d.clas_vrc)) + ') y de las observaciones (' + str(len(d.clas_rpo)) + ') '
+      f'clasificados por el primer lector: {nv_} eventos del VRC y {nr_} observaciones del RPO. La lectura se hizo sobre las citas '
+      'y el contexto registrados en la muestra, no releyendo cada documento completo. Acuerdo entre lectores (filas con acuerdo '
+      f'sobre filas revisadas): VRC {ac_v}/{nv_} (' + fnum(100 * ac_v / nv_, 0) + r'~\%) y RPO ' + f'{ac_r}/{nr_} ('
+      + fnum(100 * ac_r / nr_, 0) + r'~\%). Ningún resultado cambia. Dos casos, en los que hubo acuerdo pero con duda, '
+      'se llevan a la sección~7 como decisiones para los profesores.')
     a(r'\item \textbf{Verificación de Forensis 2024.} La mortalidad vial de 2024 (' + fnum(forensis['valor']) + ' por 100.000 '
       'habitantes, ' + esc(forensis['pagina_tabla']) + ') es una cifra citada: el documento no se ha podido descargar '
       '(el sitio de Medicina Legal rechaza descargas automáticas). Hay que bajarlo, confirmar la cifra y el criterio territorial '

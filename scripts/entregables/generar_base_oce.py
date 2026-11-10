@@ -880,13 +880,29 @@ def build_supuestos():
                           defecto=ops.split(' / ')[0] + ' (PROVISIONAL)', alts='\n'.join(f'• {o}' for o in ops.split(' / ')[1:]), afecta=ind,
                           sint=depurar(rango), detalle='Se evaluó fuera de los parámetros configurables del cálculo; el resultado está en la columna anterior.',
                           estado='PROVISIONAL: decisión pendiente de los profesores'))
+    # Casos dudosos de la segunda lectura (acuerdo con duda): decisiones adicionales, sin efecto en los escenarios calculados.
+    n0 = len(filas) + 1
+    for k, (nombre, preg, dflt, alts, ind, sint) in enumerate([
+        ('Carta de respuesta como prueba de presencia de una veeduría (VRC)',
+         '¿Basta una carta de respuesta dirigida a una veeduría para acreditar que la veeduría estuvo presente en el evento, o se exige acta o lista de asistencia?',
+         'Basta la carta', ['Se exige acta o lista de asistencia'], 'CS.VRC, CS.ICRCS',
+         'No cambia ningún resultado calculado: el caso (rendición del Comité Municipal de Discapacidad, segundo semestre de 2024) solo entra en el universo amplio de eventos, que da N/D.'),
+        ('Respuesta sin la fecha pedida como respuesta de fondo (RPO)',
+         '¿Una respuesta que da información sobre el asunto pero no contesta la fecha que pidió la persona («¿para cuándo?») cuenta como respuesta de fondo?',
+         'Sí cuenta', ['No cuenta'], 'CS.RPO',
+         'No cambia ningún resultado calculado: el caso (carta del Comité Municipal de Discapacidad, primer semestre de 2025) solo entra en el universo de todos los cuadros de 2025, que da N/D.'),
+    ], n0):
+        filas.append(dict(n=k, tipo='Caso dudoso de la segunda lectura', tema='Control social', clave='', nombre=nombre, preg=preg,
+                          defecto=dflt + ' (PROVISIONAL)', alts='\n'.join(f'• {o}' for o in alts), afecta=ind, sint=sint,
+                          detalle='Surgió de la segunda lectura de la muestra del 20 %: ambos lectores coincidieron, pero con duda sobre el criterio.',
+                          estado='PROVISIONAL: decisión pendiente de los profesores'))
     return filas
 
 
 def cols_supuestos():
     return [
      Col('N.º', 5, 'int', get=lambda r: r['n'], desc='Número de orden.'),
-     Col('Tipo', 16, 'txt', get=lambda r: r['tipo'], desc='Parámetro (configurable) o Sensibilidad adicional evaluada fuera de los parámetros.'),
+     Col('Tipo', 16, 'txt', get=lambda r: r['tipo'], desc='Parámetro (configurable), Sensibilidad adicional evaluada fuera de los parámetros, o Caso dudoso de la segunda lectura.'),
      Col('Tema', 20, 'txt', get=lambda r: r['tema'], desc='Sistema o tema al que pertenece el supuesto.'),
      Col('Supuesto', 36, 'txt', get=lambda r: r['nombre'], desc='Nombre corto del supuesto.'),
      Col('Pregunta para los profesores', 62, 'txt', get=lambda r: r['preg'], desc='Decisión que corresponde a los profesores, en lenguaje claro.'),
@@ -952,7 +968,7 @@ def leeme(n):
      ['Hoja PP por zona', 'Ejecución presupuestal del presupuesto participativo (EPP) por zona y año en el escenario por defecto, con apropiación (APP), obligaciones (OPP), porcentaje y semáforo, y tres alternativas relevantes en columnas. 2024 es aproximado; el primer semestre de 2026 no tiene semáforo.'],
      ['Hoja PP por proyecto', 'Proyectos de presupuesto participativo con apropiación, compromisos, obligaciones y porcentaje de ejecución, más la marca de "posible no PP" y el tipo de cruce de 2024.'],
      ['Hojas Soporte de conteos, Clasificación VRC, Clasificación RPO y Entregas PP',
-      'Detalle auditable de cada elemento contado (zona, evento, observación, proyecto, meta) y de su clasificación. Las citas de ciudadanos y funcionarios están anonimizadas. La segunda lectura de una muestra del 20 % de VRC y RPO está pendiente; hasta entonces la clasificación es de un solo lector.'],
+      'Detalle auditable de cada elemento contado (zona, evento, observación, proyecto, meta) y de su clasificación. Las citas de ciudadanos y funcionarios están anonimizadas. La segunda lectura de una muestra aleatoria del 20 % de VRC y RPO está terminada: una segunda persona clasificó 4 eventos del VRC y 12 observaciones del RPO sobre las citas y el contexto registrados en la muestra, no releyendo cada documento completo. Acuerdo entre lectores (filas con acuerdo sobre filas revisadas): VRC 4/4 (100 %) y RPO 12/12 (100 %). Ningún resultado cambia; los dos casos con duda están en la hoja Supuestos como decisiones para los profesores.'],
      ['Hojas Supuestos y Efecto de alternativas', 'Las 36 decisiones metodológicas (parámetros) que condicionan los resultados, con la pregunta para los profesores, el valor por defecto, las alternativas y cuánto cambia el resultado con cada una. La hoja Efecto de alternativas lo detalla por indicador y año a nivel municipal.'],
      ['Hoja Diccionario de datos', 'Para quien construirá el tablero: cada columna de cada hoja, con su tipo, descripción, valores permitidos y las llaves para unir hojas.'],
      ['Llaves para unir hojas', 'Código del indicador (y código de la variable), año, periodo, territorio y clave de escenario. La clave de escenario es "defecto" o la lista de cambios parámetro=opción, y aparece al final de las hojas que la usan. El ID de soporte une Variables con Soporte de conteos y las hojas de clasificación.'],
@@ -1034,7 +1050,7 @@ def verificar(cuentas):
             fallos.append(f'filas {nombre}: {len(f)} != {n}')
     esperado = {'Resultados': len(RES) - sum(r['no_calculado_por_etapa'] == 'True' for r in RES), 'No calculados': sum(r['no_calculado_por_etapa'] == 'True' for r in RES),
                 'Variables': len(VAR), 'Soporte de conteos': len(SOP), 'PP por proyecto': len(PPY), 'Clasificación VRC': len(C_VRC),
-                'Clasificación RPO': len(C_RPO), 'Entregas PP': len(C_ENT), 'Supuestos': 39}
+                'Clasificación RPO': len(C_RPO), 'Entregas PP': len(C_ENT), 'Supuestos': 41}  # 36 parámetros + 3 sensibilidades + 2 casos de la segunda lectura
     for k, v in esperado.items():
         if cuentas[k] != v:
             fallos.append(f'origen {k}: {cuentas[k]} != {v}')
