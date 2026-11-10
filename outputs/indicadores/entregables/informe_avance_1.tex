@@ -1,0 +1,1066 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[spanish,es-noshorthands,es-tabla]{babel}
+\usepackage[margin=2.5cm,headheight=14pt]{geometry}
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+\usepackage{xltabular}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage[hidelinks,breaklinks=true]{hyperref}
+\usepackage{url}
+
+\definecolor{cverde}{RGB}{214,240,214}
+\definecolor{camarillo}{RGB}{255,243,191}
+\definecolor{cnaranja}{RGB}{255,222,184}
+\definecolor{crojo}{RGB}{248,212,212}
+\definecolor{cgris}{RGB}{225,225,225}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\emergencystretch}{3em}
+\setlist{itemsep=2pt,topsep=4pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small OCE -- Avance 1: cálculo provisional de indicadores}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyhead[R]{\small\thepage}}
+
+\hypersetup{pdftitle={Sistema de indicadores del Observatorio Ciudadano de Envigado: cálculo provisional de indicadores viables},pdfauthor={Isabella Hoyos Álvarez}}
+
+\begin{document}
+
+
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\centering
+\vspace*{3cm}
+{\LARGE\bfseries Sistema de indicadores del Observatorio Ciudadano de Envigado: cálculo provisional de indicadores viables\par}
+\vspace{1.5cm}
+{\large Avance 1 -- 9 de noviembre de 2026\par}
+\vspace{2cm}
+{\large Isabella Hoyos Álvarez\par}
+\vspace{0.5cm}
+{\large Observatorio Ciudadano de Envigado (OCE)\par}
+\vspace{2cm}
+{\large Dirigido a: profesores Francisco Correa y Eber Gutiérrez\par}
+\vfill
+{\large Fecha de corte de la información: según el indicador, entre el 31 de diciembre de 2024 y el 30 de junio de 2026 (detalle en la sección~2)\par}
+\vspace{0.3cm}
+{\large Fuentes consultadas hasta el 9 de noviembre de 2026\par}
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+
+\begin{center}\fcolorbox{red!60!black}{crojo}{\parbox{0.92\linewidth}{\centering\bfseries RESULTADOS PROVISIONALES. NADA ESTÁ VALIDADO: todos los valores están en estado Pendiente y los resultados dependen de decisiones que todavía deben tomar los profesores.}}\end{center}
+
+\tableofcontents
+\clearpage
+
+\section{Resumen ejecutivo}
+
+Se calcularon, en el escenario por defecto, los 11 indicadores clasificados como viables o viables con ajuste. De ellos, 9 tienen resultado numérico en al menos un año y 2 (VRC, ICRCS) quedan en N/D. Todo es \textbf{provisional}: las variables están en estado Pendiente y cada resultado depende de los supuestos por defecto que se describen en la sección~2. La tabla muestra el puntaje (de 0 a 100) y el color del semáforo definido en la Matriz.
+
+\begin{center}\footnotesize\begin{tabularx}{\linewidth}{L{6.3cm}YYY}\toprule
+
+\textbf{Indicador} & \textbf{2024} & \textbf{2025} & \textbf{2026 (primer semestre)} \\ \midrule
+
+Promoción del control social (PCS) & \cellcolor{cverde}100 (Verde) & \cellcolor{cverde}100 (Verde) & -- \\
+Disponibilidad de información de seguimiento (DSI) & \cellcolor{crojo}0 (Rojo) & \cellcolor{crojo}0 (Rojo) & -- \\
+Presencia de veedurías en la rendición de cuentas (VRC) & \cellcolor{cgris}N/D & \cellcolor{cgris}N/D & -- \\
+Respuesta pública a observaciones ciudadanas (RPO) & \cellcolor{cverde}94,12 (Verde) & \cellcolor{cgris}N/D & -- \\
+Índice de condiciones y respuesta para el control social (ICRCS) & \cellcolor{cgris}N/D & \cellcolor{cgris}N/D & -- \\
+I2 Cobertura territorial de la participación & \cellcolor{cverde}100 (Verde) & \cellcolor{cverde}92,31 (Verde) & -- \\
+I3 Cumplimiento de la oferta formativa & \cellcolor{cgris}N/D & \cellcolor{cverde}83,33 (Verde) & -- \\
+I5 Cumplimiento de sesiones de las instancias de participación & \cellcolor{cgris}N/D & \cellcolor{cverde}100 (Verde) & -- \\
+Cumplimiento del espacio público verde (CA) & \cellcolor{cverde}100 (Verde) & -- & -- \\
+Cumplimiento de la mortalidad vial (CM) & \cellcolor{cverde}100 (Verde) & -- & -- \\
+Ejecución presupuestal del presupuesto participativo (EPP) & \cellcolor{cverde}98,69 (Verde) & \cellcolor{cverde}98,83 (Verde) & 23,26 (Sin semáforo) \\ \bottomrule\end{tabularx}\end{center}
+
+{\footnotesize Escenario por defecto, nivel municipal. \colorbox{cverde}{Verde}, \colorbox{camarillo}{Amarillo}, \colorbox{crojo}{Rojo} y \colorbox{cgris}{Gris (N/D)} según los umbrales de la Matriz; el guion (--) indica que no se calcula para ese año (no hay información). El presupuesto participativo de 2026 corresponde al primer semestre (corte al 30 de junio) y se deja sin semáforo porque la Matriz solo lo prevé en periodo anual; el de 2024 es aproximado.}
+
+\paragraph{Mensajes principales}
+
+\begin{enumerate}
+
+\item \textbf{Resultados con número:} 9 de 11 indicadores. Hay 11 celdas en Verde; el único Rojo con número es el DSI. VRC e ICRCS no tienen resultado por defecto.
+
+\item \textbf{DSI en cero por la ventana de publicación:} con el corte del 31 de marzo del año siguiente, el DSI de 2024 y de 2025 es 0; si se acepta todo lo publicado hasta la fecha de consulta, el de 2024 sube a 28,57 (sigue en Rojo).
+
+\item \textbf{VRC e ICRCS en N/D por presencia desconocida de veedurías:} del evento del Alcalde solo se publicó un cuadro de preguntas, sin asistentes. Si la falta de mención de veedurías se cuenta como ausencia, el VRC de 2024 es 66,67 y el de 2025 20; el ICRCS de 2024 sería 65,20 (o 68,17 en el universo institucional), con un rango por componente de 55,68 a 73,81, todo en Amarillo.
+
+\item \textbf{Ejecución del presupuesto participativo alta en 2024 y 2025:} 98,69 (aproximado) y 98,83, en Verde. En 2026 (primer semestre) es 23,26, sin semáforo. La única zona que no está en Verde es la zona 10 en 2024 (82,58, Amarillo), por un cruce aproximado de datos.
+
+\item \textbf{Hallazgos de datos para Planeación:} un rubro de déficit fiscal dentro del presupuesto participativo de 2024, cruces débiles entre el listado de la Escuela y Hacienda, 51 y no 50 proyectos con entrega exigible en 2024, y una cifra de 55 entregas de 2025 que no se reproduce (se obtienen entre 45 y 50). Ver sección~6.
+
+\end{enumerate}
+
+\section{Método: escenarios y supuestos por defecto}
+
+Cada indicador se calcula con la fórmula y los umbrales de semáforo de la hoja Resultados de la Matriz de información de indicadores. Donde la Matriz deja una decisión abierta, se calcularon todas las opciones razonables (\emph{escenarios}) y se marcó una como valor por defecto, \textbf{sin decidir por los profesores}. Todos los supuestos por defecto son provisionales.
+
+\subsection{Supuestos del escenario por defecto}
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{3.4cm}Y}
+\toprule
+\textbf{Tema} & \textbf{Supuesto por defecto} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Tema} & \textbf{Supuesto por defecto} \\
+\midrule
+\endhead
+\midrule \multicolumn{2}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+Fecha de registro & Se normaliza al cierre de la vigencia (31 de diciembre) para datos de cierre de año \\
+2026 & Se trata como primer semestre provisional (corte 30 de junio de 2026), sin semáforo \\
+Cálculo con datos pendientes & Se calcula con valores en estado "Pendiente" (regla preliminar) \\
+Zonas & 13 zonas oficiales; la zona 1 es "No evaluable" en presupuesto participativo \\
+Población & Serie publicada por cada fuente \\
+Metas del plan de desarrollo & Se evalúa contra la meta de 2027 \\
+Ventana de publicación (control social) & Hasta el 31 de marzo del año siguiente \\
+DSI -- metas & 7 metas del ICPD; solo valores oficiales con la misma definición \\
+VRC & Alcalde más rendiciones sectoriales con acta; la mención en el acta acredita presencia; el evento sin mención cuenta como ausencia solo si el documento es integral; el evento se asigna al año de su fecha \\
+RPO & Solo la audiencia del Alcalde; se excluyen felicitaciones; criterio estricto de respuesta de fondo; cuadro incompleto = N/D \\
+PC.I2 & Asambleas del presupuesto participativo, del plan de desarrollo y del POT; basta la realización reportada \\
+PC.I3 & Se miden acciones formativas; se excluye lo exclusivo para servidores; si lo ejecutado supera lo programado, "Revisar" \\
+PC.I5 & Instancias de salud (CMSSS) y COPACO \\
+PDM & Mortalidad vial según Medicina Legal; espacio público verde urbano del POT \\
+PP & Proyectos identificados cruzando el listado EFPC con el plan de acción; no incluye el proyecto 0553 (costo del proceso); fuente de cálculo: plan de acción (2025 y 2026) y Hacienda (2024); 2024 con correspondencia completa (exactos más aproximados); obligaciones de 2026 de Hacienda al 30 de junio; zona 1 = NE \\
+\end{xltabular}
+}
+
+\subsection{Convenciones de lectura}
+\begin{itemize}
+\item \textbf{N/D}: no se puede calcular con la información disponible o con la regla de la Matriz. \textbf{NE}: no evaluable (la zona 1 no tiene proyectos de presupuesto participativo). \textbf{Revisar}: el numerador supera al denominador y la Matriz pide revisión, sin color.
+\item Los semáforos se asignan con los umbrales de la Matriz, sin redondear antes de clasificar. Los puntajes se muestran con dos decimales.
+\item Las variables están en estado Pendiente y los resultados en estado Provisional; ningún dato está validado.
+\end{itemize}
+
+\subsection{Fecha de corte de la información}
+
+Los datos se registran al cierre de la vigencia (31 de diciembre), pero el documento fuente puede tener un corte real distinto; la tabla muestra el corte real de las fuentes de cada indicador, por año.
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{6cm}Y}
+\toprule
+\textbf{Indicador} & \textbf{Corte real de la información} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Indicador} & \textbf{Corte real de la información} \\
+\midrule
+\endhead
+\midrule \multicolumn{2}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+Promoción del control social (PCS) & 2024: 30 de junio de 2026; 2025: 30 de junio de 2026; 2026 S1: 30 de junio de 2026 \\
+Disponibilidad de información de seguimiento (DSI) & 2024: 31 de diciembre de 2024; 2025: 31 de diciembre de 2025 \\
+Presencia de veedurías en la rendición de cuentas (VRC) & 2024: 31 de diciembre de 2024; 2025: 31 de diciembre de 2025 \\
+Respuesta pública a observaciones ciudadanas (RPO) & 2024: 31 de diciembre de 2024; 2025: 31 de diciembre de 2025 \\
+Índice de condiciones y respuesta para el control social (ICRCS) & Combina los cortes de DSI, PCS, VRC y RPO \\
+I2 Cobertura territorial de la participación & 2024: 31 de diciembre de 2024; 2025: 31 de diciembre de 2025 \\
+I3 Cumplimiento de la oferta formativa & 2024: 31 de diciembre de 2024; 2025: 31 de diciembre de 2025 \\
+I5 Cumplimiento de sesiones de las instancias de participación & 2025: 31 de diciembre de 2025 \\
+Cumplimiento del espacio público verde (CA) & 2024: 31 de diciembre de 2024; 2025: 31 de diciembre de 2025 \\
+Cumplimiento de la mortalidad vial (CM) & 2024: 31 de diciembre de 2024; 2025: 31 de diciembre de 2025 \\
+Ejecución presupuestal del presupuesto participativo (EPP) & 2024: 31 de diciembre de 2024; 2025: 7 de enero de 2026; 2026 S1: 30 de junio de 2026 \\
+\end{xltabular}
+}
+
+\subsection{Verificación}
+
+\begin{itemize}
+
+\item \textbf{Contra la hoja Resultados de la Matriz de los profesores:} se recalculó una copia temporal de la Matriz con los datos marcados como validados, solo para comparar sus fórmulas, y la copia se borró. De 62 resultados comparados, 48 coinciden y 14 difieren, todas esperadas: el presupuesto participativo del primer semestre de 2026 (municipal y 12 zonas), porque la Matriz solo calcula este indicador con periodo anual y devuelve N/D, y la zona 1, donde el cálculo da NE y la Matriz da N/D.
+
+\item \textbf{Recálculo independiente desde los documentos fuente:} se recalcularon a mano 23 valores (15 de indicadores, 5 observaciones del RPO y 3 proyectos del presupuesto participativo de 2024); los 23 coinciden. La revisión encontró 5 errores de presentación o documentación, que se corrigieron sin cambiar ningún puntaje del escenario por defecto. Además, 951 de 975 filas verificables reproducen exactamente la regla de la Matriz; las otras 24 son una sensibilidad declarada de PC.I3.
+
+\item \textbf{Estados y datos personales:} no hay ningún dato en estado validado ni datos personales; las citas de ciudadanos y funcionarios están anonimizadas.
+
+\end{itemize}
+
+\section{Resultados por sistema}
+
+Para cada indicador se presentan la fórmula (de la Matriz), los valores de sus variables con su fuente (documento y página, con enlace al documento publicado), el resultado por año y cómo cambia según el escenario. El escenario por defecto aparece primero.
+
+\subsection{Control social (CS)}
+
+\subsubsection*{Promoción del control social (PCS)}
+
+\textbf{Fórmula (Matriz):} PCS = 100 $\times$ EE / EP, con tope de 100. EE: estrategias de promoción ejecutadas; EP: estrategias programadas. \textbf{Semáforo:} Verde $\geq$ 75; Amarillo 50 a \textless{} 75; Rojo \textless{} 50.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{4.4cm}L{1.9cm}L{2.5cm}Y}
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+CS.PCS.EE: Estrategias de promoción del control social ejecutadas & 2024 & 1 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Indicativo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Productos,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{evaluación} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{definitiva} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{2T-\allowbreak{}2026} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{(Alcaldía} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Envigado,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{DAP)}, Hoja Plan-Indicativo-Productos, fila 547, col. BM (AVANCE EJECUTADO 2024), CONSECUTIVO 544 \\
+CS.PCS.EP: Estrategias de promoción del control social programadas & 2024 & 1 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Indicativo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Productos,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{evaluación} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{definitiva} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{2T-\allowbreak{}2026} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{(Alcaldía} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Envigado,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{DAP)}, Hoja Plan-Indicativo-Productos, fila 547, col. AS (META PROGRAMADA 2024), CONSECUTIVO 544 \\
+CS.PCS.EE: Estrategias de promoción del control social ejecutadas & 2025 & 1 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Indicativo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Productos,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{evaluación} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{definitiva} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{2T-\allowbreak{}2026} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{(Alcaldía} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Envigado,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{DAP)}, Hoja Plan-Indicativo-Productos, fila 547, col. BN (AVANCE EJECUTADO 2025), CONSECUTIVO 544 \\
+CS.PCS.EP: Estrategias de promoción del control social programadas & 2025 & 1 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Indicativo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Productos,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{evaluación} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{definitiva} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{2T-\allowbreak{}2026} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{(Alcaldía} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Envigado,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{DAP)}, Hoja Plan-Indicativo-Productos, fila 547, col. AT (META PROGRAMADA 2025), CONSECUTIVO 544 \\
+CS.PCS.EE: Estrategias de promoción del control social ejecutadas & 2026 (primer semestre) & 0 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Indicativo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Productos,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{evaluación} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{definitiva} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{2T-\allowbreak{}2026} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{(Alcaldía} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Envigado,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{DAP)}, Hoja Plan-Indicativo-Productos, fila 547, col. BO (AVANCE EJECUTADO 2026), CONSECUTIVO 544 \\
+CS.PCS.EP: Estrategias de promoción del control social programadas & 2026 (primer semestre) & 1 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Indicativo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Productos,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{evaluación} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{definitiva} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{2T-\allowbreak{}2026} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{(Alcaldía} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Envigado,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{DAP)}, Hoja Plan-Indicativo-Productos, fila 547, col. AU (META PROGRAMADA 2026), CONSECUTIVO 544 \\
+\end{xltabular}
+}
+
+\paragraph{Resultado y sensibilidad (nivel municipal).} Entradas: EE / EP.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{5.0cm}L{1.9cm}L{3.6cm}L{1.8cm}Y}
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\textbf{Por defecto} & 2024 & 1 / 1 & 100 & \cellcolor{cverde}Verde \\
+\textbf{Por defecto} & 2025 & 1 / 1 & 100 & \cellcolor{cverde}Verde \\
+\end{xltabular}
+}
+
+Cómo cambia: no cambia con ningún supuesto probado (fecha de registro, tratamiento de 2026). El Departamento Administrativo de Planeación dejó observaciones en la fila del plan indicativo sobre la concordancia de la ejecución anual; el resultado coincide con lo reportado, pero conviene atenderlas antes de validar.
+
+\subsubsection*{Disponibilidad de información de seguimiento (DSI)}
+
+\textbf{Fórmula (Matriz):} DSI = 100 $\times$ MD / MS. MD: metas seleccionadas con valor observado publicado para la vigencia; MS: metas seleccionadas. \textbf{Semáforo:} Verde $\geq$ 90; Amarillo 70 a \textless{} 90; Rojo \textless{} 70.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{4.4cm}L{1.9cm}L{2.5cm}Y}
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+CS.DSI.MD: Metas seleccionadas con valor observado publicado para la vigencia & 2024 & 0 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{Soporte} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{meta} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{por} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{meta} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{(base} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{datos,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{hoja} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{Soporte} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{conteos)}, detalle por elemento en la hoja Soporte de conteos de la base de datos \\
+CS.DSI.MS: Metas seleccionadas (lista definida en los supuestos) & 2024 & 7 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{Apéndice} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{9.\allowbreak{}1.\allowbreak{}2} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{del} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{Indicativo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{del} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{PDM} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{2024-\allowbreak{}2027} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{(lista} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{metas} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{definida} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{por} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{parámetro)}, Hoja Apéndice9.1.2., filas 16, 24, 71, 74, 119, 129, 146 \\
+CS.DSI.MD: Metas seleccionadas con valor observado publicado para la vigencia & 2025 & 0 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{Soporte} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{meta} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{por} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{meta} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{(base} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{datos,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{hoja} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{Soporte} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{conteos)}, detalle por elemento en la hoja Soporte de conteos de la base de datos \\
+CS.DSI.MS: Metas seleccionadas (lista definida en los supuestos) & 2025 & 7 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{Apéndice} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{9.\allowbreak{}1.\allowbreak{}2} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{del} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{Indicativo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{del} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{PDM} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{2024-\allowbreak{}2027} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{(lista} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{metas} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{definida} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{por} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx}{parámetro)}, Hoja Apéndice9.1.2., filas 16, 24, 71, 74, 119, 129, 146 \\
+\end{xltabular}
+}
+
+\paragraph{Resultado y sensibilidad (nivel municipal).} Entradas: MD / MS.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{5.0cm}L{1.9cm}L{3.6cm}L{1.8cm}Y}
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\textbf{Por defecto} & 2024 & 0 / 7 & 0 & \cellcolor{crojo}Rojo \\
+Aceptar publicaciones hasta la fecha de consulta & 2024 & 2 / 7 & 28,57 & \cellcolor{crojo}Rojo \\
+10 metas (con tres de gobernanza) & 2024 & 0 / 10 & 0 & \cellcolor{crojo}Rojo \\
+Productos del plan indicativo (solo control) & 2024 & 477 / 477 & 100 & \cellcolor{cverde}Verde \\
+\textbf{Por defecto} & 2025 & 0 / 7 & 0 & \cellcolor{crojo}Rojo \\
+Aceptar también cifras de apoyo (aproximadas) & 2025 & 2 / 7 & 28,57 & \cellcolor{crojo}Rojo \\
+10 metas (con tres de gobernanza) & 2025 & 0 / 10 & 0 & \cellcolor{crojo}Rojo \\
+Productos del plan indicativo (solo control) & 2025 & 528 / 528 & 100 & \cellcolor{cverde}Verde \\
+\end{xltabular}
+}
+
+Cómo cambia: el cero depende de la ventana de publicación. Con el corte del 31 de marzo del año siguiente el DSI es 0 en 2024 y 0 en 2025; con todo lo publicado hasta la fecha de consulta, 2024 es 28,57; con cifras de apoyo, 2025 es 28,57. Todos son Rojo. La lista de productos del plan indicativo da 100, pero se usa solo como control.
+
+\subsubsection*{Presencia de veedurías en la rendición de cuentas (VRC)}
+
+\textbf{Fórmula (Matriz):} VRC = 100 $\times$ EV / ET. EV: eventos municipales de rendición de cuentas con presencia documentada de veedurías; ET: eventos realizados. Si hay eventos con presencia desconocida, la Matriz indica N/D. \textbf{Semáforo:} Verde $\geq$ 75; Amarillo 50 a \textless{} 75; Rojo \textless{} 50.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{4.4cm}L{1.9cm}L{2.5cm}Y}
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+CS.VRC.EV: Número de eventos municipales de rendición de cuentas realizados con presencia documentada de veedurías & 2024 & Desconocida & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Documentos} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{rendición} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{cuentas} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{la} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Alcaldía} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Envigado} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{(actas,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{cuadros} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{preguntas,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{memorias,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{cartas,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Indicativo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{2T-\allowbreak{}2026)} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{clasificados} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{evento} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{por} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{evento}, detalle por elemento en la hoja Soporte de conteos de la base de datos; Plan Indicativo consecutivos 545 y 546 en Hoja Plan-Indicativo-Productos, filas 548 y 549 \\
+CS.VRC.ET: Número total de eventos municipales de rendición de cuentas realizados en el periodo & 2024 & 3 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Documentos} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{rendición} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{cuentas} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{la} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Alcaldía} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Envigado} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{(actas,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{cuadros} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{preguntas,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{memorias,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{cartas,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Indicativo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{2T-\allowbreak{}2026)} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{clasificados} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{evento} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{por} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{evento}, detalle por elemento en la hoja Soporte de conteos de la base de datos; Plan Indicativo consecutivos 545 y 546 en Hoja Plan-Indicativo-Productos, filas 548 y 549 \\
+CS.VRC.EV: Número de eventos municipales de rendición de cuentas realizados con presencia documentada de veedurías & 2025 & Desconocida & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Documentos} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{rendición} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{cuentas} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{la} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Alcaldía} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Envigado} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{(actas,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{cuadros} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{preguntas,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{memorias,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{cartas,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Indicativo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{2T-\allowbreak{}2026)} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{clasificados} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{evento} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{por} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{evento}, detalle por elemento en la hoja Soporte de conteos de la base de datos; Plan Indicativo consecutivos 545 y 546 en Hoja Plan-Indicativo-Productos, filas 548 y 549 \\
+CS.VRC.ET: Número total de eventos municipales de rendición de cuentas realizados en el periodo & 2025 & 5 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Documentos} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{rendición} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{cuentas} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{la} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Alcaldía} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Envigado} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{(actas,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{cuadros} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{preguntas,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{memorias,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{cartas,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{Indicativo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{2T-\allowbreak{}2026)} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{clasificados} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{evento} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{por} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180505_evaluaciondefinitivaplanindicativoproductos2026segundotrimestre20260730.xlsx}{evento}, detalle por elemento en la hoja Soporte de conteos de la base de datos; Plan Indicativo consecutivos 545 y 546 en Hoja Plan-Indicativo-Productos, filas 548 y 549 \\
+\end{xltabular}
+}
+
+\paragraph{Resultado y sensibilidad (nivel municipal).} Entradas: EV / ET.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{5.0cm}L{1.9cm}L{3.6cm}L{1.8cm}Y}
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\textbf{Por defecto} & 2024 & N/D / 3 & N/D & \cellcolor{cgris}Gris \\
+Evento sin mención de veedurías cuenta como ausencia & 2024 & 2 / 3 & 66,67 & \cellcolor{camarillo}Amarillo \\
+Control: solo audiencia del Alcalde y evento de veedurías (consecutivos 545 y 546) & 2024 & 1 / 2 & 50 & \cellcolor{camarillo}Amarillo \\
+\textbf{Por defecto} & 2025 & N/D / 5 & N/D & \cellcolor{cgris}Gris \\
+Evento sin mención de veedurías cuenta como ausencia & 2025 & 1 / 5 & 20 & \cellcolor{crojo}Rojo \\
+Control: solo audiencia del Alcalde y evento de veedurías (consecutivos 545 y 546) & 2025 & 1 / 2 & 50 & \cellcolor{camarillo}Amarillo \\
+\end{xltabular}
+}
+
+Por qué es N/D: la Matriz indica N/D cuando algún evento tiene presencia desconocida. Para la audiencia del Alcalde solo se publicó el cuadro de preguntas, sin acta ni asistentes. Si la falta de mención de veedurías se cuenta como ausencia, 2024 da 66,67 (Amarillo) y 2025 20 (Rojo).
+
+\subsubsection*{Respuesta pública a observaciones ciudadanas (RPO)}
+
+\textbf{Fórmula (Matriz):} RPO = 100 $\times$ OR / OT. OR: observaciones con respuesta de fondo publicada; OT: observaciones ciudadanas registradas públicamente. \textbf{Semáforo:} Verde $\geq$ 90; Amarillo 70 a \textless{} 90; Rojo \textless{} 70.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{4.4cm}L{1.9cm}L{2.5cm}Y}
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+CS.RPO.OR: Número de observaciones ciudadanas del universo evaluado con respuesta de fondo publicada al corte & 2024 & 16 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{Cuadros} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{preguntas} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{y} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{respuestas} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{las} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{rendiciones} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{cuentas} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{la} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{Alcaldía} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{Envigado,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{clasificados} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{observación} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{por} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{observación}, detalle por elemento en la hoja Soporte de conteos de la base de datos; cuadros de preguntas y respuestas (QA24, QA100, QA25, QAS25), acta de Salud 2024-02 y cartas del CMD \\
+CS.RPO.OT: Número total de observaciones ciudadanas sobre el PDM registradas públicamente en ejercicios cerrados de rendición de cuentas del periodo & 2024 & 17 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{Cuadros} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{preguntas} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{y} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{respuestas} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{las} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{rendiciones} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{cuentas} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{la} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{Alcaldía} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{Envigado,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{clasificados} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{observación} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{por} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{observación}, detalle por elemento en la hoja Soporte de conteos de la base de datos; cuadros de preguntas y respuestas (QA24, QA100, QA25, QAS25), acta de Salud 2024-02 y cartas del CMD \\
+CS.RPO.OR: Número de observaciones ciudadanas del universo evaluado con respuesta de fondo publicada al corte & 2025 & N/D & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{Cuadros} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{preguntas} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{y} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{respuestas} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{las} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{rendiciones} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{cuentas} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{la} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{Alcaldía} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{Envigado,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{clasificados} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{observación} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{por} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{observación}, detalle por elemento en la hoja Soporte de conteos de la base de datos; cuadros de preguntas y respuestas (QA24, QA100, QA25, QAS25), acta de Salud 2024-02 y cartas del CMD \\
+CS.RPO.OT: Número total de observaciones ciudadanas sobre el PDM registradas públicamente en ejercicios cerrados de rendición de cuentas del periodo & 2025 & N/D & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{Cuadros} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{preguntas} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{y} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{respuestas} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{las} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{rendiciones} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{cuentas} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{la} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{Alcaldía} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{Envigado,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{clasificados} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{observación} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{por} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002595/129738_preguntasyrecomendacionesrendiciondecuentas2024.pdf}{observación}, detalle por elemento en la hoja Soporte de conteos de la base de datos; cuadros de preguntas y respuestas (QA24, QA100, QA25, QAS25), acta de Salud 2024-02 y cartas del CMD \\
+\end{xltabular}
+}
+
+\paragraph{Resultado y sensibilidad (nivel municipal).} Entradas: OR / OT.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{5.0cm}L{1.9cm}L{3.6cm}L{1.8cm}Y}
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\textbf{Por defecto} & 2024 & 16 / 17 & 94,12 & \cellcolor{cverde}Verde \\
+Criterio laxo de respuesta de fondo & 2024 & 17 / 17 & 100 & \cellcolor{cverde}Verde \\
+Solo observaciones temáticas del plan de desarrollo & 2024 & 15 / 16 & 93,75 & \cellcolor{cverde}Verde \\
+Todas las observaciones, con felicitaciones & 2024 & 16 / 22 & 72,73 & \cellcolor{camarillo}Amarillo \\
+Audiencia del Alcalde y evento de los 100 días & 2024 & 27 / 29 & 93,10 & \cellcolor{cverde}Verde \\
+Todos los cuadros de preguntas publicados & 2024 & 34 / 38 & 89,47 & \cellcolor{camarillo}Amarillo \\
+\textbf{Por defecto} & 2025 & -- & N/D & \cellcolor{cgris}Gris \\
+Calcular con lo publicado aunque el cuadro esté incompleto & 2025 & 1 / 2 & 50 & \cellcolor{crojo}Rojo \\
+\end{xltabular}
+}
+
+Cómo cambia: el defecto usa solo la audiencia del Alcalde, excluye felicitaciones y aplica un criterio estricto de respuesta de fondo (94,12, Verde). Con todas las observaciones baja a 72,73 (Amarillo) y con todos los cuadros a 89,47 (Amarillo). En 2025 el cuadro publicado es claramente incompleto (3 intervenciones), por eso queda N/D.
+
+\subsubsection*{Índice de condiciones y respuesta para el control social (ICRCS)}
+
+\textbf{Fórmula (Matriz):} ICRCS = (DSI + PCS + VRC + RPO) / 4. Exige las cuatro entradas con número; la Matriz no permite redistribuir pesos. \textbf{Semáforo:} Verde $\geq$ 75; Amarillo 50 a \textless{} 75; Rojo \textless{} 50.
+
+El índice no tiene variables propias: se construye con los puntajes de DSI, PCS, VRC y RPO del mismo año.
+
+\paragraph{Resultado y sensibilidad (nivel municipal).} Entradas: DSI; PCS; VRC; RPO.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{5.0cm}L{1.9cm}L{3.6cm}L{1.8cm}Y}
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\textbf{Por defecto} & 2024 & DSI 0; PCS 100; VRC N/D; RPO 94,12 & N/D & \cellcolor{cgris}Gris \\
+VRC con evento sin mención contado como ausencia & 2024 & DSI 0; PCS 100; VRC 66,67; RPO 94,12 & 65,20 & \cellcolor{camarillo}Amarillo \\
+Control: consecutivos 545 y 546 en los cuatro componentes & 2024 & DSI 28,57; PCS 100; VRC 50; RPO 94,12 & 68,17 & \cellcolor{camarillo}Amarillo \\
+Rango por componente: mínimos & 2024 & DSI 0; PCS 100; VRC 50; RPO 72,73 & 55,68 & \cellcolor{camarillo}Amarillo \\
+Rango por componente: máximos & 2024 & DSI 28,57; PCS 100; VRC 66,67; RPO 100 & 73,81 & \cellcolor{camarillo}Amarillo \\
+\textbf{Por defecto} & 2025 & DSI 0; PCS 100; VRC N/D; RPO N/D & N/D & \cellcolor{cgris}Gris \\
+Rango por componente: mínimos & 2025 & DSI 0; PCS 100; VRC 20; RPO 50 & 42,50 & \cellcolor{crojo}Rojo \\
+Rango por componente: máximos & 2025 & DSI 28,57; PCS 100; VRC 50; RPO 50 & 57,14 & \cellcolor{camarillo}Amarillo \\
+\end{xltabular}
+}
+
+Cómo cambia: por defecto es N/D porque falta el VRC (y en 2025 también el RPO). Todo ICRCS numérico de 2024 exige apartarse de la regla de la Matriz sobre presencia desconocida. Con la falta de mención contada como ausencia, 2024 es 65,20; en el universo institucional, 68,17; y el rango por componente va de 55,68 a 73,81, todo en Amarillo. Es un rango de sensibilidad, no un valor oficial: combina opciones que pueden no ser compatibles entre sí. La revisión independiente estimó un mínimo de 43,2 (Rojo) combinando además el universo del Alcalde solo; esa combinación no está calculada.
+
+\subsection{Participación ciudadana (PC)}
+
+\subsubsection*{I2 Cobertura territorial de la participación}
+
+\textbf{Fórmula (Matriz):} I2 = 100 $\times$ V1 / V2. V1: zonas con al menos una actividad participativa realizada; V2: zonas oficiales del municipio. \textbf{Semáforo:} Verde $\geq$ 80; Amarillo 50 a \textless{} 80; Rojo \textless{} 50.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{4.4cm}L{1.9cm}L{2.5cm}Y}
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+PC.I2.V1: Número de zonas con al menos una actividad participativa realizada para su comunidad & 2024 & 13 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002315/115749_anteproyecto29022024.pdf}{Anteproyecto} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002315/115749_anteproyecto29022024.pdf}{del} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002315/115749_anteproyecto29022024.pdf}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002315/115749_anteproyecto29022024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002315/115749_anteproyecto29022024.pdf}{Desarrollo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002315/115749_anteproyecto29022024.pdf}{Municipal} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002315/115749_anteproyecto29022024.pdf}{2024-\allowbreak{}2027} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002315/115749_anteproyecto29022024.pdf}{(29-\allowbreak{}feb-\allowbreak{}2024)}, p. 53 (asambleas PDM) y Plan Indicativo de Productos 2T-2026 consecutivo 531 \\
+PC.I2.V2: Número total de zonas oficiales del municipio & 2024 & 13 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{Desarrollo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{2024-\allowbreak{}2027} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{(Acuerdo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{017} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{2024)}, p. 558 (13 zonas; 12 comités; zona 1 pendiente) y Plan Indicativo columnas C:O (ZONA 1 a ZONA 13) \\
+PC.I2.V1: Número de zonas con al menos una actividad participativa realizada para su comunidad & 2025 & 12 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf}{Informe} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf}{gestión} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf}{por} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf}{dependencias} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf}{2025}, p. 92 (asambleas zonales) y cronograma POT p. 1 si aplica \\
+PC.I2.V2: Número total de zonas oficiales del municipio & 2025 & 13 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{Desarrollo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{2024-\allowbreak{}2027} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{(Acuerdo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{017} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{2024)}, p. 558 (13 zonas; 12 comités; zona 1 pendiente) y Plan Indicativo columnas C:O (ZONA 1 a ZONA 13) \\
+\end{xltabular}
+}
+
+\paragraph{Resultado y sensibilidad (nivel municipal).} Entradas: V1 / V2.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{5.0cm}L{1.9cm}L{3.6cm}L{1.8cm}Y}
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\textbf{Por defecto} & 2024 & 13 / 13 & 100 & \cellcolor{cverde}Verde \\
+Solo asambleas de presupuesto participativo & 2024 & 12 / 13 & 92,31 & \cellcolor{cverde}Verde \\
+12 zonas con comité zonal & 2024 & 12 / 12 & 100 & \cellcolor{cverde}Verde \\
+Exigir acta por zona & 2024 & N/D / 13 & N/D & \cellcolor{cgris}Gris \\
+\textbf{Por defecto} & 2025 & 12 / 13 & 92,31 & \cellcolor{cverde}Verde \\
+12 zonas con comité zonal & 2025 & 12 / 12 & 100 & \cellcolor{cverde}Verde \\
+Incluir asambleas programadas del POT & 2025 & 13 / 13 & 100 & \cellcolor{cverde}Verde \\
+Exigir acta por zona & 2025 & N/D / 13 & N/D & \cellcolor{cgris}Gris \\
+\end{xltabular}
+}
+
+Cómo cambia: en 2025 la fuente dice que se hicieron 12 asambleas \guillemotleft{}cubriendo la totalidad de las zonas\guillemotright{} sin listarlas; se asignaron a las zonas 2 a 13. Si \guillemotleft{}totalidad\guillemotright{} significa 13 zonas, el resultado sería 13 / 13.
+
+\subsubsection*{I3 Cumplimiento de la oferta formativa}
+
+\textbf{Fórmula (Matriz):} I3 = 100 $\times$ V1 / V2. V1: acciones formativas programadas que se realizaron; V2: acciones formativas programadas con finalización prevista en el periodo. \textbf{Semáforo:} Verde $\geq$ 75; Amarillo 50 a \textless{} 75; Rojo \textless{} 50.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{4.4cm}L{1.9cm}L{2.5cm}Y}
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+PC.I3.V1: Número de acciones formativas programadas para la ciudadanía que se realizaron & 2024 & 7 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002640/131997_24informegestionpordependenciasalcaldiamunicipalenvigado2024.pdf}{Informe} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002640/131997_24informegestionpordependenciasalcaldiamunicipalenvigado2024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002640/131997_24informegestionpordependenciasalcaldiamunicipalenvigado2024.pdf}{gestión} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002640/131997_24informegestionpordependenciasalcaldiamunicipalenvigado2024.pdf}{por} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002640/131997_24informegestionpordependenciasalcaldiamunicipalenvigado2024.pdf}{dependencias} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002640/131997_24informegestionpordependenciasalcaldiamunicipalenvigado2024.pdf}{2024}, pp. 62-63; Plan Indicativo de Productos 2T-2026 consecutivo 521 col. EG \\
+PC.I3.V1: Número de acciones formativas programadas para la ciudadanía que se realizaron & 2025 & 20 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf}{Informe} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf}{gestión} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf}{por} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf}{dependencias} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf}{2025}, p. 88 \\
+PC.I3.V2: Número total de acciones formativas programadas para la ciudadanía con finalización prevista en el periodo & 2025 & 24 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf}{Informe} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf}{gestión} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf}{por} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf}{dependencias} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf}{2025}, p. 88 (Observaciones) \\
+\end{xltabular}
+}
+
+\paragraph{Resultado y sensibilidad (nivel municipal).} Entradas: V1 / V2.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{5.0cm}L{1.9cm}L{3.6cm}L{1.8cm}Y}
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\textbf{Por defecto} & 2024 & 7 / N/D & N/D & \cellcolor{cgris}Gris \\
+Medir en personas & 2024 & 95 / 10 & Revisar & Sin color \\
+\textbf{Por defecto} & 2025 & 20 / 24 & 83,33 & \cellcolor{cverde}Verde \\
+Incluir la formación para servidores & 2025 & 21 / 25 & 84 & \cellcolor{cverde}Verde \\
+Medir en personas & 2025 & 186 / 15 & Revisar & Sin color \\
+\end{xltabular}
+}
+
+Cómo cambia: el denominador de 2025 es reconstruido (acciones culminadas más no ejecutadas) porque no hay programación fechada. Se excluyó el diplomado en Gestión Pública por ser para servidores, algo que la fuente no acredita; si se cuentan los semilleros como acción formativa, el resultado baja a cerca de 80,6.
+
+\subsubsection*{I5 Cumplimiento de sesiones de las instancias de participación}
+
+\textbf{Fórmula (Matriz):} I5 = 100 $\times$ V1 / V2. V1: sesiones realizadas; V2: sesiones previstas de las instancias seleccionadas. \textbf{Semáforo:} Verde $\geq$ 75; Amarillo 50 a \textless{} 75; Rojo \textless{} 50.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{4.4cm}L{1.9cm}L{2.5cm}Y}
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+PC.I5.V1: Número de sesiones realizadas de las instancias seleccionadas & 2025 & 8 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{Seguimiento} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{al} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{Acción} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{la} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{Política} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{Participación} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{Social} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{en} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{Salud} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{PPSS} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{2025}, Hoja SEGUIMIENTO col. G, líneas E5Ld-M01-A01 (CMSSS) y E5Ld-M02-A01 (COPACO) \\
+PC.I5.V2: Número de sesiones previstas de las instancias seleccionadas & 2025 & 8 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{Seguimiento} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{al} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{Acción} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{la} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{Política} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{Participación} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{Social} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{en} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{Salud} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{PPSS} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003452/172562_pps190ppps20251231mu000000005266.xlsx}{2025}, Hoja PROGRAMACIÓN col. I, líneas E5Ld-M01-A01 (CMSSS) y E5Ld-M02-A01 (COPACO) \\
+\end{xltabular}
+}
+
+\paragraph{Resultado y sensibilidad (nivel municipal).} Entradas: V1 / V2.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{5.0cm}L{1.9cm}L{3.6cm}L{1.8cm}Y}
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\textbf{Por defecto} & 2024 & -- & N/D & \cellcolor{cgris}Gris \\
+\textbf{Por defecto} & 2025 & 8 / 8 & 100 & \cellcolor{cverde}Verde \\
+Instancias ampliadas & 2025 & -- & N/D & \cellcolor{cgris}Gris \\
+\end{xltabular}
+}
+
+Solo hay información de dos instancias (Consejo Municipal de Seguridad Social en Salud y COPACO); 2024 y los semestres de 2025 son N/D porque no hay programación ni fechas por sesión.
+
+\subsection{Cumplimiento del PDM (PDM)}
+
+\subsubsection*{Cumplimiento del espacio público verde (CA)}
+
+\textbf{Fórmula (Matriz):} CA = 100 $\times$ O / M, con tope de 100. O: espacio público verde observado (m\textsuperscript{2} por habitante); M: meta (m\textsuperscript{2} por habitante). \textbf{Semáforo:} Verde: 100 sin redondear; Amarillo 75 a \textless{} 100; Rojo \textless{} 75.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{4.4cm}L{1.9cm}L{2.5cm}Y}
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+PDM.CA.O: Espacio público verde observado, en metros cuadrados por habitante & 2024 & 5,75 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002925/146211_8-dimension-funcional-_-espacio-publico.pdf}{Documento} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002925/146211_8-dimension-funcional-_-espacio-publico.pdf}{diagnóstico} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002925/146211_8-dimension-funcional-_-espacio-publico.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002925/146211_8-dimension-funcional-_-espacio-publico.pdf}{la} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002925/146211_8-dimension-funcional-_-espacio-publico.pdf}{revisión} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002925/146211_8-dimension-funcional-_-espacio-publico.pdf}{del} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002925/146211_8-dimension-funcional-_-espacio-publico.pdf}{POT,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002925/146211_8-dimension-funcional-_-espacio-publico.pdf}{8.\allowbreak{}} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002925/146211_8-dimension-funcional-_-espacio-publico.pdf}{Dimensión} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002925/146211_8-dimension-funcional-_-espacio-publico.pdf}{funcional} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002925/146211_8-dimension-funcional-_-espacio-publico.pdf}{-\allowbreak{}} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002925/146211_8-dimension-funcional-_-espacio-publico.pdf}{Espacio} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002925/146211_8-dimension-funcional-_-espacio-publico.pdf}{público} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002925/146211_8-dimension-funcional-_-espacio-publico.pdf}{(2025)}, PDF p. 87, tabla 39 (EPV urbano 2024: 1.382.762 m2 / 240.655 hab. = 5,75); línea base AMVA 2022 = 4,66 \\
+PDM.CA.M: Meta de espacio público verde, en metros cuadrados por habitante & 2024 & 3,88 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{Desarrollo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{2024-\allowbreak{}2027} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{(Acuerdo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{017} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{2024),} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{indicadores} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{resultado} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{programáticos}, PDF p. 717 (tabla Indicadores de resultado programáticos) \\
+PDM.CA.M: Meta de espacio público verde, en metros cuadrados por habitante & 2025 & 3,88 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{Desarrollo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{2024-\allowbreak{}2027} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{(Acuerdo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{017} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{2024),} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{indicadores} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{resultado} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{programáticos}, PDF p. 717 (tabla Indicadores de resultado programáticos) \\
+\end{xltabular}
+}
+
+\paragraph{Resultado y sensibilidad (nivel municipal).} Entradas: O / M.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{5.0cm}L{1.9cm}L{3.6cm}L{1.8cm}Y}
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\textbf{Por defecto} & 2024 & 5,75 / 3,88 & 100 & \cellcolor{cverde}Verde \\
+Total del POT (no comparable con la meta urbana) & 2024 & 69,41 / 3,88 & 100 & \cellcolor{cverde}Verde \\
+Estricto con la serie de la línea base & 2024 & N/D / 3,88 & N/D & \cellcolor{cgris}Gris \\
+\end{xltabular}
+}
+
+Cómo cambia: el valor de 5,75 corresponde al espacio público verde urbano del POT y no es la misma serie de la línea base (3,88); la comparación es aproximada. Si no se aceptara esa diferencia (estricto con la serie base) el resultado sería N/D.
+
+\subsubsection*{Cumplimiento de la mortalidad vial (CM)}
+
+\textbf{Fórmula (Matriz):} CM = 100 $\times$ M / O, con tope de 100 (100 si O = 0). O: tasa observada de mortalidad vial por 100.000 habitantes; M: tasa meta. \textbf{Semáforo:} Verde: 100 sin redondear; Amarillo 75 a \textless{} 100; Rojo \textless{} 75.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{4.4cm}L{1.9cm}L{2.5cm}Y}
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+PDM.CM.O: Tasa de mortalidad por siniestros viales por 100.000 habitantes & 2024 & 7,25 & \href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{INMLCF,} \href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{Forensis} \href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{2024,} \href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{tasa} \href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{publicada}, p. 440 (tabla 14) \\
+AUX.PDM.CM.MUERTES: Muertes viales del año (numerador de la tasa) & 2024 & 18 & \href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{INMLCF,} \href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{Forensis} \href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{2024:} \href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{muertes} \href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{por} \href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{transporte,} \href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{Envigado} \href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{(cifra} \href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{citada,} \href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{PDF} \href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{no} \href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{verificado)}, Forensis 2024 p. 37 (tabla 5) y p. 440 (tabla 14) \\
+AUX.PDM.CM.POBLACION: Población total de Envigado del año (denominador de la tasa) & 2024 & 248.304 & \href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{Población} \href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{implícita} \href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{en} \href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{la} \href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{tasa} \href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{publicada} \href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{por} \href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{Forensis} \href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{(248.\allowbreak{}304} \href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{=\allowbreak{}} \href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{DANE} \href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{post-\allowbreak{}COVID} \href{https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-proypoblacion-Mun-2020-2035-ActPostCOVID-19.xlsx}{2024)}, Hoja1, fila 2232 (Total 2024) \\
+PDM.CM.M: Tasa meta de mortalidad vial por 100.000 habitantes & 2024 & 8 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{Desarrollo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{2024-\allowbreak{}2027} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{(Acuerdo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{017} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{2024),} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{indicadores} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{resultado} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{programáticos}, PDF p. 706 (tabla Indicadores de resultado programáticos) \\
+PDM.CM.M: Tasa meta de mortalidad vial por 100.000 habitantes & 2025 & 8 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{Desarrollo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{2024-\allowbreak{}2027} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{(Acuerdo} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{017} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{2024),} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{indicadores} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{resultado} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002562/128075_plandesarrollo20242027.pdf}{programáticos}, PDF p. 706 (tabla Indicadores de resultado programáticos) \\
+\end{xltabular}
+}
+
+\paragraph{Resultado y sensibilidad (nivel municipal).} Entradas: O / M.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{5.0cm}L{1.9cm}L{3.6cm}L{1.8cm}Y}
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\textbf{Por defecto} & 2024 & 7,25 / 8 & 100 & \cellcolor{cverde}Verde \\
+Datos de la Policía y población DANE posterior a la pandemia & 2024 & 8,05 / 8 & 99,32 & \cellcolor{camarillo}Amarillo \\
+\end{xltabular}
+}
+
+Cómo cambia: la cifra observada (7,25; 18 muertes) es una cita de Forensis 2024 pendiente de verificar. Con datos de la Policía y población DANE posterior a la pandemia el resultado es 99,32 (Amarillo).
+
+\subsection{Presupuesto participativo (PP)}
+
+\subsubsection*{Ejecución presupuestal del presupuesto participativo (EPP)}
+
+\textbf{Fórmula (Matriz):} EPP = 100 $\times$ OPP / APP. OPP: obligaciones presupuestales con cargo al presupuesto participativo; APP: apropiación definitiva. \textbf{Semáforo:} Verde 90 a 100; Amarillo 75 a \textless{} 90; Naranja 50 a \textless{} 75; Rojo \textless{} 50.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{4.4cm}L{1.9cm}L{2.5cm}Y}
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Variable} & \textbf{Año} & \textbf{Valor} & \textbf{Fuente y página} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+PP.EPP.OPP: Obligaciones del presupuesto participativo (OPP) & 2025 & \$20.684.427.720 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003057/152845_evaluaciondefinitivaplanaccionivtri.xlsx}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003057/152845_evaluaciondefinitivaplanaccionivtri.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003057/152845_evaluaciondefinitivaplanaccionivtri.xlsx}{Acción,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003057/152845_evaluaciondefinitivaplanaccionivtri.xlsx}{evaluación} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003057/152845_evaluaciondefinitivaplanaccionivtri.xlsx}{definitiva} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003057/152845_evaluaciondefinitivaplanaccionivtri.xlsx}{IV} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003057/152845_evaluaciondefinitivaplanaccionivtri.xlsx}{trimestre} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003057/152845_evaluaciondefinitivaplanaccionivtri.xlsx}{2025} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003057/152845_evaluaciondefinitivaplanaccionivtri.xlsx}{(Planeación)}, Hoja PlanAcción27.01.2026, col. APROPIACIÓN DEFINITIVA y EJECUCIÓN OBLIGACIÓN \\
+PP.EPP.APP: Apropiación definitiva del presupuesto participativo (APP) & 2025 & \$20.928.690.218 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003057/152845_evaluaciondefinitivaplanaccionivtri.xlsx}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003057/152845_evaluaciondefinitivaplanaccionivtri.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003057/152845_evaluaciondefinitivaplanaccionivtri.xlsx}{Acción,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003057/152845_evaluaciondefinitivaplanaccionivtri.xlsx}{evaluación} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003057/152845_evaluaciondefinitivaplanaccionivtri.xlsx}{definitiva} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003057/152845_evaluaciondefinitivaplanaccionivtri.xlsx}{IV} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003057/152845_evaluaciondefinitivaplanaccionivtri.xlsx}{trimestre} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003057/152845_evaluaciondefinitivaplanaccionivtri.xlsx}{2025} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003057/152845_evaluaciondefinitivaplanaccionivtri.xlsx}{(Planeación)}, Hoja PlanAcción27.01.2026, col. APROPIACIÓN DEFINITIVA y EJECUCIÓN OBLIGACIÓN \\
+PP.EPP.OPP: Obligaciones del presupuesto participativo (OPP) & 2026 (primer semestre) & \$5.702.528.148 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180504_evaluaciondefinitivaplanaccion2026segundotrimestre20260730.xlsx}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180504_evaluaciondefinitivaplanaccion2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180504_evaluaciondefinitivaplanaccion2026segundotrimestre20260730.xlsx}{Acción} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180504_evaluaciondefinitivaplanaccion2026segundotrimestre20260730.xlsx}{2026,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180504_evaluaciondefinitivaplanaccion2026segundotrimestre20260730.xlsx}{evaluación} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180504_evaluaciondefinitivaplanaccion2026segundotrimestre20260730.xlsx}{definitiva} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180504_evaluaciondefinitivaplanaccion2026segundotrimestre20260730.xlsx}{2T-\allowbreak{}2026} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180504_evaluaciondefinitivaplanaccion2026segundotrimestre20260730.xlsx}{(Planeación)}, Hoja Plan-Acción, col. APROPIACIÓN DEFINITIVA y EJECUCIÓN OBLIGACIÓN (OPP 2026: ver observaciones) \\
+PP.EPP.APP: Apropiación definitiva del presupuesto participativo (APP) & 2026 (primer semestre) & \$24.519.738.737 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180504_evaluaciondefinitivaplanaccion2026segundotrimestre20260730.xlsx}{Plan} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180504_evaluaciondefinitivaplanaccion2026segundotrimestre20260730.xlsx}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180504_evaluaciondefinitivaplanaccion2026segundotrimestre20260730.xlsx}{Acción} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180504_evaluaciondefinitivaplanaccion2026segundotrimestre20260730.xlsx}{2026,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180504_evaluaciondefinitivaplanaccion2026segundotrimestre20260730.xlsx}{evaluación} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180504_evaluaciondefinitivaplanaccion2026segundotrimestre20260730.xlsx}{definitiva} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180504_evaluaciondefinitivaplanaccion2026segundotrimestre20260730.xlsx}{2T-\allowbreak{}2026} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003611/180504_evaluaciondefinitivaplanaccion2026segundotrimestre20260730.xlsx}{(Planeación)}, Hoja Plan-Acción, col. APROPIACIÓN DEFINITIVA y EJECUCIÓN OBLIGACIÓN (OPP 2026: ver observaciones) \\
+PP.EPP.OPP: Obligaciones del presupuesto participativo (OPP) & 2024 & \$18.357.265.731 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002660/132983_ejecucion-presupuestal-egresos-al-31122024.pdf}{Secretaría} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002660/132983_ejecucion-presupuestal-egresos-al-31122024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002660/132983_ejecucion-presupuestal-egresos-al-31122024.pdf}{Hacienda,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002660/132983_ejecucion-presupuestal-egresos-al-31122024.pdf}{ejecución} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002660/132983_ejecucion-presupuestal-egresos-al-31122024.pdf}{presupuestal} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002660/132983_ejecucion-presupuestal-egresos-al-31122024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002660/132983_ejecucion-presupuestal-egresos-al-31122024.pdf}{egresos} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002660/132983_ejecucion-presupuestal-egresos-al-31122024.pdf}{al} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002660/132983_ejecucion-presupuestal-egresos-al-31122024.pdf}{31-\allowbreak{}12-\allowbreak{}2024}, Rubros con sufijo = código de proyecto: Apropiación Definitiva y Ejecución (obligaciones), al 31-dic-2024 \\
+PP.EPP.APP: Apropiación definitiva del presupuesto participativo (APP) & 2024 & \$18.601.236.386 & \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002660/132983_ejecucion-presupuestal-egresos-al-31122024.pdf}{Secretaría} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002660/132983_ejecucion-presupuestal-egresos-al-31122024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002660/132983_ejecucion-presupuestal-egresos-al-31122024.pdf}{Hacienda,} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002660/132983_ejecucion-presupuestal-egresos-al-31122024.pdf}{ejecución} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002660/132983_ejecucion-presupuestal-egresos-al-31122024.pdf}{presupuestal} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002660/132983_ejecucion-presupuestal-egresos-al-31122024.pdf}{de} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002660/132983_ejecucion-presupuestal-egresos-al-31122024.pdf}{egresos} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002660/132983_ejecucion-presupuestal-egresos-al-31122024.pdf}{al} \href{https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002660/132983_ejecucion-presupuestal-egresos-al-31122024.pdf}{31-\allowbreak{}12-\allowbreak{}2024}, Rubros con sufijo = código de proyecto: Apropiación Definitiva y Ejecución (obligaciones), al 31-dic-2024 \\
+\end{xltabular}
+}
+
+\paragraph{Resultado y sensibilidad (nivel municipal).} Entradas: OPP / APP.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{5.0cm}L{1.9cm}L{3.6cm}L{1.8cm}Y}
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Escenario} & \textbf{Año} & \textbf{Entradas} & \textbf{Puntaje} & \textbf{Semáforo} \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\textbf{Por defecto} & 2024 & \$18.357.265.731 / \$18.601.236.386 & 98,69 & \cellcolor{cverde}Verde \\
+Solo cruces exactos & 2024 & \$12.513.707.791 / \$12.604.658.235 & 99,28 & \cellcolor{cverde}Verde \\
+Incluir el costo del proceso (proyecto 0553) & 2024 & \$19.488.422.446 / \$19.737.305.333 & 98,74 & \cellcolor{cverde}Verde \\
+\textbf{Por defecto} & 2025 & \$20.684.427.720 / \$20.928.690.218 & 98,83 & \cellcolor{cverde}Verde \\
+Incluir el costo del proceso (proyecto 0553) & 2025 & \$21.457.674.510 / \$21.705.648.217 & 98,86 & \cellcolor{cverde}Verde \\
+Fuente CUIPO & 2025 & -- & N/D & \cellcolor{cgris}Gris \\
+\textbf{Por defecto} & 2026 (primer semestre) & \$5.702.528.148 / \$24.519.738.737 & 23,26 & Sin semáforo \\
+Incluir el costo del proceso (proyecto 0553) & 2026 (primer semestre) & \$6.056.098.055 / \$25.319.105.880 & 23,92 & Sin semáforo \\
+Fuente CUIPO & 2026 (primer semestre) & -- & N/D & \cellcolor{cgris}Gris \\
+\end{xltabular}
+}
+
+Cómo cambia: ver la sección~6 para el rubro de déficit fiscal de 2024 (sin él, 98,64). El municipal es suma de obligaciones sobre suma de apropiaciones. El proyecto 0553 (costo del proceso) se excluye por defecto. En 2026 la Matriz no prevé el indicador en periodo semestral: el puntaje de medio año se conserva como dato informativo, sin semáforo.
+
+\section{Presupuesto participativo por zona}
+
+Ejecución presupuestal (EPP) en el escenario por defecto: obligaciones sobre apropiación definitiva de los proyectos de presupuesto participativo de cada zona. El municipal es la suma de obligaciones sobre la suma de apropiaciones, no un promedio de zonas. La cifra de 2024 es aproximada (cruce del listado de la Escuela de Formación con el informe de Hacienda) y la de 2026 corresponde al primer semestre, sin semáforo.
+
+\begin{center}\footnotesize\begin{tabularx}{\linewidth}{L{3cm}YYY}\toprule
+
+\textbf{Territorio} & \textbf{2024 (aproximado)} & \textbf{2025} & \textbf{2026, primer semestre (sin semáforo)} \\ \midrule
+
+\textbf{Municipio} & \cellcolor{cverde}98,69 (Verde) & \cellcolor{cverde}98,83 (Verde) & 23,26 \\
+Zona 1 & \cellcolor{cgris}NE & \cellcolor{cgris}NE & \cellcolor{cgris}NE \\
+Zona 2 & \cellcolor{cverde}97,32 (Verde) & \cellcolor{cverde}97,38 (Verde) & 13,61 \\
+Zona 3 & \cellcolor{cverde}99,12 (Verde) & \cellcolor{cverde}99,83 (Verde) & 30,14 \\
+Zona 4 & \cellcolor{cverde}97,48 (Verde) & \cellcolor{cverde}98,70 (Verde) & 17,08 \\
+Zona 5 & \cellcolor{cverde}99,07 (Verde) & \cellcolor{cverde}99,14 (Verde) & 22,54 \\
+Zona 6 & \cellcolor{cverde}99,85 (Verde) & \cellcolor{cverde}98,70 (Verde) & 23,54 \\
+Zona 7 & \cellcolor{cverde}99,99 (Verde) & \cellcolor{cverde}99,77 (Verde) & 30,96 \\
+Zona 8 & \cellcolor{cverde}98,68 (Verde) & \cellcolor{cverde}99,50 (Verde) & 26,11 \\
+Zona 9 & \cellcolor{cverde}99,99 (Verde) & \cellcolor{cverde}97,32 (Verde) & 28,76 \\
+Zona 10 & \cellcolor{camarillo}82,58 (Amarillo) & \cellcolor{cverde}98,40 (Verde) & 9,54 \\
+Zona 11 & \cellcolor{cverde}98,33 (Verde) & \cellcolor{cverde}98,11 (Verde) & 13,97 \\
+Zona 12 & \cellcolor{cverde}98,87 (Verde) & \cellcolor{cverde}99,12 (Verde) & 13,29 \\
+Zona 13 & \cellcolor{cverde}97,97 (Verde) & \cellcolor{cverde}99,82 (Verde) & 14,19 \\ \bottomrule\end{tabularx}\end{center}
+
+La zona 1 es NE (no evaluable) porque no tiene proyectos de presupuesto participativo; confirmarlo con Planeación es una condición de la Guía. En el municipal, 2025 usa obligaciones de \$20.684.427.720 sobre apropiación de \$20.928.690.218; 2024, \$18.357.265.731 sobre \$18.601.236.386; y 2026 (primer semestre), \$5.702.528.148 sobre \$24.519.738.737.
+
+\section{Variables construidas de los indicadores no viables}
+
+Para estos indicadores no se calculó el puntaje ni se asignó semáforo: solo se construyeron las variables que la información secundaria permite. La tabla siguiente indica por qué no se calcula cada uno.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{3.6cm}YY}
+\toprule
+\textbf{Indicador} & \textbf{Variables construidas} & \textbf{Por qué no se calcula} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Indicador} & \textbf{Variables construidas} & \textbf{Por qué no se calcula} \\
+\midrule
+\endhead
+\midrule \multicolumn{3}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+PC -- I1, I4 e I6 (procesos participativos, participación virtual) & Universo exploratorio de procesos participativos: 3 en 2024 y 5 en 2025. Participación virtual: 1 por año, como cota inferior & El universo de procesos participativos "cerrados" lo deben definir los profesores. Sin esa definición el denominador no es confiable \\
+PDM -- Cobertura en salud (CS) & Afiliados al régimen subsidiado: 29.794 (diciembre de 2025) y 31.997 (agosto de 2026), con la población de MinSalud & El método del plan de desarrollo (99,5 \%) no se puede reproducir con fuentes públicas \\
+PDM -- Primera infancia (ILE) & ILE.A: 15,58 (2024) y 15,40 (2025) con niños de 0 a 6 años; 18,43 y 18,23 con 0 a 5 años. Una institución educativa que mejora (cota inferior) & La edad del denominador está pendiente (el informe de gestión dice "hasta 5 años"); la decisión es de los profesores \\
+PDM -- Convivencia y paz (CP) y Deporte (CD) & Índice situacional 3,23 (2022); 38 de 40 disciplinas deportivas & Quedan como variables auxiliares; el indicador no se calcula en esta etapa \\
+PP -- Cumplimiento de entregas (CEP) & Proyectos con entrega exigible: 51 (2024), 61 (2025) y 66 (2026). Proyectos con entrega cumplida en 2025: 49 por defecto (45 o 50 según la regla), como aproximación de autorreporte & La entrega cumplida solo se conoce por el autorreporte del plan de acción, sin acta de recibo ni informe final \\
+PP -- Metas de atención (CMA) & Tabla de clasificación por proyecto (180 filas) & No se ha decidido a qué proyectos aplica la meta de atención \\
+PP -- Índice (IREPP) & Ninguna adicional & Depende de CEP y CMA \\
+\end{xltabular}
+}
+
+\subsection{Valores de las variables}
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{4cm}YL{1.6cm}L{2.6cm}}
+\toprule
+\textbf{Indicador} & \textbf{Variable} & \textbf{Año} & \textbf{Valor} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Indicador} & \textbf{Variable} & \textbf{Año} & \textbf{Valor} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+PC -- I1 (incorporación de aportes) & Número total de procesos participativos cerrados en los que se recibieron aportes ciudadanos & 2024 & 3 \\
+PC -- I1 (incorporación de aportes) & Número total de procesos participativos cerrados en los que se recibieron aportes ciudadanos & 2025 & 5 \\
+PC -- I4 (publicación de resultados) & Número total de procesos participativos cerrados & 2024 & 3 \\
+PC -- I4 (publicación de resultados) & Número total de procesos participativos cerrados & 2025 & 5 \\
+PC -- I6 (participación virtual) & Número de actividades participativas realizadas que habilitaron un canal virtual para intervenir & 2024 & 1 \\
+PC -- I6 (participación virtual) & Número de actividades participativas realizadas que habilitaron un canal virtual para intervenir & 2025 & 1 \\
+PDM -- Cobertura en salud (CS) & Afiliados al régimen subsidiado, Envigado & 2025 & 29.794 \\
+PDM -- Cobertura en salud (CS) & Afiliados totales al SGSSS, Envigado & 2025 & 219.795 \\
+PDM -- Cobertura en salud (CS) & Población de referencia de MinSalud, Envigado & 2025 & 250.767 Habitantes \\
+PDM -- Cobertura en salud (CS) & Cobertura total del SGSSS publicada por MinSalud & 2025 & 87,65 \% \\
+PDM -- Cobertura en salud (CS) & Afiliados RS sobre población total de MinSalud (calculada) & 2025 & 11,88 \% \\
+PDM -- Cobertura en salud (CS) & Afiliados al régimen subsidiado, Envigado & 2026 & 31.997 \\
+PDM -- Cobertura en salud (CS) & Afiliados totales al SGSSS, Envigado & 2026 & 222.151 \\
+PDM -- Cobertura en salud (CS) & Población de referencia de MinSalud, Envigado & 2026 & 268.990 Habitantes \\
+PDM -- Cobertura en salud (CS) & Cobertura total del SGSSS publicada por MinSalud & 2026 & 82,59 \% \\
+PDM -- Cobertura en salud (CS) & Afiliados RS sobre población total de MinSalud (calculada) & 2026 & 11,90 \% \\
+PDM -- Cobertura en salud (CS) & Cobertura del régimen subsidiado según TerriData (afiliados RS / población total) & 2022 & 10,21 \% \\
+PDM -- Cobertura en salud (CS) & Cobertura del régimen subsidiado según TerriData (afiliados RS / población total) & 2023 & 11,13 \% \\
+PDM -- Cobertura en salud (CS) & Cobertura del régimen subsidiado según TerriData (afiliados RS / población total) & 2024 & 12,20 \% \\
+PDM -- Cobertura en salud (CS) & Cobertura del régimen subsidiado según TerriData (afiliados RS / población total) & 2025 & 11,88 \% \\
+PDM -- Cobertura en salud (CS) & Porcentaje de cobertura del régimen subsidiado del diagnóstico del PDM (método del plan) & 2020 & 99,60 \% \\
+PDM -- Cobertura en salud (CS) & Porcentaje de cobertura del régimen subsidiado del diagnóstico del PDM (método del plan) & 2021 & 99,20 \% \\
+PDM -- Cobertura en salud (CS) & Porcentaje de cobertura del régimen subsidiado del diagnóstico del PDM (método del plan) & 2022 & 99,50 \% \\
+PDM -- Cobertura en salud (CS) & Cobertura meta del aseguramiento en el régimen subsidiado & 2024 & 99,50 \% \\
+PDM -- Cobertura en salud (CS) & Cobertura meta del aseguramiento en el régimen subsidiado & 2025 & 99,50 \% \\
+PDM -- Convivencia y paz (CP) & Porcentaje meta de implementación de esos procesos & 2024 & 100 \% \\
+PDM -- Convivencia y paz (CP) & Porcentaje meta de implementación de esos procesos & 2025 & 100 \% \\
+PDM -- Convivencia y paz (CP) & Índice de implementación de los procesos de participación ciudadana (indicador situacional) & 2022 & 3,23 \\
+PDM -- Deporte (CD) & Cobertura porcentual meta de esos servicios deportivos & 2024 & 6 \% \\
+PDM -- Deporte (CD) & Cobertura porcentual meta de esos servicios deportivos & 2025 & 6 \% \\
+PDM -- Deporte (CD) & Disciplinas deportivas implementadas por el Índer & 2025 & 38 \\
+PDM -- Deporte (CD) & Disciplinas deportivas previstas (meta plan) & 2025 & 40 \\
+PDM -- Primera infancia (ILE) & ILE.A reconstruida 2023 para calibrar contra la línea base 16,3 & 2023 & 14,56 \% \\
+PDM -- Primera infancia (ILE) & Niños y niñas con atención integral (numerador de ILE.A) & 2023 & 2.059 \\
+PDM -- Primera infancia (ILE) & Cobertura de atención integral inicial construida (niños atendidos / población DANE) & 2024 & 15,58 \% \\
+PDM -- Primera infancia (ILE) & Niños y niñas con atención integral (numerador de ILE.A) & 2024 & 2.161 \\
+PDM -- Primera infancia (ILE) & Población DANE de 0 a 6 años de Envigado (denominador de ILE.A) & 2024 & 13.868 Habitantes \\
+PDM -- Primera infancia (ILE) & Cobertura de atención integral inicial construida (niños atendidos / población DANE) & 2025 & 15,40 \% \\
+PDM -- Primera infancia (ILE) & Niños y niñas con atención integral (numerador de ILE.A) & 2025 & 2.092 \\
+PDM -- Primera infancia (ILE) & Población DANE de 0 a 6 años de Envigado (denominador de ILE.A) & 2025 & 13.582 Habitantes \\
+PDM -- Primera infancia (ILE) & Meta de cobertura de atención integral inicial & 2024 & 19 \% \\
+PDM -- Primera infancia (ILE) & Meta de cobertura de atención integral inicial & 2025 & 19 \% \\
+PDM -- Primera infancia (ILE) & Meta de instituciones oficiales que mejoran su categoría en Saber 11 & 2024 & 14 \% \\
+PDM -- Primera infancia (ILE) & Meta de instituciones oficiales que mejoran su categoría en Saber 11 & 2025 & 14 \% \\
+PDM -- Primera infancia (ILE) & Instituciones educativas oficiales que mejoran la categoría Saber 11 (mínimo reportado) & 2024 & 1 \\
+PDM -- Primera infancia (ILE) & Instituciones educativas oficiales que mejoran la categoría Saber 11 (mínimo reportado) & 2025 & 1 \\
+PP -- Cumplimiento de entregas (CEP) & Proyectos con entrega exigible en la vigencia (PE) & 2024 & 51 \\
+PP -- Cumplimiento de entregas (CEP) & Proyectos con entrega exigible en la vigencia (PE) & 2025 & 61 \\
+PP -- Cumplimiento de entregas (CEP) & Proyectos con entrega cumplida (PEC), proxy de autorreporte & 2025 & 49 \\
+PP -- Cumplimiento de entregas (CEP) & Proyectos con entrega exigible en la vigencia (PE) & 2026 & 66 \\
+\end{xltabular}
+}
+
+Estado de la información: Pendiente. Las variables de CEP y CMA para cada proyecto están en la hoja PP por proyecto de la base de datos (Anexo).
+
+\section{Hallazgos para Planeación}
+
+\subsection{Presupuesto participativo}
+
+\begin{itemize}
+
+\item \textbf{Rubro 2.3.7.06 (déficit fiscal) en 2024.} 7 proyectos incluyen \$627.204.058 del rubro 2.3.7.06 \guillemotleft{}Disminución de pasivos -- Financiación de déficit fiscal\guillemotright{}, es decir, pagos de vigencias anteriores ejecutados al 100~\%. No se excluyó por defecto: la decisión es de los profesores. Sin ese rubro el EPP municipal de 2024 es 98,64 en lugar de 98,69. En 2025 y 2026 no aparece este rubro en los proyectos. Los proyectos afectados quedan marcados como \guillemotleft{}posible no presupuesto participativo\guillemotright{} en la tabla de clasificación de 2024.
+
+\item \textbf{Cruces débiles de 2024.} Se cruzaron 50 de 51 proyectos del listado de la Escuela con los rubros de Hacienda (35 exactos y 15 aproximados; 1 sin correspondencia). En los aproximados la apropiación de Hacienda puede incluir recursos que no son del presupuesto participativo. Planeación debe confirmar, en particular, los cruces 13-2 $\leftrightarrow$ 0714 (Hacienda 60,8~\% frente al listado) y 12-3 $\leftrightarrow$ 0733 (-17,2~\%), y el 10-2 $\leftrightarrow$ 0709 (+32,5~\%), que explica la zona 10 en Amarillo (82,58). Con solo cruces exactos el EPP de 2024 sería 99,28 (Verde).
+
+\item \textbf{51 proyectos con entrega exigible en 2024 (no 50).} El listado de la Escuela de 2024 tiene 51 registros; la nota previa de disponibilidad contaba 50 porque omitía el de la zona 8, cuyo valor viene sin signo \guillemotleft{}\$\guillemotright{} en el PDF (registro dudoso, corroborado por Hacienda y por el listado de proyectos de inversión). Para 2025 y 2026 las entregas exigibles son 61 y 66.
+
+\item \textbf{Las 55 entregas cumplidas de 2025 no se reproducen.} Con las distintas reglas de conteo se obtienen entre 45 y 50 (49 con la regla por defecto), de 61 proyectos con entrega exigible. La entrega cumplida solo se conoce por autorreporte del plan de acción, sin acta de recibo ni informe final.
+
+\item \textbf{Encabezado del plan de acción 2026.} Los encabezados de apropiación y obligación de la hoja dicen \guillemotleft{}01-04-2026\guillemotright{}, pero las cifras coinciden al peso con Hacienda al 30 de junio de 2026 (66 de 66 proyectos). Además, la cifra de \$11.555.041.247 de obligaciones 2026 que traía la versión 1.1 de la nota de disponibilidad era errónea; la correcta es \$5.702.528.148.
+
+\item \textbf{Listas oficiales.} No hay un marcador de presupuesto participativo en la ejecución presupuestal; el universo de proyectos se reconstruyó por nombre y valor. Planeación debe confirmar la lista de proyectos de cada vigencia y la inexistencia de proyectos en la zona 1.
+
+\end{itemize}
+
+\subsection{Otras inconsistencias de los datos}
+
+\begin{itemize}
+
+\item \textbf{Medicina Legal (Forensis 2024) pendiente de verificar.} La mortalidad vial (7,25; 18 muertes) es una cifra citada: el documento no está en el archivo del Observatorio. Con el denominador DANE posterior a la pandemia, 18 muertes dan 7,249. Falta además confirmar el criterio territorial (lugar del hecho o residencia).
+
+\item \textbf{Nombre de la instancia de salud.} CMSSS es el Consejo Municipal de Seguridad Social en Salud. En entregas previas se había rotulado con otro nombre; se corrigió.
+
+\item \textbf{VRC y ICRCS.} Todo ICRCS numérico de 2024 exige apartarse de la regla de la Matriz sobre presencia desconocida. La presencia de las veedurías en una de las actas se acredita con un párrafo de plantilla que se repite en otras actas.
+
+\item \textbf{PC.I2 2025.} La fuente dice que se hicieron 12 asambleas "cubriendo la totalidad de las zonas" sin listarlas; el equipo las asignó a las zonas 2 a 13. Si "totalidad" significa 13 zonas, el resultado sería 13 / 13.
+
+\item \textbf{PC.I3 2025.} El denominador es reconstruido (culminadas más no ejecutadas) porque no hay programación fechada. Se excluyó el diplomado en Gestión Pública por ser para servidores, algo que la fuente no acredita.
+
+\item \textbf{Espacio público verde.} El valor de 5,75 corresponde al espacio público verde urbano del POT y no es la misma serie de la línea base (3,88); la comparación es aproximada.
+
+\item \textbf{Reparos del DAP en PCS.} La fila del plan indicativo trae observaciones del Departamento Administrativo de Planeación sobre la concordancia de la ejecución anual; el resultado coincide con lo reportado, pero hay que atenderlo antes de cualquier validación.
+
+\item \textbf{Fechas contradictorias entre documentos.} Para cuatro eventos de rendición de cuentas las fechas difieren entre documentos (por ejemplo, la rendición del presupuesto participativo de la vigencia 2024 figura el 12 de enero de 2025 en una justificación y el 12 de febrero de 2025 en el informe de gestión). No afecta el resultado por defecto, pero Planeación debe fijar la fecha oficial de cada evento.
+
+\item \textbf{RPO 2024, intervención n.\textsuperscript{o} 10 del cuadro.} Contiene dos asuntos con su propia respuesta; si se cuentan por separado, el RPO de 2024 pasa de 94,12 a 94,44 (sigue en Verde).
+
+\item \textbf{Fuentes y fechas de publicación.} En varios indicadores de presupuesto participativo la fuente figuraba como una ruta de archivo local en lugar de un nombre de publicación, y la fecha de publicación del documento está vacía en buena parte de las variables. Es un pendiente de presentación, no de cálculo; en este informe se muestra el nombre de la publicación y su enlace.
+
+\end{itemize}
+
+\section{Decisiones pendientes para los profesores}
+
+Cada fila es una decisión que cambia un resultado. Los rangos son del nivel municipal; el valor por defecto es el primero de cada rango. \guillemotleft{}Revisar\guillemotright{} y N/D no tienen color de semáforo.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{2.6cm}L{3.1cm}L{2.5cm}L{2.4cm}Y}
+\toprule
+\textbf{Decisión} & \textbf{Pregunta} & \textbf{Opciones} & \textbf{Indicadores afectados} & \textbf{Rango de resultados} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Decisión} & \textbf{Pregunta} & \textbf{Opciones} & \textbf{Indicadores afectados} & \textbf{Rango de resultados} \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+Evento sin mención de veedurías & Si el documento de un evento no menciona veedurías, \textquestiondown{}se cuenta como ausencia o la presencia queda desconocida? & Desconocida (N/D) / ausencia si el documento es integral / ausencia siempre & VRC, ICRCS & VRC 2024: N/D a 66,67 (Amarillo); VRC 2025: N/D a 20 (Rojo); ICRCS 2024: N/D a 65,20 (Amarillo) \\
+Universo de eventos de rendición & \textquestiondown{}Qué es un evento municipal de rendición de cuentas? & Solo Alcalde / Alcalde y veedurías (545 y 546) / Alcalde y sectoriales con acta / todo documento & VRC, ICRCS & VRC 2024: 50 (control) a 66,67 con ausencia; ICRCS 2024: de 43,2 (Rojo, estimación de la revisión) a por lo menos 73,8 (Amarillo) \\
+Acreditación de presencia y año de asignación & \textquestiondown{}La mención en el acta basta como prueba de presencia? \textquestiondown{}A qué año va un evento que rinde cuentas del año anterior? & Mención / lista de asistencia; fecha del evento / vigencia rendida & VRC & Todas las opciones dan N/D mientras haya presencia desconocida \\
+Ventana de publicación & \textquestiondown{}Hasta cuándo se acepta una publicación para considerarla de la vigencia? & 31 de marzo del año siguiente / hasta la fecha de consulta & DSI, VRC, ICRCS & DSI 2024: 0 a 28,57 (Rojo en ambos) \\
+Lista de metas del DSI & \textquestiondown{}Cuáles metas forman el denominador? La Matriz sugiere iniciar con unas 10 & 7 metas del ICPD / 10 metas (con gobernanza) / productos del plan indicativo & DSI, ICRCS & 7 metas: 0; 10 metas: 0; productos del plan indicativo: 100 (solo control) \\
+Fuente del valor publicado (DSI) & \textquestiondown{}Qué cuenta como valor observado publicado? & Solo Alcaldía / oficial con la misma definición / oficial con aproximaciones & DSI & DSI 2025: 0 a 28,57 \\
+Observaciones sobre el plan de desarrollo (RPO) & \textquestiondown{}Qué es una observación "sobre el PDM"? & Excluir felicitaciones / solo temáticas / todas & RPO, ICRCS & 94,12 a 93,75 (Verde) o 72,73 (Amarillo) \\
+Universo de ejercicios (RPO) & \textquestiondown{}Qué cuadros de preguntas integran el indicador? & Alcalde / Alcalde y 100 días / todos & RPO & 94,12 a 93,10 (Verde) o 89,47 (Amarillo) \\
+Respuesta de fondo (RPO) & \textquestiondown{}Qué es una respuesta de fondo? & Rúbrica estricta / texto de la respuesta (laxo) & RPO & 94,12 a 100 \\
+Cuadro publicado incompleto (RPO 2025) & \textquestiondown{}Se calcula con lo publicado cuando el cuadro es claramente incompleto? & N/D / calcular con lo publicado & RPO 2025, ICRCS 2025 & N/D a 50 (Rojo); ICRCS 2025 con ausencia en VRC: 42,50 (Rojo) \\
+Separar la intervención 10 del cuadro de 2024 & \textquestiondown{}Una intervención con dos asuntos cuenta como una o dos? & Una / dos & RPO 2024 & 94,12 a 94,44 \\
+Actividades que cubren una zona (I2) & \textquestiondown{}Cuentan las asambleas del plan de desarrollo y del POT, o solo las del presupuesto participativo? & Solo PP / PP, PDM y POT & PC.I2 & 2024: 100 a 92,31 \\
+Evidencia de actividad en la zona (I2) & \textquestiondown{}Basta la realización reportada o se exige acta por zona? & Reportada / incluye programación / acta por zona & PC.I2 & 2025: 92,31 a 100 (con programación del POT); con acta por zona, N/D en ambos años \\
+Zonas oficiales & \textquestiondown{}Son 13 zonas o 12 con comité? & 13 / 12 & PC.I2 & 2025: 92,31 a 100. No cambia el EPP \\
+Unidad de I3 & \textquestiondown{}Se mide en acciones formativas o en personas? & Acciones / personas & PC.I3 & 2025: 83,33 a Revisar (186 / 15); 2024: N/D a Revisar (95 / 10) \\
+Formación para servidores (I3) & \textquestiondown{}Se excluye la formación exclusiva para servidores? & Excluir / incluir & PC.I3 & 83,33 a 84,00 \\
+Semilleros como acción formativa (I3) & \textquestiondown{}Los semilleros cuentan como acción formativa? & No / sí & PC.I3 2025 & 83,33 a 80,6 \\
+Instancias seleccionadas (I5) & \textquestiondown{}Qué instancias integran el indicador? & Salud y COPACO / ampliado & PC.I5 & 100 a N/D \\
+Horizonte de la meta del plan de desarrollo & \textquestiondown{}Se evalúa 2024-2026 contra la meta 2027 o contra metas anuales? & Meta 2027 / metas anuales & PDM.CA, PDM.CM (y todo PDM) & 100 a N/D (no existen metas anuales) \\
+Espacio público verde (CA) & \textquestiondown{}Qué cifra de espacio público verde es comparable con la meta? & Urbano del POT / total del POT / estricto de la serie base & PDM.CA & 100 / 100 (no comparable) / N/D \\
+Mortalidad vial (CM) y población & \textquestiondown{}Qué fuente de muertes y qué serie de población? & Medicina Legal / Policía; series DANE & PDM.CM & 100 (Verde) a 99,32 (Amarillo) con Policía y DANE posterior a la pandemia \\
+Método de PP 2024 & \textquestiondown{}Se aceptan los cruces aproximados entre el listado EFPC y Hacienda? & Completa / solo exactos / N/D & PP.EPP 2024 & 98,69 a 99,28 o N/D \\
+Rubros de déficit fiscal en 2024 & \textquestiondown{}Los pagos de pasivos de vigencias anteriores (rubro 2.3.7.06) forman parte del presupuesto participativo? & Incluir / excluir & PP.EPP 2024 & 98,69 a 98,64. La zona 10 sigue Amarilla y depende del cruce del proyecto 0709 \\
+Proyecto 0553 (costo del proceso) & \textquestiondown{}Se incluye en el cálculo? & No / sí & PP.EPP & 2025: 98,83 a 98,86; 2026 S1: 23,26 a 23,92 \\
+Fuente de cálculo del PP & \textquestiondown{}Plan de acción, Hacienda o CUIPO? & Plan de acción / Hacienda / CUIPO & PP.EPP & 2025: 98,83 en ambas primeras; CUIPO, N/D \\
+Zona 1 & \textquestiondown{}"No evaluable" o "No disponible"? & NE / N/D & PP.EPP, CEP, CMA & NE a N/D \\
+Tratamiento de 2026 & \textquestiondown{}Cómo se trata un año sin cierre? & Primer semestre provisional / excluir / anual provisional & PP.EPP, PCS, I2, I3 & 23,26 (sin semáforo) / sin cálculo / 23,26 rotulado anual (contradice la Guía 4; solo sensibilidad) \\
+Fecha de registro & \textquestiondown{}Se usa la fecha real o la de cierre de vigencia? & Real / normalizada & Matriz diligenciada & No cambia los resultados calculados; en la hoja Resultados, "real" deja todo en N/D porque la fecha no coincide con la de la hoja de control \\
+Regla de estado para calcular & \textquestiondown{}Se calcula con datos "Pendiente" o solo con validado? & Preliminar / estricta & Todos & Con la regla estricta de la Matriz todo es N/D mientras no haya datos validados \\
+\end{xltabular}
+}
+
+\section{Pendientes y próximos pasos}
+
+\begin{enumerate}
+
+\item \textbf{Segunda lectura de VRC y RPO (en curso).} La clasificación de eventos (17) y de observaciones (56) la hizo un solo lector. Se preparó una muestra aleatoria del 20~\% (4 eventos del VRC y 12 observaciones del RPO) para que una segunda persona la lea de forma independiente; hasta entonces, el VRC y el RPO son de un solo lector.
+
+\item \textbf{Verificación de Forensis 2024.} La mortalidad vial de 2024 (7,25 por 100.000 habitantes, p. 440 (tabla 14)) es una cifra citada: el documento no se ha podido descargar (el sitio de Medicina Legal rechaza descargas automáticas). Hay que bajarlo, confirmar la cifra y el criterio territorial (lugar del hecho o residencia). Enlace: \texttt{\footnotesize \href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{https:/\allowbreak{}}\allowbreak{}\href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{/\allowbreak{}}\allowbreak{}\href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{www.\allowbreak{}medicinalegal.\allowbreak{}gov.\allowbreak{}co/\allowbreak{}}\allowbreak{}\href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{documents/\allowbreak{}}\allowbreak{}\href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{20143/\allowbreak{}}\allowbreak{}\href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{1269218/\allowbreak{}}\allowbreak{}\href{https://www.medicinalegal.gov.co/documents/20143/1269218/Forensis_2024.pdf}{Forensis\_\allowbreak{}2024.\allowbreak{}pdf}}.
+
+\item \textbf{Tomar las decisiones de la sección~7} y, con ellas, fijar el escenario oficial de cada indicador.
+
+\item \textbf{Confirmar con Planeación} los hallazgos de la sección~6 (lista de proyectos de presupuesto participativo de cada vigencia, cruces débiles y rubro de déficit fiscal).
+
+\item \textbf{Validar} los valores que los profesores acepten; hoy ninguno lo está.
+
+\end{enumerate}
+
+\subsection{Solicitudes a la Alcaldía relacionadas con los indicadores calculados}
+
+De las 32 solicitudes de información preparadas, 22 se relacionan con los indicadores calculados o con los pendientes de esta sección.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{3.4cm}L{2.2cm}YL{3cm}}
+\toprule
+\textbf{Dependencia} & \textbf{Variable} & \textbf{Dato a solicitar} & \textbf{Motivo} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Dependencia} & \textbf{Variable} & \textbf{Dato a solicitar} & \textbf{Motivo} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+Bienestar Social & CS.VRC.ET & Fecha de la rendición de Víctimas 2024 y listas de eventos del Comité de Discapacidad y Grupos Étnicos & Completar el universo B de eventos \\
+Departamento Administrativo de Planeación & CS.VRC.ET & Calendario o balance anual de la estrategia de rendición de cuentas con la lista de eventos realizados (Alcalde, sectoriales, instancias), incluido el evento del Alcalde 2025 con su fecha & Fijar el universo de eventos municipales y resolver fechas inconsistentes \\
+Departamento Administrativo de Planeación & PC.I2.V2 & Acto administrativo vigente de zonificación (Acuerdo 007 de 2025 y su antecedente) y confirmación de la situación de la zona 1 & El texto del Acuerdo 007 de 2025 no fue obtenido; la zona 1 no tiene comité zonal. \\
+Departamento Administrativo de Planeación - Dirección de Planeación & CS.DSI.MD & Valores observados 2024 y 2025 de los indicadores de resultado del PDM (no solo de producto) y su fecha de publicación & Las evaluaciones publicadas solo cubren indicadores de producto \\
+Departamento Administrativo de Planeación - Subdirección de Participación\ldots{} & CS.PCS.EE & Soportes de ejecución del producto 5.1.2.1.2: documento Estrategia para el fortalecimiento del control social (2024) e informe de ciclos de formación en control social (2025), y avance 2026 al 31-dic & Validar un dato autodeclarado con evidencias marcadas "Si, pero con observaciones" por el DAP \\
+Departamento Administrativo de Planeación - Subdirección de Participación\ldots{} & CS.VRC.EV & Actas, memorias y listas de asistencia (sin datos personales: conteo de veedurías presentes) del evento de rendición con veedurías del 12-dic-2024 y del equivalente de 2025 y 2026 & Acreditar presencia de veedurías; no existe soporte público \\
+Departamento Administrativo de Planeación - Subdirección de Participación\ldots{} & PC.I2.V1 & Actas o listados de asistencia (sin datos personales: solo conteos) de las asambleas zonales de PDM, POT y PP, con fecha y zona & Los cronogramas no acreditan realización por zona; la Guía exige acta o asistencia. \\
+Departamento Administrativo de Planeación - Subdirección de Participación\ldots{} & PP.CEP.PE & Listado oficial de proyectos PP 2026 y definición de "entrega exigible en la vigencia" por proyecto (cronograma) & No hay listado 2026 en EFPC; la entrega exigible no está definida \\
+Departamento Administrativo de Planeación - Subdirección de Participación\ldots{} & PP.EPP.OPP; PP.EPP.APP & Lista oficial de códigos de proyecto que financian el presupuesto participativo por vigencia de ejecución, indicando si el proyecto es 100 \% PP y si incluye cofinanciación o el costo del proceso\ldots{} & No hay marcador PP en ROCA, CUIPO ni Hacienda; el universo se reconstruyó por nombre y valor \\
+Departamento Administrativo de Planeación / Oficina Asesora de Comunicaciones & CS.RPO.OT & Matriz completa de preguntas y observaciones recibidas (presenciales, QR, YouTube, formulario previo) en las audiencias del Alcalde 2025 y 2026, con estado de respuesta y fecha & El cuadro publicado 2025 tiene solo 3 intervenciones; el OT podría estar subestimado \\
+Escuela de Formación para la Participación Ciudadana (EFPC) / Subdirección de\ldots{} & PC.I3.V1; PC.I3.V2 & Plan de formación aprobado y relación de acciones formativas (curso, diplomado, seminario, cátedra) con fechas de inicio y fin, público (ciudadanía o servidores), cupos y certificados & El reporte público cuenta personas; no hay programación fechada de acciones. \\
+Oficina Asesora de Planeación / Secretaría de Gobierno (SECOP II) & PP.CEP.PEC & Relación contrato-proyecto PP (referencia de contrato y código de proyecto) y estado de liquidación & SECOP II no trae BPIN ni código de proyecto \\
+Personería de Envigado & CS.VRC.EV & Corte actualizado del registro de veedurías vigentes y estado (activa/inactiva) por año, sin datos personales & Identificar universo de veedurías que podrian asistir a los eventos \\
+Secretaría de Hacienda & PP.EPP.OPP & Ejecución de egresos por código de proyecto (apropiación definitiva, compromisos y obligaciones) al 31-dic-2024, 31-dic-2025 y 31-dic-2026 & 2024 no tiene plan de acción por proyecto en el archivo del observatorio; 2026 solo con corte 30-jun \\
+Secretaría de Medio Ambiente y Desarrollo Agropecuario (con DAP) & PDM.CA.O & Ficha del indicador "Espacio público verde" (m\textsuperscript{2}/hab), método de la base 3,88 y valores actualizados & El POT 2024 da 5,75 urbano y AMVA 2022 da 4,66; no se reconcilia con 3,88. \\
+Secretaría de Movilidad (con Secretaría de Salud, Gestión del conocimiento) & PDM.CM.O & Serie anual de muertes por siniestros viales, la fuente y la población usadas para la línea base 10,2 y la tasa por 100.000 & No hay cifra 2025 de INMLCF/ANSV y la línea base del plan (10,2) no coincide con Policía (16,8 en 2023). \\
+Secretaría de Salud & CS.RPO.OR & Cuadros de preguntas y respuestas de las rendiciones 2024-01 y 2024-02 & No se halló cuadro propio en el archivo del observatorio \\
+Secretaría de Salud & CS.VRC.EV & Listados de asistencia anexos a las actas de rendición 2024-01, 2024-02, 2025-01 y 2026-01, con indicación de la veeduría representada & Las actas dicen "se anexan listados de asistencia" pero no están publicados \\
+Secretaría de Salud & PC.I5.V1 & Soportes de sesiones de COPACO y CMSSS 2024 (las evidencias son carpetas SharePoint privadas) & No se pudo verificar 2024. \\
+Subdirección de Participación Ciudadana / unidades ejecutoras (INDER, Bienestar\ldots{} & PP.CEP.PEC & Actas de recibo, informes finales, informes de supervisión y actas de liquidación por proyecto PP & El indicador exige entrega completa verificada; solo hay avance físico autorreportado \\
+Subdirección de Participación Ciudadana; secretarías técnicas de las instancias\ldots{} & PC.I5.V1; PC.I5.V2 & Calendario aprobado de sesiones y actas (o certificación de sesiones con quórum) de las instancias que se seleccionen & Solo hay cifras de COPACO y CMSSS (salud); faltan las demás instancias. \\
+Unidades ejecutoras de los proyectos PP & PP.CMA.NA; PA; MP & Ficha técnica con meta anual de personas por atender e informe de personas únicas atendidas por proyecto & El plan de acción mide actividades; los informes de INDER no deduplican \\
+\end{xltabular}
+}
+
+\appendix
+
+\section{Estructura de la base de datos para el tablero}
+
+La información de este informe se entrega también como una base de datos en Excel para alimentar el tablero. Cada hoja es una tabla plana (una fila por registro, sin celdas combinadas), con columnas que se unen entre hojas por llaves. El libro de resultados se llama \guillemotleft{}base\_indicadores\_OCE\guillemotright{} y contiene las hojas siguientes.
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{2.6cm}YL{4.6cm}L{1.6cm}}
+\toprule
+\textbf{Hoja} & \textbf{Contenido} & \textbf{Columnas clave / llaves} & \textbf{Filas} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Hoja} & \textbf{Contenido} & \textbf{Columnas clave / llaves} & \textbf{Filas} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+Léeme & Descripción del libro, estado provisional, convenciones (N/D, NE, Revisar) y orden de lectura. & -- & -- \\
+Resultados & Un resultado por indicador, año, periodo, territorio y escenario: entradas, puntaje, semáforo, disponibilidad, motivo de N/D y fecha de corte. & codigo; anio; periodo; territorio; escenario\_id (es\_defecto marca el escenario por defecto) & 1.003 \\
+Variables & Valores de las variables de entrada con unidad, estado, fuente, página o tabla, enlace al documento, fechas de corte y de consulta. & id\_variable; anio; periodo; territorio; escenario\_id. Se une con Resultados por codigo\_indicador y con Soporte de conteos por ids\_soporte & 3.578 \\
+PP por zona & Ejecución presupuestal (EPP) del presupuesto participativo por zona 1-13 y municipio, por año y escenario: obligaciones, apropiación, puntaje y semáforo. & territorio; anio; periodo; escenario\_id & 515 \\
+PP por proyecto & Proyectos de presupuesto participativo con zona, código, apropiación, compromiso, obligación, tipo de correspondencia con el listado de la Escuela y si entran al cálculo. & anio; periodo; zona; codigo\_proyecto & 181 \\
+Soporte de conteos & Una fila por elemento contado (zona, evento, observación, proyecto, meta) con documento, página, enlace, clasificación y justificación. & id\_soporte (se referencia desde Variables.ids\_soporte) & 611 \\
+Supuestos & Parámetros, opciones y valor por defecto de cada decisión pendiente (estado provisional). & parametro; opcion & 36 parámetros \\
+Diccionario de datos & Descripción de cada columna de cada hoja: tipo, si es obligatoria y significado. & tabla; columna & 122 \\
+\end{xltabular}
+}
+
+\paragraph{Cómo se relacionan las hojas.} Resultados y Variables comparten el indicador (codigo / codigo\_indicador), el año, el periodo, el territorio y el escenario; las variables que sustentan un conteo apuntan a Soporte de conteos mediante ids\_soporte; PP por zona y PP por proyecto se enlazan por año, periodo y zona; el Diccionario de datos explica todas las columnas. Todos los datos están en estado Pendiente y los resultados en estado Provisional.
+
+\end{document}

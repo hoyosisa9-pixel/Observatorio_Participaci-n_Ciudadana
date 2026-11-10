@@ -102,3 +102,7 @@
 - Revisión crítica del Analizador (`outputs/indicadores/revision/revision_critica.md`): 23/23 recalculados coinciden; 5 errores de presentación corregidos. PP 2026 S1 queda sin semáforo (Gris). CMSSS = Consejo Municipal de Seguridad Social en Salud.
 - PP 2024 incluye $627.204.058 del rubro 2.3.7.06 (déficit fiscal); sin él, 98,64. Marcado `posible_no_pp`; decisión de los profesores.
 - Entregable principal: `outputs/indicadores/resumen_calculos.md`. Pendientes: segunda lectura, Forensis, decisión sobre la v1.2 del Excel de disponibilidad (OPP 2026).
+
+## 17. Entregables a los profesores (10-nov-2026)
+- Disponibilidad v1.2 (a34719d). En `outputs/indicadores/entregables/`: base_indicadores_OCE.xlsx, informe_avance_1 (PDF/Word/tex/zip), nota_tecnica_participacion.docx. Scripts en `scripts/entregables/` (leen los CSV de d723c4c; no recalculan).
+- La nota técnica usa "×" en la fórmula del ISPC (el punto medio no se ve con la fuente).

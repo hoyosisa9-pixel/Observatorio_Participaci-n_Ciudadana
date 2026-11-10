@@ -52,3 +52,11 @@ Requiere `libreoffice-calc` (instalado con apt; reinstalarlo si el Codespace se 
 
 ## Cómo retomar
 Lee este archivo, `avance_1.md`, `plan/plan_calculo.md` (asignación por tanda y sistema) y `scripts/indicadores/README.md`. La etapa está terminada. Pendientes: segunda lectura de la usuaria, PDF de Forensis 2024, decisiones de los profesores (sección 5 de `resumen_calculos.md`) y la decisión sobre la versión 1.2 del Excel de disponibilidad. Cada uno escribe solo sus scripts y `parciales/<SIS>/` y no modifica `comun.py`. Después ensambla, verifica contra la matriz y guarda el punto de control.
+
+## Entregables para los profesores (10-nov-2026)
+Generados a partir de los resultados del commit d723c4c, sin recalcular valores ni supuestos (`scripts/entregables/`):
+- `entregables/base_indicadores_OCE.xlsx` (13 hojas: Léeme, Resultados, No calculados, Variables, PP por zona, PP por proyecto, Soporte de conteos, Clasificación VRC, Clasificación RPO, Entregas PP, Supuestos con los 36 parámetros, Efecto de alternativas, Diccionario de datos).
+- `entregables/informe_avance_1.pdf`, `.docx`, `.tex` y `_overleaf.zip` (24 páginas; tectonic se descarga de nuevo en cada sesión).
+- `entregables/nota_tecnica_participacion.docx` (4 páginas, para el profesor Eber Gutiérrez). Explica 65 frente a 170 personas capacitadas: 65 es lo ejecutado en 2025 y 170 coincide con el acumulado 2024-2025 (105 + 65).
+- Disponibilidad versión 1.2 (commit a34719d): corrige las obligaciones de PP 2026 a $5.702.528.148.
+Regenerar: `python3 scripts/entregables/generar_base_oce.py`, `generar_informe_avance_latex.py` (+ tectonic), `generar_informe_avance_docx.py`, `generar_nota_pc.py`.
