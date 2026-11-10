@@ -111,3 +111,9 @@
 - `outputs/guia/`: guia_estudio_OCE.pdf/.docx/.tex (41 págs.) y hoja_reunion.pdf (1 pág.), para Isabella antes de la reunión del 11-nov con el profesor Francisco Correa. Contenido en `outputs/guia/trabajo/` (guia_contenido.md, propuesta_variables.csv, hoja_reunion.md); se genera con `scripts/entregables/generar_guia.py`.
 - Propuesta: 41 variables (39 de la matriz + PA y MP de PP_Proyectos): A=13, B=13, C=13, D=2. Tablero propuesto: 9 indicadores y 18 variables (11 y 20 si se muestran VRC e ICRCS como N/D).
 - Inconsistencias detectadas (no corregidas): el Excel de disponibilidad v1.2 conserva cifras de PP 2024 superadas (47/50); nombres de DSI e ICRCS en los resultados distintos de la Matriz; código de proyecto 2024 de la hoja Entregas PP (EFPC2024-Z…) que no une con PP por proyecto; nombre de la EFPC no unificado.
+
+## 19. Sistema de indicadores simplificado (10-nov-2026)
+- Acordado con el profesor Francisco: cada indicador lleva un respaldo; PC sin I5 ni I6 (ISPC opcional 0,556·I2 + 0,444·I3 = 88,32 en 2025); PDM con cobertura de salud (afiliados / población DANE PPED 2018-2042 VP, serie 2020-2025: 82,29 a 83,06), ILE como evolución (0-5 años; ningún rango reproduce la línea base 16,3 de 2023) y la dimensión de políticas públicas; PP con fidelidad a lo votado (76,47 en 2024 con 39/51; 95,08 en 2025) más EPP, y 4 respaldos.
+- Saber 11 en datos abiertos solo llega a 2022; no hay clasificación de planteles de Envigado.
+- `outputs/sistema_simplificado/` (documento de 4 págs., variables para solicitar de 2 págs., indicadores_simplificados.csv); scripts en `scripts/sistema_simplificado/` (`calcular.py`, `generar_documentos.py`).
+- Re-ejecutar `scripts/indicadores/descargas.py` reescribe el manifiesto y borra las filas nuevas (ICFES, MinSalud datos.gov.co, DANE por edad).
