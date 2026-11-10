@@ -106,3 +106,8 @@
 ## 17. Entregables a los profesores (10-nov-2026)
 - Disponibilidad v1.2 (a34719d). En `outputs/indicadores/entregables/`: base_indicadores_OCE.xlsx, informe_avance_1 (PDF/Word/tex/zip), nota_tecnica_participacion.docx. Scripts en `scripts/entregables/` (leen los CSV de d723c4c; no recalculan).
 - La nota técnica usa "×" en la fórmula del ISPC (el punto medio no se ve con la fuente).
+
+## 18. Guía de estudio interna (10-nov-2026)
+- `outputs/guia/`: guia_estudio_OCE.pdf/.docx/.tex (41 págs.) y hoja_reunion.pdf (1 pág.), para Isabella antes de la reunión del 11-nov con el profesor Francisco Correa. Contenido en `outputs/guia/trabajo/` (guia_contenido.md, propuesta_variables.csv, hoja_reunion.md); se genera con `scripts/entregables/generar_guia.py`.
+- Propuesta: 41 variables (39 de la matriz + PA y MP de PP_Proyectos): A=13, B=13, C=13, D=2. Tablero propuesto: 9 indicadores y 18 variables (11 y 20 si se muestran VRC e ICRCS como N/D).
+- Inconsistencias detectadas (no corregidas): el Excel de disponibilidad v1.2 conserva cifras de PP 2024 superadas (47/50); nombres de DSI e ICRCS en los resultados distintos de la Matriz; código de proyecto 2024 de la hoja Entregas PP (EFPC2024-Z…) que no une con PP por proyecto; nombre de la EFPC no unificado.

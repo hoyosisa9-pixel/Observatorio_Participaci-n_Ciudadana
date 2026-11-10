@@ -1,0 +1,1261 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[spanish,es-noshorthands,es-tabla]{babel}
+\usepackage[margin=2.5cm,headheight=14pt]{geometry}
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+\usepackage{xltabular}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{fancyvrb}
+\usepackage{needspace}
+\usepackage[hidelinks,breaklinks=true]{hyperref}
+\usepackage{url}
+
+\definecolor{cverde}{RGB}{214,240,214}
+\definecolor{camarillo}{RGB}{255,243,191}
+\definecolor{cnaranja}{RGB}{255,222,184}
+\definecolor{crojo}{RGB}{248,212,212}
+\definecolor{cgris}{RGB}{225,225,225}
+\definecolor{chead}{RGB}{214,226,240}
+\definecolor{cstripe}{RGB}{243,246,250}
+\definecolor{cnota}{RGB}{238,243,250}
+\definecolor{ccata}{RGB}{214,232,247}
+\definecolor{ccatb}{RGB}{212,238,226}
+\definecolor{ccatc}{RGB}{255,236,196}
+\definecolor{ccatd}{RGB}{246,214,222}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\renewcommand{\arraystretch}{1.18}
+\setlength{\tabcolsep}{3pt}
+\setlength{\emergencystretch}{3em}
+\setlength{\parindent}{0pt}
+\newcommand{\pagsize}{\special{papersize=21.59cm,27.94cm}}
+\setlength{\parskip}{0.5em}
+\setlist{itemsep=2pt,topsep=4pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\pagsize\small OCE -- Guía de estudio (uso interno)}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyhead[R]{\small\thepage}}
+\hypersetup{pdftitle={Guía de estudio -- uso interno},pdfauthor={Isabella Hoyos \'Alvarez}}
+
+\begin{document}
+
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\centering
+\vspace*{3.5cm}
+{\LARGE\bfseries Guía de estudio -- uso interno\par}
+\vspace{1.5cm}
+{\large Sistema de indicadores del Observatorio Ciudadano de Envigado: qué se ha hecho, problemas, variables y preparación de la reunión\par}
+\vspace{3cm}
+{\large Preparada para: Isabella Hoyos Álvarez\par}
+\vspace{0.5cm}
+{\large 10 de noviembre de 2026\par}
+\vfill
+{\large Observatorio Ciudadano de Envigado (OCE)\par}
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\tableofcontents
+\clearpage
+
+\textbf{Para:} Isabella (uso interno, no se entrega a los profesores)
+
+\textbf{Preparada:} martes 10 de noviembre de 2026, para la reunión del miércoles 11 con el profesor Francisco Correa
+
+\textbf{Fuentes:} solo archivos del repositorio. Las cifras se tomaron de los entregables enviados: \texttt{\footnotesize resultados\_\allowbreak{}indicadores.\allowbreak{}csv}, \texttt{\footnotesize base\_\allowbreak{}indicadores\_\allowbreak{}OCE.\allowbreak{}xlsx}, \texttt{\footnotesize informe\_\allowbreak{}avance\_\allowbreak{}1} y el Excel de disponibilidad versión 1.2. Esta guía no recalcula ni cambia ningún resultado.
+
+\begin{center}\fcolorbox{gray!60}{cnota}{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{\small \textbf{Cómo usar esta guía.} La Parte 1 cuenta lo que se hizo, en orden. La Parte 2 reúne los problemas. La Parte 3 es la propuesta de variables que vas a discutir. La Parte 4 explica la base de datos del tablero. La Parte 5 te prepara para la reunión: si solo tienes diez minutos, lee la hoja de reunión (5.1) y las respuestas a preguntas (5.2). Al final hay un glosario con todas las siglas.}}\end{center}
+
+\clearpage
+
+\section*{Parte 1. Qué se ha hecho}
+
+\phantomsection\addcontentsline{toc}{section}{Parte 1. Qué se ha hecho}
+
+\subsection*{1.1 Punto de partida}
+
+\phantomsection\addcontentsline{toc}{subsection}{1.1 Punto de partida}
+
+\subsubsection*{Qué es el OCE y qué es el OPCEN}
+
+\begin{itemize}
+\item El \textbf{Observatorio Ciudadano de Envigado (OCE)} es, según la propuesta de 2025 (\texttt{\footnotesize Documentos guias/\allowbreak{}02032026\_\allowbreak{}Propuesta  Observatorio Ciudadano.\allowbreak{}docx}), una instancia \textbf{ciudadana y autónoma} que vigila, evalúa y pide cuentas sobre la gestión pública municipal. La propuesta lleva los nombres de la Alcaldía de Envigado, el Departamento Administrativo de Planeación (DAP), la Subdirección de Participación Ciudadana y la Institución Universitaria de Envigado (IUE).
+\item El \textbf{Observatorio de Participación Ciudadana de Envigado (OPCEN)} es la instancia \textbf{institucional} (de la Alcaldía). La propuesta dice que el OPCEN ``diagnostica y describe'' los procesos participativos, mientras el OCE ``vigila, evalúa críticamente y exige rendición de cuentas''.
+\item El marco normativo clave es el \textbf{Acuerdo Municipal 033 de 2022} (Política Pública de Participación Incidente).
+\item Uno de los objetivos de la propuesta es ``diseñar un sistema de indicadores y monitoreo'' y ofrecer a la ciudadanía ``tableros de control interactivos'' para explorar indicadores, comparar periodos y filtrar por zona.
+\end{itemize}
+
+\subsubsection*{Qué pidieron los profesores}
+
+\begin{itemize}
+\item Los profesores \textbf{Francisco Correa y Eber Gutiérrez} definieron un sistema preliminar de indicadores para la Alcaldía de Envigado (con entrega prevista el 15 de octubre de 2026) y lo plasmaron en la \textbf{Matriz de información de indicadores} (archivo Excel en \texttt{\footnotesize Documentos guias/\allowbreak{}}, que no se modifica).
+\item \textbf{Primer encargo (octubre):} decir, variable por variable, si el dato existe, dónde está, en qué formato y qué falta. Se llamó ``disponibilidad y brecha''. No incluía calcular nada.
+\item \textbf{Segundo encargo (noviembre), del profesor Francisco:} organizar los datos de los indicadores que sí se pueden calcular, construir las variables que se obtienen de información pública y calcular los indicadores clasificados como ``Viable'' y ``Viable con ajuste''. Para los ``No viables por ahora'', solo construir las variables.
+\item \textbf{Para qué sirve:} el sistema alimenta un informe a Envigado y un \textbf{tablero} (una página interactiva con los indicadores). Otra persona hará el tablero y necesita, al final de esta semana, la lista de variables y la base de datos.
+\end{itemize}
+
+\subsubsection*{Antecedente: el IIC}
+
+Antes de estos encargos, el repositorio trabajó en el \textbf{Índice de Incidencia Ciudadana (IIC)}: se hizo un inventario de archivos fuente y se probaron las ``llaves de cruce'' entre bases (por ejemplo, el código BPIN de un proyecto). Ese trabajo sirvió como insumo, pero \textbf{ninguno de los dos encargos calcula el IIC}.
+
+\subsection*{1.2 La matriz de los profesores}
+
+\phantomsection\addcontentsline{toc}{subsection}{1.2 La matriz de los profesores}
+
+La Matriz es un libro de Excel con cinco hojas:
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{2.58cm}L{13.57cm}}
+\toprule
+\cellcolor{chead}\textbf{Hoja} & \cellcolor{chead}\textbf{Qué tiene} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{Hoja} & \cellcolor{chead}\textbf{Qué tiene} \\
+\midrule
+\endhead
+\midrule \multicolumn{2}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+Guía & 20 reglas de uso (cómo registrar datos, cuándo un valor se puede usar, cómo leer los semáforos) \\
+Matriz & El catálogo: 19 indicadores y 4 índices, con fórmula, fuentes, semáforo e interpretación \\
+Registro & Donde se escribe el valor de cada variable por año, periodo y territorio: 39 variables $\times$ 4 años (2024 a 2027) = 156 filas \\
+PP\_Proyectos & Una fila por proyecto de presupuesto participativo, para las personas atendidas y la meta de atención \\
+Resultados & Fórmulas que calculan los puntajes y los semáforos \\
+\end{xltabular}
+}
+
+\textbf{Nota sobre la ``guía metodológica''.} En \texttt{\footnotesize Documentos guias/\allowbreak{}} solo hay dos archivos: la propuesta del OCE y la Matriz. La guía metodológica es la hoja \textbf{Guía} de la Matriz. Los cuatro anexos en Word que la Guía cita como fuente metodológica (uno por sistema) y el documento de diagnóstico del OPCEN \textbf{no están en el repositorio}.
+
+\subsubsection*{Conceptos básicos (para leer todo lo demás)}
+
+\begin{itemize}
+\item \textbf{Variable:} un dato que se busca en un documento. Ejemplo: ``número de estrategias de promoción del control social ejecutadas''.
+\item \textbf{Indicador:} una cuenta hecha con dos variables, casi siempre 100 $\times$ numerador / denominador. Da un \textbf{puntaje} de 0 a 100.
+\item \textbf{Índice:} un promedio ponderado de varios indicadores. Ejemplo: el ICRCS promedia cuatro indicadores de control social.
+\item \textbf{Semáforo:} el color que se asigna al puntaje según unos umbrales (cortes) fijados en la Matriz. Se clasifica \textbf{sin redondear}: 99,99 en un indicador del PDM no es Verde.
+\item \textbf{Peso:} cuánto cuenta cada indicador dentro de un índice (por ejemplo, 25 \%).
+\end{itemize}
+
+\subsubsection*{Reglas generales de la Guía que hay que conocer}
+
+\begin{itemize}
+\item \textbf{N/D (no disponible):} información faltante, no validada o fuera del corte. Sin color.
+\item \textbf{NE (no evaluable):} base cero; no hay universo que evaluar. Ejemplo: la zona 1 no tiene proyectos de presupuesto participativo. Sin color.
+\item \textbf{Revisar:} claves duplicadas, numerador mayor que el universo u otra inconsistencia. Sin color.
+\item \textbf{Un cero observado y validado con base positiva sí da 0 puntos} (y su color).
+\item \textbf{Tope de 100:} solo los indicadores que lo dicen expresamente (PCS y los del PDM) se limitan a 100. En los demás, si el numerador supera al denominador, el resultado es ``Revisar''.
+\item \textbf{Índices sin redistribuir pesos (regla 15):} si falta un componente, el índice queda N/D. No se reparte el peso entre los que sí hay.
+\item \textbf{``Validado'' (regla 3):} la Matriz solo usa un valor si tiene estado ``Validado'', fuente, fecha de corte y valor numérico. Validar es decisión del responsable de la matriz (regla 19). \textbf{En este trabajo nada está validado:} las variables están en ``Pendiente'' y los resultados en ``Provisional''.
+\item \textbf{Metas del PDM (reglas 8 y 9):} las metas son de 2027; comparar 2024 con la meta 2027 es ``logro al corte'', no cumplimiento anual.
+\item \textbf{Control social (regla 17):} los universos se definen antes de medir; una convocatoria no prueba que las veedurías asistieron; un acuse de recibo no es respuesta de fondo; la búsqueda documental llega hasta el 31 de marzo del año siguiente.
+\item \textbf{Alertas de PP (regla 20):} si CEP o CMA es menor de 50, se muestra una alerta aunque el índice sea alto. No se compensa una entrega débil con buena ejecución financiera.
+\end{itemize}
+
+\subsubsection*{Los cuatro sistemas, indicador por indicador}
+
+\textbf{Sistema 1. Control social (CS).} Mide si existen condiciones para que la ciudadanía vigile la gestión y si la Alcaldía responde.
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{4.02cm}L{4.19cm}L{4.33cm}L{3.16cm}}
+\toprule
+\cellcolor{chead}\textbf{Código} & \cellcolor{chead}\textbf{Qué mide, en palabras simples} & \cellcolor{chead}\textbf{Fórmula y variables} & \cellcolor{chead}\textbf{Semáforo (umbrales exactos de la Matriz)} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{Código} & \cellcolor{chead}\textbf{Qué mide, en palabras simples} & \cellcolor{chead}\textbf{Fórmula y variables} & \cellcolor{chead}\textbf{Semáforo (umbrales exactos de la Matriz)} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+CS.DSI -- Disponibilidad de información de seguimiento & De una lista fija de metas del plan, cuántas tienen una cifra pública utilizable del año & DSI = 100 $\times$ MD / MS. MD = metas de la lista con valor observado publicado; MS = metas de la lista & Verde $\geq$ 90; Amarillo 70 a \textless{} 90; Rojo \textless{} 70; Gris N/D \\
+CS.PCS -- Cumplimiento de la promoción del control social & Si se hicieron las estrategias de promoción del control social que estaban programadas & PCS = 100 $\times$ EE / EP, con tope de 100. EE = ejecutadas; EP = programadas & Verde $\geq$ 75; Amarillo 50 a \textless{} 75; Rojo \textless{} 50 \\
+CS.VRC -- Presencia de veedurías en la rendición de cuentas & En cuántos eventos de rendición de cuentas consta que hubo veedurías & VRC = 100 $\times$ EV / ET. EV = eventos con presencia documentada; ET = eventos del año. Si hay casos con presencia desconocida, VRC = N/D & Verde $\geq$ 75; Amarillo 50 a \textless{} 75; Rojo \textless{} 50 \\
+CS.RPO -- Respuesta pública a observaciones ciudadanas & De las observaciones que hizo la ciudadanía en la rendición de cuentas, cuántas recibieron respuesta de fondo publicada & RPO = 100 $\times$ OR / OT. OR = con respuesta de fondo; OT = total de observaciones sobre el PDM & Verde $\geq$ 90; Amarillo 70 a \textless{} 90; Rojo \textless{} 70 \\
+CS.ICRCS -- Índice de Condiciones y Respuesta para el Control Social & Resumen de los cuatro anteriores & (DSI + PCS + VRC + RPO) / 4, cada uno al 25 \% & Verde $\geq$ 75; Amarillo 50 a \textless{} 75; Rojo \textless{} 50 \\
+\end{xltabular}
+}
+
+\textbf{Sistema 2. Participación ciudadana (PC).} Mide si la participación llega al territorio, si incide en decisiones y si la oferta formativa se cumple.
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{4.72cm}L{4.84cm}L{2.93cm}L{3.22cm}}
+\toprule
+\cellcolor{chead}\textbf{Código} & \cellcolor{chead}\textbf{Qué mide} & \cellcolor{chead}\textbf{Fórmula y variables} & \cellcolor{chead}\textbf{Semáforo} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{Código} & \cellcolor{chead}\textbf{Qué mide} & \cellcolor{chead}\textbf{Fórmula y variables} & \cellcolor{chead}\textbf{Semáforo} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+PC.I1 -- Incorporación de aportes ciudadanos & De los procesos participativos cerrados, en cuántos se incorporó al menos un aporte ciudadano en una decisión formal & 100 $\times$ V1 / V2 & Verde $\geq$ 70; Amarillo 40 a \textless{} 70; Rojo \textless{} 40 \\
+\cellcolor{cstripe}PC.I2 -- Cobertura territorial de la participación & \cellcolor{cstripe}En cuántas de las zonas oficiales hubo al menos una actividad participativa & \cellcolor{cstripe}100 $\times$ V1 / V2 (V2 = zonas oficiales) & \cellcolor{cstripe}Verde $\geq$ 80; Amarillo 50 a \textless{} 80; Rojo \textless{} 50 \\
+PC.I3 -- Cumplimiento de la oferta formativa & De las acciones formativas programadas para la ciudadanía, cuántas se realizaron & 100 $\times$ V1 / V2 & Verde $\geq$ 75; Amarillo 50 a \textless{} 75; Rojo \textless{} 50 \\
+\cellcolor{cstripe}PC.I4 -- Publicación de resultados participativos & \cellcolor{cstripe}De los procesos cerrados, cuántos publicaron sus resultados & \cellcolor{cstripe}100 $\times$ V1 / V2 & \cellcolor{cstripe}Verde $\geq$ 90; Amarillo 70 a \textless{} 90; Rojo \textless{} 70 \\
+PC.I5 -- Cumplimiento de sesiones de participación (complementario) & De las sesiones previstas de unas instancias seleccionadas, cuántas se hicieron & 100 $\times$ V1 / V2 & Verde $\geq$ 75; Amarillo 50 a \textless{} 75; Rojo \textless{} 50 \\
+\cellcolor{cstripe}PC.I6 -- Disponibilidad de participación virtual (complementario) & \cellcolor{cstripe}De las actividades realizadas, cuántas tuvieron un canal virtual para intervenir & \cellcolor{cstripe}100 $\times$ V1 / V2 & \cellcolor{cstripe}Verde $\geq$ 60; Amarillo 30 a \textless{} 60; Rojo \textless{} 30 \\
+PC.ISPC -- Índice Simplificado de Participación Ciudadana de Envigado & Resumen de I1 a I4 (I5 e I6 no entran) & 0,30 $\times$ I1 + 0,25 $\times$ I2 + 0,20 $\times$ I3 + 0,25 $\times$ I4 & Verde $\geq$ 75; Amarillo 50 a \textless{} 75; Rojo \textless{} 50 \\
+\end{xltabular}
+}
+
+\textbf{Sistema 3. Cumplimiento del Plan de Desarrollo Municipal (PDM).} Compara seis resultados del plan con su meta de 2027. En todos: puntaje = 100 $\times$ observado / meta, con tope de 100 (en mortalidad vial es al revés, porque menos es mejor: 100 $\times$ meta / observado).
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{4.63cm}L{5.39cm}L{2.98cm}L{2.71cm}}
+\toprule
+\cellcolor{chead}\textbf{Código} & \cellcolor{chead}\textbf{Qué mide} & \cellcolor{chead}\textbf{Meta de formulación (2027)} & \cellcolor{chead}\textbf{Semáforo (igual para todo el PDM)} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{Código} & \cellcolor{chead}\textbf{Qué mide} & \cellcolor{chead}\textbf{Meta de formulación (2027)} & \cellcolor{chead}\textbf{Semáforo (igual para todo el PDM)} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+PDM.CS -- Logro de la cobertura de aseguramiento subsidiado & Cobertura del régimen subsidiado de salud & 99,5 \% & Verde solo en 100 sin redondear; Amarillo 75 a \textless{} 100; Rojo 0 a \textless{} 75 \\
+\cellcolor{cstripe}PDM.CM -- Logro de la reducción de mortalidad vial & \cellcolor{cstripe}Muertes por siniestros viales por cada 100.000 habitantes & \cellcolor{cstripe}8 & \cellcolor{cstripe}Igual \\
+PDM.CA -- Logro del mantenimiento de espacio público verde & Metros cuadrados de espacio público verde por habitante & 3,88 & Igual \\
+\cellcolor{cstripe}PDM.CP -- Logro de implementación de procesos participativos & \cellcolor{cstripe}Porcentaje oficial de implementación de procesos de participación & \cellcolor{cstripe}100 \% & \cellcolor{cstripe}Igual \\
+PDM.CD -- Logro de cobertura de servicios deportivos & Cobertura de servicios deportivos & 6 \% & Igual \\
+\cellcolor{cstripe}PDM.ILE -- Índice de Logro Educativo & \cellcolor{cstripe}Promedio de dos logros: atención integral de 0 a 6 años (LA = 100 $\times$ A / MA) y porcentaje de instituciones oficiales que mejoran su categoría en Saber 11 (LS = 100 $\times$ S / MS) & \cellcolor{cstripe}MA = 19 \%; MS = 14 \% & \cellcolor{cstripe}Igual \\
+PDM.ICPD-6 -- Índice de cumplimiento de resultados seleccionados del PDM & Promedio de dos subíndices: bienestar social, IBS = (CS + ILE + CD) / 3, y territorio y gobernanza, ITG = (CM + CA + CP) / 3; ICPD-6 = (IBS + ITG) / 2 & --- & Igual \\
+\end{xltabular}
+}
+
+\textbf{Sistema 4. Presupuesto participativo (PP).} Mide si los recursos que la comunidad priorizó se ejecutan, se entregan y atienden a la población.
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{3.97cm}L{4.59cm}L{4.16cm}L{2.99cm}}
+\toprule
+\cellcolor{chead}\textbf{Código} & \cellcolor{chead}\textbf{Qué mide} & \cellcolor{chead}\textbf{Fórmula y variables} & \cellcolor{chead}\textbf{Semáforo (cuatro colores)} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{Código} & \cellcolor{chead}\textbf{Qué mide} & \cellcolor{chead}\textbf{Fórmula y variables} & \cellcolor{chead}\textbf{Semáforo (cuatro colores)} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+PP.EPP -- Ejecución presupuestal del PP & Qué parte del dinero disponible del PP se convirtió en obligaciones & EPP = 100 $\times$ OPP / APP. OPP = obligaciones; APP = apropiación definitiva & Verde 90 a 100; Amarillo 75 a \textless{} 90; Naranja 50 a \textless{} 75; Rojo 0 a \textless{} 50; N/D o NE sin puntaje \\
+PP.CEP -- Cumplimiento de entrega de proyectos & Qué parte de los proyectos completó las entregas exigibles, verificadas con acta o informe & CEP = 100 $\times$ PEC / PE & Igual \\
+PP.CMA -- Cumplimiento de metas de atención & Promedio, por proyecto, de personas atendidas frente a la meta & Por proyecto: 100 $\times$ mín(PA / MP; 1); CMA = SC / NA & Igual \\
+PP.IREPP -- Índice de Resultados de Ejecución del PP & Resumen con 80 \% del peso en entrega y atención & 0,20 $\times$ EPP + 0,40 $\times$ CEP + 0,40 $\times$ CMA & Igual \\
+\end{xltabular}
+}
+
+Para el municipio, el EPP es \textbf{la suma de obligaciones sobre la suma de apropiaciones} de todos los proyectos, no un promedio de zonas (regla 13).
+
+\subsection*{1.3 Etapa 1: disponibilidad y brecha (octubre de 2026)}
+
+\phantomsection\addcontentsline{toc}{subsection}{1.3 Etapa 1: disponibilidad y brecha (octubre de 2026)}
+
+\subsubsection*{Qué se buscó y dónde}
+
+\begin{itemize}
+\item Para cada una de las \textbf{39 variables} de la hoja Registro: si el dato existe, en qué documento, en qué página, para qué años y si viene por zona.
+\item Para cada uno de los \textbf{23 indicadores e índices}: si se puede calcular hoy.
+\item \textbf{Dónde:} primero en el archivo del observatorio (los 2.787 archivos fuente, ver 1.5) y después en la web, en fuentes primarias: Ministerio de Salud (MinSalud), Medicina Legal (Forensis), DANE, TerriData, ICFES, ADRES, datos de la Policía, sitio de la Escuela de Formación (EFPC) y portal de la Alcaldía. Regla: ninguna variable podía quedar ``No disponible'' o ``Proxy'' sin búsqueda en fuentes primarias.
+\item \textbf{Periodo:} 2024, 2025 y lo publicado de 2026. \textbf{Territorio:} municipio y, cuando había, las 13 zonas.
+\end{itemize}
+
+\subsubsection*{La escala de disponibilidad, con un ejemplo real de cada una}
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{2.79cm}L{5.52cm}L{7.62cm}}
+\toprule
+\cellcolor{chead}\textbf{Categoría} & \cellcolor{chead}\textbf{Definición (hoja Léeme del Excel)} & \cellcolor{chead}\textbf{Ejemplo real} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{Categoría} & \cellcolor{chead}\textbf{Definición (hoja Léeme del Excel)} & \cellcolor{chead}\textbf{Ejemplo real} \\
+\midrule
+\endhead
+\midrule \multicolumn{3}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\textbf{Disponible} & Publicado con la unidad y la definición del indicador para al menos un año entre 2024 y 2026 & CS.PCS.EE: el Plan Indicativo reporta 1 estrategia de promoción del control social ejecutada en 2024 y 1 en 2025 (consecutivo 544) \\
+\textbf{Construible} & No está publicado como cifra, pero se puede contar o calcular con documentos que ya se tienen & PP.EPP.APP: no existe una cifra oficial de ``apropiación del PP''; se reconstruyó cruzando los 61 proyectos del plan de acción 2025 con el listado de la EFPC (\$20.928.690.218) \\
+\textbf{Parcial} & Existe, pero faltan años, la desagregación o el soporte exigido, o la definición difiere & PC.I2.V1: hay reportes de asambleas por zona, pero no las actas o listas de asistencia que pide la Matriz \\
+\textbf{Proxy} & Solo hay un dato parecido, con otra definición, unidad o universo & PDM.CD.O: la Matriz pide cobertura deportiva en porcentaje; solo se halló ``38 de 40 disciplinas implementadas'' en 2025 \\
+\textbf{No disponible} & No está en el archivo ni en fuentes públicas; hay que pedirlo & PDM.CP.O: no hay cifra ni método oficial del porcentaje de implementación de procesos participativos \\
+\end{xltabular}
+}
+
+\subsubsection*{Resultados (verificados en el Excel de disponibilidad, versión 1.2)}
+
+\textbf{Variables (39):} Disponible 10 \textperiodcentered{} Construible 7 \textperiodcentered{} Parcial 19 \textperiodcentered{} Proxy 2 \textperiodcentered{} No disponible 1.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{1.72cm}L{2.29cm}L{2.47cm}L{1.72cm}L{1.34cm}L{2.47cm}L{1.34cm}}
+\toprule
+\cellcolor{chead}\textbf{Sistema} & \cellcolor{chead}\textbf{Disponible} & \cellcolor{chead}\textbf{Construible} & \cellcolor{chead}\textbf{Parcial} & \cellcolor{chead}\textbf{Proxy} & \cellcolor{chead}\textbf{No disponible} & \cellcolor{chead}\textbf{Total} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{Sistema} & \cellcolor{chead}\textbf{Disponible} & \cellcolor{chead}\textbf{Construible} & \cellcolor{chead}\textbf{Parcial} & \cellcolor{chead}\textbf{Proxy} & \cellcolor{chead}\textbf{No disponible} & \cellcolor{chead}\textbf{Total} \\
+\midrule
+\endhead
+\midrule \multicolumn{7}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+CS & 2 & 3 & 3 & 0 & 0 & 8 \\
+PC & 1 & 0 & 11 & 0 & 0 & 12 \\
+PDM & 7 & 1 & 3 & 2 & 1 & 14 \\
+PP & 0 & 3 & 2 & 0 & 0 & 5 \\
+\textbf{Total} & \textbf{10} & \textbf{7} & \textbf{19} & \textbf{2} & \textbf{1} & \textbf{39} \\
+\end{xltabular}
+}
+
+Qué significan esos números:
+
+\begin{itemize}
+\item \textbf{De los 10 ``Disponibles'', 7 son metas del PDM} (99,5; 8; 3,88; 100; 6; 19 y 14). Solo \textbf{3 son datos observados}: CS.PCS.EE, CS.PCS.EP y PC.I2.V2 (13 zonas). Es decir, casi nada de lo que se mide está publicado tal cual.
+\item \textbf{Los 7 Construibles} (CS.DSI.MD, CS.DSI.MS, CS.VRC.ET, PDM.ILE.A, PP.EPP.OPP, PP.EPP.APP, PP.CEP.PE) se pueden armar con documentos que ya se tienen.
+\item \textbf{Los 19 Parciales} son la mitad del sistema: el dato existe, pero falta soporte, años o definición. Participación ciudadana tiene 11 de sus 12 variables en Parcial.
+\item \textbf{Los 2 Proxy} son PDM.CS.O y PDM.CD.O. \textbf{El único No disponible} es PDM.CP.O.
+\end{itemize}
+
+\textbf{Indicadores e índices (23):} 1 Viable \textperiodcentered{} 10 Viables con ajuste \textperiodcentered{} 12 No viables por ahora.
+
+\begin{itemize}
+\item \textbf{Viable (1):} CS.PCS.
+\item \textbf{Viables con ajuste (10):} CS.DSI, CS.VRC, CS.RPO, CS.ICRCS, PC.I2, PC.I3, PC.I5, PDM.CM, PDM.CA y PP.EPP. ``Con ajuste'' significa que se pueden calcular si se fija una definición (por ejemplo, el universo de eventos) o se acepta una fuente con salvedades.
+\item \textbf{No viables por ahora (12):} PC.I1, PC.I4, PC.I6, PC.ISPC, PDM.CS, PDM.CP, PDM.CD, PDM.ILE, PDM.ICPD-6, PP.CEP, PP.CMA y PP.IREPP. Los tres índices (ISPC, ICPD-6, IREPP) quedan bloqueados por la regla 15: les falta al menos un componente.
+\end{itemize}
+
+\subsubsection*{Qué se entregó en la etapa 1}
+
+\begin{itemize}
+\item \texttt{\footnotesize outputs/\allowbreak{}disponibilidad/\allowbreak{}disponibilidad\_\allowbreak{}brecha\_\allowbreak{}indicadores.\allowbreak{}xlsx}: hojas Léeme, Indicadores (23), Variables (39), Fuentes (66), Solicitudes (32 datos para pedir a la Alcaldía, por dependencia) y Enlaces (218 hipervínculos).
+\item Informe formal en Word (\texttt{\footnotesize informe\_\allowbreak{}disponibilidad.\allowbreak{}docx}) y en LaTeX/PDF con su paquete para Overleaf.
+\item Un hallazgo adicional que se ofreció como complemento a la revisión previa del profesor Francisco (que había dejado EPP en N/D): \textbf{EPP 2025 = 98,83, marcado ``preliminar, por validar''}.
+\item Documentos internos (no se entregan): resumen de la reunión y lista de documentos por descargar, en \texttt{\footnotesize outputs/\allowbreak{}disponibilidad/\allowbreak{}interno/\allowbreak{}}.
+\end{itemize}
+
+\subsection*{1.4 Etapa 2: cálculo provisional (noviembre de 2026)}
+
+\phantomsection\addcontentsline{toc}{subsection}{1.4 Etapa 2: cálculo provisional (noviembre de 2026)}
+
+\subsubsection*{Qué significa ``provisional''}
+
+\begin{itemize}
+\item \textbf{Ninguna cifra está validada.} Las variables están en estado ``Pendiente'' y los resultados en ``Provisional''.
+\item Con la regla estricta de la Matriz (solo calcula con datos ``Validado''), \textbf{todo saldría N/D}. Por eso se calculó con la regla ``preliminar'' (calcular con datos ``Pendiente'') y se rotuló cada resultado como provisional.
+\item Además, muchos resultados dependen de \textbf{decisiones metodológicas que no tomó el equipo} sino que corresponden a los profesores.
+\end{itemize}
+
+\subsubsection*{Qué es un escenario y qué es un supuesto por defecto}
+
+\begin{itemize}
+\item Cuando la Matriz deja una pregunta abierta (por ejemplo, ``\textquestiondown{}qué cuenta como evento de rendición de cuentas?''), en vez de decidir por los profesores se calcularon \textbf{todas las respuestas razonables}. Cada combinación de respuestas es un \textbf{escenario}.
+\item Una de esas respuestas se marcó como \textbf{valor por defecto}: el supuesto de trabajo que se usa mientras los profesores deciden. Todos los valores por defecto están rotulados ``PROVISIONAL''.
+\item Las preguntas y sus opciones están en el archivo \textbf{\texttt{\footnotesize config/\allowbreak{}supuestos.\allowbreak{}yaml}} (un archivo de texto de configuración): \textbf{36 parámetros}, cada uno con sus opciones y su valor por defecto. La hoja Supuestos de la base tiene esos 36, más 3 sensibilidades adicionales y 2 casos dudosos de la segunda lectura (41 filas).
+\end{itemize}
+
+Tres ejemplos de supuestos por defecto:
+
+\begin{enumerate}
+\item \textbf{Ventana de publicación (control social):} solo cuenta un documento publicado a más tardar el 31 de marzo del año siguiente (regla 17 de la Guía). Alternativa: aceptar todo lo publicado hasta la fecha de consulta.
+\item \textbf{Proyecto 0553 (costo del proceso de PP):} se excluye del cálculo del EPP. Si se incluye, EPP 2025 pasa de 98,83 a 98,86.
+\item \textbf{Zona 1:} en PP se marca NE (no tiene proyectos). Alternativa: N/D.
+\end{enumerate}
+
+Otros: 2026 se trata como primer semestre provisional (corte 30 de junio de 2026), las metas del PDM se comparan con la meta 2027, el DSI usa 7 metas.
+
+\subsubsection*{Resultados por indicador (nivel municipal, escenario por defecto)}
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{3.94cm}L{2.87cm}L{4.19cm}L{1.90cm}L{2.58cm}}
+\toprule
+\cellcolor{chead}\textbf{Indicador} & \cellcolor{chead}\textbf{Año} & \cellcolor{chead}\textbf{Numerador / denominador} & \cellcolor{chead}\textbf{Puntaje} & \cellcolor{chead}\textbf{Semáforo} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{Indicador} & \cellcolor{chead}\textbf{Año} & \cellcolor{chead}\textbf{Numerador / denominador} & \cellcolor{chead}\textbf{Puntaje} & \cellcolor{chead}\textbf{Semáforo} \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+CS.PCS -- Promoción del control social & 2024 & 1 / 1 estrategias & 100 & \cellcolor{cverde}Verde \\
+\cellcolor{cstripe}CS.PCS & \cellcolor{cstripe}2025 & \cellcolor{cstripe}1 / 1 & \cellcolor{cstripe}100 & \cellcolor{cverde}Verde \\
+CS.DSI -- Disponibilidad de información de seguimiento & 2024 & 0 / 7 metas & 0 & \cellcolor{crojo}Rojo \\
+\cellcolor{cstripe}CS.DSI & \cellcolor{cstripe}2025 & \cellcolor{cstripe}0 / 7 & \cellcolor{cstripe}0 & \cellcolor{crojo}Rojo \\
+CS.VRC -- Veedurías en la rendición de cuentas & 2024 & 3 eventos; presencia desconocida en 1 & N/D & \cellcolor{cgris}Gris \\
+\cellcolor{cstripe}CS.VRC & \cellcolor{cstripe}2025 & \cellcolor{cstripe}5 eventos; presencia desconocida & \cellcolor{cstripe}N/D & \cellcolor{cgris}Gris \\
+CS.RPO -- Respuesta a observaciones ciudadanas & 2024 & 16 / 17 observaciones & 94,12 & \cellcolor{cverde}Verde \\
+\cellcolor{cstripe}CS.RPO & \cellcolor{cstripe}2025 & \cellcolor{cstripe}Cuadro publicado incompleto & \cellcolor{cstripe}N/D & \cellcolor{cgris}Gris \\
+CS.ICRCS -- Índice de control social & 2024 & Falta VRC & N/D & \cellcolor{cgris}Gris \\
+\cellcolor{cstripe}CS.ICRCS & \cellcolor{cstripe}2025 & \cellcolor{cstripe}Faltan VRC y RPO & \cellcolor{cstripe}N/D & \cellcolor{cgris}Gris \\
+PC.I2 -- Cobertura territorial & 2024 & 13 / 13 zonas & 100 & \cellcolor{cverde}Verde \\
+\cellcolor{cstripe}PC.I2 & \cellcolor{cstripe}2025 & \cellcolor{cstripe}12 / 13 & \cellcolor{cstripe}92,31 & \cellcolor{cverde}Verde \\
+PC.I3 -- Oferta formativa & 2024 & No hay programación publicada & N/D & \cellcolor{cgris}Gris \\
+\cellcolor{cstripe}PC.I3 & \cellcolor{cstripe}2025 & \cellcolor{cstripe}20 / 24 acciones formativas & \cellcolor{cstripe}83,33 & \cellcolor{cverde}Verde \\
+PC.I5 -- Sesiones de instancias & 2025 & 8 / 8 reuniones (CMSSS y COPACO) & 100 & \cellcolor{cverde}Verde \\
+\cellcolor{cstripe}PDM.CA -- Espacio público verde & \cellcolor{cstripe}2024 & \cellcolor{cstripe}5,75 observado / meta 3,88 m\textsuperscript{2} por habitante & \cellcolor{cstripe}100 & \cellcolor{cverde}Verde \\
+PDM.CM -- Mortalidad vial & 2024 & 7,25 observado / meta 8 por 100.000 & 100 & \cellcolor{cverde}Verde \\
+\cellcolor{cstripe}PP.EPP -- Ejecución del PP & \cellcolor{cstripe}2024 (aproximado) & \cellcolor{cstripe}\$18.357.265.731 / \$18.601.236.386 & \cellcolor{cstripe}98,69 & \cellcolor{cverde}Verde \\
+PP.EPP & 2025 & \$20.684.427.720 / \$20.928.690.218 & 98,83 & \cellcolor{cverde}Verde \\
+\cellcolor{cstripe}PP.EPP & \cellcolor{cstripe}2026, primer semestre & \cellcolor{cstripe}\$5.702.528.148 / \$24.519.738.737 & \cellcolor{cstripe}23,26 & \cellcolor{cstripe}Sin semáforo \\
+\end{xltabular}
+}
+
+Cómo se lee un ejemplo: \textbf{EPP 2025 = 100 $\times$ 20.684.427.720 / 20.928.690.218 = 98,83}. Como 98,83 está entre 90 y 100, el semáforo de PP es Verde.
+
+\textbf{EPP por zona (escenario por defecto):} en 2024 y 2025 todas las zonas con puntaje están en Verde, salvo la \textbf{zona 10 en 2024: 82,58, Amarillo}, que se explica sobre todo por un cruce aproximado del proyecto 0709. La zona 1 es NE en los tres años.
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{2.22cm}L{2.59cm}L{2.41cm}L{1.16cm}L{2.41cm}L{1.86cm}L{2.41cm}}
+\toprule
+\cellcolor{chead}\textbf{Territorio} & \cellcolor{chead}\textbf{2024 (aproximado)} & \cellcolor{chead}\textbf{Semáforo 2024} & \cellcolor{chead}\textbf{2025} & \cellcolor{chead}\textbf{Semáforo 2025} & \cellcolor{chead}\textbf{2026, primer semestre} & \cellcolor{chead}\textbf{Semáforo 2026} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{Territorio} & \cellcolor{chead}\textbf{2024 (aproximado)} & \cellcolor{chead}\textbf{Semáforo 2024} & \cellcolor{chead}\textbf{2025} & \cellcolor{chead}\textbf{Semáforo 2025} & \cellcolor{chead}\textbf{2026, primer semestre} & \cellcolor{chead}\textbf{Semáforo 2026} \\
+\midrule
+\endhead
+\midrule \multicolumn{7}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+Municipio & 98,69 & \cellcolor{cverde}Verde & 98,83 & \cellcolor{cverde}Verde & 23,26 & Sin semáforo \\
+\cellcolor{cstripe}Zona 1 & \cellcolor{cstripe}NE & \cellcolor{cgris}Gris & \cellcolor{cstripe}NE & \cellcolor{cgris}Gris & \cellcolor{cstripe}NE & \cellcolor{cgris}Gris \\
+Zona 2 & 97,32 & \cellcolor{cverde}Verde & 97,38 & \cellcolor{cverde}Verde & 13,61 & Sin semáforo \\
+\cellcolor{cstripe}Zona 3 & \cellcolor{cstripe}99,12 & \cellcolor{cverde}Verde & \cellcolor{cstripe}99,83 & \cellcolor{cverde}Verde & \cellcolor{cstripe}30,14 & \cellcolor{cstripe}Sin semáforo \\
+Zona 4 & 97,48 & \cellcolor{cverde}Verde & 98,70 & \cellcolor{cverde}Verde & 17,08 & Sin semáforo \\
+\cellcolor{cstripe}Zona 5 & \cellcolor{cstripe}99,07 & \cellcolor{cverde}Verde & \cellcolor{cstripe}99,14 & \cellcolor{cverde}Verde & \cellcolor{cstripe}22,54 & \cellcolor{cstripe}Sin semáforo \\
+Zona 6 & 99,85 & \cellcolor{cverde}Verde & 98,70 & \cellcolor{cverde}Verde & 23,54 & Sin semáforo \\
+\cellcolor{cstripe}Zona 7 & \cellcolor{cstripe}99,99 & \cellcolor{cverde}Verde & \cellcolor{cstripe}99,77 & \cellcolor{cverde}Verde & \cellcolor{cstripe}30,96 & \cellcolor{cstripe}Sin semáforo \\
+Zona 8 & 98,68 & \cellcolor{cverde}Verde & 99,50 & \cellcolor{cverde}Verde & 26,11 & Sin semáforo \\
+\cellcolor{cstripe}Zona 9 & \cellcolor{cstripe}99,99 & \cellcolor{cverde}Verde & \cellcolor{cstripe}97,32 & \cellcolor{cverde}Verde & \cellcolor{cstripe}28,76 & \cellcolor{cstripe}Sin semáforo \\
+Zona 10 & 82,58 & \cellcolor{camarillo}Amarillo & 98,40 & \cellcolor{cverde}Verde & 9,54 & Sin semáforo \\
+\cellcolor{cstripe}Zona 11 & \cellcolor{cstripe}98,33 & \cellcolor{cverde}Verde & \cellcolor{cstripe}98,11 & \cellcolor{cverde}Verde & \cellcolor{cstripe}13,97 & \cellcolor{cstripe}Sin semáforo \\
+Zona 12 & 98,87 & \cellcolor{cverde}Verde & 99,12 & \cellcolor{cverde}Verde & 13,29 & Sin semáforo \\
+\cellcolor{cstripe}Zona 13 & \cellcolor{cstripe}97,97 & \cellcolor{cverde}Verde & \cellcolor{cstripe}99,82 & \cellcolor{cverde}Verde & \cellcolor{cstripe}14,19 & \cellcolor{cstripe}Sin semáforo \\
+\end{xltabular}
+}
+
+\needspace{4\baselineskip}
+
+\textbf{Escenarios que cambian el resultado (los más importantes):}
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{2.33cm}L{1.13cm}L{7.55cm}L{1.90cm}L{2.58cm}}
+\toprule
+\cellcolor{chead}\textbf{Indicador} & \cellcolor{chead}\textbf{Año} & \cellcolor{chead}\textbf{Escenario alternativo} & \cellcolor{chead}\textbf{Puntaje} & \cellcolor{chead}\textbf{Semáforo} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{Indicador} & \cellcolor{chead}\textbf{Año} & \cellcolor{chead}\textbf{Escenario alternativo} & \cellcolor{chead}\textbf{Puntaje} & \cellcolor{chead}\textbf{Semáforo} \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+CS.DSI & 2024 & Aceptar publicaciones hasta la fecha de consulta & 28,57 & \cellcolor{crojo}Rojo \\
+\cellcolor{cstripe}CS.VRC & \cellcolor{cstripe}2024 & \cellcolor{cstripe}Evento sin mención de veedurías cuenta como ausencia & \cellcolor{cstripe}66,67 & \cellcolor{camarillo}Amarillo \\
+CS.VRC & 2025 & Igual & 20 & \cellcolor{crojo}Rojo \\
+\cellcolor{cstripe}CS.RPO & \cellcolor{cstripe}2024 & \cellcolor{cstripe}Todas las observaciones, con felicitaciones & \cellcolor{cstripe}72,73 & \cellcolor{camarillo}Amarillo \\
+CS.RPO & 2024 & Todos los cuadros de preguntas publicados & 89,47 & \cellcolor{camarillo}Amarillo \\
+\cellcolor{cstripe}CS.RPO & \cellcolor{cstripe}2024 & \cellcolor{cstripe}Criterio laxo de respuesta de fondo & \cellcolor{cstripe}100 & \cellcolor{cverde}Verde \\
+CS.RPO & 2025 & Calcular con lo publicado & 50 & \cellcolor{crojo}Rojo \\
+\cellcolor{cstripe}CS.ICRCS & \cellcolor{cstripe}2024 & \cellcolor{cstripe}VRC con ausencia (0 + 100 + 66,67 + 94,12) / 4 & \cellcolor{cstripe}65,20 & \cellcolor{camarillo}Amarillo \\
+CS.ICRCS & 2024 & Control: consecutivos 545 y 546 (28,57 + 100 + 50 + 94,12) / 4 & 68,17 & \cellcolor{camarillo}Amarillo \\
+\cellcolor{cstripe}PC.I2 & \cellcolor{cstripe}2024 & \cellcolor{cstripe}Solo asambleas de PP & \cellcolor{cstripe}92,31 & \cellcolor{cverde}Verde \\
+PC.I3 & 2025 & Medir en personas (186 / 15) & Revisar & Sin semáforo \\
+\cellcolor{cstripe}PDM.CM & \cellcolor{cstripe}2024 & \cellcolor{cstripe}Datos de la Policía y población DANE posterior a la pandemia & \cellcolor{cstripe}99,32 & \cellcolor{camarillo}Amarillo \\
+PP.EPP & 2024 & Solo cruces exactos (35 de 51 proyectos) & 99,28 & \cellcolor{cverde}Verde \\
+\cellcolor{cstripe}PP.EPP & \cellcolor{cstripe}2024 & \cellcolor{cstripe}Sin el rubro de déficit fiscal (calculado aparte, fuera de las opciones configuradas) & \cellcolor{cstripe}98,64 & \cellcolor{cverde}Verde \\
+PP.EPP & 2025 & Incluir el proyecto 0553 & 98,86 & \cellcolor{cverde}Verde \\
+\end{xltabular}
+}
+
+Para el ICRCS se calculó también un \textbf{rango de sensibilidad} (el menor y el mayor puntaje posible de cada componente): 55,68 a 73,81 en 2024 (Amarillo en ambos extremos) y 42,50 a 57,14 en 2025 (Rojo a Amarillo). La revisión crítica estimó que una combinación más extrema llega a 43,18 (Rojo) en 2024; esa combinación no está calculada en los archivos. Es un rango, no un valor oficial.
+
+\subsubsection*{Variables de los indicadores no viables (construidas, sin puntaje)}
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{2.96cm}L{7.34cm}L{5.63cm}}
+\toprule
+\cellcolor{chead}\textbf{Indicador} & \cellcolor{chead}\textbf{Lo que se construyó} & \cellcolor{chead}\textbf{Por qué no se calcula} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{Indicador} & \cellcolor{chead}\textbf{Lo que se construyó} & \cellcolor{chead}\textbf{Por qué no se calcula} \\
+\midrule
+\endhead
+\midrule \multicolumn{3}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+PC.I1, I4, I6 & Universo exploratorio de procesos: 3 (2024) y 5 (2025). Participación virtual: al menos 1 actividad por año & No hay inventario oficial de procesos ni registro de actividades \\
+\cellcolor{cstripe}PDM.CS & \cellcolor{cstripe}Afiliados al régimen subsidiado: 29.794 (dic-2025) y 31.997 (ago-2026) & \cellcolor{cstripe}El método del plan (99,5 \%) no se puede reproducir con fuentes públicas \\
+PDM.ILE & ILE.A: 15,58 (2024) y 15,40 (2025) con 0 a 6 años; 18,43 y 18,23 con 0 a 5 años. Al menos 1 institución mejora por año & Falta la clasificación ICFES por plantel (componente LS) \\
+\cellcolor{cstripe}PDM.CP y PDM.CD & \cellcolor{cstripe}Índice situacional 3,23 (2022); 38 de 40 disciplinas & \cellcolor{cstripe}No son la misma medida que pide la Matriz \\
+PP.CEP & Proyectos con entrega exigible: 51 (2024), 61 (2025), 66 (2026). Entrega cumplida 2025: 49 por defecto (45 a 50 según la regla), como autorreporte & No hay actas de recibo ni informes finales \\
+\cellcolor{cstripe}PP.CMA & \cellcolor{cstripe}Tabla de clasificación por proyecto (180 filas) & \cellcolor{cstripe}No hay meta de personas por proyecto \\
+PP.IREPP & Nada adicional & Depende de CEP y CMA \\
+\end{xltabular}
+}
+
+\subsubsection*{Qué se entregó en la etapa 2 (10 de noviembre)}
+
+\begin{itemize}
+\item \texttt{\footnotesize outputs/\allowbreak{}indicadores/\allowbreak{}entregables/\allowbreak{}base\_\allowbreak{}indicadores\_\allowbreak{}OCE.\allowbreak{}xlsx}: la base de resultados en 13 hojas (se explica en la Parte 4).
+\item \texttt{\footnotesize informe\_\allowbreak{}avance\_\allowbreak{}1} en PDF, Word, LaTeX y paquete para Overleaf (24 páginas).
+\item \texttt{\footnotesize nota\_\allowbreak{}tecnica\_\allowbreak{}participacion.\allowbreak{}docx} (4 páginas), para el profesor Eber Gutiérrez, sobre el sistema de participación.
+\item Excel de disponibilidad versión 1.2 (corrige una cifra, ver Parte 2).
+\end{itemize}
+
+\subsection*{1.5 Cómo se hizo}
+
+\phantomsection\addcontentsline{toc}{subsection}{1.5 Cómo se hizo}
+
+\subsubsection*{Las bases recolectadas: 2.787 archivos}
+
+\begin{itemize}
+\item \textbf{Qué son exactamente:} 2.787 \textbf{archivos fuente} (no son 2.787 registros de datos ni 2.787 indicadores). Son documentos oficiales descargados: 2.512 PDF, 118 XLS, 56 XLSX, 44 DOC, 26 CSV, 16 DOCX y algunas presentaciones. Pesan en total unos 7,8 GB.
+\item Están listados en un \textbf{inventario} (\texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}inventario\_\allowbreak{}detallado\_\allowbreak{}IIC.\allowbreak{}csv}): una fila por archivo, con 11 datos de cada uno (carpeta, nombre, ruta, enlace de origen, página de donde se bajó, título, año, emisor, fecha de publicación y tamaño).
+\item Se organizan en cinco carpetas: 01 Propuestas y acuerdos (389), 02 Ejecución y presupuesto (1.067), 03 Actas y comités técnicos (754), 04 Datos abiertos y SECOP (6) y 05 Fuentes externas y POT (571).
+\item Los emisores principales son el DAP (722 archivos), el Concejo Municipal (449), la Oficina de Evaluación y Control (389), la Subdirección de Participación Ciudadana (347), la Secretaría de Hacienda (216), la Contraloría Municipal (162) y la EFPC (78).
+\item Llegaron en cinco archivos ZIP, que hoy están respaldados en Google Drive (carpeta Bases\_Datos\_IIC\_Envigado). Se verificó que los 2.787 archivos están completos y con el tamaño exacto. \textbf{El repositorio no registra quién hizo la descarga original}; el inventario se incorporó el 25 de septiembre de 2026.
+\item En la etapa 2 se descargaron además, aparte del inventario, archivos del DANE (población), MinSalud (afiliación) y la Policía (homicidios en accidentes de tránsito), en \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}06\_\allowbreak{}descargas\_\allowbreak{}indicadores/\allowbreak{}}.
+\end{itemize}
+
+\subsubsection*{Búsqueda en fuentes oficiales y el dominio espejo}
+
+\begin{itemize}
+\item El portal \texttt{\footnotesize www.\allowbreak{}envigado.\allowbreak{}gov.\allowbreak{}co} \textbf{falla por un problema de certificado de seguridad} (TLS, el protocolo que cifra la conexión). Por regla, no se intentó saltarse esa protección.
+\item Los mismos documentos de la Alcaldía están publicados con la misma ruta en un \textbf{dominio espejo}: \texttt{\footnotesize alcaldia-\allowbreak{}municipal-\allowbreak{}de-\allowbreak{}envigado-\allowbreak{}en-\allowbreak{}antioquia.\allowbreak{}micolombiadi\allowbreak{}gital.\allowbreak{}gov.\allowbreak{}co}. En la versión 1.1 todos los enlaces a documentos se cambiaron a ese espejo: 36 de 36 responden con certificado válido. Las 15 páginas de sección del portal que no tienen espejo quedaron con la nota ``puede requerir abrirse desde otro navegador''.
+\end{itemize}
+
+\subsubsection*{Cálculos en scripts reproducibles}
+
+\begin{itemize}
+\item Un \textbf{script} es un programa corto (aquí, en el lenguaje Python) que lee los documentos fuente, cuenta o suma y escribe las tablas de resultados. Se escribió un script por indicador (por ejemplo, \texttt{\footnotesize pp\_\allowbreak{}epp.\allowbreak{}py} para el EPP).
+\item \textbf{Reproducible} significa que cualquiera puede volver a correrlo y obtener exactamente las mismas cifras; si cambia un supuesto, se corre de nuevo y todo se actualiza solo.
+\item Todo se guarda en un \textbf{repositorio privado en GitHub} (un servicio que guarda el historial de un proyecto). Cada \textbf{commit} es una ``foto'' guardada del proyecto, con fecha y descripción; sirve para saber qué cambió y cuándo, y para volver atrás si algo se rompe.
+\end{itemize}
+
+\subsubsection*{Agentes Analizador y Ejecutor}
+
+El trabajo lo hizo \textbf{Claude Code}, un asistente de programación, organizado en dos papeles:
+
+\begin{itemize}
+\item \textbf{Agente Analizador:} diseña el plan (fórmulas, fuentes, supuestos) y hace las revisiones críticas. No escribe el código definitivo.
+\item \textbf{Agente Ejecutor:} escribe y corre los scripts, busca los documentos y arma los entregables siguiendo el plan.
+\end{itemize}
+
+Separar los papeles sirve para que quien revisa no sea quien calculó.
+
+\subsubsection*{Verificaciones y por qué dan confianza}
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{3.40cm}L{4.35cm}L{3.41cm}L{4.55cm}}
+\toprule
+\cellcolor{chead}\textbf{Verificación} & \cellcolor{chead}\textbf{Qué se hizo} & \cellcolor{chead}\textbf{Resultado} & \cellcolor{chead}\textbf{Por qué da confianza} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{Verificación} & \cellcolor{chead}\textbf{Qué se hizo} & \cellcolor{chead}\textbf{Resultado} & \cellcolor{chead}\textbf{Por qué da confianza} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\textbf{Comparación con la hoja Resultados de la Matriz} & Se llenó una copia temporal de la Matriz con los datos marcados como ``Validado'' (solo para que sus fórmulas calcularan), se recalculó con LibreOffice y se comparó con los scripts. La copia se borró & \textbf{62 resultados comparados: 48 iguales y 14 diferencias esperadas} & Las fórmulas de los profesores dan lo mismo que los scripts. Las 14 diferencias son todas del PP del primer semestre de 2026 (municipio y sus 13 zonas): la Matriz solo calcula PP en periodo anual y devuelve N/D; en la zona 1, además, el equipo marca NE y la Matriz N/D \\
+\textbf{Recálculo a mano} (revisión crítica del Analizador, 9 de noviembre) & El Analizador leyó él mismo los documentos fuente, sin usar los scripts, y rehízo 23 cuentas (15 valores de indicador, 5 observaciones del RPO y 3 proyectos de PP 2024) & \textbf{23 de 23 coinciden} & Los datos se leyeron bien de los documentos. Única salvedad: la cifra de mortalidad vial (7,25) no se pudo verificar contra Forensis porque el PDF no está en el repositorio \\
+\textbf{Fórmulas y semáforos} (misma revisión) & Recalculó por programa 975 filas & 951 reproducen exactamente la regla de la Matriz; las otras 24 son una sensibilidad declarada de PC.I3 & Topes, ``Revisar'', NE y umbrales se aplican como dice la Matriz \\
+\textbf{Segunda lectura} & Tú clasificaste, sin mirar la clasificación del primer lector, una muestra aleatoria del 20 \%: 4 eventos del VRC y 12 observaciones del RPO. Se hizo \textbf{sobre las citas y el contexto registrados en la muestra, no releyendo cada documento completo} & \textbf{16 de 16 en acuerdo} (VRC 4/4 y RPO 12/12). Ningún resultado cambia. Dos casos con duda pasaron a ser decisiones para los profesores & Dos lectores llegan a la misma clasificación. Límite: como no se releyeron los documentos completos, mide el acuerdo sobre la regla, no la extracción de las citas \\
+\textbf{Control de calidad de la etapa 1} & Fase 3: el Analizador reabrió 5 hallazgos de alto impacto (EPP 2025, entrega de PP, PCS, PP 2024 y datos personales) e hizo 20 correcciones (6 cambiaron la categoría de una variable). Versión 1.1: revisión de enlaces & EPP 2025 reproducido al peso; 5 errores de presentación corregidos en la etapa 2; 0 datos personales & Las clasificaciones se revisaron con una regla de coherencia escrita y los enlaces funcionan \\
+\end{xltabular}
+}
+
+La revisión crítica encontró \textbf{5 errores, todos de presentación}, que se corrigieron sin cambiar ningún puntaje por defecto: el semáforo de PP 2026 (que salía Rojo y pasó a ``sin semáforo''), el nombre del CMSSS, el nombre y tipo en filas del EPP, los rótulos del rango del ICRCS y textos desactualizados de supuestos.
+
+\subsection*{1.6 Línea de tiempo de entregables y versiones (según el historial de commits)}
+
+\phantomsection\addcontentsline{toc}{subsection}{1.6 Línea de tiempo de entregables y versiones (según el historial de commits)}
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{2.40cm}L{3.24cm}L{10.29cm}}
+\toprule
+\cellcolor{chead}\textbf{Fecha} & \cellcolor{chead}\textbf{Commit} & \cellcolor{chead}\textbf{Qué pasó} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{Fecha} & \cellcolor{chead}\textbf{Commit} & \cellcolor{chead}\textbf{Qué pasó} \\
+\midrule
+\endhead
+\midrule \multicolumn{3}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+24-sep-2026 & b4ef62c & Se crea el repositorio \\
+\cellcolor{cstripe}25-sep-2026 & \cellcolor{cstripe}8ff6c4f, cf3496d & \cellcolor{cstripe}Inventario de los archivos fuente y matriz de relaciones del IIC; primer informe en LaTeX para Overleaf \\
+14-oct-2026 & 9aca547 & Perfil de llaves de cruce del IIC y limpieza del código BPIN \\
+\cellcolor{cstripe}14-oct-2026 & \cellcolor{cstripe}5fed56a, 89f620c & \cellcolor{cstripe}Etapa 1, fases 1 y 2: búsqueda de las 39 variables (PP al final) \\
+14-oct-2026 & ce8a5df & Fases 3 y 4: revisión crítica y \textbf{Excel de disponibilidad versión 1.0} \\
+\cellcolor{cstripe}14-oct-2026 & \cellcolor{cstripe}0efe801 & \cellcolor{cstripe}EPP 2025 reproducible y resumen de la reunión en Word \\
+14-oct-2026 & 0546308, 2ab79df, ca50937 & \textbf{Informe de disponibilidad en LaTeX/Overleaf} y Excel pulido para los profesores \\
+\cellcolor{cstripe}14-oct-2026 & \cellcolor{cstripe}f09792c & \cellcolor{cstripe}\textbf{Informe de disponibilidad en Word} \\
+9-nov-2026 & 7a29057 & \textbf{Disponibilidad versión 1.1}: correcciones del control de calidad (enlaces al espejo), sin cambiar cifras \\
+\cellcolor{cstripe}9-nov-2026 & \cellcolor{cstripe}9f5483e & \cellcolor{cstripe}Etapa 2: plan, supuestos e infraestructura común \\
+9-nov-2026 & 1c0e78a, e3df303, 9cfdb46, d723c4c & Tandas 1 a 4 de cálculo; la tanda 4 incluye el ICRCS y la revisión crítica \\
+\cellcolor{cstripe}10-nov-2026 & \cellcolor{cstripe}a34719d & \cellcolor{cstripe}\textbf{Disponibilidad versión 1.2}: corrige las obligaciones de PP 2026 (la portada dice ``Versión 1.2 -- 9 de noviembre de 2026'') \\
+10-nov-2026 & 3b0086a & \textbf{Base de resultados, informe de avance 1} (PDF, Word, LaTeX, Overleaf) y \textbf{nota técnica de participación} \\
+\cellcolor{cstripe}10-nov-2026 & \cellcolor{cstripe}52590ac & \cellcolor{cstripe}Segunda lectura terminada e incorporada al informe de avance y a la base \\
+\end{xltabular}
+}
+
+\clearpage
+
+\section*{Parte 2. Problemas y limitaciones}
+
+\phantomsection\addcontentsline{toc}{section}{Parte 2. Problemas y limitaciones}
+
+Para cada problema: qué pasó, por qué importa y cómo se manejó o qué falta.
+
+\subsection*{2.1 Problemas de información (lo que no existe o no se puede ver)}
+
+\phantomsection\addcontentsline{toc}{subsection}{2.1 Problemas de información (lo que no existe o no se puede ver)}
+
+\begin{enumerate}
+\item \textbf{No hay inventario oficial de procesos participativos.}
+\begin{itemize}
+\item \emph{Qué pasó:} nadie publica la lista de procesos participativos ``cerrados'' ni el vínculo entre cada aporte ciudadano y una decisión formal.
+\item \emph{Por qué importa:} es el numerador y el denominador de PC.I1 e I4, que pesan 55 \% del ISPC. Sin ellos, el índice de participación no se calcula.
+\item \emph{Cómo se manejó:} se armó un universo exploratorio (3 procesos en 2024, 5 en 2025) que corre riesgo de subconteo. Falta la solicitud a la Subdirección de Participación.
+\end{itemize}
+\item \textbf{Universo de eventos de rendición de cuentas.}
+\begin{itemize}
+\item \emph{Qué pasó:} no hay un balance que diga cuántos eventos de rendición hubo. Según la definición, salen de 1 a 8 por año.
+\item \emph{Por qué importa:} es el denominador del VRC.
+\item \emph{Cómo se manejó:} por defecto, audiencia del Alcalde más rendiciones sectoriales con acta (3 eventos en 2024 y 5 en 2025). La definición final es de los profesores.
+\end{itemize}
+\item \textbf{Presencia de veedurías desconocida.}
+\begin{itemize}
+\item \emph{Qué pasó:} de la audiencia del Alcalde solo se publicó el cuadro de preguntas, sin acta ni lista de asistentes.
+\item \emph{Por qué importa:} la Matriz dice que con presencia desconocida el VRC es N/D, y sin VRC el ICRCS también es N/D.
+\item \emph{Cómo se manejó:} se dejó N/D. Se calcularon escenarios (66,67 en 2024 si el silencio se toma como ausencia), pero todos exigen apartarse de la regla. Además, en una de las actas la presencia se acredita con un párrafo de plantilla que se repite en otras actas.
+\end{itemize}
+\item \textbf{Ventana de publicación del DSI.}
+\begin{itemize}
+\item \emph{Qué pasó:} con la regla de la Guía (documentos publicados hasta el 31 de marzo del año siguiente), ninguna de las 7 metas tenía cifra a tiempo. El POT se publicó el 24 de octubre de 2025; Forensis no tiene fecha de publicación verificable.
+\item \emph{Por qué importa:} DSI da 0 (Rojo) en 2024 y 2025 y arrastra al ICRCS.
+\item \emph{Cómo se manejó:} con todo lo publicado hasta hoy, 2024 da 28,57 (sigue Rojo). Si Forensis 2024 hubiera salido antes del límite, sería 14,3. Las evaluaciones del PDM de la Alcaldía solo publican indicadores de producto, no de resultado.
+\end{itemize}
+\item \textbf{Metas solo a 2027, sin metas anuales.}
+\begin{itemize}
+\item \emph{Qué pasó:} las 7 metas del PDM coinciden en el PDM, el documento técnico de soporte (DTS) del 22-dic-2025 y el Apéndice 9.1.2, pero todas son de 2027.
+\item \emph{Por qué importa:} comparar 2024 con la meta de 2027 es ``logro al corte'', no cumplimiento del año. Si se exigieran metas anuales, todo el PDM quedaría N/D.
+\item \emph{Cómo se manejó:} por defecto se compara con la meta 2027, como permite la regla 9 de la Guía.
+\end{itemize}
+\item \textbf{Fuentes con otra definición.}
+\begin{itemize}
+\item \emph{TerriData} publica ``cobertura del régimen subsidiado'' como afiliados sobre población total (cerca de 12 \%), no con el método del plan (99,5 \%). La Matriz prohíbe sustituir.
+\item \emph{POT:} da 5,75 m\textsuperscript{2} de espacio público verde urbano por habitante en 2024; la línea base del plan es 3,88 y el Área Metropolitana daba 4,66 en 2022. No se reconcilian. Se usa el POT rotulado ``serie distinta''.
+\item \emph{Forensis frente a Policía:} Medicina Legal cuenta muertes por transporte (18 en 2024; tasa 7,25); la Policía cuenta ``homicidio en accidente de tránsito'' (20 en 2024). Con Policía y población DANE posterior a la pandemia, el CM 2024 pasa de 100 (Verde) a 99,32 (Amarillo).
+\end{itemize}
+\item \textbf{Forensis 2024 pendiente.} La cifra 7,25 es citada (p. 440): el PDF no está en el repositorio porque el sitio de Medicina Legal responde ``403'' (rechaza descargas automáticas). Debes descargarlo a mano y subirlo a \texttt{\footnotesize data\_\allowbreak{}raw\_\allowbreak{}IIC/\allowbreak{}06\_\allowbreak{}descargas\_\allowbreak{}indicadores/\allowbreak{}inmlcf/\allowbreak{}}. Falta además confirmar si cuenta por lugar del hecho o por residencia.
+\item \textbf{Actas en SharePoint sin acceso.} Las evidencias de las sesiones de COPACO y CMSSS de 2024 son carpetas de SharePoint (el sistema interno de archivos de la Alcaldía) privadas. Por eso PC.I5 solo se calcula para 2025.
+\item \textbf{Portales que no abren.} Además del certificado de \texttt{\footnotesize www.\allowbreak{}envigado.\allowbreak{}gov.\allowbreak{}co}, fallaron \texttt{\footnotesize mi.\allowbreak{}envigado.\allowbreak{}gov.\allowbreak{}co}, el sitio de la Agencia Nacional de Seguridad Vial (ANSV), el tablero histórico de MinSalud, la descarga del ICFES por plantel y la sección Observatorio del sitio de la EFPC (error 404, ``página no encontrada'').
+\end{enumerate}
+
+\subsection*{2.2 Problemas del presupuesto participativo}
+
+\phantomsection\addcontentsline{toc}{subsection}{2.2 Problemas del presupuesto participativo}
+
+\begin{enumerate}
+\item \textbf{No hay marca oficial de qué proyectos son de PP.} Ninguna fuente (plan de acción, Hacienda, CUIPO) dice ``este proyecto es de PP''. La lista se \textbf{reconstruyó} cruzando el listado de la EFPC con los proyectos que dicen ``ZONA n'' en el plan de acción. En 2025 los 61 proyectos cruzan uno a uno y 56 coinciden al peso. Falta que Planeación confirme la lista.
+\item \textbf{2024 es aproximado y tiene cruces débiles.} No hay plan de acción de 2024 por proyecto, así que se cruzó el listado con los rubros de Hacienda: 35 coincidencias exactas, 15 aproximadas y 1 sin correspondencia (zona 9, \$500.398.021, que queda fuera). Hay tres cruces débiles por confirmar con Planeación:
+\begin{itemize}
+\item \textbf{13-2 $\leftrightarrow$ 0714:} la apropiación de Hacienda supera al listado en 60,8 \% (\$685.162.170 frente a \$425.998.943).
+\item \textbf{12-3 $\leftrightarrow$ 0733:} coincidencia de nombre baja (0,5) y 17,2 \% menos que el listado.
+\item \textbf{10-2 $\leftrightarrow$ 0709:} 32,5 \% más que el listado. Es la causa principal del \textbf{Amarillo de la zona 10 (82,58)}.
+\end{itemize}
+\item \textbf{Rubro 2.3.7.06 de déficit fiscal.} Siete proyectos de 2024 incluyen \textbf{\$627.204.058} del rubro ``Disminución de pasivos -- Financiación de déficit fiscal'' (pagos de vigencias anteriores, ejecutados al 100 \%). Probablemente no son PP de la vigencia. \textbf{Sin ese rubro, EPP 2024 = 98,64} (en lugar de 98,69). No se excluyó por defecto; los proyectos quedan marcados ``posible no PP''. Ese escenario se calculó aparte y no está entre las opciones del archivo de supuestos.
+\item \textbf{51 frente a 50 proyectos en 2024.} El listado de la EFPC 2024 tiene 51 registros. La etapa 1 contaba 50 porque omitía uno de la zona 8 cuyo valor viene sin el signo ``\$'' en el PDF. Ese valor coincide al peso con Hacienda (proyecto 0726), así que se incluyó como registro dudoso.
+\item \textbf{Las 55 entregas cumplidas no se reproducen.} En la etapa 1 se citó que con la regla ``última fila por indicador'' 55 de 61 proyectos tenían la entrega cumplida en 2025. En la etapa 2, con cerca de 40 definiciones probadas, el resultado va de 45 a 50 (49 por defecto). El Excel de disponibilidad v1.2 todavía dice ``entre 45 y 55''.
+\item \textbf{Cifra de obligaciones de PP 2026 errónea, corregida en la v1.2.} La v1.1 decía \$11.555.041.247; la cifra correcta es \textbf{\$5.702.528.148} (Hacienda al 30 de junio de 2026 y la hoja ROCA del plan de acción coinciden al peso). Además, los encabezados de la hoja del plan de acción dicen ``01-04-2026'', pero las cifras son del 30 de junio.
+\item \textbf{El Excel de disponibilidad conserva cifras de 2024 superadas.} La v1.2 solo corrigió la obligación de 2026. Para 2024 sigue diciendo ``47 de 50 proyectos'', OPP \$17.199.119.162 y PE = 50, cifras que la etapa 2 reemplazó por 50 de 51 proyectos, OPP \$18.357.265.731 y PE = 51. Si te preguntan, la cifra vigente es la de la etapa 2.
+\item \textbf{PP 2026 no es anual.} La Matriz solo prevé el PP en periodo anual. El 23,26 compara medio año de ejecución con una apropiación anual, así que se muestra sin semáforo.
+\end{enumerate}
+
+\subsection*{2.3 Problemas de calidad y presentación}
+
+\phantomsection\addcontentsline{toc}{subsection}{2.3 Problemas de calidad y presentación}
+
+\begin{enumerate}
+\item \textbf{Datos personales en los cuadros de preguntas.} Los documentos originales tienen nombres, teléfonos y correos de ciudadanos. Las tablas del repositorio no los reproducen: las citas dicen ``[ciudadano/a]'' o ``[funcionario/a]''. Un archivo cuyo nombre contenía el nombre de una persona se citó como ``[archivo con nombre de persona omitido]''.
+\item \textbf{El nombre de la EFPC no está unificado.} En el repositorio aparece de tres formas:
+\begin{itemize}
+\item ``Escuela de Formación para la Participación Ciudadana'': así la registra el inventario (como emisor de 78 archivos, adscrita a la Subdirección de Participación Ciudadana del DAP), el Excel de disponibilidad y la base de resultados.
+\item ``Escuela de Formación Ciudadana'': en el informe de disponibilidad (LaTeX y Word).
+\item ``Escuela de Formación Política y Ciudadana'': en los avances 2 y 3 y en la nota técnica de participación.
+\item Recomendación: usar la del inventario y confirmar con el profesor.
+\end{itemize}
+\item \textbf{Nombres de indicadores distintos a los de la Matriz.} En los archivos de resultados el ICRCS se llama ``Índice de control y rendición social'' (la Matriz dice ``Índice de Condiciones y Respuesta para el Control Social''), y en el resumen de cálculos y la hoja Léeme de la base el DSI aparece como ``Divulgación de la situación'' (la Matriz dice ``Disponibilidad de información de seguimiento''). Para el tablero conviene usar los nombres de la Matriz.
+\item \textbf{CMSSS mal nombrado, ya corregido.} En entregas previas se llamó ``Comité Municipal de Participación Social en Salud''. El nombre correcto, según el acta de la primera rendición de Salud 2024, es \textbf{Consejo Municipal de Seguridad Social en Salud}.
+\item \textbf{65 frente a 170 personas capacitadas.} El plan indicativo dice 65 en 2025 y el informe de gestión dice 170. La nota técnica lo explica: 65 es lo ejecutado en 2025 y 170 coincide con el acumulado 2024-2025 (105 + 65). Es una lectura aritmética que el informe no declara y que debe confirmar la Subdirección.
+\item \textbf{Asignaciones y reconstrucciones inferidas.}
+\begin{itemize}
+\item PC.I2 2025: la fuente dice ``12 asambleas\ldots{} cubriendo la totalidad de las zonas'' sin listarlas; se asignaron a las zonas 2 a 13. Si ``totalidad'' son 13 zonas, sería 13/13.
+\item PC.I3 2025: el denominador se reconstruyó como culminadas más no ejecutadas, y se excluyó el diplomado en Gestión Pública por ser para servidores, algo que la fuente no acredita.
+\end{itemize}
+\item \textbf{Reparos del DAP en PCS.} La fila del plan indicativo trae observaciones del DAP (``no concuerda la información de ejecución anual\ldots{}'' y evidencias ``Sí, pero con observaciones''). El resultado coincide con lo reportado, pero hay que atenderlo antes de validar.
+\item \textbf{Fechas contradictorias entre documentos.} Audiencia del Alcalde 2024: 20 o 26 de noviembre. Rendición de PP de la vigencia 2024: 12 de enero o 12 de febrero de 2025. No cambian los resultados por defecto.
+\item \textbf{Inconsistencias de la Matriz misma.} Las páginas del PDM que cita la Matriz (``copia del Concejo'') no corresponden a los documentos; el programa de mortalidad vial probablemente es el 3.2.3 y no el 3.2.2; ``CS'' es a la vez el sistema de control social y el indicador de salud del PDM; ``MS'' es a la vez ``metas seleccionadas'' y ``meta Saber 11''. La propuesta del OCE habla de 12 zonas, pero el PDM (p. 558) establece 13 zonas con 12 comités zonales (la zona 1 no tiene comité).
+\item \textbf{Huecos de trazabilidad.} En PP, la columna ``fuente'' trae una ruta de archivo en vez del nombre de la publicación; la fecha de publicación está vacía en muchas variables; algunos conteos (PCS, las 13 zonas) no tienen fila de soporte. No cambian cálculos, pero hay que arreglarlos para la base final.
+\end{enumerate}
+
+\clearpage
+
+\section*{Parte 3. Qué variables quedan: propuesta para la reunión}
+
+\phantomsection\addcontentsline{toc}{section}{Parte 3. Qué variables quedan: propuesta para la reunión}
+
+\begin{center}\fcolorbox{gray!60}{cnota}{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{\small \textbf{Importante:} esta clasificación es una \textbf{propuesta razonada} para discutir. La decisión es del profesor.}}\end{center}
+
+\subsection*{3.1 Cómo se clasificó}
+
+\phantomsection\addcontentsline{toc}{subsection}{3.1 Cómo se clasificó}
+
+\begin{itemize}
+\item \textbf{A. Lista para la base de datos:} ya tiene dato y fuente; no depende de una decisión que cambie el resultado.
+\item \textbf{B. Lista si los profesores deciden algo:} el dato existe, pero falta una decisión concreta. Se indica la opción recomendada.
+\item \textbf{C. Depende de una solicitud a la Alcaldía:} el dato no se puede obtener con lo público; se indica la dependencia y qué pedir (según la hoja Solicitudes del Excel de disponibilidad).
+\item \textbf{D. Propuesta de ajustar, reemplazar o eliminar:} aun con una solicitud, la variable no se sostiene en esta versión.
+\end{itemize}
+
+\textbf{Regla de desempate:} cuando una variable depende de una solicitud y además de una decisión, se clasificó por lo que la bloquea primero. Por ejemplo, PDM.CP.O queda en C porque primero hay que preguntar al DAP si existe la ficha; si no existe, pasaría a D.
+
+Las 41 filas son las \textbf{39 variables de la hoja Registro} más las \textbf{2 variables de la hoja PP\_Proyectos} (personas atendidas, PA, y meta de atención, MP). La tabla también está en \texttt{\footnotesize outputs/\allowbreak{}guia/\allowbreak{}trabajo/\allowbreak{}propuesta\_\allowbreak{}variables.\allowbreak{}csv}.
+
+\clearpage
+\newgeometry{left=2.5cm,width=22.94cm,top=2.5cm,height=16.5cm,headheight=14pt,headsep=0.8cm}
+\setlength{\headwidth}{\textwidth}
+\renewcommand{\pagsize}{\special{papersize=27.94cm,21.59cm}}
+
+\subsection*{3.2 Tabla de variables}
+
+\phantomsection\addcontentsline{toc}{subsection}{3.2 Tabla de variables}
+
+\par\noindent{\footnotesize\textbf{Leyenda de la columna Cat.:} \colorbox{ccata}{~\textbf{A}~} Lista para la base de datos\quad \colorbox{ccatb}{~\textbf{B}~} Lista si los profesores deciden algo\quad \colorbox{ccatc}{~\textbf{C}~} Depende de una solicitud a la Alcaldía\quad \colorbox{ccatd}{~\textbf{D}~} Propuesta de ajustar, reemplazar o eliminar\par}\smallskip
+
+{\scriptsize
+\begin{xltabular}{\linewidth}{L{1.94cm}L{2.56cm}L{2.04cm}L{1.12cm}L{2.87cm}L{2.87cm}L{2.71cm}L{2.77cm}L{2.04cm}}
+\toprule
+\cellcolor{chead}\textbf{ID} & \cellcolor{chead}\textbf{Nombre} & \cellcolor{chead}\textbf{Indicador} & \cellcolor{chead}\textbf{Cat.} & \cellcolor{chead}\textbf{Dato actual} & \cellcolor{chead}\textbf{Fuente} & \cellcolor{chead}\textbf{Decisión, solicitud o ajuste} & \cellcolor{chead}\textbf{Recomendación} & \cellcolor{chead}\textbf{\textquestiondown{}Tablero?} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{ID} & \cellcolor{chead}\textbf{Nombre} & \cellcolor{chead}\textbf{Indicador} & \cellcolor{chead}\textbf{Cat.} & \cellcolor{chead}\textbf{Dato actual} & \cellcolor{chead}\textbf{Fuente} & \cellcolor{chead}\textbf{Decisión, solicitud o ajuste} & \cellcolor{chead}\textbf{Recomendación} & \cellcolor{chead}\textbf{\textquestiondown{}Tablero?} \\
+\midrule
+\endhead
+\midrule \multicolumn{9}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+CS.DSI.MD & Número de metas seleccionadas con valor observado publicado para la vigencia & CS.DSI & \cellcolor{ccatb}\textbf{B} & 0 (2024) y 0 (2025); 2 de 7 si se acepta todo lo publicado hasta hoy & Soporte meta por meta (POT, Forensis, MinSalud, evaluaciones del PDM) & Decidir: lista de metas (7 del ICPD-6 o 10), ventana de publicación (31 de marzo del año siguiente o hasta la fecha de consulta) y qué fuente cuenta como valor publicado & Aprobar 7 metas, ventana del 31 de marzo (es la regla 17 de la Guía) y fuente oficial con la misma definición. Pedir además al DAP los valores observados de resultado 2024-2025 & Sí \\
+\cellcolor{cstripe}CS.DSI.MS & \cellcolor{cstripe}Número total de metas incluidas previamente en la selección de seguimiento & \cellcolor{cstripe}CS.DSI & \cellcolor{ccatb}\textbf{B} & \cellcolor{cstripe}7 metas (2024 y 2025) & \cellcolor{cstripe}Apéndice 9.1.2 del Plan Indicativo del PDM & \cellcolor{cstripe}Decidir la lista de metas que forman el denominador & \cellcolor{cstripe}Aprobar las 7 metas del ICPD-6 y fijarlas para todo el periodo; la Matriz sugiere unas 10, pero las 3 adicionales no tienen evidencia & \cellcolor{cstripe}Sí \\
+CS.PCS.EE & Número de estrategias de promoción del control social ejecutadas y reportadas en el periodo & CS.PCS & \cellcolor{ccata}\textbf{A} & 1 (2024), 1 (2025); 0 al 30-jun-2026 & Plan Indicativo de Productos, evaluación definitiva 2T-2026 (DAP), consecutivo 544 & Ninguna para el cálculo. Anotar que es autorreporte con observaciones del DAP & Dejar como está; pedir los soportes a la Subdirección de Participación cuando se busque validar & Sí \\
+\cellcolor{cstripe}CS.PCS.EP & \cellcolor{cstripe}Número de estrategias de promoción del control social programadas oficialmente para el mismo periodo & \cellcolor{cstripe}CS.PCS & \cellcolor{ccata}\textbf{A} & \cellcolor{cstripe}1 (2024), 1 (2025), 1 (2026) & \cellcolor{cstripe}Plan Indicativo de Productos, evaluación definitiva 2T-2026 (DAP), consecutivo 544 & \cellcolor{cstripe}Ninguna & \cellcolor{cstripe}Dejar como está & \cellcolor{cstripe}Sí \\
+CS.VRC.EV & Número de eventos municipales de rendición de cuentas realizados con presencia documentada de veedurías & CS.VRC & \cellcolor{ccatc}\textbf{C} & Sin valor: presencia de veedurías desconocida (audiencia del Alcalde) & Actas de rendición de Salud; cuadro de preguntas del Alcalde & Solicitud (hoja Solicitudes): actas, memorias y listas de asistencia (solo conteos) a la Subdirección de Participación y a la Secretaría de Salud. También hay una decisión: cómo tratar el evento sin mención de veedurías & Mantener N/D (regla de la Matriz) y enviar la solicitud. No contar el evento sin mención como ausencia & No \\
+\cellcolor{cstripe}CS.VRC.ET & \cellcolor{cstripe}Número total de eventos municipales de rendición de cuentas realizados en el periodo & \cellcolor{cstripe}CS.VRC & \cellcolor{ccatb}\textbf{B} & \cellcolor{cstripe}3 eventos (2024), 5 (2025) & \cellcolor{cstripe}Actas, memorias y cuadros de rendición; Plan Indicativo de Productos, evaluación definitiva 2T-2026 (DAP), consecutivos 545 y 546 & \cellcolor{cstripe}Decidir qué es un evento municipal de rendición de cuentas (solo Alcalde; Alcalde y sectoriales con acta; todo documento) & \cellcolor{cstripe}Aprobar el valor por defecto: audiencia del Alcalde y rendiciones sectoriales con acta o memoria publicada & \cellcolor{cstripe}No \\
+CS.RPO.OR & Número de observaciones ciudadanas del universo evaluado con respuesta de fondo publicada al corte & CS.RPO & \cellcolor{ccatb}\textbf{B} & 16 (2024); 2025 sin dato (cuadro incompleto) & Preguntas y recomendaciones, audiencia pública de rendición de cuentas del Alcalde 2024 & Decidir qué ejercicios cuentan, si se excluyen felicitaciones y qué es respuesta de fondo. Para 2025, solicitud de la matriz completa de preguntas (DAP y Comunicaciones) & Aprobar el valor por defecto (Alcalde, sin felicitaciones, criterio estricto); 2025 en N/D hasta recibir la matriz completa & Sí \\
+\cellcolor{cstripe}CS.RPO.OT & \cellcolor{cstripe}Número total de observaciones ciudadanas sobre el PDM registradas públicamente en ejercicios cerrados de rendición de cuentas del periodo & \cellcolor{cstripe}CS.RPO & \cellcolor{ccatb}\textbf{B} & \cellcolor{cstripe}17 (2024); 2025 sin dato & \cellcolor{cstripe}Igual que CS.RPO.OR & \cellcolor{cstripe}Las mismas decisiones de CS.RPO.OR & \cellcolor{cstripe}Igual que CS.RPO.OR & \cellcolor{cstripe}Sí \\
+PC.I1.V1 & Número de procesos participativos cerrados que incorporaron al menos un aporte ciudadano en una decisión formal & PC.I1 & \cellcolor{ccatc}\textbf{C} & Sin dato (no se hizo el vínculo aporte-decisión) & Informe de gestión por dependencias 2025 y otros (narrativo) & Solicitud a la Subdirección de Participación: inventario de procesos participativos cerrados con el acto donde se incorporó el aporte & Dejar fuera del tablero por ahora y enviar la solicitud & No \\
+\cellcolor{cstripe}PC.I1.V2 & \cellcolor{cstripe}Número total de procesos participativos cerrados en los que se recibieron aportes ciudadanos & \cellcolor{cstripe}PC.I1 & \cellcolor{ccatc}\textbf{C} & \cellcolor{cstripe}3 (2024) y 5 (2025), universo exploratorio no oficial & \cellcolor{cstripe}Informe de gestión 2025 y documentos de PP, PDM, POT y rendición & \cellcolor{cstripe}Misma solicitud de inventario. Alternativa: que los profesores acepten el universo exploratorio & \cellcolor{cstripe}Dejar fuera hasta tener el inventario; el universo exploratorio corre riesgo de subconteo & \cellcolor{cstripe}No \\
+PC.I2.V1 & Número de zonas con al menos una actividad participativa realizada para su comunidad & PC.I2 & \cellcolor{ccatb}\textbf{B} & 13 zonas (2024), 12 (2025) & Informe de gestión 2025 p. 92; anteproyecto del PDM (2024); asambleas del POT (2025) & Decidir qué actividades cubren una zona (solo PP o también PDM y POT) y qué evidencia basta (reporte o acta por zona) & Aprobar el valor por defecto (asambleas de PP, PDM y POT; basta el reporte oficial) y pedir actas por zona para validar & Sí \\
+\cellcolor{cstripe}PC.I2.V2 & \cellcolor{cstripe}Número total de zonas oficiales del municipio & \cellcolor{cstripe}PC.I2 & \cellcolor{ccata}\textbf{A} & \cellcolor{cstripe}13 zonas & \cellcolor{cstripe}PDM p. 558 & \cellcolor{cstripe}Confirmar 13 zonas (y no 12 con comité) & \cellcolor{cstripe}Aprobar 13; pedir el texto del Acuerdo 007 de 2025 & \cellcolor{cstripe}Sí \\
+PC.I3.V1 & Número de acciones formativas programadas para la ciudadanía que se realizaron & PC.I3 & \cellcolor{ccatb}\textbf{B} & 7 (2024), 20 (2025) & Informe de gestión por dependencias 2025 pp. 87-88 & Decidir la unidad (acciones formativas o personas), si se excluye la formación para servidores y si cuentan los semilleros & Aprobar acciones formativas, excluir lo exclusivo para servidores y no contar semilleros (como dice la Matriz) & Sí \\
+\cellcolor{cstripe}PC.I3.V2 & \cellcolor{cstripe}Número total de acciones formativas programadas para la ciudadanía con finalización prevista en el periodo & \cellcolor{cstripe}PC.I3 & \cellcolor{ccatb}\textbf{B} & \cellcolor{cstripe}Sin dato (2024); 24 (2025, reconstruido) & \cellcolor{cstripe}Informe de gestión 2025 pp. 87-88 (culminadas más no ejecutadas) & \cellcolor{cstripe}Mismas decisiones de PC.I3.V1. Para 2024, solicitud a la EFPC del plan de formación con fechas & \cellcolor{cstripe}Aprobar; 2024 queda N/D hasta recibir la programación & \cellcolor{cstripe}Sí \\
+PC.I4.V1 & Número de procesos participativos cerrados con resultados publicados y consultables & PC.I4 & \cellcolor{ccatc}\textbf{C} & Sin dato (no auditado documento por documento) & Documentos de resultados de los procesos (exploratorio) & Misma solicitud de inventario de PC.I1, con enlace público por proceso & Dejar fuera por ahora & No \\
+\cellcolor{cstripe}PC.I4.V2 & \cellcolor{cstripe}Número total de procesos participativos cerrados & \cellcolor{cstripe}PC.I4 & \cellcolor{ccatc}\textbf{C} & \cellcolor{cstripe}3 (2024) y 5 (2025), universo exploratorio & \cellcolor{cstripe}Igual que PC.I1.V2 & \cellcolor{cstripe}Misma solicitud de inventario & \cellcolor{cstripe}Dejar fuera por ahora & \cellcolor{cstripe}No \\
+PC.I5.V1 & Número de sesiones previstas de las instancias seleccionadas que se realizaron & PC.I5 & \cellcolor{ccatb}\textbf{B} & 8 sesiones realizadas (2025); 2024 sin dato & Seguimiento al Plan de Acción de la Política de Participación Social en Salud (PPSS) 2025 & Decidir qué instancias se miden (solo COPACO y CMSSS, o también CMPC, CTP y comités zonales) & Aprobar el indicador acotado a COPACO y CMSSS para 2025, rotulado así, y pedir calendarios y actas del CMPC y el CTP & Sí \\
+\cellcolor{cstripe}PC.I5.V2 & \cellcolor{cstripe}Número total de sesiones previstas de esas mismas instancias para el periodo & \cellcolor{cstripe}PC.I5 & \cellcolor{ccatb}\textbf{B} & \cellcolor{cstripe}8 sesiones previstas (2025) & \cellcolor{cstripe}PPSS 2025 & \cellcolor{cstripe}La misma decisión de PC.I5.V1 & \cellcolor{cstripe}Igual que PC.I5.V1 & \cellcolor{cstripe}Sí \\
+PC.I6.V1 & Número de actividades participativas realizadas que habilitaron un canal virtual para intervenir & PC.I6 & \cellcolor{ccatd}\textbf{D} & Al menos 1 actividad por año (2024 y 2025), cota inferior & Rendición del Alcalde 2024; votación de PP en plataforma web (2025) & Ajuste: no existe un registro de actividades realizadas; el indicador es complementario y no entra a ningún índice & Sacarlo del tablero en esta versión y pedir a la Subdirección y a la EFPC un registro de actividades con modalidad desde 2026 & No \\
+\cellcolor{cstripe}PC.I6.V2 & \cellcolor{cstripe}Número total de actividades participativas realizadas & \cellcolor{cstripe}PC.I6 & \cellcolor{ccatd}\textbf{D} & \cellcolor{cstripe}Sin dato (universo sin definir) & \cellcolor{cstripe}Cifras parciales (asambleas, Semana de la Participación) & \cellcolor{cstripe}Igual que PC.I6.V1 & \cellcolor{cstripe}Igual que PC.I6.V1 & \cellcolor{cstripe}No \\
+PDM.CS.O & Cobertura porcentual observada del aseguramiento en el régimen subsidiado & PDM.CS & \cellcolor{ccatc}\textbf{C} & Sin dato con el método del plan (proxy: 29.794 afiliados al régimen subsidiado, dic-2025) & MinSalud, cifras de aseguramiento (solo proxy) & Solicitud a la Secretaría de Salud, Dirección de Aseguramiento: cobertura del régimen subsidiado con el método del plan (fórmula, numerador, denominador, fuente) & Dejar fuera y no sustituir con TerriData (cerca de 12 \%, otra definición) & No \\
+\cellcolor{cstripe}PDM.CS.M & \cellcolor{cstripe}Cobertura meta del aseguramiento en el régimen subsidiado & \cellcolor{cstripe}PDM.CS & \cellcolor{ccata}\textbf{A} & \cellcolor{cstripe}99,5 (meta 2027) & \cellcolor{cstripe}PDM 2024-2027 (Acuerdo 017 de 2024), p. 602 & \cellcolor{cstripe}Ninguna para la variable (el indicador sale por falta del observado) & \cellcolor{cstripe}Conservar en la base & \cellcolor{cstripe}No \\
+PDM.CM.O & Tasa anual observada de mortalidad vial por 100.000 habitantes & PDM.CM & \cellcolor{ccata}\textbf{A} & 7,25 muertes por 100.000 hab. (2024), cifra citada & INMLCF, Forensis 2024, p. 440 (PDF por verificar) & Confirmar Medicina Legal como fuente oficial. Pendiente: subir el PDF de Forensis 2024 y verificar la cifra & Aprobar Medicina Legal; verificar el PDF antes del viernes & Sí \\
+\cellcolor{cstripe}PDM.CM.M & \cellcolor{cstripe}Tasa meta de mortalidad vial por 100.000 habitantes & \cellcolor{cstripe}PDM.CM & \cellcolor{ccata}\textbf{A} & \cellcolor{cstripe}8 (meta 2027) & \cellcolor{cstripe}PDM 2024-2027 (Acuerdo 017 de 2024), p. 706 & \cellcolor{cstripe}Decidir el horizonte: meta 2027 (no hay metas anuales) & \cellcolor{cstripe}Aprobar meta 2027, leída como ``logro al corte'' (regla 9 de la Guía) & \cellcolor{cstripe}Sí \\
+PDM.CA.O & Espacio público verde observado, en metros cuadrados por habitante & PDM.CA & \cellcolor{ccatb}\textbf{B} & 5,75 m\textsuperscript{2} por habitante (2024) & Documento diagnóstico de la revisión del POT, espacio público (2025), tabla 39 & Decidir si se acepta la cifra del POT, que es una serie distinta de la línea base (3,88) & Aceptarla rotulada como ``serie distinta'' y pedir a Medio Ambiente la ficha del indicador & Sí \\
+\cellcolor{cstripe}PDM.CA.M & \cellcolor{cstripe}Meta de espacio público verde, en metros cuadrados por habitante & \cellcolor{cstripe}PDM.CA & \cellcolor{ccata}\textbf{A} & \cellcolor{cstripe}3,88 (meta 2027) & \cellcolor{cstripe}PDM 2024-2027 (Acuerdo 017 de 2024), p. 717 & \cellcolor{cstripe}Horizonte de la meta (igual que PDM.CM.M) & \cellcolor{cstripe}Aprobar meta 2027 & \cellcolor{cstripe}Sí \\
+PDM.CP.O & Porcentaje observado de implementación de procesos de participación ciudadana, según el método oficial & PDM.CP & \cellcolor{ccatc}\textbf{C} & Sin dato ni método oficial & Ninguna & Solicitud a la Subdirección de Participación (DAP): ficha técnica y valor del indicador ``Implementación de los procesos de participación ciudadana'' & Dejar fuera. Si el DAP confirma que no existe la ficha, pasar a D y redefinirlo & No \\
+\cellcolor{cstripe}PDM.CP.M & \cellcolor{cstripe}Porcentaje meta de implementación de esos procesos & \cellcolor{cstripe}PDM.CP & \cellcolor{ccata}\textbf{A} & \cellcolor{cstripe}100 (meta 2027) & \cellcolor{cstripe}PDM 2024-2027 (Acuerdo 017 de 2024), p. 742 & \cellcolor{cstripe}Ninguna para la variable & \cellcolor{cstripe}Conservar en la base & \cellcolor{cstripe}No \\
+PDM.CD.O & Cobertura porcentual observada de los servicios deportivos incluidos en el resultado & PDM.CD & \cellcolor{ccatc}\textbf{C} & Sin dato (proxy: 38 de 40 disciplinas en 2025) & Informe de gestión 2025 (solo proxy) & Solicitud al Índer: cobertura de servicios deportivos con el método de la línea base (5,3 \%) & Dejar fuera; la Matriz prohíbe convertir disciplinas en cobertura & No \\
+\cellcolor{cstripe}PDM.CD.M & \cellcolor{cstripe}Cobertura porcentual meta de esos servicios deportivos & \cellcolor{cstripe}PDM.CD & \cellcolor{ccata}\textbf{A} & \cellcolor{cstripe}6 (meta 2027) & \cellcolor{cstripe}PDM 2024-2027 (Acuerdo 017 de 2024), p. 609 & \cellcolor{cstripe}Ninguna para la variable & \cellcolor{cstripe}Conservar en la base & \cellcolor{cstripe}No \\
+PDM.ILE.A & Cobertura observada de atención integral de niños y niñas de 0 a 6 años & PDM.ILE & \cellcolor{ccatb}\textbf{B} & 15,58 (2024), 15,40 (2025) con niños de 0 a 6 años & Balance del PDM 2024 e informe de gestión 2025 (Educación) y población DANE & Decidir la edad del denominador (0 a 6 años, como la Matriz, o 0 a 5, como el informe). También solicitud a Educación del dato oficial & Aprobar 0 a 6 años; el índice igual queda fuera mientras falte PDM.ILE.S & No \\
+\cellcolor{cstripe}PDM.ILE.MA & \cellcolor{cstripe}Meta de cobertura de atención integral inicial & \cellcolor{cstripe}PDM.ILE & \cellcolor{ccata}\textbf{A} & \cellcolor{cstripe}19 (meta 2027) & \cellcolor{cstripe}PDM 2024-2027 (Acuerdo 017 de 2024), p. 650 & \cellcolor{cstripe}Ninguna para la variable & \cellcolor{cstripe}Conservar en la base & \cellcolor{cstripe}No \\
+PDM.ILE.S & Porcentaje observado de instituciones oficiales que mejoran su categoría en Saber 11 & PDM.ILE & \cellcolor{ccatc}\textbf{C} & Sin dato (al menos 1 institución mejora por año, cota inferior) & Sin clasificación ICFES por plantel & Solicitud a la Secretaría de Educación: listado de instituciones oficiales con su categoría ICFES 2023, 2024 y 2025 & Dejar fuera y enviar la solicitud & No \\
+\cellcolor{cstripe}PDM.ILE.MS & \cellcolor{cstripe}Meta de instituciones oficiales que mejoran su categoría en Saber 11 & \cellcolor{cstripe}PDM.ILE & \cellcolor{ccata}\textbf{A} & \cellcolor{cstripe}14 (meta 2027) & \cellcolor{cstripe}PDM 2024-2027 (Acuerdo 017 de 2024), p. 652 & \cellcolor{cstripe}Ninguna para la variable & \cellcolor{cstripe}Conservar en la base & \cellcolor{cstripe}No \\
+PP.EPP.OPP & Valor de las obligaciones presupuestales registradas con cargo a recursos de presupuesto participativo & PP.EPP & \cellcolor{ccata}\textbf{A} & 2025: \$20.684.427.720; 2024 aprox.: \$18.357.265.731; 2026 S1: \$5.702.528.148 & Plan de acción IV trimestre 2025 (DAP) cruzado con el listado de la EFPC; Hacienda (2024 y 2026) & 2025 lista. Para 2024: aceptar cruces aproximados y decidir sobre el rubro de déficit fiscal. Para todos: proyecto 0553. Solicitud a Planeación: lista oficial de proyectos de PP & Aprobar 2025; 2024 rotulado ``aproximado''; 2026 sin semáforo; excluir el 0553 & Sí \\
+\cellcolor{cstripe}PP.EPP.APP & \cellcolor{cstripe}Valor de la apropiación definitiva de recursos de presupuesto participativo & \cellcolor{cstripe}PP.EPP & \cellcolor{ccata}\textbf{A} & \cellcolor{cstripe}2025: \$20.928.690.218; 2024 aprox.: \$18.601.236.386; 2026: \$24.519.738.737 & \cellcolor{cstripe}Igual que PP.EPP.OPP & \cellcolor{cstripe}Las mismas de PP.EPP.OPP & \cellcolor{cstripe}Igual que PP.EPP.OPP & \cellcolor{cstripe}Sí \\
+PP.CEP.PE & Número total de proyectos financiados con entrega exigible en la vigencia & PP.CEP & \cellcolor{ccatb}\textbf{B} & 51 (2024), 61 (2025), 66 (2026) proyectos & Listados de proyectos de PP de la EFPC 2024 y 2025; plan de acción 2026 & Decidir qué es ``entrega exigible en la vigencia''. Solicitud del listado oficial 2026 & Aprobar ``todo proyecto financiado en la vigencia''; el indicador igual queda fuera mientras falte PP.CEP.PEC & No \\
+\cellcolor{cstripe}PP.CEP.PEC & \cellcolor{cstripe}Número de proyectos con todas las entregas exigibles completas y verificadas al corte & \cellcolor{cstripe}PP.CEP & \cellcolor{ccatc}\textbf{C} & \cellcolor{cstripe}49 de 61 (2025) como autorreporte (45 a 50 según la regla); 2024 y 2026 sin dato & \cellcolor{cstripe}Plan de acción IV trimestre 2025, ejecución física neta (autorreporte) & \cellcolor{cstripe}Solicitud a las unidades ejecutoras: actas de recibo, informes finales o de supervisión por proyecto & \cellcolor{cstripe}Dejar fuera y no reemplazar por el autorreporte (la Guía, regla 20, pide no compensar entrega débil) & \cellcolor{cstripe}No \\
+PP.CMA.NA & Número de proyectos con meta de atención aplicable en el universo completo y verificado & PP.CMA & \cellcolor{ccatc}\textbf{C} & Sin dato & Ninguna & Solicitud a las unidades ejecutoras: fichas con meta anual de personas por proyecto. Además, decidir qué tipos de proyecto aplican & Dejar fuera y enviar la solicitud & No \\
+\cellcolor{cstripe}PP.CMA.PA & \cellcolor{cstripe}Personas efectivamente atendidas por proyecto (hoja PP\_Proyectos) & \cellcolor{cstripe}PP.CMA & \cellcolor{ccatc}\textbf{C} & \cellcolor{cstripe}Sin dato (sin datos personales) & \cellcolor{cstripe}Ninguna & \cellcolor{cstripe}Solicitud: informe de personas únicas atendidas por proyecto & \cellcolor{cstripe}Dejar fuera & \cellcolor{cstripe}No \\
+PP.CMA.MP & Meta anual de personas por atender del proyecto (hoja PP\_Proyectos) & PP.CMA & \cellcolor{ccatc}\textbf{C} & Sin dato & Ninguna & Solicitud: ficha técnica con meta anual de personas & Dejar fuera & No \\
+\end{xltabular}
+}
+
+\textbf{Resumen:} A = 13 \textperiodcentered{} B = 13 \textperiodcentered{} C = 13 \textperiodcentered{} D = 2 (total 41).
+
+\clearpage
+\restoregeometry
+\setlength{\headwidth}{\textwidth}
+\renewcommand{\pagsize}{\special{papersize=21.59cm,27.94cm}}
+
+\subsection*{3.3 Clasificación por indicador e índice}
+
+\phantomsection\addcontentsline{toc}{subsection}{3.3 Clasificación por indicador e índice}
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{3.07cm}L{4.87cm}L{7.99cm}}
+\toprule
+\cellcolor{chead}\textbf{Grupo} & \cellcolor{chead}\textbf{Indicadores} & \cellcolor{chead}\textbf{Qué haría falta} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{Grupo} & \cellcolor{chead}\textbf{Indicadores} & \cellcolor{chead}\textbf{Qué haría falta} \\
+\midrule
+\endhead
+\midrule \multicolumn{3}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\textbf{Entran al tablero ya} (3) & CS.PCS (2024 y 2025), PDM.CM (2024), PP.EPP (2025; 2024 aproximado; 2026 sin semáforo) & Para PDM.CM, verificar el PDF de Forensis 2024. Para PP.EPP, rótulos de ``aproximado'' y ``sin semáforo'' \\
+\textbf{Entran con una decisión} (6) & CS.DSI, CS.RPO, PC.I2, PC.I3, PC.I5, PDM.CA & Aprobar los valores por defecto (o elegir otra opción) en la lista de metas del DSI, el universo y el criterio del RPO, las actividades del I2, la unidad del I3, las instancias del I5 y la serie del POT \\
+\textbf{Se pueden mostrar como N/D explicado} (2) & CS.VRC, CS.ICRCS & Mantener N/D hasta recibir actas o listas de asistencia. Mostrarlos ``en construcción'' es opcional \\
+\textbf{Salen por ahora} (12) & PC.I1, PC.I4, PC.I6, PC.ISPC, PDM.CS, PDM.CP, PDM.CD, PDM.ILE, PDM.ICPD-6, PP.CEP, PP.CMA, PP.IREPP & Solicitudes a la Alcaldía (inventario de procesos, cobertura de salud con el método del plan, ficha de participación, cobertura deportiva, clasificación ICFES, actas de recibo, fichas de meta de personas). PC.I6 se propone sacar de esta versión \\
+\end{xltabular}
+}
+
+Total: 3 + 6 + 2 + 12 = 23.
+
+\subsection*{3.4 Conteo final}
+
+\phantomsection\addcontentsline{toc}{subsection}{3.4 Conteo final}
+
+\needspace{4\baselineskip}
+
+\textbf{Si se aprueban las recomendaciones, el tablero tendría 9 indicadores con resultado y 18 variables.}
+
+Cómo se cuenta:
+
+\begin{itemize}
+\item \textbf{Los 9 indicadores} son los 3 que entran ya más los 6 que entran con una decisión: CS.PCS, CS.DSI, CS.RPO, PC.I2, PC.I3, PC.I5, PDM.CA, PDM.CM y PP.EPP. Ningún índice tiene resultado: a los cuatro les falta al menos un componente.
+\item \textbf{Las 18 variables} son las dos de cada uno de esos 9 indicadores (numerador y denominador): 8 de la categoría A (CS.PCS.EE, CS.PCS.EP, PC.I2.V2, PDM.CM.O, PDM.CM.M, PDM.CA.M, PP.EPP.OPP y PP.EPP.APP) y 10 de la categoría B (CS.DSI.MD, CS.DSI.MS, CS.RPO.OR, CS.RPO.OT, PC.I2.V1, PC.I3.V1, PC.I3.V2, PC.I5.V1, PC.I5.V2 y PDM.CA.O).
+\item \textbf{No se cuentan:} 5 variables A que son metas de indicadores que salen (PDM.CS.M, PDM.CP.M, PDM.CD.M, PDM.ILE.MA y PDM.ILE.MS), 3 variables B cuyos indicadores siguen bloqueados (CS.VRC.ET, PDM.ILE.A y PP.CEP.PE), las 13 C y las 2 D. Igual quedan en la base para no perder el trabajo.
+\item \textbf{Variante:} si el profesor quiere mostrar VRC e ICRCS como N/D explicado, serían 11 indicadores visibles (9 con resultado) y 20 variables (se suman CS.VRC.EV y CS.VRC.ET).
+\item Las \textbf{variables auxiliares} (por ejemplo, 18 muertes viales o 29.794 afiliados) están en la base como contexto y no se cuentan entre las 18.
+\end{itemize}
+
+\clearpage
+
+\section*{Parte 4. La base de datos para el tablero}
+
+\phantomsection\addcontentsline{toc}{section}{Parte 4. La base de datos para el tablero}
+
+\subsection*{4.1 Qué hay hoy}
+
+\phantomsection\addcontentsline{toc}{subsection}{4.1 Qué hay hoy}
+
+Existen dos versiones del mismo contenido:
+
+\begin{itemize}
+\item \textbf{El libro de Excel para los profesores:} \texttt{\footnotesize outputs/\allowbreak{}indicadores/\allowbreak{}entregables/\allowbreak{}base\_\allowbreak{}indicadores\_\allowbreak{}OCE.\allowbreak{}xlsx}, con encabezados en español y 13 hojas.
+\item \textbf{Los archivos CSV} en \texttt{\footnotesize outputs/\allowbreak{}indicadores/\allowbreak{}}. Un \textbf{CSV} es una tabla en texto plano que cualquier programa puede leer; es el formato más cómodo para un tablero.
+\end{itemize}
+
+\subsubsection*{Hojas del Excel (y su CSV equivalente)}
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{3.35cm}L{1.47cm}L{5.73cm}L{5.15cm}}
+\toprule
+\cellcolor{chead}\textbf{Hoja} & \cellcolor{chead}\textbf{Filas} & \cellcolor{chead}\textbf{Qué contiene} & \cellcolor{chead}\textbf{CSV equivalente} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{Hoja} & \cellcolor{chead}\textbf{Filas} & \cellcolor{chead}\textbf{Qué contiene} & \cellcolor{chead}\textbf{CSV equivalente} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+Léeme & 16 & Avisos, contenido, llaves y convenciones & --- \\
+\cellcolor{cstripe}Resultados & \cellcolor{cstripe}947 & \cellcolor{cstripe}Un resultado por indicador $\times$ año $\times$ periodo $\times$ territorio $\times$ escenario: entradas, puntaje, semáforo, estado y motivo si es N/D & \cellcolor{cstripe}\texttt{resultados\_\allowbreak{}indicadores.\allowbreak{}csv} (1.003 filas = 947 + 56) \\
+No calculados & 56 & Indicadores no viables: por qué no se calculan y qué variables se construyeron & Incluidos en \texttt{resultados\_\allowbreak{}indicadores.\allowbreak{}csv} (columna \texttt{no\_\allowbreak{}calculado\_\allowbreak{}por\_\allowbreak{}etapa}) \\
+\cellcolor{cstripe}Variables & \cellcolor{cstripe}3.578 & \cellcolor{cstripe}El valor de cada variable con fuente, enlace, página, fechas, estado y escenario & \cellcolor{cstripe}\texttt{valores\_\allowbreak{}variables.\allowbreak{}csv} \\
+PP por zona & 42 & EPP por zona y año, con APP, OPP, porcentaje, semáforo y tres alternativas & Se deriva de \texttt{resultados\_\allowbreak{}indicadores.\allowbreak{}csv} \\
+\cellcolor{cstripe}PP por proyecto & \cellcolor{cstripe}181 & \cellcolor{cstripe}Cada proyecto de PP con apropiación, compromisos, obligaciones y porcentaje; tipo de cruce de 2024 y marca ``posible no PP'' & \cellcolor{cstripe}\texttt{pp\_\allowbreak{}proyectos.\allowbreak{}csv} + \texttt{clasificacion\_\allowbreak{}pp\_\allowbreak{}2024.\allowbreak{}csv} \\
+Soporte de conteos & 611 & Una fila por cada cosa contada (zona, evento, observación, proyecto, meta), con documento y página & \texttt{soporte\_\allowbreak{}conteos.\allowbreak{}csv} \\
+\cellcolor{cstripe}Clasificación VRC & \cellcolor{cstripe}17 & \cellcolor{cstripe}Cada evento de rendición y cómo se clasificó & \cellcolor{cstripe}\texttt{clasificacion\_\allowbreak{}vrc.\allowbreak{}csv} \\
+Clasificación RPO & 56 & Cada observación ciudadana y su respuesta (anonimizadas) & \texttt{clasificacion\_\allowbreak{}rpo.\allowbreak{}csv} \\
+\cellcolor{cstripe}Entregas PP & \cellcolor{cstripe}180 & \cellcolor{cstripe}Proyectos con entrega exigible y las tres reglas de ``entrega cumplida'' & \cellcolor{cstripe}\texttt{clasificacion\_\allowbreak{}pp\_\allowbreak{}entregas.\allowbreak{}csv} \\
+Supuestos & 41 & Los 36 parámetros, 3 sensibilidades y 2 casos dudosos, con su pregunta para los profesores & \texttt{config/\allowbreak{}supuestos.\allowbreak{}yaml} \\
+\cellcolor{cstripe}Efecto de alternativas & \cellcolor{cstripe}200 & \cellcolor{cstripe}Cuánto cambia cada resultado municipal con cada alternativa & \cellcolor{cstripe}--- \\
+Diccionario de datos & 248 & Qué significa cada columna de cada hoja y cuáles son llaves & \texttt{diccionario\_\allowbreak{}datos.\allowbreak{}csv} \\
+\end{xltabular}
+}
+
+También existe \texttt{\footnotesize matriz\_\allowbreak{}diligenciada.\allowbreak{}xlsx}: una copia de la Matriz con las hojas Registro y PP\_Proyectos llenas (todo en ``Pendiente'', por eso su hoja Resultados muestra N/D).
+
+\subsection*{4.2 Cómo se conectan las tablas}
+
+\phantomsection\addcontentsline{toc}{subsection}{4.2 Cómo se conectan las tablas}
+
+Una \textbf{llave} es una columna que permite unir dos tablas: si dos filas tienen el mismo valor en la llave, hablan de lo mismo.
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{3.08cm}L{4.81cm}L{8.03cm}}
+\toprule
+\cellcolor{chead}\textbf{Llave} & \cellcolor{chead}\textbf{Qué es} & \cellcolor{chead}\textbf{Dónde aparece} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{Llave} & \cellcolor{chead}\textbf{Qué es} & \cellcolor{chead}\textbf{Dónde aparece} \\
+\midrule
+\endhead
+\midrule \multicolumn{3}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+Código del indicador & Por ejemplo \texttt{PP.\allowbreak{}EPP} & Resultados, No calculados, Variables, Soporte, Efecto de alternativas \\
+\cellcolor{cstripe}Código (id) de la variable & \cellcolor{cstripe}Por ejemplo \texttt{PP.\allowbreak{}EPP.\allowbreak{}OPP} & \cellcolor{cstripe}Variables, Soporte de conteos; en Resultados va en ``Variables usadas'' (varios separados por ``;'') \\
+Año & 2024, 2025, 2026 & Casi todas \\
+\cellcolor{cstripe}Periodo & \cellcolor{cstripe}Anual, Semestre 1, Semestre 2 & \cellcolor{cstripe}Casi todas \\
+Territorio & Municipio, Zona 1 \ldots{} Zona 13 & Resultados, Variables, Soporte, PP por zona. En PP por proyecto la zona es un número (2 a 13) y hay que convertirla a ``Zona n'' \\
+\cellcolor{cstripe}Clave de escenario & \cellcolor{cstripe}``defecto'' o la lista de cambios parámetro=opción & \cellcolor{cstripe}Resultados, Variables, Soporte, PP por zona, Efecto de alternativas. El nombre del parámetro es la llave con la hoja Supuestos \\
+ID de soporte & Por ejemplo \texttt{CS-\allowbreak{}RPO-\allowbreak{}2024-\allowbreak{}001} & Variables (``Identificadores de soporte'', varios separados por coma), Soporte de conteos y las hojas de Clasificación VRC y RPO \\
+\cellcolor{cstripe}Código del proyecto & \cellcolor{cstripe}4 dígitos, por ejemplo \texttt{0709} & \cellcolor{cstripe}PP por proyecto y Entregas PP (2025 y 2026). En 2024, Entregas PP usa un código del listado (por ejemplo \texttt{EFPC2024-\allowbreak{}Z2-\allowbreak{}1}) y se une a través de la tabla de cruce de 2024 \\
+\end{xltabular}
+}
+
+\clearpage
+\newgeometry{left=2.5cm,width=22.94cm,top=2.5cm,height=16.5cm,headheight=14pt,headsep=0.8cm}
+\setlength{\headwidth}{\textwidth}
+\renewcommand{\pagsize}{\special{papersize=27.94cm,21.59cm}}
+
+\subsubsection*{Esquema simple de tablas y relaciones}
+
+\begin{Verbatim}[fontsize=\footnotesize,frame=single,rulecolor=\color{gray},framesep=2mm]
+                         SUPUESTOS (clave del parámetro)
+                                   |
+                                   | el parámetro va dentro de la "clave de escenario"
+                                   v
+EFECTO DE ALTERNATIVAS --(indicador, año, periodo, escenario)--> RESULTADOS <--(indicador, año, periodo)-- NO CALCULADOS
+                                                                    |
+                                                                    | "Variables usadas" + año + periodo + territorio + escenario
+                                                                    v
+                                                                VARIABLES
+                                                                    |
+                                                                    | "Identificadores de soporte"
+                                                                    v
+                                                           SOPORTE DE CONTEOS
+                                                             |            |
+                                         (ID de soporte = ID del evento)  (ID de soporte = ID de la observación)
+                                                             v            v
+                                                   CLASIFICACIÓN VRC   CLASIFICACIÓN RPO
+
+RESULTADOS (PP.EPP) --(año, periodo, territorio)--> PP POR ZONA <--(año, zona -> "Zona n")-- PP POR PROYECTO
+PP POR PROYECTO --(año, código del proyecto; en 2024 vía cruce del listado)--> ENTREGAS PP
+DICCIONARIO DE DATOS: describe todas las columnas (no se une con nada)
+\end{Verbatim}
+
+\clearpage
+\restoregeometry
+\setlength{\headwidth}{\textwidth}
+\renewcommand{\pagsize}{\special{papersize=21.59cm,27.94cm}}
+
+\subsection*{4.3 Formato}
+
+\phantomsection\addcontentsline{toc}{subsection}{4.3 Formato}
+
+\begin{itemize}
+\item \textbf{CSV:} separados por \textbf{punto y coma (;)}, codificación \textbf{UTF-8 con BOM} (una marca invisible al inicio que hace que Excel muestre bien las tildes). Abrir en Excel con ``Datos \textgreater{} Desde texto/CSV''.
+\item \textbf{Ojo con los decimales:} en los CSV el separador decimal es el \textbf{punto} (98.83288), no la coma. Las fechas van como aaaa-mm-dd.
+\item \textbf{Excel:} el mismo contenido con encabezados en español.
+\item \textbf{Vocabulario del semáforo:} el CSV usa Verde, Amarillo, Rojo y Gris; el Excel distingue además ``Sin semáforo'' (PP 2026) y ``Revisar'' (PC.I3 en personas). Para el tablero conviene usar el del Excel.
+\item Ningún dato está ``Validado'' ni contiene datos personales.
+\end{itemize}
+
+\subsection*{4.4 Cómo se actualiza cuando cambia un supuesto}
+
+\phantomsection\addcontentsline{toc}{subsection}{4.4 Cómo se actualiza cuando cambia un supuesto}
+
+En palabras simples:
+
+\begin{enumerate}
+\item Se abre \texttt{\footnotesize config/\allowbreak{}supuestos.\allowbreak{}yaml} y, en el parámetro que el profesor decidió (por ejemplo, \texttt{\footnotesize vrc\_\allowbreak{}evento\_\allowbreak{}sin\_\allowbreak{}mencion}), se cambia el valor por defecto por la opción elegida. La opción tiene que estar entre las que el archivo ya ofrece; si no está (como el rubro de déficit fiscal), primero hay que agregarla.
+\item Se vuelven a correr los scripts de los indicadores afectados y luego el que junta todo (\texttt{\footnotesize ensamblar.\allowbreak{}py}).
+\item Se vuelve a comparar con la hoja Resultados de la Matriz (\texttt{\footnotesize llenar\_\allowbreak{}matriz.\allowbreak{}py -\allowbreak{}-\allowbreak{}verificar -\allowbreak{}-\allowbreak{}zonas}) y se regenera el Excel de la base.
+\end{enumerate}
+
+Esto lo hace Claude Code; toma minutos. Los escenarios alternativos se regeneran solos, y el ``por defecto'' pasa a ser lo que el profesor decidió.
+
+\subsection*{4.5 Qué falta para que quede ``final'' esta semana}
+
+\phantomsection\addcontentsline{toc}{subsection}{4.5 Qué falta para que quede ``final'' esta semana}
+
+\begin{enumerate}
+\item \textbf{Aplicar las decisiones de la reunión} en \texttt{\footnotesize config/\allowbreak{}supuestos.\allowbreak{}yaml} y recalcular (y, si se decide, agregar la opción de excluir el rubro de déficit fiscal).
+\item \textbf{Verificar Forensis 2024} cuando subas el PDF.
+\item \textbf{Unificar nombres} de indicadores con la Matriz y el nombre de la EFPC.
+\item \textbf{Unificar el vocabulario del semáforo} entre CSV y Excel.
+\item \textbf{Unificar la columna de disponibilidad}: en 10 de las 39 variables, la categoría de la hoja Variables (por año y escenario) no coincide con la categoría final de la etapa 1.
+\item \textbf{Corregir la trazabilidad:} nombre de la publicación en lugar de ruta en PP, fechas de publicación y filas de soporte faltantes.
+\item \textbf{Agregar una hoja ``Catálogo''} con código, nombre de la Matriz, sistema, tipo, fórmula y umbrales de cada indicador. Hoy la base no la tiene y el tablero la necesita para pintar los colores.
+\item \textbf{Preparar una versión liviana para el tablero:} solo el escenario por defecto y los 9 indicadores aprobados, más la hoja de efecto de alternativas. Falta que el profesor diga si el tablero muestra escenarios.
+\item \textbf{Arreglar las uniones:} zona como número frente a ``Zona n'' y el código de proyecto de 2024 en Entregas PP.
+\end{enumerate}
+
+\clearpage
+
+\section*{Parte 5. Preparación de la reunión}
+
+\phantomsection\addcontentsline{toc}{section}{Parte 5. Preparación de la reunión}
+
+\subsection*{5.1 Hoja de reunión (una página)}
+
+\phantomsection\addcontentsline{toc}{subsection}{5.1 Hoja de reunión (una página)}
+
+\textbf{Objetivo:} salir con la lista aprobada de indicadores y variables del tablero y las decisiones que permiten cerrar la base el viernes 13 de noviembre.
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{0.61cm}L{4.05cm}L{3.16cm}L{3.66cm}L{4.00cm}}
+\toprule
+\cellcolor{chead}\textbf{\#} & \cellcolor{chead}\textbf{Pregunta exacta} & \cellcolor{chead}\textbf{Opciones} & \cellcolor{chead}\textbf{Efecto en los resultados} & \cellcolor{chead}\textbf{Recomendación (propuesta; decide el profesor)} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{\#} & \cellcolor{chead}\textbf{Pregunta exacta} & \cellcolor{chead}\textbf{Opciones} & \cellcolor{chead}\textbf{Efecto en los resultados} & \cellcolor{chead}\textbf{Recomendación (propuesta; decide el profesor)} \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+1 & \textquestiondown{}Qué indicadores entran a la primera versión del tablero? & 9 con resultado (+ VRC e ICRCS como N/D) / solo los 3 sin decisión / todos los 23 & 9 indicadores y 18 variables (11 y 20 con los N/D) & 9 con resultado; VRC e ICRCS como N/D explicado \\
+\cellcolor{cstripe}2 & \cellcolor{cstripe}\textquestiondown{}Se aprueban en bloque los valores por defecto (36 parámetros) como versión 1 provisional, salvo lo que se discuta hoy? & \cellcolor{cstripe}Sí / revisar uno a uno & \cellcolor{cstripe}Si sí, los resultados quedan como en el informe de avance & \cellcolor{cstripe}Sí, rotulados ``provisional'' \\
+3 & VRC: si el documento de un evento no menciona veedurías, \textquestiondown{}la presencia es desconocida o ausencia? & Desconocida (regla de la Matriz) / ausencia si el documento es integral / ausencia siempre & VRC 2024: N/D o 66,67 Amarillo; ICRCS 2024: N/D o 65,20 Amarillo & Desconocida (N/D) y pedir actas y listas de asistencia \\
+\cellcolor{cstripe}4 & \cellcolor{cstripe}DSI: \textquestiondown{}qué metas forman la lista y hasta cuándo se acepta una publicación? & \cellcolor{cstripe}7 metas del ICPD-6 / 10 metas; 31 de marzo / hasta hoy & \cellcolor{cstripe}2024: 0 (Rojo) o 28,57 (Rojo) & \cellcolor{cstripe}7 metas y 31 de marzo (regla 17) \\
+5 & PP 2024: \textquestiondown{}se excluye el rubro de déficit fiscal (\$627.204.058) y se aceptan los cruces aproximados? & Incluir / excluir; completa / solo exactos & 98,69 / 98,64 / 99,28 (Verde en todos); la zona 10 sigue Amarilla & Excluir el rubro, aceptar los cruces rotulados ``aproximado'' y confirmar 0714, 0733 y 0709 con Planeación \\
+\cellcolor{cstripe}6 & \cellcolor{cstripe}\textquestiondown{}Las metas del PDM se leen contra la meta 2027 y PP 2026 se muestra sin semáforo? & \cellcolor{cstripe}Meta 2027 / metas anuales; 2026 sin semáforo / no mostrar & \cellcolor{cstripe}Con metas anuales, CA y CM pasan a N/D & \cellcolor{cstripe}Meta 2027 como ``logro al corte''; 2026 sin semáforo \\
+7 & \textquestiondown{}Quién envía las solicitudes a la Alcaldía y cuáles van primero? & Profesores / Isabella con carta del profesor & Desbloquearían VRC, ICRCS, I1, I4, PDM.CS, CP, CD, ILE, CEP y CMA & Primero: inventario de procesos, actas de rendición, cobertura de salud y lista oficial de proyectos de PP \\
+\end{xltabular}
+}
+
+\needspace{4\baselineskip}
+
+\textbf{Necesito que me confirmes para cerrar la base esta semana:}
+
+\begin{itemize}
+\item La lista de indicadores y variables (puntos 1 y 2).
+\item Si el tablero muestra solo el escenario por defecto o también las alternativas.
+\item Los nombres oficiales: los de la Matriz para los indicadores y el de la EFPC.
+\item El formato de entrega a la persona del tablero (Excel, CSV o ambos) y su contacto.
+\end{itemize}
+
+\subsection*{5.2 Preguntas que podría hacer el profesor y cómo responderlas}
+
+\phantomsection\addcontentsline{toc}{subsection}{5.2 Preguntas que podría hacer el profesor y cómo responderlas}
+
+\needspace{4\baselineskip}
+
+\textbf{\textquestiondown{}De dónde sale el 98,83?}
+
+Es el EPP de 2025. Se tomaron los 61 proyectos del plan de acción del IV trimestre de 2025 cuyo nombre dice ``ZONA n'' y se compararon uno a uno con el listado de la EFPC: coinciden en número por zona y 56 coinciden al peso. Se sumaron sus obligaciones y su apropiación: 100 $\times$ 20.684.427.720 / 20.928.690.218 = 98,83. No incluye el proyecto 0553 (costo del proceso); con él daría 98,86. Lo reprodujo la revisión crítica al peso. Falta que Planeación confirme la lista de proyectos.
+
+\needspace{4\baselineskip}
+
+\textbf{\textquestiondown{}Por qué VRC queda en N/D?}
+
+Porque la Matriz dice que si hay eventos con presencia desconocida de veedurías, el VRC es N/D. De la audiencia del Alcalde solo se publicó el cuadro de preguntas, sin acta ni asistentes, así que no se sabe si hubo veedurías. Si se decidiera contar ese silencio como ausencia, 2024 daría 66,67 (Amarillo) y 2025, 20 (Rojo), pero eso es apartarse de la regla. Lo correcto es pedir las actas o listas de asistencia.
+
+\needspace{4\baselineskip}
+
+\textbf{\textquestiondown{}Qué tan confiables son los resultados?}
+
+Son provisionales, no validados. A favor: las fórmulas coinciden con las de la Matriz (48 de 62 resultados iguales y las 14 diferencias explicadas), el Analizador recalculó a mano 23 valores leyendo los documentos y todos coinciden, y la segunda lectura dio 16 de 16 en acuerdo. En contra: muchos datos son autorreporte de la Alcaldía, la mortalidad vial es una cifra citada sin verificar, PP 2024 es aproximado y varios resultados dependen de decisiones que están pendientes. La confiabilidad aritmética es alta; la de las fuentes, la da la Alcaldía cuando valide.
+
+\needspace{4\baselineskip}
+
+\textbf{\textquestiondown{}Qué falta para el tablero?}
+
+Que se aprueben la lista de indicadores y los supuestos; aplicar esas decisiones y recalcular; verificar Forensis; unificar nombres y vocabulario; agregar una hoja de catálogo con umbrales; y una versión liviana con el escenario por defecto. Con las decisiones de hoy, se puede tener el viernes.
+
+\needspace{4\baselineskip}
+
+\textbf{\textquestiondown{}Por qué DSI da 0?}
+
+Porque de las 7 metas seleccionadas, ninguna tenía una cifra oficial publicada, con la misma definición, antes del 31 de marzo del año siguiente, que es el límite de la regla 17 de la Guía. La Alcaldía solo publica la evaluación de indicadores de producto, no de resultado; el POT salió en octubre de 2025 y Forensis no tiene fecha verificable. Con todo lo publicado hasta hoy, 2024 sube a 28,57, que sigue siendo Rojo. El 0 es en sí un hallazgo: la información de resultados del plan no se publica a tiempo.
+
+\needspace{4\baselineskip}
+
+\textbf{\textquestiondown{}Por qué 2026 no tiene semáforo?}
+
+Porque solo hay datos al 30 de junio de 2026 y la Matriz solo prevé el PP en periodo anual. El 23,26 compara seis meses de ejecución con la apropiación de todo el año; pintarlo de Rojo sugeriría un mal desempeño que no se puede afirmar. Se muestra como dato informativo.
+
+\needspace{4\baselineskip}
+
+\textbf{\textquestiondown{}Qué es un escenario?}
+
+Es una forma de calcular el indicador con una respuesta distinta a una pregunta que la Matriz deja abierta. Ejemplo: para el RPO, si se cuentan o no las felicitaciones (94,12 o 72,73). En vez de decidir por los profesores, se calcularon todas las opciones y se marcó una como valor por defecto provisional. La hoja ``Efecto de alternativas'' muestra cuánto cambia cada resultado.
+
+\needspace{4\baselineskip}
+
+\textbf{\textquestiondown{}Por qué no se calcularon I1, I4 e I6?}
+
+Porque no existe un inventario oficial de procesos participativos cerrados ni un registro que vincule cada aporte con una decisión (I1 e I4), ni un registro de actividades con canal virtual (I6). Se armó un universo exploratorio (3 procesos en 2024, 5 en 2025), pero corre riesgo de subconteo. Sin I1 e I4, el ISPC queda bloqueado (pesan 55 \%). Hay que pedirle el inventario a la Subdirección de Participación.
+
+\subsection*{5.3 Plan de trabajo hasta el viernes 13 de noviembre}
+
+\phantomsection\addcontentsline{toc}{subsection}{5.3 Plan de trabajo hasta el viernes 13 de noviembre}
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{2.41cm}L{4.71cm}L{5.51cm}L{3.08cm}}
+\toprule
+\cellcolor{chead}\textbf{Día} & \cellcolor{chead}\textbf{Isabella} & \cellcolor{chead}\textbf{Claude Code} & \cellcolor{chead}\textbf{Depende de los profesores} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{Día} & \cellcolor{chead}\textbf{Isabella} & \cellcolor{chead}\textbf{Claude Code} & \cellcolor{chead}\textbf{Depende de los profesores} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\textbf{Miércoles 11} (reunión) & Lleva la hoja de reunión; anota cada decisión con la opción elegida; pide el contacto de la persona del tablero & Nada antes de la reunión & Las 7 decisiones de la hoja \\
+\textbf{Miércoles 11} (tarde) & Descarga a mano el PDF de Forensis 2024 y lo sube al repositorio; envía a Claude Code la lista de decisiones & Aplica las decisiones en el archivo de supuestos (agrega la opción de déficit fiscal si se aprobó), recalcula, verifica Forensis y compara con la Matriz & --- \\
+\textbf{Jueves 12} & Revisa los resultados nuevos frente a esta guía; redacta el borrador de las solicitudes a partir de la hoja Solicitudes & Unifica nombres, vocabulario del semáforo y disponibilidad; agrega la hoja Catálogo; arregla trazabilidad y llaves; prepara la versión liviana para el tablero y el diccionario & Firmar y enviar las solicitudes a la Alcaldía \\
+\textbf{Viernes 13} & Entrega la lista de variables y la base a la persona del tablero y al profesor & Verificación final (matriz, recálculo, datos personales, ``Validado''), guarda la versión en GitHub y actualiza la memoria & Visto bueno final \\
+\end{xltabular}
+}
+
+Las respuestas de la Alcaldía no llegarán esta semana: lo que está en C queda fuera de la primera versión del tablero y entrará cuando llegue la información.
+
+\clearpage
+
+\section*{Glosario de siglas}
+
+\phantomsection\addcontentsline{toc}{section}{Glosario de siglas}
+
+{\footnotesize
+\begin{xltabular}{\linewidth}{L{2.56cm}L{8.91cm}L{4.46cm}}
+\toprule
+\cellcolor{chead}\textbf{Sigla} & \cellcolor{chead}\textbf{Significado} & \cellcolor{chead}\textbf{Nota} \\
+\midrule
+\endfirsthead
+\toprule
+\cellcolor{chead}\textbf{Sigla} & \cellcolor{chead}\textbf{Significado} & \cellcolor{chead}\textbf{Nota} \\
+\midrule
+\endhead
+\midrule \multicolumn{3}{r}{\emph{Continúa en la página siguiente}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+ADRES & Administradora de los Recursos del Sistema General de Seguridad Social en Salud & Significado general; el repositorio solo cita ``ADRES -- BDUA'' \\
+\cellcolor{cstripe}AMVA & \cellcolor{cstripe}Área Metropolitana del Valle de Aburrá & \cellcolor{cstripe}--- \\
+ANSV & Agencia Nacional de Seguridad Vial (Observatorio Nacional de Seguridad Vial) & --- \\
+\cellcolor{cstripe}APP & \cellcolor{cstripe}Apropiación definitiva de recursos de presupuesto participativo & \cellcolor{cstripe}Denominador del EPP \\
+BDUA & Base de Datos Única de Afiliados (salud) & Significado general; no está escrito en el repositorio \\
+\cellcolor{cstripe}BOM & \cellcolor{cstripe}Marca de orden de bytes: marca invisible al inicio de un archivo que indica UTF-8 & \cellcolor{cstripe}--- \\
+BPIN & Banco de Programas y Proyectos de Inversión Nacional (código de un proyecto de inversión) & Significado general; no está escrito en el repositorio \\
+\cellcolor{cstripe}CA & \cellcolor{cstripe}Logro del mantenimiento de espacio público verde (PDM.CA) & \cellcolor{cstripe}--- \\
+CD & Logro de cobertura de servicios deportivos (PDM.CD) & --- \\
+\cellcolor{cstripe}CEP & \cellcolor{cstripe}Cumplimiento de entrega de proyectos (PP.CEP) & \cellcolor{cstripe}--- \\
+CM & Logro de la reducción de mortalidad vial (PDM.CM) & --- \\
+\cellcolor{cstripe}CMA & \cellcolor{cstripe}Cumplimiento de metas de atención (PP.CMA) & \cellcolor{cstripe}--- \\
+CMPC & Consejo Municipal de Participación Ciudadana & --- \\
+\cellcolor{cstripe}CMSSS & \cellcolor{cstripe}Consejo Municipal de Seguridad Social en Salud & \cellcolor{cstripe}Antes mal nombrado; corregido \\
+COPACO & Comité de Participación Comunitaria en Salud & --- \\
+\cellcolor{cstripe}CP & \cellcolor{cstripe}Logro de implementación de procesos participativos (PDM.CP) & \cellcolor{cstripe}--- \\
+CS & Dos significados: el sistema de Control social, y el indicador de salud del PDM (PDM.CS, Logro de la cobertura de aseguramiento subsidiado) & Ambigüedad de la Matriz \\
+\cellcolor{cstripe}CSV & \cellcolor{cstripe}Valores separados por comas: tabla en texto plano (aquí con punto y coma) & \cellcolor{cstripe}--- \\
+CTP & Consejo Territorial de Planeación & --- \\
+\cellcolor{cstripe}CUIPO & \cellcolor{cstripe}Categoría Única de Información del Presupuesto Ordinario (reporte presupuestal a la Contraloría General) & \cellcolor{cstripe}Significado general; el repositorio solo dice ``Contraloría General de la República -- CUIPO'' \\
+DANE & Departamento Administrativo Nacional de Estadística & Significado general; no está escrito en el repositorio \\
+\cellcolor{cstripe}DAP & \cellcolor{cstripe}Departamento Administrativo de Planeación (Alcaldía de Envigado) & \cellcolor{cstripe}--- \\
+DNP & Departamento Nacional de Planeación (publica TerriData) & Significado general \\
+\cellcolor{cstripe}DSI & \cellcolor{cstripe}Disponibilidad de información de seguimiento (CS.DSI) & \cellcolor{cstripe}En algunos archivos aparece como ``Divulgación de la situación''; el nombre correcto es el de la Matriz \\
+DTS & Documento técnico de soporte del PDM & Así se usa en el repositorio \\
+\cellcolor{cstripe}EFPC & \cellcolor{cstripe}Escuela de Formación para la Participación Ciudadana & \cellcolor{cstripe}Nombre según el inventario; en otros archivos aparece como ``Escuela de Formación Ciudadana'' o ``Escuela de Formación Política y Ciudadana'' \\
+EPP & Ejecución presupuestal del presupuesto participativo (PP.EPP) & --- \\
+\cellcolor{cstripe}EPV & \cellcolor{cstripe}Espacio público verde & \cellcolor{cstripe}--- \\
+Forensis & Publicación anual de datos de Medicina Legal & No es sigla \\
+\cellcolor{cstripe}I1 a I6 & \cellcolor{cstripe}Indicadores de participación ciudadana: I1 Incorporación de aportes, I2 Cobertura territorial, I3 Oferta formativa, I4 Publicación de resultados, I5 Sesiones de participación, I6 Participación virtual & \cellcolor{cstripe}--- \\
+IBS / ITG & Subíndice de bienestar social / Subíndice de territorio y gobernanza (partes del ICPD-6) & --- \\
+\cellcolor{cstripe}ICFES & \cellcolor{cstripe}Instituto Colombiano para la Evaluación de la Educación (pruebas Saber 11) & \cellcolor{cstripe}Significado general; no está escrito en el repositorio \\
+ICLD & Ingresos corrientes de libre destinación & --- \\
+\cellcolor{cstripe}ICPD-6 & \cellcolor{cstripe}Índice de cumplimiento de resultados seleccionados del PDM (6 dimensiones) & \cellcolor{cstripe}--- \\
+ICRCS & Índice de Condiciones y Respuesta para el Control Social & En los archivos de resultados aparece como ``Índice de control y rendición social'' \\
+\cellcolor{cstripe}IIC & \cellcolor{cstripe}Índice de Incidencia Ciudadana & \cellcolor{cstripe}Trabajo previo; no se calcula en estos encargos \\
+ILE & Índice de Logro Educativo (PDM.ILE); sus partes son LA (logro de acceso inicial) y LS (logro en Saber 11) & --- \\
+\cellcolor{cstripe}INMLCF & \cellcolor{cstripe}Instituto Nacional de Medicina Legal y Ciencias Forenses & \cellcolor{cstripe}--- \\
+IREPP & Índice de Resultados de Ejecución del Presupuesto Participativo & --- \\
+\cellcolor{cstripe}ISPC & \cellcolor{cstripe}Índice Simplificado de Participación Ciudadana de Envigado & \cellcolor{cstripe}--- \\
+IUE & Institución Universitaria de Envigado & --- \\
+\cellcolor{cstripe}JAC & \cellcolor{cstripe}Juntas de Acción Comunal & \cellcolor{cstripe}--- \\
+MD / MS & Metas con valor publicado / metas seleccionadas (variables del DSI). MS también es la meta de Saber 11 en el ILE & Ambigüedad de la Matriz \\
+\cellcolor{cstripe}MGA & \cellcolor{cstripe}Metodología General Ajustada (fichas de proyectos de inversión) & \cellcolor{cstripe}Significado general; no está escrito en el repositorio \\
+MinSalud & Ministerio de Salud y Protección Social & --- \\
+\cellcolor{cstripe}N/D & \cellcolor{cstripe}No disponible: información faltante, no validada o fuera del corte & \cellcolor{cstripe}Sin color \\
+NA, PA, MP, SC & Variables del CMA: proyectos aplicables (NA), personas atendidas (PA), meta de personas (MP), suma de puntajes (SC) & --- \\
+\cellcolor{cstripe}NE & \cellcolor{cstripe}No evaluable: base cero, sin universo & \cellcolor{cstripe}Sin color \\
+OCE & Observatorio Ciudadano de Envigado & --- \\
+\cellcolor{cstripe}ODS & \cellcolor{cstripe}Objetivos de Desarrollo Sostenible & \cellcolor{cstripe}Aparecen en la columna de categoría de la Matriz \\
+OPCEN & Observatorio de Participación Ciudadana de Envigado (institucional) & --- \\
+\cellcolor{cstripe}OPP & \cellcolor{cstripe}Obligaciones presupuestales con cargo a recursos de presupuesto participativo & \cellcolor{cstripe}Numerador del EPP \\
+PC & Sistema de Participación ciudadana & --- \\
+\cellcolor{cstripe}PCS & \cellcolor{cstripe}Cumplimiento de la promoción del control social (CS.PCS) & \cellcolor{cstripe}--- \\
+PDM & Plan de Desarrollo Municipal 2024-2027 (Acuerdo 017 de 2024) & --- \\
+\cellcolor{cstripe}PE / PEC & \cellcolor{cstripe}Proyectos con entrega exigible / proyectos con entrega completa y verificada (variables del CEP) & \cellcolor{cstripe}--- \\
+POT & Plan de Ordenamiento Territorial del Municipio de Envigado & --- \\
+\cellcolor{cstripe}PP & \cellcolor{cstripe}Presupuesto participativo & \cellcolor{cstripe}--- \\
+PPSS & Política de Participación Social en Salud & --- \\
+\cellcolor{cstripe}ROCA & \cellcolor{cstripe}Nombre de una hoja del plan de acción con rubros, fuente, proyecto, BPIN, apropiación y obligación & \cellcolor{cstripe}El significado de la sigla no consta en el repositorio \\
+RPO & Respuesta pública a observaciones ciudadanas (CS.RPO) & --- \\
+\cellcolor{cstripe}RS & \cellcolor{cstripe}Régimen subsidiado de salud & \cellcolor{cstripe}--- \\
+S1 & Primer semestre & --- \\
+\cellcolor{cstripe}SECOP & \cellcolor{cstripe}Sistema Electrónico para la Contratación Pública & \cellcolor{cstripe}Significado general; no está escrito en el repositorio \\
+SGSSS & Sistema General de Seguridad Social en Salud & --- \\
+\cellcolor{cstripe}SisMaster & \cellcolor{cstripe}Sistema de información de aseguramiento citado como fuente de la línea base de salud & \cellcolor{cstripe}El significado no consta en el repositorio \\
+TerriData & Plataforma de datos territoriales del DNP & No es sigla \\
+\cellcolor{cstripe}TLS & \cellcolor{cstripe}Protocolo que cifra la conexión con un sitio web (el ``candado'' del navegador) & \cellcolor{cstripe}--- \\
+UTF-8 & Codificación de texto que permite tildes y eñes & --- \\
+\cellcolor{cstripe}VRC & \cellcolor{cstripe}Presencia de veedurías en la rendición de cuentas (CS.VRC) & \cellcolor{cstripe}--- \\
+YAML & Formato de archivo de texto para configuración (el de los supuestos) & --- \\
+\end{xltabular}
+}
+
+\textbf{Otros términos:} \emph{Script} (programa corto que hace los cálculos), \emph{GitHub} (servicio donde se guarda el historial del proyecto), \emph{commit} (versión guardada con fecha y descripción), \emph{Claude Code} (asistente de programación que ejecutó el trabajo), \emph{Agente Analizador} (planea y revisa), \emph{Agente Ejecutor} (programa y ejecuta), \emph{LaTeX/Overleaf} (sistema para componer documentos formales y su editor en línea), \emph{dominio espejo} (otra dirección web que publica los mismos archivos), \emph{Índer} (entidad de deporte de Envigado; su nombre completo no consta en el repositorio).
+
+\end{document}
