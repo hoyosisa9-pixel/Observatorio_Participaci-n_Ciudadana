@@ -117,3 +117,4 @@
 - Saber 11 en datos abiertos solo llega a 2022; no hay clasificación de planteles de Envigado.
 - `outputs/sistema_simplificado/` (documento de 4 págs., variables para solicitar de 2 págs., indicadores_simplificados.csv); scripts en `scripts/sistema_simplificado/` (`calcular.py`, `generar_documentos.py`).
 - Re-ejecutar `scripts/indicadores/descargas.py` reescribe el manifiesto y borra las filas nuevas (ICFES, MinSalud datos.gov.co, DANE por edad).
+- v2 (10-nov-2026): el documento simplificado se reemplazó por la versión por dimensión (tabla de variables + tabla de indicadores; 6 págs.) y un Excel nuevo. PP: principales fidelidad, proyectos votados que se terminaron (49/61 = 80,33 en 2025, autorreporte) y EPP; respaldo nuevo: ejecución de los proyectos terminados (99,22 en 2025). Hay 56 variables: 18 disponibles, 26 construibles, 12 no disponibles.

@@ -50,6 +50,7 @@ URL_MINSALUD_DIC25 = "https://minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/
 URL_MINSALUD_AGO26 = "https://minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/VP/RBC/cifras-afiliacion-salud-agosto2026.zip"
 
 FILAS: list[dict] = []
+INFO_PP: dict = {}
 
 
 # ---------------------------------------------------------------- utilidades
@@ -237,18 +238,38 @@ def presupuesto_participativo():
             f"Puntos de diferencia entre la zona más alta ({mx[0]}) y la más baja ({mn[0]}) en EPP; {len(zon)} zonas con proyectos. "
             "Numerador = EPP más alto; denominador = EPP más bajo. Sin semáforo.")
 
-    # avance físico (autorreporte 2025)
+    # proyectos votados que se terminaron (principal; reemplaza al antiguo "avance físico") y su respaldo monetario
     f = [r for r in ENT if r["anio"] == "2025" and r["cuenta_en_defecto_pe"] == "1"]
     pec = sum(1 for r in f if r["pec_todas_filas_dic_100"] == "1")
     pe = len(f)
     assert (pec, pe) == (int(val_def("PP.CEP.PEC", 2025)["valor"]), int(val_def("PP.CEP.PE", 2025)["valor"]))
     v = 100 * pec / pe
-    add(comp, "Avance físico (proyectos reportados terminados)", "respaldo", 2025, pec, pe, v, sem_pp(v), "Plan de acción 2025 (autorreporte)",
+    ROT = "Autorreporte de las dependencias, sin acta de recibo."
+    nom_a, nom_b = "Proyectos votados que se terminaron", "Ejecución presupuestal de los proyectos terminados"
+    add(comp, nom_a, "principal", 2025, pec, pe, v, sem_pp(v), "Plan de acción 2025 (autorreporte de las dependencias)",
         enlace_de("PP.CEP", 2025),
-        "Autorreporte: proyectos con todas las filas de diciembre en 100 % de avance físico (regla por defecto). "
-        "Semáforo con los umbrales de PP: propuesta.")
-    nd(comp, "Avance físico (proyectos reportados terminados)", "respaldo", 2024, "sin avance físico 2024 en los documentos reunidos.",
-       "Plan de acción", "")
+        ROT + " Proyectos votados con todas las filas de diciembre en 100 % de avance físico (misma regla por defecto del avance físico) "
+        "sobre proyectos votados. Semáforo con los umbrales de PP: propuesta.")
+    for a_, mot in ((2024, "sin avance físico por proyecto de 2024 en los documentos reunidos."),
+                    (2026, "el plan de acción de 2026 solo reporta avance al 30 de junio; no hay cierre de la vigencia.")):
+        nd(comp, nom_a, "principal", a_, mot, "Plan de acción (autorreporte de las dependencias)", "")
+    # (b) obligaciones / apropiación SOLO de los proyectos terminados (cruce pp_proyectos x clasificacion_pp_entregas por código de proyecto)
+    terminados = {r["codigo_proyecto"] for r in f if r["pec_todas_filas_dic_100"] == "1"}
+    pp25 = [r for r in PPP if r["anio"] == "2025" and r["en_listado_efpc"] == "True"]
+    assert terminados <= {r["codigo_proyecto"] for r in pp25}
+    sel = [r for r in pp25 if r["codigo_proyecto"] in terminados]
+    assert len(sel) == pec
+    ob_t = sum(num(r["obligacion"]) for r in sel)
+    ap_t = sum(num(r["apropiacion_definitiva"]) for r in sel)
+    vb = 100 * ob_t / ap_t
+    add(comp, nom_b, "respaldo", 2025, round(ob_t), round(ap_t), vb, sem_pp(vb), "Hacienda (ejecución) y plan de acción 2025 (autorreporte)",
+        enlace_de("PP.CEP", 2025),
+        ROT + f" Obligaciones / apropiación definitiva solo de los {pec} proyectos con avance físico de 100 % "
+        "(cruce por código de proyecto entre la ejecución de Hacienda y el plan de acción). Semáforo con los umbrales de PP: propuesta.")
+    for a_, mot in ((2024, "sin avance físico por proyecto de 2024 para identificar los proyectos terminados."),
+                    (2026, "sin cierre de la vigencia 2026 ni avance físico al cierre.")):
+        nd(comp, nom_b, "respaldo", a_, mot, "Hacienda y plan de acción", "")
+    INFO_PP.update({"terminados": pec, "ob_t": ob_t, "ap_t": ap_t})
 
 
 # =============================================================================== PARTICIPACIÓN CIUDADANA
@@ -426,6 +447,9 @@ def ile_primera_infancia(td, pob_edad):
             "100 × (valor − 16,3) / (19 − 16,3), con tope entre 0 y 100. Línea base 16,3 (2023) y meta 19.")
         prev = v
     INFO_ILE["serie"] = serie
+    INFO_ILE["atend"] = (atend, fuente_atend, enl_atend)
+    INFO_ILE["pob_edad"] = {a: sum(pob_edad[a][e] for e in range(0, hasta + 1)) for a in ANIOS_SERIE}
+    INFO_ILE["rango"] = elegido
 
 
 def ile_saber():
@@ -510,6 +534,9 @@ def cobertura_salud(td, pop):
     add(comp, "Cobertura de salud, cifra publicada por MinSalud (agosto)", "referencial", 2026, 222151, 268990, num(d2["valor"]), "", "MinSalud, cifras de afiliación a agosto de 2026",
         URL_MINSALUD_AGO26, "La diferencia con diciembre de 2025 se debe a que MinSalud actualizó la población con otra proyección, no a una pérdida de afiliados.")
     INFO_ILE["salud"] = ser
+    INFO_ILE["afiliados"] = {"Afiliados al régimen contributivo": contrib, "Afiliados al régimen subsidiado": sub,
+                             "Afiliados a regímenes especiales": esp, "Afiliados al SGSSS": tot}
+    INFO_ILE["pop_pped"] = pop
 
 
 def discapacidad():
@@ -518,6 +545,7 @@ def discapacidad():
         filas = list(csv.DictReader(f))
     total = sum(float(r["personas_registradas"]) for r in filas)
     ult = max(int(r["anio_registro"]) for r in filas)
+    INFO_ILE["discap"] = (ult, total)
     add(comp, "Inclusión: personas con discapacidad en el registro nacional (acumulado)", "referencial", ult, int(total), None, total, "",
         "MinSalud, Registro de Localización y Caracterización de Personas con Discapacidad (datos.gov.co)", URL_RLCPD,
         f"Personas registradas desde 2003 hasta {ult}; el conjunto público no se actualiza desde 2022 y es un registro acumulado, no una tasa. "
@@ -578,6 +606,271 @@ def politicas():
         "a) políticas con informe de seguimiento publicado / políticas vigentes sería calculable de inmediato; b) y c) quedan para después.")
 
 
+# =============================================================================== INVENTARIO DE VARIABLES POR DIMENSIÓN
+F_VARS = OUT / "variables_por_dimension.csv"
+CAMPOS_VARS = ["dimension", "id_variable", "variable", "origen", "para_indicador", "estado", "anio", "valor", "unidad",
+               "detalle_valor", "fuente", "enlace", "que_falta", "limitacion"]
+VARS: list[dict] = []
+DIM_CS, DIM_PC, DIM_PDM, DIM_PP = "Control social", "Participación ciudadana", "Cumplimiento del PDM", "Presupuesto participativo"
+
+
+def fil_ind(ind, anio, tipo=None):
+    c = [r for r in FILAS if r["indicador"] == ind and r["anio"] == anio and (tipo is None or r["tipo"] == tipo)]
+    assert len(c) == 1, (ind, anio)
+    return c[0]
+
+
+def vf(ind, anio, campo="valor"):
+    return num(fil_ind(ind, anio)[campo])
+
+
+def vv(id_var, anio, periodo=None):
+    for r in VAL:
+        if (r["id_variable"] == id_var and r["anio"] == str(anio) and r["escenario_id"] == "defecto" and r["territorio"] == "Municipio"
+                and (periodo is None or r["periodo"] == periodo)):
+            return num(r["valor"])
+    return None
+
+
+def enl_var(id_var):
+    for r in VAL:
+        if r["id_variable"] == id_var and r["escenario_id"] == "defecto" and r["enlace"]:
+            return r["enlace"].split("\n")[0]
+    return ""
+
+
+def var(dim, id_, nombre, origen, para, estado, fuente, enlace, falta, limit, unidad, valores):
+    """valores: lista de (anio, valor, detalle). Una fila por año con valor; una fila sin año si no hay ninguno."""
+    assert estado in ("Disponible", "Construible", "No disponible"), estado
+    base = {"dimension": dim, "id_variable": id_, "variable": nombre, "origen": origen, "para_indicador": para, "estado": estado,
+            "unidad": unidad, "fuente": fuente, "enlace": enlace, "que_falta": falta, "limitacion": limit}
+    vals = [x for x in valores if x[1] is not None]
+    if not vals:
+        VARS.append({**base, "anio": "", "valor": "", "detalle_valor": ""})
+    for a, v, d in vals:
+        VARS.append({**base, "anio": a, "valor": round(float(v), 4) if isinstance(v, float) else v, "detalle_valor": d})
+
+
+def variables_por_dimension():
+    M, N = "Matriz", "Nueva"
+    # ------------------------------------------------------------------ CONTROL SOCIAL
+    ur_dsi = enl_var("CS.PCS.EE")
+    var(DIM_CS, "CS.DSI.MS", "Metas del plan seleccionadas para el seguimiento (MS)", M, "DSI", "Construible",
+        "Decisión del equipo sobre el Apéndice 9.1 del PDM", enl_var("CS.DSI.MS"),
+        "Lista de metas aprobada por los profesores (la Matriz sugiere unas 10)", "No es un dato de la Alcaldía: es una decisión de diseño; con otra lista cambia el resultado",
+        "metas", [(a, vv("CS.DSI.MS", a), "lista provisional del índice del PDM") for a in (2024, 2025)])
+    dsi_r = "DSI - Respaldo: con todo lo publicado hasta la fecha de consulta"
+    var(DIM_CS, "CS.DSI.MD", "Metas seleccionadas con valor observado publicado a tiempo (MD)", M, "DSI", "Construible",
+        "Plan Indicativo de Productos y evaluaciones del PDM (DAP)", enl_var("CS.DSI.MD"),
+        "Valores observados 2024 y 2025 de las metas seleccionadas, publicados oficialmente",
+        f"Las evaluaciones publicadas solo cubren metas de producto; con lo publicado hasta hoy serían {fm_n(vf(dsi_r, 2024, 'numerador'))} de {fm_n(vf(dsi_r, 2024, 'denominador'))} en 2024",
+        "metas", [(a, vv("CS.DSI.MD", a), "al cierre de la vigencia") for a in (2024, 2025)])
+    var(DIM_CS, "CS.PCS.EE", "Estrategias de promoción del control social ejecutadas (EE)", M, "PCS", "Disponible",
+        "Plan Indicativo de Productos (DAP)", enl_var("CS.PCS.EE"), "Soportes de ejecución (documento de estrategia 2024, informe de ciclos 2025); cierre de 2026",
+        "Dato autodeclarado por la dependencia; el DAP anotó reparos a las evidencias",
+        "estrategias", [(2024, vv("CS.PCS.EE", 2024), ""), (2025, vv("CS.PCS.EE", 2025), ""), (2026, vv("CS.PCS.EE", 2026), "corte 30 de junio")])
+    var(DIM_CS, "CS.PCS.EP", "Estrategias de promoción del control social programadas (EP)", M, "PCS", "Disponible",
+        "Plan Indicativo de Productos (DAP)", enl_var("CS.PCS.EP"), "Confirmar con el DAP que no hubo modificaciones de la programación",
+        "Programación oficial de 1 por año (meta total 4)", "estrategias",
+        [(2024, vv("CS.PCS.EP", 2024), ""), (2025, vv("CS.PCS.EP", 2025), ""), (2026, vv("CS.PCS.EP", 2026), "corte 30 de junio")])
+    vr = "VRC - Respaldo: evento sin mención de veeduría = ausencia"
+    var(DIM_CS, "CS.VRC.EV", "Eventos de rendición de cuentas con veedurías presentes (EV)", M, "VRC", "Construible",
+        "Actas de rendición de cuentas (Secretaría de Salud y otras)", enl_var("CS.VRC.EV"),
+        "Listas de asistencia anexas a las actas y acta del evento institucional",
+        "Solo hay menciones textuales de veedurías; sin listas, la presencia no está comprobada. Valor con el supuesto del respaldo",
+        "eventos", [(a, vf(vr, a, "numerador"), "supuesto: sin mención = ausencia") for a in (2024, 2025)])
+    var(DIM_CS, "CS.VRC.ET", "Eventos municipales de rendición de cuentas realizados (ET)", M, "VRC", "Construible",
+        "Actas y cuadros de rendición de cuentas", enl_var("CS.VRC.ET"), "Definición oficial de qué cuenta como evento municipal",
+        "Según el universo elegido (solo la audiencia del Alcalde o todos los eventos con documento) la cifra va de 1 a 8 por año",
+        "eventos", [(a, vv("CS.VRC.ET", a), "universo exploratorio") for a in (2024, 2025)])
+    rp = "RPO - Respaldo: con el cuadro de preguntas y respuestas publicado"
+    var(DIM_CS, "CS.RPO.OR", "Observaciones ciudadanas con respuesta de fondo publicada (OR)", M, "RPO", "Construible",
+        "Cuadros de preguntas y respuestas de la rendición", enl_var("CS.RPO.OR"), "Clasificar cada respuesta como \"de fondo\" y fijar el universo evaluado",
+        "2025: solo un cuadro publicado con 2 observaciones; el resultado es frágil", "observaciones",
+        [(2024, vv("CS.RPO.OR", 2024), ""), (2025, vf(rp, 2025, "numerador"), "con el cuadro publicado")])
+    var(DIM_CS, "CS.RPO.OT", "Observaciones ciudadanas registradas en rendiciones cerradas (OT)", M, "RPO", "Construible",
+        "Cuadros de preguntas y respuestas de la rendición", enl_var("CS.RPO.OT"), "Separar felicitaciones y temas ajenos al PDM",
+        "Los cuadros no distinguen las observaciones sobre el PDM", "observaciones",
+        [(2024, vv("CS.RPO.OT", 2024), ""), (2025, vf(rp, 2025, "denominador"), "con el cuadro publicado")])
+
+    # ------------------------------------------------------------------ PARTICIPACIÓN CIUDADANA
+    var(DIM_PC, "PC.I1.V1", "Procesos cerrados que incorporaron un aporte ciudadano en una decisión formal", M, "I1", "No disponible",
+        "Sin fuente: no hay registro", "", "Inventario de procesos cerrados que vincule cada aporte con la decisión",
+        "Solo hay un vínculo narrativo en presupuesto participativo y en el PDM; la Matriz exige verlo proceso por proceso", "procesos", [])
+    var(DIM_PC, "PC.I1.V2", "Procesos cerrados en que se recibieron aportes ciudadanos", M, "I1 e I4 (respaldo de I1)", "Construible",
+        "Universo propuesto por el equipo", enl_var("PC.I1.V2"), "Definición oficial de proceso participativo cerrado",
+        "Universo no oficial; riesgo de subconteo (consultas sectoriales e instancias no inventariadas)", "procesos",
+        [(a, vv("PC.I1.V2", a), "exploratorio") for a in (2024, 2025)])
+    var(DIM_PC, "PC.I2.V1", "Zonas con al menos una actividad participativa", M, "I2", "Construible",
+        "Informe de gestión 2025, PDM y cronogramas", enl_var("PC.I2.V1"), "Actas o listas de asistencia por zona (fecha, zona y acta)",
+        "Hay cronogramas y reportes agregados, no actas por zona", "zonas", [(a, vv("PC.I2.V1", a), "") for a in (2024, 2025)])
+    var(DIM_PC, "PC.I2.V2", "Zonas oficiales del municipio", M, "I2", "Disponible",
+        "Acuerdos municipales sobre zonificación", enl_var("PC.I2.V2"), "Verificar el texto del Acuerdo 007 de 2025",
+        "Cifra sin verificar contra el acto que crea las zonas", "zonas", [(a, vv("PC.I2.V2", a), "") for a in (2024, 2025)])
+    var(DIM_PC, "PC.I3.V1", "Acciones formativas para la ciudadanía realizadas", M, "I3", "Construible",
+        "Informe de gestión 2025 (Escuela de Formación)", enl_var("PC.I3.V1"), "Relación oficial de acciones realizadas, sin formación a servidores",
+        "El reporte oficial cuenta personas formadas, no acciones; 2024 se reconstruye de una lista", "acciones",
+        [(a, vv("PC.I3.V1", a), "") for a in (2024, 2025)])
+    var(DIM_PC, "PC.I3.V2", "Acciones formativas programadas con finalización en el periodo", M, "I3", "Construible",
+        "Informe de gestión 2025 (Escuela de Formación)", enl_var("PC.I3.V2"), "Plan de formación aprobado con las acciones programadas",
+        "No hay programación oficial de acciones (la meta está en personas); 2025 es una reconstrucción; 2024 sin dato", "acciones",
+        [(2025, vv("PC.I3.V2", 2025), "inferido")])
+    var(DIM_PC, "PC.I4.V1", "Procesos cerrados con resultados publicados y consultables", M, "I4", "No disponible",
+        "Portal de la Alcaldía", enl_var("PC.I4.V1"), "Inventario de procesos y revisión de cada publicación de resultados",
+        "No se ha verificado que cada publicación comunique aportes y decisiones", "procesos", [])
+    var(DIM_PC, "PC.I4.V2", "Procesos participativos cerrados (universo)", M, "I4", "Construible",
+        "Universo propuesto por el equipo", enl_var("PC.I4.V2"), "Definición oficial de proceso participativo cerrado",
+        "Mismo universo no oficial que I1: una sola lista debe servir a ambos indicadores", "procesos",
+        [(a, vv("PC.I4.V2", a), "exploratorio") for a in (2024, 2025)])
+
+    # ------------------------------------------------------------------ CUMPLIMIENTO DEL PDM
+    pn = lambda *x: x
+    var(DIM_PDM, "PDM.CM.O", "Tasa de mortalidad vial por 100.000 habitantes", M, "CM", "Construible",
+        "Forensis (INMLCF); Policía Nacional", "https://terridata.dnp.gov.co/", "Cifra de 2025 (Forensis aún no la publica) y de 2026",
+        "Solo 2024; la Policía y el INMLCF miden distinto (la Policía da más en 2024)", "por 100.000 hab.", [(2024, vv("PDM.CM.O", 2024), "INMLCF")])
+    var(DIM_PDM, "PDM.CM.M", "Meta de mortalidad vial", M, "CM", "Disponible", "PDM 2024-2027", enl_var("PDM.CM.M"), "Nada",
+        "Solo meta final 2027 (sin metas anuales); línea base 10,2", "por 100.000 hab.", [(2027, vv("PDM.CM.M", 2024), "meta final del plan")])
+    var(DIM_PDM, "PDM.CA.O", "Espacio público verde observado", M, "CA", "Construible",
+        "Diagnóstico del POT 2024", enl_var("PDM.CA.O"), "Cifras de 2025 y 2026; conciliar con la línea base del plan",
+        "No concilia con la línea base del plan (3,88) ni con la del AMVA (4,66): otra definición de área", "m² por habitante",
+        [(2024, vv("PDM.CA.O", 2024), "EPV urbano")])
+    var(DIM_PDM, "PDM.CA.M", "Meta de espacio público verde", M, "CA", "Disponible", "PDM 2024-2027", enl_var("PDM.CA.M"), "Nada",
+        "Solo meta final 2027", "m² por habitante", [(2027, vv("PDM.CA.M", 2024), "meta final del plan")])
+    var(DIM_PDM, "PDM.CP.O", "Implementación de los procesos de participación (método oficial)", M, "CP", "No disponible",
+        "PDM 2024-2027 (solo diagnóstico)", enl_var("AUX.PDM.CP.INDICE_SITUACIONAL"), "Ficha oficial del indicador (fórmula, valor y fuente) pedida al DAP",
+        f"El PDM usa dos magnitudes distintas (un índice de {fm_n(vv('AUX.PDM.CP.INDICE_SITUACIONAL', 2022))} en 2022 y un porcentaje de 75 en 2023)", "%", [])
+    var(DIM_PDM, "PDM.CP.M", "Meta de implementación de los procesos de participación", M, "CP", "Disponible", "PDM 2024-2027", enl_var("PDM.CP.M"), "Nada",
+        "Solo meta final 2027; línea base 75", "%", [(2027, vv("PDM.CP.M", 2024), "meta final del plan")])
+    dd, dm = vv("AUX.PDM.CD.DISCIPLINAS", 2025), vv("AUX.PDM.CD.DISCIPLINAS_META", 2025)
+    var(DIM_PDM, "PDM.CD.O", "Cobertura de los servicios deportivos", M, "CD", "No disponible",
+        "Informe de gestión (Índer)", enl_var("AUX.PDM.CD.DISCIPLINAS"), "Numerador, denominador y valor de la cobertura (pedido al Índer)",
+        f"Solo hay disciplinas implementadas ({fm_n(dd)} de {fm_n(dm)} en 2025): mide oferta, no población atendida", "%", [])
+    var(DIM_PDM, "PDM.CD.M", "Meta de cobertura de servicios deportivos", M, "CD", "Disponible", "PDM 2024-2027", enl_var("PDM.CD.M"), "Nada",
+        "Solo meta final 2027; línea base 5,3", "%", [(2027, vv("PDM.CD.M", 2024), "meta final del plan")])
+    ile = "ILE primera infancia - cobertura de atención integral"
+    rango = INFO_ILE["rango"]
+    var(DIM_PDM, "PDM.ILE.A", f"Cobertura de atención integral de primera infancia ({rango})", M, "ILE (primera infancia)", "Construible",
+        "Cálculo propio: atendidos / población DANE", URL_TERRIDATA, "Confirmar con la Secretaría de Educación el rango de edad de la línea base",
+        f"Con {rango}, 2023 da {fm_n(vf(ile, 2023))}, no los 16,3 de la línea base: el rango exacto del plan no está documentado", "%",
+        [(a, vf(ile, a), "") for a in ANIOS_SERIE])
+    var(DIM_PDM, "PDM.ILE.MA", "Meta de cobertura de atención integral", M, "ILE (primera infancia)", "Disponible", "PDM 2024-2027", enl_var("PDM.ILE.MA"), "Nada",
+        "Solo meta final 2027; línea base 16,3", "%", [(2027, vv("PDM.ILE.MA", 2024), "meta final del plan")])
+    var(DIM_PDM, "PDM.ILE.S", "Instituciones oficiales que mejoran su categoría en Saber 11", M, "ILE (Saber 11)", "No disponible",
+        "ICFES (solo menciones de casos)", URL_SABER, "Clasificación de planteles 2023 a 2025 y total de instituciones oficiales",
+        "Hay casos aislados (una institución en 2024 y una en 2025), no el porcentaje", "%", [])
+    var(DIM_PDM, "PDM.ILE.MS", "Meta de instituciones que mejoran su categoría", M, "ILE (Saber 11)", "Disponible", "PDM 2024-2027", enl_var("PDM.ILE.MS"), "Nada",
+        "Solo meta final 2027; línea base 0", "%", [(2027, vv("PDM.ILE.MS", 2024), "meta final del plan")])
+    # nuevas: salud
+    af = INFO_ILE["afiliados"]
+    for k, (nom, idv) in enumerate((("Afiliados al régimen contributivo", "PDM.SAL.CONTRIB"), ("Afiliados al régimen subsidiado", "PDM.SAL.SUBS"),
+                                    ("Afiliados a regímenes especiales", "PDM.SAL.ESP"), ("Afiliados al SGSSS", "PDM.SAL.TOTAL"))):
+        serie = af[nom]
+        est = "Disponible" if all(a in serie for a in (2024, 2025)) else "Construible"
+        var(DIM_PDM, idv, nom.replace("SGSSS", "sistema de salud (total)"), N, "Cobertura de salud", est,
+            "TerriData (MinSalud), diciembre", URL_TERRIDATA,
+            {"Afiliados a regímenes especiales": "Cifra de 2026 al cierre; 2019 y 2020 sin dato publicado",
+             "Afiliados al SGSSS": "Cifra de 2026 al cierre; 2019 sin total publicado"}.get(nom, "Cifra de 2026 al cierre"),
+            "Cortes de diciembre",
+            "personas", [(a, serie[a], "") for a in ANIOS_SERIE if a in serie])
+    pp_ = INFO_ILE["pop_pped"]
+    var(DIM_PDM, "PDM.SAL.POB", "Población total del municipio (proyección DANE 2018-2042)", N, "Cobertura de salud", "Disponible",
+        "DANE, proyecciones de población", URL_DANE, "Nada",
+        "Una sola proyección para toda la serie (comparable); MinSalud usa en cada corte otra población, por eso difiere de sus cifras", "personas",
+        [(a, pp_[a], "") for a in ANIOS_SERIE])
+    atend, fat, eat = INFO_ILE["atend"]
+    var(DIM_PDM, "PDM.ILE.ATEND", "Niños, niñas y gestantes atendidos de forma integral (educación inicial)", N, "ILE (primera infancia)", "Disponible",
+        "TerriData (MinEducación) hasta 2023; informe de gestión de la Alcaldía 2024 y 2025", URL_TERRIDATA,
+        "Confirmar con la Secretaría de Educación las cifras de 2024 y 2025", "Fuente distinta antes y después de 2023; incluye gestantes", "personas",
+        [(a, atend[a], fat[a]) for a in ANIOS_SERIE])
+    var(DIM_PDM, "PDM.ILE.POB05", f"Población de {rango} (DANE, edad simple)", N, "ILE (primera infancia)", "Disponible",
+        "DANE, proyección de población 2018-2042 por edad simple", URL_DANE, "Nada", "Proyección, no censo; se revisa cada vez que el DANE actualiza", "personas",
+        [(a, INFO_ILE["pob_edad"][a], "") for a in ANIOS_SERIE])
+    sab = INFO_ILE["saber"]
+    var(DIM_PDM, "PDM.ILE.SABER_OU", "Puntaje global promedio de Saber 11, instituciones oficiales urbanas", N, "ILE (Saber 11, respaldo)", "Construible",
+        "ICFES, resultados Saber 11 (datos.gov.co); promedio propio ponderado", URL_SABER, "Resultados de 2021 y de 2023 a 2025",
+        "El conjunto público termina en 2022; es el respaldo mientras no haya clasificación de planteles", "puntos",
+        [(a, sab["oficial_urbano"][a], "") for a in ANIOS_SERIE if a in sab["oficial_urbano"]])
+    var(DIM_PDM, "PDM.ILE.SABER_TD", "Puntaje global promedio de Saber 11, todos los planteles", N, "ILE (Saber 11, respaldo)", "Construible",
+        "ICFES, resultados Saber 11 (datos.gov.co); promedio propio ponderado", URL_SABER, "Resultados de 2021 y de 2023 a 2025",
+        "Promedio de los calendarios A y B; el conjunto público termina en 2022", "puntos",
+        [(a, sab["municipio"][a], "") for a in ANIOS_SERIE if a in sab["municipio"]])
+    var(DIM_PDM, "PDM.ILE.CLASIF", "Clasificación de planteles de Saber 11 (A+, A, B, C, D) por institución oficial", N, "ILE (Saber 11)", "No disponible",
+        "ICFES (no publica la de Envigado en datos abiertos)", "", "Solicitarla a la Secretaría de Educación, 2023 a 2025",
+        "Sin ella no se puede calcular el avance hacia la meta de 14 %", "instituciones", [])
+    ult, tot_d = INFO_ILE["discap"]
+    var(DIM_PDM, "PDM.INC.DISCAP", "Personas con discapacidad en el registro nacional (acumulado)", N, "Inclusión (respaldo de salud)", "Construible",
+        "MinSalud, Registro de Localización y Caracterización (datos.gov.co)", URL_RLCPD, "Registro actualizado del municipio (Secretaría de Salud o de Inclusión Social)",
+        f"Acumulado desde 2003; el conjunto público no se actualiza desde {ult}; no es una tasa", "personas", [(ult, int(tot_d), "acumulado")])
+    pol = "Concejo Municipal (acuerdos) y Planeación"
+    var(DIM_PDM, "PDM.POL.VIG", "Políticas públicas municipales vigentes (inventario)", N, "Logros de políticas públicas", "Construible", pol, "",
+        "Armar la lista con los acuerdos del Concejo y confirmarla con Planeación", "Hoy solo constan, por separado, 4 políticas (participación, víctimas, salud mental y biodiversidad)", "políticas", [])
+    var(DIM_PDM, "PDM.POL.INF", "Políticas vigentes con informe de seguimiento publicado", N, "Logros de políticas públicas", "Construible", pol, "",
+        "Revisar el portal por política una vez exista el inventario", "Depende del inventario de vigentes", "políticas", [])
+    var(DIM_PDM, "PDM.POL.PLAN", "Políticas vigentes con plan de acción vigente", N, "Logros de políticas públicas (futuro)", "No disponible", pol, "",
+        "Planes de acción por política", "Sin fuente identificada", "políticas", [])
+    var(DIM_PDM, "PDM.POL.METAS", "Metas de las políticas cumplidas y metas totales", N, "Logros de políticas públicas (futuro)", "No disponible", pol, "",
+        "Metas por política con su seguimiento", "Sin fuente identificada", "metas", [])
+
+    # ------------------------------------------------------------------ PRESUPUESTO PARTICIPATIVO
+    est24 = {a: [r for r in PPP if r["anio"] == str(a) and r["en_listado_efpc"] == "True"] for a in (2024, 2025)}
+    url25 = enlace_de("PP.CEP", 2025)
+    var(DIM_PP, "PP.VOT", "Valor votado por proyecto (listado de proyectos votados)", N, "Fidelidad a lo votado", "Disponible",
+        "Listado de proyectos votados (EFPC)", URL_EFPC24, "Valor votado de cada proyecto de 2026",
+        "Es el valor del proyecto en el listado; 2026 no lo trae", "pesos",
+        [(a, round(sum(num(r["valor_listado_efpc"]) for r in est24[a])), f"suma de {len(est24[a])} proyectos") for a in (2024, 2025)])
+    var(DIM_PP, "PP.CEP.PE", "Proyectos votados (número)", M, "Fidelidad, terminados y respaldos", "Disponible",
+        "Listado de proyectos votados (EFPC)", URL_EFPC24, "Lista oficial de códigos de proyecto del presupuesto participativo",
+        "No hay marcador de presupuesto participativo en Hacienda: el universo se reconstruye cruzando el listado con los códigos del plan de acción", "proyectos",
+        [(a, vv("PP.CEP.PE", a), "") for a in (2024, 2025, 2026)])
+    var(DIM_PP, "PP.EPP.APP", "Apropiación definitiva por proyecto (APP)", M, "EPP, fidelidad y respaldos", "Construible",
+        "Hacienda y plan de acción", enl_var("PP.EPP.APP"), "Cierre de 2026; en 2024 un proyecto de 51 no se pudo cruzar con Hacienda",
+        "Universo reconstruido y por validar con Planeación; 2024 es aproximado (cruce por nombre y valor)", "pesos",
+        [(2024, vv("PP.EPP.APP", 2024), "50 de 51 proyectos"), (2025, vv("PP.EPP.APP", 2025), "61 proyectos"), (2026, vv("PP.EPP.APP", 2026), "corte 30 de junio")])
+    comp25 = round(sum(num(r["compromiso"]) for r in est24[2025]))
+    var(DIM_PP, "PP.CMP", "Compromisos por proyecto", N, "Tasa de compromiso", "Construible",
+        "Hacienda (plan de acción 2025)", url25, "Compromisos separados de obligaciones en 2024 y 2026",
+        "En 2024 Hacienda no separa compromisos de obligaciones; 2026 sin dato", "pesos", [(2025, comp25, "61 proyectos")])
+    var(DIM_PP, "PP.EPP.OPP", "Obligaciones por proyecto (OPP)", M, "EPP y respaldos", "Construible",
+        "Hacienda y plan de acción", enl_var("PP.EPP.OPP"), "Cierre de 2026",
+        "Mismas limitaciones que la apropiación; 2026 es provisional (primer semestre)", "pesos",
+        [(2024, vv("PP.EPP.OPP", 2024), "50 de 51 proyectos"), (2025, vv("PP.EPP.OPP", 2025), "61 proyectos"), (2026, vv("PP.EPP.OPP", 2026), "corte 30 de junio")])
+    e25 = [r for r in ENT if r["anio"] == "2025" and r["cuenta_en_defecto_pe"] == "1"]
+    con_dato = sum(1 for r in e25 if r["n_filas_dic"])
+    var(DIM_PP, "PP.AVF", "Avance físico por proyecto (plan de acción)", N, "Proyectos terminados", "Construible",
+        "Plan de acción 2025 (autorreporte)", url25, "Avance físico por proyecto de 2024 y al cierre de 2026",
+        "Autorreporte, sin acta de recibo; 3 proyectos traen valores no numéricos", "proyectos con avance reportado", [(2025, con_dato, "de 61 proyectos")])
+    var(DIM_PP, "PP.CEP.PEC", "Proyectos votados con avance físico de 100 % (autorreporte)", M, "Proyectos terminados", "Construible",
+        "Plan de acción 2025 (autorreporte)", enl_var("PP.CEP.PEC"), "Actas de recibo, informes finales o de supervisión por proyecto",
+        "Autorreporte: con otra regla de agregación el número va de 45 a 50 (la cifra de 55 citada antes no se reproduce)", "proyectos", [(2025, vv("PP.CEP.PEC", 2025), "todas las filas de diciembre al 100 %")])
+    var(DIM_PP, "PP.TER.APP", "Apropiación de los proyectos terminados", N, "Proyectos terminados (respaldo)", "Construible",
+        "Hacienda y plan de acción 2025", url25, "Avance físico de 2024 y 2026", "Hereda las limitaciones del autorreporte", "pesos",
+        [(2025, round(INFO_PP["ap_t"]), f"{INFO_PP['terminados']} proyectos")])
+    var(DIM_PP, "PP.TER.OPP", "Obligaciones de los proyectos terminados", N, "Proyectos terminados (respaldo)", "Construible",
+        "Hacienda y plan de acción 2025", url25, "Avance físico de 2024 y 2026", "Hereda las limitaciones del autorreporte", "pesos",
+        [(2025, round(INFO_PP["ob_t"]), f"{INFO_PP['terminados']} proyectos")])
+    var(DIM_PP, "PP.ACTA", "Actas de recibo o informes finales por proyecto", N, "Proyectos terminados (verificación)", "No disponible",
+        "Sin fuente: no se encontraron publicadas", "", "Pedirlas a la Subdirección de Participación y a las unidades ejecutoras",
+        "Sin ellas el indicador sigue siendo autorreporte", "documentos", [])
+    for idv, nom in (("PP.CMA.NA", "Proyectos con meta de atención aplicable (NA)"), ("PP.CMA.MP", "Meta anual de personas por proyecto (MP)"),
+                     ("PP.CMA.PA", "Personas atendidas por proyecto (PA)")):
+        var(DIM_PP, idv, nom, M, "Meta de atención (fuera por ahora)", "No disponible", "Plan de acción (mide actividades, no personas)", enl_var(idv),
+            "Ficha del proyecto con meta anual de personas", "El indicador de meta de atención sale por ahora del sistema", "proyectos" if "NA" in idv else "personas", [])
+    return VARS
+
+
+def fm_n(x):
+    if x is None:
+        return "sin dato"
+    return (f"{int(round(x)):,}".replace(",", ".") if abs(x - round(x)) < 1e-9 else f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
+
+
+def escribir_variables():
+    variables_por_dimension()
+    C.escribir_csv(F_VARS, VARS, CAMPOS_VARS)
+    ids = {v["id_variable"] for v in VARS}
+    print(f"{len(VARS)} filas ({len(ids)} variables) -> {F_VARS.relative_to(RAIZ)}")
+
+
 def main():
     for f, s in ((DESC / "icfes" / "saber11_envigado_agregado_kgxf-xxbe.csv", "descargas_nuevas.py"),):
         if not f.exists():
@@ -596,6 +889,7 @@ def main():
     icpd6()
     politicas()
     C.escribir_csv(F_SALIDA, FILAS, CAMPOS)
+    escribir_variables()
     print(f"{len(FILAS)} filas -> {F_SALIDA.relative_to(RAIZ)}")
     print("ILE calibración:", INFO_ILE["cal"], "->", INFO_ILE["elegido"], "|", INFO_ILE["motivo"])
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Genera los dos documentos cortos del sistema simplificado (PROVISIONAL), con las cifras leídas de
-outputs/sistema_simplificado/indicadores_simplificados.csv:
+"""Genera los documentos del sistema simplificado (PROVISIONAL), con las cifras leídas de
+outputs/sistema_simplificado/indicadores_simplificados.csv y variables_por_dimension.csv:
 
-  outputs/sistema_simplificado/sistema_indicadores_simplificado.{pdf,docx}   (máximo 5 páginas)
-  outputs/sistema_simplificado/variables_para_solicitar.{docx,xlsx}           (máximo 2 páginas)
+  outputs/sistema_simplificado/sistema_indicadores_simplificado.{pdf,docx,xlsx}   (PDF y Word: máximo 6 páginas)
+  outputs/sistema_simplificado/variables_para_solicitar.{docx,xlsx}               (máximo 2 páginas)
 
 Uso (desde la raíz, sin -I):  python3 scripts/sistema_simplificado/generar_documentos.py [--sin-pdf]
 Cadena: Markdown -> .tex (estilo de los informes anteriores) -> PDF con tectonic -> Word con el traductor .tex -> .docx
@@ -34,12 +34,14 @@ import generar_guia as G  # noqa: E402
 
 OUT = RAIZ / "outputs" / "sistema_simplificado"
 F_CSV = OUT / "indicadores_simplificados.csv"
-TMP = G.SCRATCH / "simplificado"
+F_VARS = OUT / "variables_por_dimension.csv"
+TMP = G.SCRATCH / "simplificado2"
 G.TMP = TMP
 FECHA = "10 de noviembre de 2026"
 MARGEN = 1.6                      # cm
 ANCHO = 27.94 - 2 * MARGEN        # cm de texto en horizontal (carta)
 G.ANCHO_V = G.ANCHO_H = ANCHO
+ESTADO_COLOR = {"Disponible": "cverde", "Construible": "ccata", "No disponible": "crojo"}
 PRIORIDAD = {"Alta": "crojo", "Media": "camarillo", "Baja": "cverde"}
 
 # ------------------------------------------------------------------------------------------------ datos
@@ -48,6 +50,14 @@ with open(F_CSV, encoding="utf-8-sig", newline="") as f:
 for r in FILAS:
     r["anio"] = int(r["anio"])
     r["v"] = float(r["valor"]) if r["valor"] != "" else None
+
+
+with open(F_VARS, encoding="utf-8-sig", newline="") as f:
+    VARS = list(csv.DictReader(f, delimiter=";"))
+for r in VARS:
+    r["anio"] = int(r["anio"]) if r["anio"] != "" else ""
+    r["v"] = float(r["valor"]) if r["valor"] != "" else None
+    r["detalle"] = r["detalle_valor"]
 
 
 def fm(x, dec=2):
@@ -125,13 +135,15 @@ def _en_linea(t, tabla=False):
 
 G.en_linea = _en_linea
 
-FRACCIONES = {7: [0.11, 0.14, 0.15, 0.18, 0.08, 0.20, 0.14], 5: [0.30, 0.22, 0.23, 0.15, 0.10]}
+FRACCIONES = {"vars": [0.19, 0.09, 0.26, 0.16, 0.21, 0.09], "inds": [0.20, 0.085, 0.215, 0.235, 0.07, 0.195],
+              "res": [0.19, 0.09, 0.09, 0.09, 0.09, 0.11, 0.12, 0.12, 0.10], "solic": [0.30, 0.22, 0.23, 0.15, 0.10]}
 
 
 def _anchos(filas, total, tam):
     n = len(filas[0])
     util = total - n * 0.22
-    return [util * f for f in FRACCIONES[n]]
+    clave = {9: "res", 5: "solic"}.get(n) or ("vars" if filas[0][0] == "Variable" else "inds")
+    return [util * f for f in FRACCIONES[clave]]
 
 
 G.anchos = _anchos
@@ -140,6 +152,10 @@ _celda_orig = G.celda_tex
 
 def _celda(texto, enc, par):
     plano = re.sub(r"\*", "", texto.strip())
+    if enc.startswith("Semáforo") and plano == "Sin semáforo":
+        return r"\cellcolor{cgris}" + G.en_linea(texto.strip(), tabla=True)
+    if enc == "Estado" and plano in ESTADO_COLOR:
+        return r"\cellcolor{" + ESTADO_COLOR[plano] + "}" + G.en_linea(texto.strip(), tabla=True)
     if enc.startswith("Prioridad") and plano in PRIORIDAD:
         return r"\cellcolor{" + PRIORIDAD[plano] + "}" + G.en_linea(texto.strip(), tabla=True)
     return _celda_orig(texto, enc, par)
@@ -150,20 +166,38 @@ _tabla_orig = G.tabla_tex
 
 
 def _tabla(filas, ancho):
-    t, tam = _tabla_orig(filas, ancho)
-    return t, tam
+    """Igual que la original pero siempre en letra pequeña (7 pt) para que las tablas por dimensión quepan."""
+    n = len(filas[0])
+    tam = "footnotesize" if n == 5 else "scriptsize"
+    w = G.anchos(filas, ancho, tam)
+    spec = "".join(r"L{%.2fcm}" % x for x in w)
+    cab = [r"\cellcolor{chead}\textbf{" + G.en_linea(c, True) + "}" for c in filas[0]]
+    rayado = len(filas) > 7
+    cuerpo = [[G.celda_tex(c, filas[0][k], rayado and i % 2 == 1) for k, c in enumerate(f)] for i, f in enumerate(filas[1:])]
+    fin = r" \\"
+    lin = ["{" + (chr(92) + "fontsize{6.5}{7.6}" + chr(92) + "selectfont" if n != 5 else chr(92) + tam), r"\begin{xltabular}{\linewidth}{" + spec + "}", r"\toprule", " & ".join(cab) + fin,
+           r"\midrule", r"\endfirsthead", r"\toprule", " & ".join(cab) + fin, r"\midrule", r"\endhead",
+           r"\midrule \multicolumn{" + str(n) + r"}{r}{\emph{Continúa en la página siguiente}} \\", r"\endfoot",
+           r"\bottomrule", r"\endlastfoot"]
+    lin += [" & ".join(f) + fin for f in cuerpo]
+    lin += [r"\end{xltabular}", "}"]
+    return "\n".join(lin), (8 if n == 5 else 6.5)
+
+
+G.tabla_tex = _tabla
 
 
 # ------------------------------------------------------------------------------------------------ LaTeX / Word
 def preambulo(titulo_corto, titulo_pdf):
     p = G.PREAMBULO.replace("\\documentclass[11pt,letterpaper]{article}", "\\documentclass[10pt,letterpaper]{article}")
     p = p.replace("\\usepackage[margin=MARGEN,headheight=14pt]{geometry}",
-                  f"\\usepackage[landscape,margin={MARGEN}cm,headheight=14pt,headsep=0.5cm]{{geometry}}")
+                  f"\\usepackage[landscape,left={MARGEN}cm,right={MARGEN}cm,top=1.6cm,bottom=1.2cm,headheight=12pt,headsep=0.3cm]{{geometry}}")
     p = p.replace("[hidelinks,breaklinks=true]", "[colorlinks=true,linkcolor=black,urlcolor=blue!55!black,breaklinks=true]")
     p = p.replace("COLORES", G.COLORES_TEX)
     p = p.replace("\\newcommand{\\pagsize}{\\special{papersize=21.59cm,27.94cm}}",
                   "\\newcommand{\\pagsize}{\\special{papersize=27.94cm,21.59cm}}")
     p = p.replace("\\setlength{\\parskip}{0.5em}", "\\setlength{\\parskip}{0.35em}")
+    p = p.replace("\\renewcommand{\\arraystretch}{1.18}", "\\renewcommand{\\arraystretch}{1.04}")
     p += (r"\pagestyle{fancy}" "\n" r"\fancyhf{}" "\n" r"\fancyhead[L]{\pagsize\small " + L.esc(titulo_corto) + "}\n"
           r"\fancyhead[R]{\small\thepage}" "\n" r"\renewcommand{\headrulewidth}{0.4pt}" "\n"
           r"\fancypagestyle{plain}{\fancyhf{}\fancyhead[R]{\small\thepage}}" "\n"
@@ -178,14 +212,17 @@ def documento_tex(titulo_corto, titulo, cuerpo_tex, word):
         cab = (r"\begin{center}{\Large\bfseries " + L.esc(titulo) + r"\par}\vspace{3pt}{\small " +
                L.esc(FECHA + ". Observatorio Ciudadano de Envigado (OCE).") + r"\par}\end{center}" "\n\n")
     aviso = L.aviso(L.esc("PROVISIONAL: propuesta de trabajo. Ninguna cifra está validada ni confirmada por la Alcaldía.")) + "\n\n"
-    return (preambulo(titulo_corto, titulo) + "\n\\begin{document}\n\\hypersetup{pageanchor=true}\n\n" + cab + aviso +
+    return (preambulo(titulo_corto, titulo) + "\n\\begin{document}\n" + ("" if word else "\\small\n") + "\\hypersetup{pageanchor=true}\n\n" + cab + aviso +
             cuerpo_tex + "\n\n\\end{document}\n")
 
 
 def a_tex(md, word):
     bl = G.parsear_md(md)
     T, tam, _ = G.a_latex(bl, word=word)
-    return "\n\n".join(T), tam
+    tex = "\n\n".join(T).replace(r"\needspace{4\baselineskip}", r"\needspace{6\baselineskip}")
+    if word:   # el traductor a Word no lee \fontsize: el tamaño real (tam) se aplica al escribir la tabla
+        tex = tex.replace(r"{\fontsize{6.5}{7.6}\selectfont", r"{\scriptsize")
+    return tex, tam
 
 
 def construir_word(tex_word, tamanos, destino, encabezado):
@@ -194,7 +231,7 @@ def construir_word(tex_word, tamanos, destino, encabezado):
                for m in re.finditer(r"\\definecolor\{(\w+)\}\{RGB\}\{([\d,]+)\}", tex_word)}
     doc = Document()
     D.preparar_estilos(doc)
-    D.fijar_fuente(doc.styles["Normal"], D.FUENTE, 10)
+    D.fijar_fuente(doc.styles["Normal"], D.FUENTE, 9)
     doc.styles["Normal"].paragraph_format.space_after = Pt(4)
     doc.styles["Normal"].paragraph_format.line_spacing = 1.05
     D.ENCABEZADO = encabezado
@@ -205,7 +242,7 @@ def construir_word(tex_word, tamanos, destino, encabezado):
     sec.page_width, sec.page_height = Cm(27.94), Cm(21.59)
     for lado in ("left_margin", "right_margin"):
         setattr(sec, lado, Cm(MARGEN))
-    sec.top_margin, sec.bottom_margin = Cm(1.8), Cm(1.5)
+    sec.top_margin, sec.bottom_margin = Cm(1.6), Cm(1.2)
     sec.different_first_page_header_footer = False
     pg = sec._sectPr.find(qn("w:pgNumType"))
     if pg is not None:
@@ -286,250 +323,421 @@ def paginas_word(docx, carpeta):
 
 
 # ================================================================================================ DOCUMENTO 1
-def tabla_md(filas):
-    cab = ["Indicador", "Qué mide", "Fórmula", "Estado hoy (valor y año)", "Semáforo", "Respaldo o proxy", "Fuente"]
+DIMS = ["Control social", "Participación ciudadana", "Cumplimiento del PDM", "Presupuesto participativo"]
+DIM_TIT = {"Control social": "Control social (CS)", "Participación ciudadana": "Participación ciudadana (PC)",
+           "Cumplimiento del PDM": "Cumplimiento del Plan de Desarrollo Municipal (PDM)", "Presupuesto participativo": "Presupuesto participativo (PP)"}
+SIN_SEM = "Sin semáforo"
+SEMS = ("Verde", "Amarillo", "Naranja", "Rojo")
+TIPO_TXT = {"principal": "Principal", "respaldo": "Respaldo", "complemento": "Complemento"}
+
+
+def tabla_md(cab, filas):
     lin = ["| " + " | ".join(cab) + " |", "|" + "---|" * len(cab)]
     for f in filas:
-        assert len(f) == 7, f
+        assert len(f) == len(cab), f
         lin.append("| " + " | ".join(x.replace("|", "/") for x in f) + " |")
     return "\n".join(lin)
 
 
+def mm(x):
+    """Pesos en millones, con coma decimal."""
+    return "$" + fm(x / 1e6, 1) + " millones"
+
+
+def fv(x, unidad):
+    if unidad == "pesos":
+        return mm(x)
+    return fm(x)
+
+
+def hoy(vs):
+    """Texto 'qué hay hoy' de una variable (lista de filas del CSV de variables) con valor y años, más la fuente."""
+    v0 = vs[0]
+    con = [r for r in vs if r["valor"] != ""]
+    if not con:
+        txt = "Sin dato"
+    else:
+        con.sort(key=lambda r: r["anio"])
+        det = {r["detalle"] for r in con}
+        un = v0["unidad"]
+        if len(con) > 3:
+            txt = (f"Serie {con[0]['anio']}-{con[-1]['anio']}: {fv(con[0]['v'], un)} ({con[0]['anio']}) a {fv(con[-1]['v'], un)} ({con[-1]['anio']})")
+        else:
+            items = []
+            for r in con:
+                t = fv(r["v"], un)
+                if r["anio"] == 2027:
+                    items.append(f"meta 2027: {t}")
+                else:
+                    items.append(f"{t} ({r['anio']})")
+            txt = "; ".join(items)
+        if len(det) == 1 and next(iter(det)) and not (len(con) == 1 and con[0]["anio"] == 2027):
+            txt += f" [{next(iter(det))}]"
+        elif len(con) == 1 and con[0]["anio"] != 2027 and con[0]["detalle"]:
+            txt += f" [{con[0]['detalle']}]"
+    f = v0["fuente"]
+    return txt + ". " + (lk(f, v0["enlace"]) if v0["enlace"] else f)
+
+
+def vars_dim(dim):
+    orden, d = [], {}
+    for r in VARS:
+        if r["dimension"] == dim:
+            if r["id_variable"] not in d:
+                orden.append(r["id_variable"])
+            d.setdefault(r["id_variable"], []).append(r)
+    return [d[k] for k in orden]
+
+
+def tabla_variables(dim):
+    cab = ["Variable", "Para qué indicador", "Qué hay hoy (valor, años y fuente)", "Qué falta", "Limitación", "Estado"]
+    filas = []
+    for vs in vars_dim(dim):
+        v0 = vs[0]
+        filas.append([v0["variable"], v0["para_indicador"], hoy(vs), v0["que_falta"], v0["limitacion"], v0["estado"]])
+    return tabla_md(cab, filas)
+
+
+def ser(ind, anios, tipo=None, con_razon=False):
+    items = []
+    for a in anios:
+        r = fila(ind, a, tipo)
+        if r["v"] is None:
+            t = "N/D"
+        else:
+            t = fm(r["v"])
+            if con_razon and r["numerador"] != "" and r["denominador"] != "":
+                t += f" ({razon(ind, a, tipo)})"
+        items.append((t, a))
+    return pares(*items)
+
+
+def sem_de(ind, anios, tipo=None):
+    return sem_ultimo(ind, anios) if tipo is None else next(
+        (fila(ind, a, tipo)["semaforo"] for a in sorted(anios, reverse=True)
+         if fila(ind, a, tipo)["v"] is not None and fila(ind, a, tipo)["semaforo"] in SEMS), SIN_SEM)
+
+
+def _sem(x):
+    return SIN_SEM if x == "Gris" or x not in SEMS else x
+
+
+CUENTA: list[tuple] = []     # (dimensión, tipo, [nombres de indicadores del CSV])
+
+
+def IND(dim, nombre, tipo, formula, valores, sem, limit, nombres):
+    CUENTA.append((dim, tipo, nombres))
+    return [nombre, TIPO_TXT[tipo], formula, valores, _sem(sem), limit]
+
+
+def tabla_indicadores(filas):
+    return tabla_md(["Indicador", "Tipo", "Fórmula", "Valor por año", "Semáforo", "Limitación"], filas)
+
+
 def ind_cs():
-    A = (2024, 2025)
-    I = "Control social"
-    pcs = "PCS - Promoción del control social"
-    dsi = "DSI - Disponibilidad de información de seguimiento"
-    vrc, rpo = "VRC - Veedurías en la rendición de cuentas", "RPO - Respuesta a observaciones ciudadanas"
-    icr = "ICRCS - Índice de Condiciones y Respuesta para el Control Social"
-    filas = [
-        ["**PCS** Promoción del control social", "Estrategias de promoción ejecutadas frente a las programadas", "100 × ejecutadas / programadas",
-         pares(*[(fm(v(pcs, a)), a) for a in A]), sem_ultimo(pcs, A),
-         f"Número de estrategias ejecutadas: {fm(v('PCS - Respaldo: estrategias ejecutadas (número)', 2024))} por año",
-         lk("Plan Indicativo de Productos (Planeación)", enlace(pcs, 2024))],
-        ["**DSI** Disponibilidad de información de seguimiento", "Metas del plan con valor publicado a tiempo", "100 × metas con valor / metas seleccionadas",
-         pares(*[(fm(v(dsi, a)), a) for a in A]), sem_ultimo(dsi, A),
-         f"Con todo lo publicado hasta hoy: {fm(v('DSI - Respaldo: con todo lo publicado hasta la fecha de consulta', 2024))} (2024), "
-         f"{fila('DSI - Respaldo: con todo lo publicado hasta la fecha de consulta', 2024)['semaforo']}",
-         lk("Plan Indicativo, informes de gestión", enlace(dsi, 2024))],
-        ["**VRC** Veedurías en la rendición de cuentas", "Eventos de rendición con presencia de veedurías", "100 × eventos con veeduría / eventos",
-         "No disponible (2024 y 2025)", "Gris",
-         f"Evento sin mención = ausencia: {fm(v('VRC - Respaldo: evento sin mención de veeduría = ausencia', 2024))} (2024, "
-         f"{fila('VRC - Respaldo: evento sin mención de veeduría = ausencia', 2024)['semaforo']}) y "
-         f"{fm(v('VRC - Respaldo: evento sin mención de veeduría = ausencia', 2025))} (2025, "
-         f"{fila('VRC - Respaldo: evento sin mención de veeduría = ausencia', 2025)['semaforo']}); provisional",
-         lk("Actas y cuadros de rendición", enlace(vrc, 2024))],
-        ["**RPO** Respuesta a observaciones ciudadanas", "Observaciones con respuesta de fondo publicada", "100 × respondidas / observaciones",
-         f"{fm(v(rpo, 2024))} (2024); no disponible (2025)", sem_ultimo(rpo, A),
-         f"2025 con el cuadro publicado: {fm(v('RPO - Respaldo: con el cuadro de preguntas y respuestas publicado', 2025))}, "
-         f"{fila('RPO - Respaldo: con el cuadro de preguntas y respuestas publicado', 2025)['semaforo']} (solo 2 observaciones)",
-         lk("Cuadros de preguntas y respuestas", enlace(rpo, 2024))],
-        ["**ICRCS** Índice de Condiciones y Respuesta para el Control Social", "Resumen del componente", "(DSI + PCS + VRC + RPO) / 4",
-         "No disponible (2024 y 2025)", "Gris",
-         f"Con los respaldos de VRC y RPO: {fm(v('ICRCS - Respaldo: con los respaldos de VRC y RPO', 2024))} (2024, "
-         f"{fila('ICRCS - Respaldo: con los respaldos de VRC y RPO', 2024)['semaforo']}) y "
-         f"{fm(v('ICRCS - Respaldo: con los respaldos de VRC y RPO', 2025))} (2025, "
-         f"{fila('ICRCS - Respaldo: con los respaldos de VRC y RPO', 2025)['semaforo']}); provisional",
-         "Los cuatro indicadores anteriores"],
+    D, A = "Control social", (2024, 2025)
+    pcs, pcs_r = "PCS - Promoción del control social", "PCS - Respaldo: estrategias ejecutadas (número)"
+    dsi, dsi_r = "DSI - Disponibilidad de información de seguimiento", "DSI - Respaldo: con todo lo publicado hasta la fecha de consulta"
+    vrc, vrc_r = "VRC - Veedurías en la rendición de cuentas", "VRC - Respaldo: evento sin mención de veeduría = ausencia"
+    rpo, rpo_r = "RPO - Respuesta a observaciones ciudadanas", "RPO - Respaldo: con el cuadro de preguntas y respuestas publicado"
+    icr, icr_r = "ICRCS - Índice de Condiciones y Respuesta para el Control Social", "ICRCS - Respaldo: con los respaldos de VRC y RPO"
+    return [
+        IND(D, "**PCS** Promoción del control social", "principal", "100 × estrategias ejecutadas / programadas", ser(pcs, A), sem_ultimo(pcs, A),
+            "Dato autodeclarado por la dependencia", [pcs]),
+        IND(D, "PCS: estrategias ejecutadas", "respaldo", "Conteo de estrategias ejecutadas", ser(pcs_r, A), "Gris", "Conteo sin meta: no tiene semáforo", [pcs_r]),
+        IND(D, "**DSI** Disponibilidad de información de seguimiento", "principal", "100 × metas con valor publicado a tiempo / metas seleccionadas",
+            ser(dsi, A, con_razon=True), sem_ultimo(dsi, A), "Depende de la lista de metas y de que se publiquen valores de resultado", [dsi]),
+        IND(D, "DSI: con todo lo publicado hasta la consulta", "respaldo", "Igual, sin exigir que se publique a tiempo", ser(dsi_r, (2024,), con_razon=True), sem_ultimo(dsi_r, (2024,)),
+            "Cuenta lo publicado después del cierre de la vigencia", [dsi_r]),
+        IND(D, "**VRC** Veedurías en la rendición de cuentas", "principal", "100 × eventos con veeduría / eventos", ser(vrc, A), sem_ultimo(vrc, A),
+            "Faltan listas de asistencia y el universo de eventos", [vrc]),
+        IND(D, "VRC: evento sin mención = ausencia", "respaldo", "Igual, contando como ausencia el evento que no menciona veedurías", ser(vrc_r, A, con_razon=True), sem_ultimo(vrc_r, A),
+            "El supuesto puede subestimar la presencia real", [vrc_r]),
+        IND(D, "**RPO** Respuesta a observaciones ciudadanas", "principal", "100 × observaciones con respuesta de fondo / observaciones", ser(rpo, A, con_razon=True), sem_ultimo(rpo, A),
+            "2025 sin cuadro completo de preguntas y respuestas", [rpo]),
+        IND(D, "RPO: con el cuadro publicado", "respaldo", "Igual, con el único cuadro publicado de 2025", ser(rpo_r, (2025,), con_razon=True), sem_ultimo(rpo_r, (2025,)),
+            "Solo 2 observaciones: resultado frágil", [rpo_r]),
+        IND(D, "**ICRCS** Índice de condiciones y respuesta para el control social", "principal", "(DSI + PCS + VRC + RPO) / 4", ser(icr, A), sem_ultimo(icr, A),
+            "No se calcula si falta algún componente", [icr]),
+        IND(D, "ICRCS: con los respaldos de VRC y RPO", "respaldo", "Mismo promedio, con los respaldos de VRC y RPO", ser(icr_r, A), sem_ultimo(icr_r, A),
+            "Mezcla principales y respaldos; provisional", [icr_r]),
     ]
-    return filas, dict(
-        principales=[[pcs], [dsi], [vrc], [rpo], [icr]],
-        respaldos=[["PCS - Respaldo: estrategias ejecutadas (número)"], ["DSI - Respaldo: con todo lo publicado hasta la fecha de consulta"],
-                   ["VRC - Respaldo: evento sin mención de veeduría = ausencia"],
-                   ["RPO - Respaldo: con el cuadro de preguntas y respuestas publicado"], ["ICRCS - Respaldo: con los respaldos de VRC y RPO"]])
 
 
 def ind_pc():
-    A = (2024, 2025)
-    i1, i2, i3, i4 = ("I1 - Incorporación de aportes", "I2 - Cobertura territorial", "I3 - Oferta formativa", "I4 - Publicación de resultados")
+    D, A = "Participación ciudadana", (2024, 2025)
+    i1, i2, i3, i4 = "I1 - Incorporación de aportes", "I2 - Cobertura territorial", "I3 - Oferta formativa", "I4 - Publicación de resultados"
     r1 = "I1 - Respaldo: proyectos votados con presupuesto asignado"
     r2 = "I2 - Respaldo: zonas con asamblea de presupuesto participativo"
     r3 = "I3 - Respaldo: acciones formativas culminadas (número)"
     r4 = "I4 - Respaldo: procesos con documento de resultados (universo exploratorio)"
-    ispc_o = "ISPC - Índice (fórmula original: 0,30·I1 + 0,25·I2 + 0,20·I3 + 0,25·I4)"
-    ispc_r = "ISPC - Opción redistribuida (0,556·I2 + 0,444·I3)"
-    filas = [
-        ["**I1** Incorporación de aportes", "Procesos en que un aporte ciudadano entró a una decisión formal", "100 × procesos con aporte incorporado / procesos cerrados",
-         "No disponible (sin inventario de procesos)", "Gris",
-         f"Proyectos votados con presupuesto asignado / votados: {razon(r1, 2024)} (2024), {razon(r1, 2025)} (2025); provisional. "
-         "Usa los mismos datos de la fidelidad de presupuesto participativo; no sumar en dos componentes",
-         lk("Listado EFPC, Hacienda y plan de acción", enlace(r1, 2024))],
-        ["**I2** Cobertura territorial", "Zonas con al menos una actividad participativa", "100 × zonas con actividad / 13",
-         pares((fm(v(i2, 2024)), 2024), (fm(v(i2, 2025)), 2025)), sem_ultimo(i2, A),
-         f"Asambleas de presupuesto participativo: {razon(r2, 2024)} (2024 y 2025)", lk("Informe de gestión 2025, PDM", enlace(i2, 2025))],
-        ["**I3** Oferta formativa", "Acciones formativas ejecutadas frente a las programadas", "100 × ejecutadas / programadas",
-         f"{fm(v(i3, 2025))} (2025); no disponible (2024)", sem_ultimo(i3, A),
-         f"Acciones culminadas: {fm(v(r3, 2024))} (2024), {fm(v(r3, 2025))} (2025)", lk("Informe de gestión 2025", enlace(i3, 2025))],
-        ["**I4** Publicación de resultados", "Procesos con resultados publicados", "100 × con resultados publicados / procesos cerrados",
-         "No disponible (sin inventario de procesos)", "Gris",
-         f"Procesos con documento de resultados (universo exploratorio): {fm(v(r4, 2024))} (2024), {fm(v(r4, 2025))} (2025); construible",
-         "Portal de la Alcaldía; Subdirección de Participación"],
-        ["**ISPC** Índice de Seguimiento de la Participación Ciudadana", "Resumen del componente",
-         "Original: 0,30·I1 + 0,25·I2 + 0,20·I3 + 0,25·I4. Opción: 0,556·I2 + 0,444·I3",
-         "No disponible (original)", "Gris",
-         f"Opción redistribuida: {fm(v(ispc_r, 2025))} (2025), {fila(ispc_r, 2025)['semaforo']}; 2024 no disponible. Provisional",
-         "I2 e I3"],
+    io, ir = "ISPC - Índice (fórmula original: 0,30·I1 + 0,25·I2 + 0,20·I3 + 0,25·I4)", "ISPC - Opción redistribuida (0,556·I2 + 0,444·I3)"
+    return [
+        IND(D, "**I1** Incorporación de aportes", "principal", "100 × procesos con aporte incorporado / procesos cerrados", ser(i1, A), sem_ultimo(i1, A),
+            "Sin inventario de procesos cerrados", [i1]),
+        IND(D, "I1: proyectos votados con presupuesto asignado", "respaldo", "100 × proyectos votados con presupuesto / proyectos votados", ser(r1, A, con_razon=True), sem_ultimo(r1, A),
+            "Usa los datos de la fidelidad de PP: no sumar en dos dimensiones", [r1]),
+        IND(D, "**I2** Cobertura territorial", "principal", "100 × zonas con actividad / 13 zonas", ser(i2, A, con_razon=True), sem_ultimo(i2, A),
+            "Faltan actas por zona", [i2]),
+        IND(D, "I2: zonas con asamblea de PP", "respaldo", "100 × zonas con asamblea de presupuesto participativo / 13", ser(r2, A, con_razon=True), sem_ultimo(r2, A),
+            "La zona 1 no tiene comité zonal", [r2]),
+        IND(D, "**I3** Oferta formativa", "principal", "100 × acciones realizadas / programadas", ser(i3, A, con_razon=True), sem_ultimo(i3, A),
+            "2024 sin programación publicada; 2025 reconstruida", [i3]),
+        IND(D, "I3: acciones formativas culminadas", "respaldo", "Conteo de acciones culminadas", ser(r3, A), "Gris",
+            "Incluye acciones para servidores; sin meta, sin semáforo", [r3]),
+        IND(D, "**I4** Publicación de resultados", "principal", "100 × procesos con resultados publicados / procesos cerrados", ser(i4, A), sem_ultimo(i4, A),
+            "Sin inventario de procesos cerrados", [i4]),
+        IND(D, "I4: procesos del universo exploratorio", "respaldo", "Conteo de procesos del universo exploratorio", ser(r4, A), "Gris",
+            "Universo no oficial; sin semáforo", [r4]),
+        IND(D, "**ISPC** Índice de seguimiento de la participación ciudadana", "principal", "0,30·I1 + 0,25·I2 + 0,20·I3 + 0,25·I4", ser(io, A), sem_ultimo(io, A),
+            "Faltan I1 e I4", [io]),
+        IND(D, "ISPC: opción redistribuida", "respaldo", "0,556·I2 + 0,444·I3 (pesos 0,25/0,45 y 0,20/0,45)", ser(ir, A), sem_ultimo(ir, A),
+            "No es el índice original; 2024 sin I3", [ir]),
     ]
-    return filas, dict(principales=[[i1], [i2], [i3], [i4], [ispc_o]], respaldos=[[r1], [r2], [r3], [r4], [ispc_r]])
 
 
 def ind_pdm():
+    D = "Cumplimiento del PDM"
     salud = "Cobertura de salud"
     cm, cmr = "CM - Mortalidad vial", "CM - Respaldo: cifra de la Policía"
     ca, car = "CA - Espacio público verde", "CA - Respaldo: espacio público verde total del POT"
     cp, cpr = "CP - Procesos participativos", "CP - Respaldo: índice situacional de implementación"
     cd, cdr = "CD - Servicios deportivos", "CD - Respaldo: disciplinas deportivas atendidas"
-    ile = "ILE primera infancia - cobertura de atención integral"
-    ile_av = "ILE primera infancia - avance hacia la meta 2027"
+    ile, ile_av = "ILE primera infancia - cobertura de atención integral", "ILE primera infancia - avance hacia la meta 2027"
+    clasif = "ILE Saber 11 - clasificación de planteles (meta 14 %)"
     sab = "ILE Saber 11 - puntaje global promedio, instituciones oficiales urbanas"
-    icpd = "ICPD-6 - Promedio parcial con los indicadores disponibles"
+    icpd, icpd_r = "ICPD-6 - Índice", "ICPD-6 - Promedio parcial con los indicadores disponibles"
     dis = "Inclusión: personas con discapacidad en el registro nacional (acumulado)"
     ms_d, ms_a = "Cobertura de salud, cifra publicada por MinSalud (diciembre)", "Cobertura de salud, cifra publicada por MinSalud (agosto)"
-    ser_s = [(a, v(salud, a)) for a in range(2020, 2026)]
-    sab_s = [(a, v(sab, a)) for a in (2019, 2020, 2022)]
-    filas = [
-        ["**Cobertura de salud** (nuevo; reemplaza el aseguramiento subsidiado)", "Población afiliada al sistema de salud",
-         "100 × afiliados (contributivo + subsidiado + especiales) / población DANE",
-         f"Serie 2020-2025 con una sola proyección de población: {fm(ser_s[0][1])} (2020) a {fm(ser_s[-1][1])} (2025). "
-         f"MinSalud publicó {fm(v(ms_d, 2025))} (dic-2025) y {fm(v(ms_a, 2026))} (ago-2026) con otras poblaciones", "Gris",
-         f"Discapacidad o inclusión: {fm(v(dis, 2020))} personas en el registro nacional (acumulado a 2020); por verificar",
-         lk("MinSalud, TerriData", "https://terridata.dnp.gov.co/")],
-        ["**CM** Mortalidad vial", "Muertes en vías por 100.000 habitantes frente a la meta", "Logro frente a la meta (Matriz)",
-         f"{fm(v(cm, 2024))} (2024; {fm(float(fila(cm, 2024)['numerador']))} frente a {fm(float(fila(cm, 2024)['denominador']))})",
-         sem_ultimo(cm, [2024]),
-         f"Policía: {fm(float(fila(cmr, 2024)['numerador']))} → {fm(v(cmr, 2024))}, {fila(cmr, 2024)['semaforo']}",
-         lk("Forensis (INMLCF), Policía", enlace(cm, 2024))],
-        ["**CA** Espacio público verde", "Metros cuadrados por habitante frente a la meta", "Logro frente a la meta",
-         f"{fm(v(ca, 2024))} (2024; {fm(float(fila(ca, 2024)['numerador']))} frente a {fm(float(fila(ca, 2024)['denominador']))})", sem_ultimo(ca, [2024]),
-         f"EPV total del POT {fm(float(fila(car, 2024)['numerador']))} (otra serie)", lk("POT, PDM", enlace(ca, 2024))],
-        ["**CP** Procesos participativos", "Implementación oficial de los procesos de participación", "Logro frente a la meta",
-         "No disponible (sin ficha oficial)", "Gris", f"Índice situacional {fm(v(cpr, 2022))} (2022)", lk("PDM; ficha al DAP", enlace(cp, 2024))],
-        ["**CD** Servicios deportivos", "Cobertura deportiva", "Logro frente a la meta", "No disponible", "Gris",
-         f"Disciplinas atendidas {razon(cdr, 2025)} = {fm(v(cdr, 2025))} (2025), {fila(cdr, 2025)['semaforo']}; provisional",
-         lk("Informe de gestión (Índer)", enlace(cdr, 2025))],
-        ["**ILE** Logro educativo (evolución)", "Avance de la serie hacia la meta 2027",
-         "Serie anual; variación anual; avance = 100 × (valor − línea base) / (meta − línea base), entre 0 y 100",
-         f"Primera infancia (0 a 5 años): {fm(v(ile, 2024))} (2024) y {fm(v(ile, 2025))} (2025); avance {fm(v(ile_av, 2024))} y {fm(v(ile_av, 2025))}. "
-         f"Serie 2019-2025 calculada", "Gris",
-         f"Saber 11, puntaje promedio de oficiales urbanas: {fm(sab_s[0][1])} (2019), {fm(sab_s[1][1])} (2020), {fm(sab_s[2][1])} (2022); "
-         "sin clasificación de planteles",
-         lk("TerriData, ICFES", "https://www.datos.gov.co/d/kgxf-xxbe") + "; Secretaría de Educación"],
-        ["**ICPD-6** Índice de cumplimiento del PDM", "Resumen del componente", "IBS = (salud + ILE + CD)/3; ITG = (CM + CA + CP)/3; (IBS + ITG)/2",
-         "No disponible", "Gris",
-         f"Promedio con las entradas disponibles: {fm(v(icpd, 2024))} (2024) y {fm(v(icpd, 2025))} (2025), con {fm(float(fila(icpd, 2024)['denominador']))} y "
-         f"{fm(float(fila(icpd, 2025)['denominador']))} de 6 entradas; referencial: no cumple la regla de la Guía de no calcular índices con entradas faltantes",
-         "Los indicadores anteriores"],
-        ["**Logros de políticas públicas** (nueva dimensión)", "Seguimiento de las políticas públicas municipales",
-         "a) 100 × políticas con informe de seguimiento publicado / políticas vigentes; b) con plan de acción vigente / vigentes; c) metas cumplidas / metas",
-         "No disponible (sin inventario oficial); a) construible armando la lista con los acuerdos del Concejo", "Gris",
-         "a) hoy; b) y c) en el futuro", "Concejo (acuerdos); Planeación"],
+    pol = "Logros de políticas públicas (nueva dimensión)"
+    r = lambda ind, a: f"{fm(v(ind, a))}"
+    return [
+        IND(D, "**Cobertura de salud** (reemplaza el aseguramiento subsidiado)", "principal", "100 × afiliados (contributivos + subsidiados + especiales) / población DANE",
+            ser(salud, (2024, 2025)) + f"; serie 2020-2025 calculada", "Gris",
+            f"Sin meta oficial. MinSalud publicó {r(ms_d, 2025)} (dic. 2025) y {r(ms_a, 2026)} (ago. 2026) con otras poblaciones", [salud]),
+        IND(D, "Cobertura de salud: discapacidad registrada", "respaldo", "Personas con discapacidad en el registro nacional (acumulado)",
+            f"{fm(v(dis, 2020))} personas (acumulado a 2020)", "Gris", "Registro sin actualizar desde 2020; no es una tasa", [dis]),
+        IND(D, "**CM** Mortalidad vial", "principal", "Logro frente a la meta (7,25 frente a 8 por 100.000 hab.)", ser(cm, (2024,)), sem_ultimo(cm, (2024,)),
+            "Solo 2024; meta final 2027, sin metas anuales", [cm]),
+        IND(D, "CM: cifra de la Policía", "respaldo", "Igual, con homicidios en accidente de tránsito de la Policía", ser(cmr, (2024,)), sem_ultimo(cmr, (2024,)),
+            "Otra definición que la del INMLCF", [cmr]),
+        IND(D, "**CA** Espacio público verde", "principal", "Logro frente a la meta (5,75 frente a 3,88 m² por hab.)", ser(ca, (2024,)), sem_ultimo(ca, (2024,)),
+            "No concilia con la línea base del plan", [ca]),
+        IND(D, "CA: espacio público verde total del POT", "respaldo", "Igual, con el total del POT (69,41 m² por hab.)", ser(car, (2024,)), sem_ultimo(car, (2024,)),
+            "Otra serie: no comparable con la línea base", [car]),
+        IND(D, "**CP** Procesos participativos", "principal", "Logro frente a la meta (100 %)", ser(cp, (2024, 2025)), sem_ultimo(cp, (2024, 2025)),
+            "No hay método ni cifra oficial", [cp]),
+        IND(D, "CP: índice situacional", "respaldo", "Índice del diagnóstico del PDM", f"{fm(v(cpr, 2022))} (2022)", "Gris", "Sin meta comparable; sin semáforo", [cpr]),
+        IND(D, "**CD** Servicios deportivos", "principal", "Logro frente a la meta (cobertura de 6 %)", ser(cd, (2025,)), sem_ultimo(cd, (2025,)),
+            "Falta la cifra de cobertura del Índer", [cd]),
+        IND(D, "CD: disciplinas atendidas", "respaldo", "100 × disciplinas implementadas / previstas", ser(cdr, (2025,), con_razon=True), sem_ultimo(cdr, (2025,)),
+            "Mide oferta, no población atendida", [cdr]),
+        IND(D, "**ILE** Logro educativo (evolución)", "principal", "Serie anual, variación anual y avance = 100 × (valor − 16,3) / (19 − 16,3), entre 0 y 100",
+            f"Primera infancia (0 a 5 años): {fm(v(ile, 2024))} (2024) y {fm(v(ile, 2025))} (2025); avance {fm(v(ile_av, 2024))} y {fm(v(ile_av, 2025))}. Serie 2019-2025 calculada. Planteles que mejoran en Saber 11: N/D",
+            "Gris", f"2023 da {fm(v(ile, 2023))}, no 16,3 de la línea base; sin clasificación de planteles", [ile, clasif]),
+        IND(D, "ILE: puntaje de Saber 11", "respaldo", "Puntaje global promedio de oficiales urbanas",
+            pares((fm(v(sab, 2019)), 2019), (fm(v(sab, 2020)), 2020), (fm(v(sab, 2022)), 2022)), "Gris", "Datos públicos solo hasta 2022; sin semáforo", [sab]),
+        IND(D, "**ICPD-6** Índice de cumplimiento del PDM", "principal", "IBS = (salud + ILE + CD) / 3; ITG = (CM + CA + CP) / 3; (IBS + ITG) / 2", "N/D (2024 y 2025)", "Gris",
+            "Faltan salud, CP, CD y planteles", [icpd]),
+        IND(D, "ICPD-6: promedio con las entradas disponibles", "respaldo", "Promedio simple de las entradas disponibles",
+            f"{fm(v(icpd_r, 2024))} (2024, {fm(float(fila(icpd_r, 2024)['denominador']))} de 6 entradas); {fm(v(icpd_r, 2025))} (2025, {fm(float(fila(icpd_r, 2025)['denominador']))} de 6)",
+            "Gris", "Referencial: no cumple la regla de la Guía de no calcular índices con entradas faltantes", [icpd_r]),
+        IND(D, "**Logros de políticas públicas** (nueva)", "principal", "100 × políticas con informe de seguimiento publicado / políticas vigentes", "N/D (2025)", "Gris",
+            "Sin inventario oficial de políticas vigentes", [pol]),
+        IND(D, "Políticas: con plan de acción y metas cumplidas", "respaldo", "Políticas con plan de acción / vigentes; metas cumplidas / metas", "N/D", "Gris",
+            "Para más adelante; sin fuente identificada", ["__politicas_respaldo__"]),
     ]
-    return filas, dict(
-        principales=[[salud], [cm], [ca], [cp], [cd], [ile, ile_av, "ILE Saber 11 - clasificación de planteles (meta 14 %)"], [icpd.replace("Promedio parcial", "Índice")],
-                     ["Logros de políticas públicas (nueva dimensión)"]],
-        respaldos=[[dis], [cmr], [car], [cpr], [cdr], [sab], [icpd], ["__politicas_respaldo__"]])
 
 
 def ind_pp():
-    A = (2024, 2025)
-    fid = "Fidelidad a lo votado"
-    mon = "Fidelidad a lo votado, versión monetaria"
+    D, A = "Presupuesto participativo", (2024, 2025, 2026)
+    fid, mon = "Fidelidad a lo votado", "Fidelidad a lo votado, versión monetaria"
+    ter, ejt = "Proyectos votados que se terminaron", "Ejecución presupuestal de los proyectos terminados"
     epp = "EPP, ejecución presupuestal del presupuesto participativo"
     epp26 = epp + " (1.er semestre)"
     tc, p90 = "Tasa de compromiso", "Proyectos con ejecución de al menos 90 %"
-    eq, af = "Equidad entre zonas (brecha de ejecución)", "Avance físico (proyectos reportados terminados)"
-    filas = [
-        ["**Fidelidad a lo votado** (principal)", "Proyectos cuya apropiación coincide con lo votado",
-         "100 × proyectos con apropiación igual al valor votado (más o menos 1 %, parámetro) / proyectos votados",
-         f"{fm(v(fid, 2024))} (2024, aprox.; {razon(fid, 2024)}), {fila(fid, 2024)['semaforo']}; {fm(v(fid, 2025))} (2025; {razon(fid, 2025)}), {fila(fid, 2025)['semaforo']}; 2026 construible (falta el valor votado)",
-         sem_ultimo(fid, A),
-         f"Complemento monetario: apropiación total / valor votado total = {fm(v(mon, 2024))} (2024) y {fm(v(mon, 2025))} (2025). "
-         "Semáforo con los umbrales de presupuesto participativo (propuesta)",
-         lk("Listado EFPC", enlace(fid, 2024)) + "; Hacienda; plan de acción"],
-        ["**EPP** Ejecución presupuestal (principal)", "Dinero del presupuesto participativo convertido en obligaciones", "100 × OPP / APP",
-         f"{fm(v(epp, 2024))} (2024, aprox.); {fm(v(epp, 2025))} (2025); {fm(v(epp26, 2026))} (1.er semestre de 2026, sin semáforo)",
-         sem_ultimo(epp, A), "Sin respaldo propio: lo respaldan los cuatro siguientes", lk("Hacienda, plan de acción", enlace(epp, 2025))],
-        ["Tasa de compromiso (respaldo)", "Dinero comprometido", "100 × compromisos / apropiación",
-         f"{fm(v(tc, 2025))} (2025); 2024 no disponible (Hacienda no separa compromisos)", sem_ultimo(tc, A), "—", "Hacienda"],
-        ["Proyectos bien ejecutados (respaldo)", "Proyectos con ejecución de al menos 90 %", "proyectos con 90 % o más / proyectos",
-         f"{razon(p90, 2024)} (2024); {razon(p90, 2025)} (2025)", sem_ultimo(p90, A), "—", "Hacienda"],
-        ["Equidad entre zonas (respaldo)", "Brecha de ejecución entre zonas", "zona más alta − zona más baja (puntos)",
-         f"{fm(v(eq, 2024))} (2024: {fm(float(fila(eq, 2024)['denominador']))} a {fm(float(fila(eq, 2024)['numerador']))}); "
-         f"{fm(v(eq, 2025))} (2025: {fm(float(fila(eq, 2025)['denominador']))} a {fm(float(fila(eq, 2025)['numerador']))})", "Gris", "—", "Hacienda"],
-        ["Avance físico (respaldo de entrega)", "Proyectos reportados como terminados", "proyectos con avance físico de 100 % / proyectos",
-         f"{razon(af, 2025)} = {fm(v(af, 2025))} (2025, autorreporte)", sem_ultimo(af, A), "—", lk("Plan de acción 2025", enlace(af, 2025))],
+    eq = "Equidad entre zonas (brecha de ejecución)"
+    return [
+        IND(D, "**Fidelidad a lo votado**", "principal", "100 × proyectos con apropiación igual al valor votado (más o menos 1 %) / proyectos votados", ser(fid, A, con_razon=True), sem_ultimo(fid, A),
+            "2024 aproximada; 2026 sin el valor votado de cada proyecto", [fid]),
+        IND(D, "**Proyectos votados que se terminaron**", "principal", "100 × proyectos votados con avance físico de 100 % / proyectos votados", ser(ter, A, con_razon=True), sem_ultimo(ter, A),
+            "Autorreporte de las dependencias, sin acta de recibo", [ter]),
+        IND(D, "**EPP** Ejecución presupuestal", "principal", "100 × obligaciones (OPP) / apropiación definitiva (APP)",
+            f"{fm(v(epp, 2024))} (2024); {fm(v(epp, 2025))} (2025); {fm(v(epp26, 2026))} (1.er semestre de 2026)", sem_ultimo(epp, (2024, 2025)),
+            "2024 aproximada (50 de 51 proyectos cruzados); 2026 sin semáforo", [epp, epp26]),
+        IND(D, "Ejecución de los proyectos terminados", "respaldo", "100 × obligaciones / apropiación, solo de los proyectos con avance físico de 100 %", ser(ejt, A), sem_ultimo(ejt, A),
+            "Autorreporte de las dependencias, sin acta de recibo", [ejt]),
+        IND(D, "Tasa de compromiso", "respaldo", "100 × compromisos / apropiación definitiva", ser(tc, (2024, 2025)), sem_ultimo(tc, (2024, 2025)),
+            "2024: Hacienda no separa compromisos", [tc]),
+        IND(D, "Proyectos con ejecución de al menos 90 %", "respaldo", "100 × proyectos con obligaciones ≥ 90 % de su apropiación / proyectos", ser(p90, (2024, 2025), con_razon=True),
+            sem_ultimo(p90, (2024, 2025)), "2024 sobre 50 proyectos cruzados", [p90]),
+        IND(D, "Equidad entre zonas", "respaldo", "Zona con mayor EPP − zona con menor EPP (puntos)", ser(eq, (2024, 2025)), "Gris",
+            "Sin umbral: no tiene semáforo", [eq]),
+        IND(D, "Fidelidad a lo votado, versión monetaria", "complemento", "100 × apropiación total / valor votado total", ser(mon, (2024, 2025)), "Gris",
+            "Complemento de la fidelidad; puede superar 100", [mon]),
     ]
-    return filas, dict(principales=[[fid], [epp, epp26]], respaldos=[[tc], [p90], [eq], [af]])
 
 
-def _cuenta(grupos):
-    """(total, con valor) contando cada grupo como un indicador; el grupo con '__politicas_respaldo__' no tiene valor."""
-    return len(grupos), sum(1 for g in grupos if con_valor(g))
+def _cuenta_dim(dim, tipo):
+    gr = [n for d, t, n in CUENTA if d == dim and t == tipo]
+    return len(gr), sum(1 for g in gr if con_valor(g))
 
 
 def documento_1():
-    A = {}
-    cs, cs_c = ind_cs()
-    pc, pc_c = ind_pc()
-    pdm, pdm_c = ind_pdm()
-    pp, pp_c = ind_pp()
+    CUENTA.clear()
+    ind = {"Control social": ind_cs(), "Participación ciudadana": ind_pc(), "Cumplimiento del PDM": ind_pdm(), "Presupuesto participativo": ind_pp()}
     fid24 = fila("Fidelidad a lo votado", 2024)
-    ile23 = [r for r in FILAS if r["indicador"] == "ILE primera infancia - cobertura de atención integral" and r["anio"] == 2023][0]
-    m = re.search(r"2023 da ([\d,]+) con 0 a 5 años y ([\d,]+) con 0 a 6 años", ile23["nota"])
-    v05, v06 = m.group(1), m.group(2)
-    sal25, ms_dic, ms_ago = v("Cobertura de salud", 2025), v("Cobertura de salud, cifra publicada por MinSalud (diciembre)", 2025), v("Cobertura de salud, cifra publicada por MinSalud (agosto)", 2026)
-    isp = fila("ISPC - Opción redistribuida (0,556·I2 + 0,444·I3)", 2025)
-    cs_t = {k: _cuenta(cs_c[k]) for k in cs_c}
-    pc_t = {k: _cuenta(pc_c[k]) for k in pc_c}
-    pdm_t = {k: _cuenta(pdm_c[k]) for k in pdm_c}
-    pp_t = {k: _cuenta(pp_c[k]) for k in pp_c}
-    resumen = [("Control social", cs_t), ("Participación ciudadana", pc_t), ("Cumplimiento del PDM", pdm_t), ("Presupuesto participativo", pp_t)]
-    tot_p = sum(t["principales"][0] for _, t in resumen), sum(t["principales"][1] for _, t in resumen)
-    tot_r = sum(t["respaldos"][0] for _, t in resumen), sum(t["respaldos"][1] for _, t in resumen)
-    tab_res = ["| Componente | Principales | Principales con valor hoy | Respaldos | Respaldos con valor hoy |", "|---|---|---|---|---|"]
-    for n, t in resumen:
-        tab_res.append(f"| {n} | {t['principales'][0]} | {t['principales'][1]} | {t['respaldos'][0]} | {t['respaldos'][1]} |")
-    tab_res.append(f"| **Total** | **{tot_p[0]}** | **{tot_p[1]}** | **{tot_r[0]}** | **{tot_r[1]}** |")
+    ter25 = fila("Proyectos votados que se terminaron", 2025)
+    ejt25 = fila("Ejecución presupuestal de los proyectos terminados", 2025)
+    partes = []
+    cab_res = ["Dimensión", "Principales", "Con valor hoy", "Respaldos", "Con valor hoy", "Variables disponibles", "Variables construibles", "Variables no disponibles", "Total de variables"]
+    res = []
+    tot = [0] * 8
+    for d in DIMS:
+        p, pv = _cuenta_dim(d, "principal")
+        rp, rv = _cuenta_dim(d, "respaldo")
+        est = {e: len({x["id_variable"] for x in VARS if x["dimension"] == d and x["estado"] == e}) for e in ("Disponible", "Construible", "No disponible")}
+        fila_r = [DIM_TIT[d], p, pv, rp, rv, est["Disponible"], est["Construible"], est["No disponible"]]
+        fila_r.append(sum(est.values()))
+        res.append(fila_r)
+        for k in range(8):
+            tot[k] += fila_r[k + 1]
+    res.append(["**Total**"] + [f"**{x}**" for x in tot])
+    tab_res = tabla_md(cab_res, [[str(x) for x in f] for f in res])
+    for d in DIMS:
+        partes.append(f"## {DIM_TIT[d]}\n\n**Variables**\n\n{tabla_variables(d)}\n\n**Indicadores**\n\n{tabla_indicadores(ind[d])}\n")
     md = f"""
 ## Introducción
 
-Tras la reunión con el profesor Francisco Correa se aprobó simplificar el sistema de indicadores. En control social se mantienen los indicadores; en participación ciudadana se eliminan I5 e I6; en el cumplimiento del Plan de Desarrollo (PDM) la cobertura de salud reemplaza al aseguramiento subsidiado y se añade una dimensión de políticas públicas; en presupuesto participativo se mantienen la ejecución presupuestal (EPP) y la fidelidad a lo votado, y salen por ahora la entrega cumplida, la meta de atención y el índice del presupuesto participativo.
+Este documento reemplaza al anterior tras la reunión con el profesor Francisco Correa. Qué cambió: **(1)** documentos más cortos, organizados por dimensión; en cada una se ve variable por variable qué hay, qué falta y con qué limitaciones, y los indicadores se construyen desde esas variables; **(2)** regla del respaldo: cada indicador lleva un respaldo (o una variable proxy) que da una lectura provisional cuando el principal no se puede calcular, sin reemplazarlo ni sumarse a él; **(3)** en participación ciudadana se eliminan I5 e I6; **(4)** en el cumplimiento del PDM la cobertura de salud reemplaza al aseguramiento subsidiado, el logro educativo (ILE) pasa a medirse como evolución de una serie y se añade la dimensión de políticas públicas; **(5)** en presupuesto participativo los principales son la fidelidad a lo votado, los proyectos votados que se terminaron y la ejecución presupuestal (EPP).
 
-**Regla del respaldo.** Cada indicador lleva un indicador de respaldo o una variable proxy: si el principal no se puede calcular hoy, el respaldo ofrece una lectura provisional con los datos que sí existen. El respaldo no reemplaza al principal ni se suma a él. Las cifras de este documento son provisionales: nada está validado y no hubo tiempo de validar con Planeación. Las series se calcularon con documentos públicos consultados hasta el {FECHA}. En las tablas, el semáforo de cada fila corresponde al año más reciente con valor y el de los respaldos se indica en su texto.
+**Nada está validado** ni se validó con Planeación: las cifras son provisionales y salen de documentos públicos consultados hasta el {FECHA}. **Estado de las variables.** *Disponible*: hay valor publicado para 2024 y 2025 (en las metas, para el horizonte del plan). *Construible*: no está publicado tal cual o faltan años, pero se puede calcular o armar con datos existentes o con una solicitud concreta. *No disponible*: no hay dato ni forma de armarlo con lo reunido. **Semáforo:** del año más reciente con valor; en presupuesto participativo usa los umbrales de PP (verde desde 90, amarillo desde 75, naranja desde 50), una propuesta. N/D: sin dato.
 
-## Control social
-
-{tabla_md(cs)}
-
-## Participación ciudadana
-
-{tabla_md(pc)}
-
-*Notas.* El ISPC original ya usa solo I1 a I4; eliminar I5 e I6 no cambia sus pesos. La opción redistribuida (0,556·I2 + 0,444·I3, es decir 0,25/0,45 y 0,20/0,45) se ofrece a los profesores mientras I1 e I4 no sean viables. El respaldo de I1 usa los mismos datos de la fidelidad de presupuesto participativo, por eso no debe sumarse en dos componentes.
-
-## Cumplimiento del Plan de Desarrollo (PDM)
-
-{tabla_md(pdm)}
-
-*Notas.* **Rango de edad (ILE).** El PDM fija la línea base 16,3 en 2023; con la población DANE por edad simple de una misma proyección, 2023 da {v05} con 0 a 5 años y {v06} con 0 a 6 años: ninguno la reproduce con tolerancia de 0,1, y se usa 0 a 5 años (el más cercano). La clasificación de planteles de Saber 11 de Envigado no está en datos abiertos; sin ella el avance hacia la meta de 14 % no se puede calcular y el respaldo es el puntaje promedio (el conjunto público termina en 2022). **Cobertura de salud.** La serie divide los afiliados de cada diciembre entre una sola proyección de población DANE (la de 2018-2042), por eso es comparable entre años: {fm(sal25)} en 2025. La cifra de MinSalud de diciembre de 2025 ({fm(ms_dic)}) y la de agosto de 2026 ({fm(ms_ago)}) difieren porque MinSalud actualizó la población con otra proyección, no por una pérdida de afiliados. **ICPD-6.** Solo se muestra como referencial. **Políticas públicas.** Hay documentos de cuatro políticas, pero no un inventario oficial de las vigentes.
-
-## Presupuesto participativo
-
-{tabla_md(pp)}
-
-*Notas.* **Fidelidad 2024:** se cuentan los {fid24['denominador']} proyectos votados del listado de la EFPC; si solo se cuentan los 50 que se pudieron cruzar con Hacienda, el resultado sería 39/50 = 78,00. La versión monetaria es un complemento de la fidelidad, no un respaldo aparte; por eso en este componente los principales son la fidelidad y la EPP, y los respaldos son los cuatro últimos.
-
+{chr(10).join(partes)}
 ## Resumen
 
-Cuántos indicadores principales y respaldos tiene cada componente, y cuántos tienen valor hoy (al menos un año con cifra, aunque sea referencial).
+Indicadores por dimensión y cuántos tienen valor hoy (al menos un año con cifra), y variables por estado. La versión monetaria de la fidelidad es un complemento y no se cuenta como respaldo.
 
-{chr(10).join(tab_res)}
+{tab_res}
 
 ## Siglas
 
-**CA** espacio público verde. **CD** servicios deportivos. **CM** mortalidad vial. **CP** procesos participativos. **DAP** Departamento Administrativo de Planeación. **DANE** Departamento Administrativo Nacional de Estadística. **DSI** disponibilidad de información de seguimiento. **EFPC** Escuela de Formación para la Participación Ciudadana. **EPP** ejecución del presupuesto participativo. **EPV** espacio público verde. **I1 a I4** indicadores de incorporación de aportes, cobertura territorial, oferta formativa y publicación de resultados. **ICFES** Instituto Colombiano para la Evaluación de la Educación. **ICPD-6** índice de cumplimiento del PDM. **ICRCS** índice de condiciones y respuesta para el control social. **ILE** logro educativo. **Índer** Instituto de Deporte y Recreación de Envigado. **INMLCF** Instituto Nacional de Medicina Legal y Ciencias Forenses. **ISPC** índice de seguimiento de la participación ciudadana. **MinSalud** Ministerio de Salud y Protección Social. **OPP, APP** obligaciones y apropiación definitiva del presupuesto participativo. **PCS** promoción del control social. **PDM** Plan de Desarrollo Municipal 2024-2027. **POT** Plan de Ordenamiento Territorial. **RPO** respuesta a observaciones ciudadanas. **VRC** veedurías en la rendición de cuentas.
+**APP** apropiación definitiva del presupuesto participativo. **CA** espacio público verde. **CD** servicios deportivos. **CM** mortalidad vial. **CP** procesos participativos. **DAP** Departamento Administrativo de Planeación. **DANE** Departamento Administrativo Nacional de Estadística. **DSI** disponibilidad de información de seguimiento. **EFPC** Escuela de Formación para la Participación Ciudadana. **EPP** ejecución del presupuesto participativo. **EPV** espacio público verde. **I1 a I4** incorporación de aportes, cobertura territorial, oferta formativa y publicación de resultados. **ICFES** Instituto Colombiano para la Evaluación de la Educación. **ICPD-6** índice de cumplimiento del PDM (IBS: bienestar social; ITG: gestión territorial). **ICRCS** índice de condiciones y respuesta para el control social. **ILE** logro educativo. **Índer** Instituto de Deporte y Recreación de Envigado. **INMLCF** Instituto Nacional de Medicina Legal y Ciencias Forenses. **ISPC** índice de seguimiento de la participación ciudadana. **MinSalud** Ministerio de Salud y Protección Social. **N/D** sin dato. **OPP** obligaciones del presupuesto participativo. **PCS** promoción del control social. **PDM** Plan de Desarrollo Municipal 2024-2027. **POT** Plan de Ordenamiento Territorial. **RPO** respuesta a observaciones ciudadanas. **SGSSS** Sistema General de Seguridad Social en Salud. **TerriData** portal de datos territoriales del Departamento Nacional de Planeación. **VRC** veedurías en la rendición de cuentas. Las letras entre paréntesis en las variables (MS, MD, EE, EP y similares) son las de la Matriz de los profesores.
 """
-    return md.strip() + "\n", dict(resumen=resumen)
+    return md.strip() + "\n", dict(res=res, tot=tot, fid24=fid24, ter25=ter25, ejt25=ejt25, ind=ind)
+
+
+# ================================================================================================ EXCEL DEL SISTEMA
+def plano(t):
+    """Texto sin los enlaces en formato Markdown."""
+    return re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", t)
+
+
+def excel_sistema(destino, info):
+    from openpyxl import Workbook
+    from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+    wb = Workbook()
+    azul = PatternFill("solid", fgColor="1F4E78")
+    fino = Side(style="thin", color="BFBFBF")
+    col_estado = {"Disponible": "D6F0D6", "Construible": "DCEBFA", "No disponible": "F8D4D4"}
+    col_sem = {"Verde": "D6F0D6", "Amarillo": "FFF3BF", "Naranja": "FFDEB8", "Rojo": "F8D4D4", SIN_SEM: "E1E1E1"}
+
+    def cabecera(ws, cols, anchos):
+        ws.append(cols)
+        for c in ws[1]:
+            c.fill, c.font, c.alignment = azul, Font(bold=True, color="FFFFFF"), Alignment(wrap_text=True, vertical="center")
+        for i, w in enumerate(anchos):
+            ws.column_dimensions[chr(65 + i) if i < 26 else "A" + chr(65 + i - 26)].width = w
+        ws.freeze_panes = "A2"
+
+    def enlace_celda(c, url):
+        if url:
+            c.value, c.hyperlink = url, url
+            c.font = Font(color="0563C1", underline="single")
+
+    # --- Variables por dimensión (una fila por variable; columnas de años con el valor)
+    wv = wb.active
+    wv.title = "Variables por dimensión"
+    anios = list(range(2019, 2028))
+    cols = ["Dimensión", "ID de la variable", "Variable", "Origen", "Para qué indicador", "Estado", "Qué hay hoy (valor, años y fuente)", "Qué falta", "Limitación",
+            "Unidad"] + [str(a) if a != 2027 else "2027 (meta)" for a in anios] + ["Fuente", "Enlace"]
+    cabecera(wv, cols, [20, 17, 40, 9, 22, 14, 48, 36, 44, 14] + [11] * len(anios) + [38, 40])
+    for d in DIMS:
+        for vs in vars_dim(d):
+            v0 = vs[0]
+            porano = {r["anio"]: r["v"] for r in vs if r["v"] is not None}
+            fila_ = [DIM_TIT[d], v0["id_variable"], v0["variable"], v0["origen"], v0["para_indicador"], v0["estado"], plano(hoy(vs)), v0["que_falta"], v0["limitacion"], v0["unidad"]]
+            fila_ += [porano.get(a) for a in anios] + [v0["fuente"], None]
+            wv.append(fila_)
+            r_ = wv.max_row
+            wv.cell(r_, 6).fill = PatternFill("solid", fgColor=col_estado[v0["estado"]])
+            for k in range(11, 11 + len(anios)):
+                wv.cell(r_, k).number_format = "#,##0.00" if v0["unidad"] not in ("pesos", "personas") else "#,##0"
+            enlace_celda(wv.cell(r_, 10 + len(anios) + 2), v0["enlace"])
+    for row in wv.iter_rows(min_row=2):
+        for c in row:
+            c.alignment = Alignment(wrap_text=True, vertical="top")
+            c.border = Border(bottom=fino)
+    wv.auto_filter.ref = wv.dimensions
+
+    # --- Indicadores por dimensión
+    wi = wb.create_sheet("Indicadores por dimensión")
+    cabecera(wi, ["Dimensión", "Indicador", "Tipo", "Fórmula", "Valor por año", "Semáforo (año más reciente con valor)", "Limitación", "Con valor hoy", "Valor 2024", "Valor 2025", "Valor 2026",
+                  "Fuente", "Enlace"], [20, 40, 12, 46, 46, 16, 44, 10, 11, 11, 11, 34, 40])
+    for d in DIMS:
+        nombres = [n for dd, t, n in CUENTA if dd == d]
+        for row, nom in zip(info["ind"][d], nombres):
+            filas_i = [r for r in FILAS if r["indicador"] in nom]
+            def valor(a):
+                c = [r for r in filas_i if r["indicador"] == nom[0] and r["anio"] == a]
+                return c[0]["v"] if c else None
+            con = [r for r in filas_i if r["enlace"]]
+            ult = sorted(con, key=lambda r: r["anio"])[-1] if con else None
+            wi.append([DIM_TIT[d], plano(row[0]).replace("**", ""), row[1], row[2], plano(row[3]), row[4], row[5], "Sí" if con_valor(nom) else "No",
+                       valor(2024), valor(2025), valor(2026), ult["fuente"] if ult else "", None])
+            r_ = wi.max_row
+            wi.cell(r_, 6).fill = PatternFill("solid", fgColor=col_sem[row[4]])
+            for k in (9, 10, 11):
+                wi.cell(r_, k).number_format = "#,##0.00"
+            enlace_celda(wi.cell(r_, 13), ult["enlace"] if ult else "")
+    for row in wi.iter_rows(min_row=2):
+        for c in row:
+            c.alignment = Alignment(wrap_text=True, vertical="top")
+            c.border = Border(bottom=fino)
+    wi.auto_filter.ref = wi.dimensions
+
+    # --- Léeme
+    lm = wb.create_sheet("Léeme", 0)
+    cabecera(lm, ["Tema", "Contenido"], [30, 120])
+    res, tot = info["res"], info["tot"]
+    filas_lm = [
+        ("Versión", f"{FECHA}. PROVISIONAL: propuesta de trabajo del Observatorio Ciudadano de Envigado (OCE)."),
+        ("Qué es este archivo", "Sistema de indicadores simplificado, organizado por dimensión (control social, participación ciudadana, cumplimiento del Plan de Desarrollo Municipal y presupuesto participativo). "
+                                "Para cada dimensión dice, variable por variable, qué hay, qué falta y con qué limitaciones, y los indicadores que se construyen desde esas variables."),
+        ("Regla del respaldo", "Cada indicador principal lleva un respaldo (o una variable proxy) que da una lectura provisional cuando el principal no se puede calcular; el respaldo no lo reemplaza ni se suma a él."),
+        ("Estado de las variables", "Disponible: hay valor publicado para 2024 y 2025 (en las metas, para el horizonte del plan).\n"
+                                    "Construible: no está publicado tal cual o faltan años, pero se puede calcular o armar con datos existentes o con una solicitud concreta.\n"
+                                    "No disponible: no hay dato ni forma de armarlo con lo reunido."),
+        ("Semáforo", "Corresponde al año más reciente con valor. En presupuesto participativo usa los umbrales de PP (verde desde 90, amarillo desde 75, naranja desde 50), que son una propuesta. "
+                     "Los indicadores sin meta o umbral aparecen como Sin semáforo."),
+        ("Resultados", "\n".join(f"{r[0]}: {r[1]} indicadores principales ({r[2]} con valor hoy) y {r[3]} de respaldo ({r[4]} con valor hoy); variables: {r[5]} disponibles, {r[6]} construibles, {r[7]} no disponibles."
+                                  for r in res[:-1]) +
+                       f"\nTotal: {tot[0]} principales ({tot[1]} con valor hoy), {tot[2]} respaldos ({tot[3]} con valor hoy); {tot[7]} variables ({tot[4]} disponibles, {tot[5]} construibles, {tot[6]} no disponibles)."),
+        ("Cómo leer las hojas", "Variables por dimensión: una fila por variable, con el valor de cada año en las columnas de años y el enlace a la fuente. "
+                                "Indicadores por dimensión: una fila por indicador, con tipo (principal, respaldo o complemento), fórmula, valores y semáforo coloreado. Ambas hojas tienen filtros."),
+        ("Colores", "Estado: verde = Disponible, azul = Construible, rojo = No disponible. Semáforo: verde, amarillo, naranja y rojo; gris = sin semáforo."),
+        ("Aviso: nada está validado", "Ninguna cifra ha sido validada ni confirmada por la Alcaldía ni por Planeación. Las cifras de presupuesto participativo se basan en una lista de proyectos reconstruida; "
+                                      "los proyectos terminados son un autorreporte de las dependencias, sin acta de recibo."),
+    ]
+    for t, c in filas_lm:
+        lm.append([t, c])
+    for row in lm.iter_rows(min_row=2):
+        for c in row:
+            c.alignment = Alignment(wrap_text=True, vertical="top")
+        row[0].font = Font(bold=True)
+    wb.active = 0
+    wb.save(destino)
+
 
 
 # ================================================================================================ DOCUMENTO 2
@@ -544,7 +752,9 @@ VARIABLES = [
     ("Ejecución de egresos por código de proyecto (apropiación, compromisos y obligaciones, con corte de cierre)",
      "EPP, tasa de compromiso, proyectos con 90 % o más, equidad entre zonas", "Secretaría de Hacienda", "Hoja de cálculo o CSV", "Alta"),
     ("Actas de recibo, informes finales y de supervisión de los proyectos de presupuesto participativo",
-     "Avance físico (respaldo de entrega)", "Subdirección de Participación Ciudadana; unidades ejecutoras", "Carpeta de PDF con un índice", "Media"),
+     "Proyectos votados que se terminaron (verificar el autorreporte)", "Subdirección de Participación Ciudadana; unidades ejecutoras", "Carpeta de PDF con un índice", "Alta"),
+    ("Avance físico por proyecto de 2024 y al cierre de 2026 (plan de acción con corte de diciembre)",
+     "Proyectos votados que se terminaron y ejecución de los terminados", "DAP; unidades ejecutoras", "Hoja de cálculo (plan de acción)", "Alta"),
     ("Actas de rendición de cuentas con listas de asistencia (sin datos personales) y calendario de eventos",
      "VRC de control social", "Secretarías (Salud, Bienestar Social y otras); DAP", "PDF y tabla de eventos", "Alta"),
     ("Cuadros completos de preguntas y respuestas de las rendiciones 2024 a 2026",
@@ -558,6 +768,7 @@ VARIABLES = [
     ("Ficha técnica del indicador de procesos participativos (valor, fórmula y fuente)", "CP del PDM", "DAP", "Ficha en PDF", "Alta"),
     ("Cobertura deportiva: numerador, denominador y valor", "CD del PDM", "Índer", "Hoja de cálculo", "Alta"),
     ("Clasificación de planteles de Saber 11 por institución, 2023 a 2025", "ILE (Saber 11) del PDM", "Secretaría de Educación", "Hoja de cálculo por institución", "Alta"),
+    ("Resultados de Saber 11 por establecimiento de 2021 y de 2023 a 2025", "ILE (respaldo: puntaje promedio) del PDM", "Secretaría de Educación; ICFES", "Hoja de cálculo por institución", "Media"),
     ("Niños y niñas atendidos de forma integral 2023 a 2025 y la población usada para la línea base", "ILE (primera infancia) del PDM", "Secretaría de Educación", "Hoja de cálculo", "Alta"),
     ("Afiliados al sistema de salud por régimen y población de referencia, cortes de diciembre y el último de 2026", "Cobertura de salud del PDM",
      "Secretaría de Salud, Dirección de Aseguramiento", "Hoja de cálculo", "Media"),
@@ -624,7 +835,7 @@ def main():
     sin_pdf = "--sin-pdf" in sys.argv
     TMP.mkdir(parents=True, exist_ok=True)
     # ---------- documento 1
-    md1, _ = documento_1()
+    md1, info1 = documento_1()
     t_pdf, tam = a_tex(md1, False)
     t_word, tam_w = a_tex(md1, True)
     titulo1 = "Sistema de indicadores del Observatorio Ciudadano de Envigado: versión simplificada (propuesta)"
@@ -635,6 +846,7 @@ def main():
     if not sin_pdf:
         compilar_pdf(tex_pdf, "sistema_indicadores_simplificado", pdf1)
     construir_word(tex_word, tam_w, docx1, "OCE – Sistema de indicadores simplificado (propuesta, provisional)")
+    excel_sistema(OUT / "sistema_indicadores_simplificado.xlsx", info1)
     # ---------- documento 2
     md2 = documento_2_md()
     t2_pdf, _ = a_tex(md2, False)
