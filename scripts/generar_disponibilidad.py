@@ -115,6 +115,10 @@ CORRECCIONES = [
      Sustituir('(zip dic-2025: /sites/rid/Lists/BibliotecaDigital/RIDE/VP/DOA/cifras-afiliacion-salud-dic-2025.zip; zip ago-2026: /sites/rid/Lists/BibliotecaDigital/RIDE/VP/RBC/cifras-afiliacion-salud-agosto2026.zip)',
                '; zip dic-2025: /sites/rid/Lists/BibliotecaDigital/RIDE/VP/DOA/cifras-afiliacion-salud-dic-2025.zip ; zip ago-2026: /sites/rid/Lists/BibliotecaDigital/RIDE/VP/RBC/cifras-afiliacion-salud-agosto2026.zip'),
      'C18: formato (parentesis); valores separados por " ; "'),
+    ('PP.EPP.OPP', 'valor_encontrado',
+     Sustituir('Vigencia 2026: $11.555.041.247 al 30-jun-2026 (Hacienda; 66 proyectos; el XLSX trae un corte anterior de $5.702.528.148)',
+               'Vigencia 2026: $5.702.528.148 al 30-jun-2026 (informe de Hacienda y hoja ROCA del plan de acción, coinciden al peso; 66 proyectos)'),
+     'C23 (v1.2): la cifra $11.555.041.247 de la versión 1.1 era errónea; OPP 2026 al 30-jun-2026 = $5.702.528.148 (ver config/supuestos.yaml pp_2026_opp_fuente)'),
     ('PP.EPP.OPP', 'valor_encontrado', Prefijar(EPP_PRELIMINAR), 'C21 (usuaria): marcar la cifra EPP como preliminar, por validar'),
     ('PP.EPP.APP', 'valor_encontrado', Prefijar(EPP_PRELIMINAR), 'C21 (usuaria): marcar la cifra EPP como preliminar, por validar'),
 ]
@@ -729,6 +733,11 @@ def main():
 
     # ---- Léeme
     leeme = [
+        ['Versión',
+         'Versión 1.2 – 9 de noviembre de 2026. Fecha de corte de la información: 14 de octubre de 2026.'],
+        ['Cambios de la versión 1.2',
+         'Cambios de la versión 1.2: se corrige la cifra de obligaciones del presupuesto participativo 2026 al 30 de '
+         'junio de 2026 ($5.702.528.148; la cifra $11.555.041.247 de la versión 1.1 era errónea).'],
         ['Qué es este documento',
          'Matriz de disponibilidad y brecha de información del sistema preliminar de indicadores del Observatorio '
          'Ciudadano de Envigado. Para cada una de las 39 variables de la matriz de indicadores dice si el dato existe, '

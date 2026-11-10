@@ -50,7 +50,7 @@ COLOR_VER = {'Viable': 'cverde', 'Viable con ajuste': 'camarillo', 'No viable po
 SISTEMAS = [('CS', 'Control social'), ('PC', 'Participación ciudadana'),
             ('PDM', 'Cumplimiento del PDM'), ('PP', 'Presupuesto participativo')]
 # Versión y fechas de la portada: parámetros fijos (no dependen del día en que se ejecute el script)
-VERSION = 'Versión 1.1 – 9 de noviembre de 2026'
+VERSION = 'Versión 1.2 – 9 de noviembre de 2026'
 FECHA_CORTE = '14 de octubre de 2026'
 
 # --------------------------------------------------------------------------- escape LaTeX

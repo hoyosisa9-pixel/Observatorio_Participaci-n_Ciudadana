@@ -1,6 +1,6 @@
 # ESTADO – Disponibilidad y brecha de información del sistema de indicadores (OCE Envigado)
 
-**Punto de control:** 14-oct-2026 (actualizado el 9-nov-2026: versión 1.1 tras el control de calidad) · Repositorio `/workspaces/Observatorio_Participaci-n_Ciudadana` · Rama `main`
+**Punto de control:** 14-oct-2026 (actualizado el 9-nov-2026: versión 1.2) · Repositorio `/workspaces/Observatorio_Participaci-n_Ciudadana` · Rama `main`
 
 Este archivo es autosuficiente: explica la tarea, lo hecho, lo pendiente y cómo retomar.
 
@@ -49,6 +49,14 @@ Los profesores **Francisco Correa y Eber** definieron un sistema preliminar de i
 - **Cobertura territorial:** zona 1 sin proyectos; zonas 2 a 13 con la misma categoría que el consolidado municipal.
 - Detalle en `trabajo/notas_PP.md`. **La Fase 3 debe evaluar críticamente esta reconstrucción frente a la conclusión del profesor.**
 
+
+## 2c. Versión 1.2 (9-nov-2026): corrección de la OPP del PP 2026
+
+- Único cambio de contenido: las obligaciones (OPP) del presupuesto participativo 2026 al 30-jun-2026 son **$5.702.528.148** (informe de Hacienda al 30-jun-2026 y hoja ROCA del plan de acción, coinciden al peso), no $11.555.041.247 (cifra errónea de la v1.1). Corregida en la fuente, `scripts/generar_disponibilidad.py` (corrección C23, variable PP.EPP.OPP, columna valor encontrado; hoja Variables, celda O36, y los dos CSV). El informe PDF/Word no citaba esa cifra. Referencia: `config/supuestos.yaml` (`pp_2026_opp_fuente`).
+- Referencia de lectura (no se escribió en los entregables): 5.702.528.148 / 24.519.738.737 = 23,26 % (primer semestre, sin semáforo; no comparable con umbrales anuales).
+- Versión: "Versión 1.2 – 9 de noviembre de 2026" (`VERSION` en `generar_informe_latex.py`; portada PDF/Word; hoja Léeme del Excel con filas nuevas "Versión" y "Cambios de la versión 1.2"). Fecha de corte sin cambio: 14 de octubre de 2026.
+- Verificado frente a la v1.1 (git HEAD): en el Excel solo difieren Variables!O36 y las dos filas nuevas de Léeme (las demás filas de Léeme bajan dos posiciones); .tex, .docx y PDF solo difieren en la línea de versión.
+- `outputs/disponibilidad/trabajo/` conserva el histórico (notas_PP.md y variables_PP.csv aún citan 11.555.041.247 como registro de la fase 2; no usar).
 
 ## 2b. Versión 1.1 (9-nov-2026): correcciones del control de calidad
 
