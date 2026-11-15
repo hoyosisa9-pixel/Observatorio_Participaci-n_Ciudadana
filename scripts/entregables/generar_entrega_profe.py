@@ -157,7 +157,8 @@ PDM = [
     ['**Mortalidad vial**', 'Forensis 2025 no se puede consultar y mezclar fuentes cambia la medida',
      '**Se mantiene**, con una sola fuente: Policía Nacional', 'Profe; fuente única: Claude', '2019–2025. Meta 8 por 100.000, de Movilidad (otro universo)'],
     ['**Espacio público verde**', 'Con la meta del PDM (3,88 m²) daba 100 sin exigencia',
-     '**Se ajusta**: avance desde 4,66 m²/hab (AMVA, 2022) hacia 9 m²/hab', 'Profe (12-nov)', 'Solo 2022 (4,66) y 2024 (5,75, POT)'],
+     '**Se ajusta**: avance desde la **línea base 2019 = 4,54 m²/hab** (AMVA) hacia el referente de 9 m²/hab', 'Profe (12-nov: avance hacia 9 m²); línea base 2019: Isabella',
+     'Cortes de espacio verde urbano: 2019: 4,54 (AMVA) · 2022: 4,66 (AMVA) · 2024: 5,75 (POT). Avance: 2,7 % en 2022 y 27,1 % en 2024. No hay dato anual (ver cuadro de fuentes)'],
     ['**Implementación de procesos participativos**', 'No hay cifra ni método oficial publicado',
      '**Se reemplaza** por el número anual de veedurías inscritas en la Personería', 'Profe (notas de reunión) e Isabella',
      '2012–2026 (datos.gov.co). El listado parece incompleto'],
@@ -176,14 +177,62 @@ PDM_COMP = [
     ['Logro educativo', 'Cobertura neta, niños atendidos y población de 0–5 años', '2018–2024', 'Sí (19 % y 100,44 %)'],
     ['Servicios públicos', 'Coberturas de acueducto, alcantarillado, aseo y energía', '2019–2024', 'Sí, 99,9 %, pero de otro universo (el aseo no tiene)'],
     ['Mortalidad vial', 'Muertes en tránsito y población', '2019–2025', 'Sí, 8 por 100.000, pero de otro universo'],
-    ['Espacio verde', 'm² verdes por habitante', '**Solo 2022 y 2024**', 'Sí (avance hacia 9 m²)'],
+    ['Espacio verde urbano', 'm² verdes urbanos por habitante', '**2019 (línea base), 2022 y 2024** (cortes de distintos estudios)', 'Referente 9 m² (no se usa la meta del PDM de 3,88)'],
     ['Veedurías (en vez de procesos participativos)', 'Veedurías inscritas por año', '2012–2026', 'No hay meta en el PDM'],
+]
+
+EV_ENC = ['Año', 'm² por habitante', 'Avance hacia 9 m²', 'Quién lo midió', 'Fuente (documento, tabla y página)']
+EV_CORTES = [
+    ['**2019**', '**4,54**', '0 % (línea base)', 'Área Metropolitana (AMVA) con la Universidad Nacional, estudio de conectividad ecológica (2020)',
+     'Reporte Metropolitano Voluntario ODS 11.7, AMVA y ONU-Hábitat (2022), tabla 4, p. 24'],
+    ['2022', '4,66', '2,7 %', 'AMVA con el Instituto Humboldt, actualización del Plan Maestro de Espacios Públicos Verdes Urbanos',
+     'Nota del Instituto Humboldt (2023), gráfico por municipio; repetido en el diagnóstico del POT, tabla 39, pp. 86-87'],
+    ['2024', '5,75', '27,1 %', 'Alcaldía de Envigado, diagnóstico de la revisión del POT (criterio del AMVA, inventario propio)',
+     'Diagnóstico del POT, dimensión funcional (espacio público), tabla 39, pp. 86-87: 1.382.762 m² / 240.655 habitantes urbanos (DANE 2024)'],
+]
+EV_NOTA = ('Avance = (valor del año − 4,54) / (9 − 4,54). Son **cortes de estudios distintos, no una serie anual**: el dato no se publica cada año '
+           'y el de 2024 usa otro inventario, así que parte del avance puede deberse al cambio de método. '
+           '**Recomendación para el informe:** solicitar a **Planeación** la serie completa desde 2019 con la metodología del AMVA, y proponer que '
+           '**Planeación la mida cada año** en el seguimiento del POT (expediente municipal), con el mismo método, y que la **Secretaría de Medio Ambiente** '
+           'la reporte en el seguimiento del PDM. Se descartan el 3,88 del PDM (sin fuente ni método), los 5,00 de 2020 y 2023 (autorreporte) y el '
+           'verde total 2024 (69,41, incluye las reservas rurales).')
+EV_URLS = [
+    '2019 (4,54): Reporte ODS 11.7, AMVA y ONU-Hábitat (2022), tabla 4, p. 24, y tabla 5, p. 25: https://urbanpolicyplatform.org/wp-content/uploads/2023/06/VMR-EPV-VALLE-DE-ABURRA.pdf',
+    '2022 (4,66): Instituto Humboldt (2023), https://www.humboldt.org.co/noticias/espacios-publicos-verdes-urbanos-en-el-valle-de-aburra-un-reto-de-conservacion '
+    '(gráfico: https://cdn.prod.website-files.com/64df6dd37ac6a0dbb9d03cb3/6591f459139e1daa37e628c9_Instituto-Humboldt-plan.jpg, columna 2022, fila Envigado).',
+    '2024 (5,75): diagnóstico del POT, dimensión funcional (espacio público), tabla 39, pp. 86-87: https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002925/146211_8-dimension-funcional-_-espacio-publico.pdf',
+    'Contexto 2013 (4,16): Minambiente, Informe Nacional de Calidad Ambiental Urbana 2013, tabla 16, p. 41: https://www.minambiente.gov.co/wp-content/uploads/2021/06/Informe_Nacional_de_Calidad_Ambiental_Urbana_poblacion_100.000_y_500.000_habitantes._Ano_2013.pdf',
+    'Descartado 3,88 (LB 2023 del PDM 2024-2027): apéndice 9.1.2 del PDM, fila 129: https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx',
+    'Búsqueda completa (todos los años, valores descartados y motivos): outputs/revision_indicadores/PDM/espacio_verde_serie.md; verificación de QA: outputs/revision_indicadores/PDM/qa_espacio_verde.md.',
+]
+
+I1_ENC = ['Año de la votación', 'Votos', 'IPCM', 'Avance hacia 7 %', 'Fuente (documento y página)']
+I1_DATOS = [
+    ['**2017**', '8.221 votos', '**3,62 %** (oficial)', '0 % (línea base)', 'Planeación, Informe de Priorización Participativa del Presupuesto (11-oct-2017), p. 7 y 12'],
+    ['2018', '—', '—', '—', 'No publicado: por solicitar'],
+    ['2019', '0', '—', '—', 'No hubo votación: los recursos alcanzaron para todos los proyectos (informe de auditoría de la priorización 2019)'],
+    ['2020–2024', '—', '—', '—', 'No publicado: por solicitar (el documento de 2023 es una imagen escaneada)'],
+    ['2025', '10.662 votantes', '4,03 % (calculado con la población DANE: 264.637)', '12,1 %', 'Informe de gestión por dependencias 2025, p. 92 del PDF (votación del 11 al 24 de agosto)'],
+]
+I1_NOTA = ('IPCM = votos de la priorización del presupuesto participativo / población × 100. Avance = (IPCM − 3,62) / (7 − 3,62). '
+           '**El PDM 2024-2027 no tiene meta** de participación en el presupuesto participativo (solo «ejercicios realizados: 1 al año»), así que se usa como referente '
+           'el **7 %, tope de la escala oficial** con la que Planeación reparte los recursos (tramos de 1–2,99 %, 3–4,99 % y 5–6,99 %; informe de 2017, p. 6). '
+           '**Cuidado:** 2017 cuenta votos y 2025 votantes; la Alcaldía usa su propia población (el 3,62 % no sale exacto con el DANE). '
+           '**Recomendación para el informe:** solicitar a **Planeación** los votos y el IPCM de 2018 a 2024, total y por zona, la población de referencia y si cuentan votos o votantes.')
+I1_URLS = [
+    '2017 (8.221 votos; IPCM 3,62 %; escala de tramos en la p. 6): https://www.envigado.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/000288/14376_informepriorizacionparticipativadelpresupuesto11deoctubrede2017.pdf',
+    '2019 (sin votación): https://www.envigado.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/000106/5254_informe-ejecutivo-auditoria-priorizacion-participativa-del-presupuesto-2019.pdf',
+    '2025 (10.662 votantes, p. 92 del PDF): https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf',
+    'Sin meta en el PDM: apéndice 9.1.1 del plan indicativo, fila 539 («Ejercicios de presupuesto participativo realizados», 1 por año): https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx',
+    'Población 2025: DANE, proyección PPED 2018-2042 (264.637), la misma de las demás tasas (outputs/revision_indicadores/PDM/series_pdm.csv).',
 ]
 
 PC = [
     ['**I1** Incorporación de aportes', 'No hay inventario de procesos; el respaldo usaba los mismos datos de la fidelidad de PP',
-     '**Se reemplaza** por la votación del presupuesto participativo (IPCM = votos / población), para diferenciarlo de PP',
-     'Profe (diferenciar); Isabella y Claude', '2017 (3,62 %) y 2025 (10.662 votantes); 2019 sin votación; 2018–2024 por solicitar'],
+     '**Se reemplaza** por la votación del presupuesto participativo (IPCM = votos / población), para diferenciarlo de PP. '
+     'Avance desde la **línea base 2017 = 3,62 %** hacia el **referente 7 %** (tope de la escala oficial del IPCM)',
+     'Profe (diferenciar); Isabella y Claude; LB 2017 y referente 7 %: Isabella',
+     '2017: 3,62 % (oficial) · 2025: 4,03 % (10.662 votantes / población DANE): avance 12,1 %. 2019 sin votación; 2018–2024 por solicitar (ver cuadro de fuentes)'],
     ['**I2** Cobertura territorial', 'El dato principal solo existe para 2024–2025',
      '**Se mantiene**; respaldo: zonas con proyectos de PP', 'Profe; respaldo: Claude',
      '2024: 13/13; 2025: 12/13. Respaldo 2020–2025: 12/13 cada año (la zona 1 es industrial)'],
@@ -216,15 +265,15 @@ CS = [
 
 INDICES = [
     ['**ICPD-6** (PDM)', 'Bienestar = salud + logro educativo + servicios públicos; territorio = mortalidad vial + espacio verde + veedurías',
-     '2022 y 2024', 'Dudas 1 a 5: referentes de salud y veedurías, metas de otro universo. Espacio verde año por año'],
+     '2019, 2022 y 2024', 'Dudas 1 a 5: referentes de salud y veedurías, metas de otro universo. Espacio verde con un mismo método cada año'],
     ['**ISPC** (PC)', '0,30·I1 + 0,25·I2 + 0,20·I3 + 0,25·I4', 'Solo 2025', 'Dudas 6 a 8: I1, denominador de I2 y pesos'],
     ['**IREPP** (PP)', '0,20·EPP + 0,40·ejecución ≥ 90 % + 0,40·fidelidad', '2024 y 2025', 'Dudas 9 y 10. Resueltas, se puede construir ya'],
     ['**ICRCS** (CS)', '(DSI + PQRSDF + VRC + RPO) / 4', 'Ninguno sin respaldos', 'VRC sin dato principal y RPO 2025 incompleto. Dudas 12 a 14'],
 ]
 
 SOLICITAR = [
-    'Espacio público verde por habitante, año por año (AMVA o Planeación).',
-    'Votos de presupuesto participativo e IPCM por año y por zona, 2018–2024 (Planeación).',
+    'Espacio público verde urbano por habitante, año por año desde 2019 y con la metodología del AMVA (Planeación). Que Planeación lo mida cada año en el seguimiento del POT y la Secretaría de Medio Ambiente lo reporte en el PDM.',
+    'Votos de presupuesto participativo e IPCM por año y por zona, 2018–2024, con la población de referencia y si se cuentan votos o votantes (Planeación).',
     'Apropiación, compromisos y obligaciones por proyecto de presupuesto participativo, 2020–2023 (Hacienda o Planeación).',
     'Listado histórico completo de veedurías inscritas (Personería).',
     'Programación anual de la oferta formativa y actividades participativas por zona (Escuela de Formación, Participación).',
@@ -269,6 +318,13 @@ def doc_profe():
         if filas is PDM:
             doc.add_heading('Variables para construir el índice del PDM', level=2)
             tabla(doc, [6.0, 8.4, 3.8, 6.2], ['Componente', 'Variables', 'Años con datos', 'Meta para pasarlo a puntaje 0–100'], PDM_COMP)
+            doc.add_heading('Espacio público verde: datos y fuentes', level=2)
+            tabla(doc, [1.6, 2.6, 2.8, 7.6, 9.8], EV_ENC, EV_CORTES)
+            parrafo(doc, EV_NOTA)
+        if filas is PC:
+            doc.add_heading('I1, votación del presupuesto participativo: datos y fuentes', level=2)
+            tabla(doc, [2.6, 2.8, 4.4, 2.8, 11.8], I1_ENC, I1_DATOS)
+            parrafo(doc, I1_NOTA)
     doc.add_heading('5. ¿Se pueden construir los índices?', level=1)
     parrafo(doc, 'Todos los componentes tienen variables con datos públicos, pero ningún índice se puede calcular todavía sin resolver las dudas de abajo. '
                  'La matriz no permite calcular con componentes faltantes ni redistribuir pesos.')
@@ -305,10 +361,15 @@ DETALLE = {
             'Estado': 'Construible; falta decidir cómo usar una meta de otro universo (duda 4b).'}),
         ('Espacio público verde', {
             'Qué medía la matriz': 'Logro = espacio verde observado / meta del PDM (3,88 m² por habitante, estable).',
-            'Qué pasó y por qué': 'El 12-nov el profe cuestionó que diera 100 sin exigencia y propuso medir el avance desde la línea base del AMVA (4,66 m², 2022) hacia el referente de 9 m².',
-            'Datos': '2022: 4,66 (AMVA, tabla 39 del diagnóstico del POT); 2024: 5,75 (diagnóstico del POT). Avance 2024 ≈ 25 %. No hay variable de espacio verde en TerriData ni en los informes de gestión 2024–2025.',
-            'Limitaciones': 'Hay tres cifras que no coinciden (3,88 del PDM, 4,66 del AMVA y 5,75 del POT). Solo dos años.',
-            'Estado': 'Construible para 2022 y 2024. Para tener serie hay que solicitar el dato año por año.'}),
+            'Qué pasó y por qué': 'El 12-nov el profe cuestionó que diera 100 sin exigencia y propuso medir el avance desde la línea base del AMVA (4,66 m², 2022) hacia el referente de 9 m². '
+                                  'El 15-nov decidiste usar el espacio verde URBANO y tomar como línea base el corte de 2019 (4,54, AMVA), el primero con la metodología del AMVA, para ver la evolución en 2022 y 2024. '
+                                  'No se espera una serie continua: el dato no se publica cada año.',
+            'Datos': 'Espacio verde urbano en tres cortes: 2019: 4,54 (AMVA con la Universidad Nacional, Reporte ODS 11.7, tabla 4); 2022: 4,66 (AMVA con el Instituto Humboldt; tabla 39 del POT); 2024: 5,75 = 1.382.762 m² / 240.655 habitantes urbanos (diagnóstico del POT, tabla 39). Primer dato propio de Envigado: 2013, 4,16 (Minambiente, ICAU). Contexto: verde total 2024 = 69,41 (incluye las reservas rurales; el POT advierte que está distorsionado). No hay variable de espacio verde en TerriData.',
+            'Limitaciones': 'Los tres cortes no son comparables: distintos productores, poblaciones y delimitación (2019 incluye suelo de expansión; 2024 solo suelo urbano). El 4,54 no se puede reproducir con los datos del reporte. Se descartan el 3,88 del PDM (sin método declarado) y los 5,00 de 2020 y 2023 (autorreporte). El diagnóstico del POT da 4,22 en una página y 4,66 en su tabla 39.',
+            'Avance hacia 9 m² (línea base 2019 = 4,54)': '2019: 0 % · 2022: (4,66 − 4,54) / (9 − 4,54) = 2,7 % · 2024: (5,75 − 4,54) / (9 − 4,54) = 27,1 %. En valores: +0,12 m² (2019–2022) y +1,09 m² (2022–2024).',
+            'Fuentes (trazabilidad)': ' · '.join(EV_URLS),
+            'Recomendación para el informe': 'Solicitar a Planeación la serie completa desde 2019 con la metodología del AMVA. Proponer que Planeación la mida cada año en el seguimiento del POT (expediente municipal) y que la Secretaría de Medio Ambiente, responsable del indicador en el PDM, la reporte con ese mismo método.',
+            'Estado': 'Construible para 2019 (línea base), 2022 y 2024 como cortes, no como tendencia.'}),
         ('Veedurías ciudadanas inscritas (antes: implementación de procesos participativos)', {
             'Qué medía la matriz': 'Logro de implementación de los procesos de participación ciudadana (meta 100 %, Planeación). Era un autorreporte y no había cifra oficial.',
             'Qué pasó y por qué': 'Tus notas dicen «cambiar por número de veedurías ciudadanas»; confirmaste que era para este indicador, cuya categoría en la matriz es «Participación ciudadana».',
@@ -343,10 +404,14 @@ DETALLE = {
         ('I1: votación del presupuesto participativo (antes: incorporación de aportes)', {
             'Qué medía la matriz': 'Procesos cerrados que incorporaron un aporte ciudadano / procesos cerrados con aportes.',
             'Qué pasó y por qué': 'No hay inventario de procesos. El respaldo que se tenía usaba los mismos datos de la fidelidad de PP, y el profe pidió diferenciarlos. '
-                                  'Elegiste la opción A: la fidelidad se queda solo en PP y I1 pasa a medir la participación en la votación (IPCM, el índice oficial que usa la Alcaldía).',
-            'Datos': '2017: 8.221 votos, IPCM 3,62 % (informe de Planeación, 11-oct-2017). 2019: no hubo votación. 2025: 10.662 votantes (informe de gestión 2025).',
-            'Limitaciones': 'Solo dos años confiables. 2025 fue el primer año con la nueva plataforma web. El 3,62 % no se reproduce con la población del DANE.',
-            'Estado': 'Construible solo para algunos años; hay que solicitar los votos 2018–2024.'}),
+                                  'Elegiste la opción A: la fidelidad se queda solo en PP y I1 pasa a medir la participación en la votación (IPCM, el índice oficial que usa la Alcaldía). '
+                                  'El 15-nov elegiste medirlo como avance desde la línea base 2017 (3,62 %) hacia el referente de 7 %, el tope de la escala oficial del IPCM, porque el PDM no tiene meta.',
+            'Datos': '2017: 8.221 votos, IPCM 3,62 % (informe de Planeación, 11-oct-2017, p. 7 y 12). 2019: no hubo votación. 2025: 10.662 votantes (informe de gestión 2025, p. 92 del PDF; verificado el 15-nov) / 264.637 habitantes (DANE) = 4,03 %.',
+            'Avance hacia 7 % (línea base 2017 = 3,62 %)': '2017: 0 % · 2025: (4,03 − 3,62) / (7 − 3,62) = 12,1 %. Puntaje simple (IPCM / 7): 51,7 en 2017 y 57,6 en 2025.',
+            'Limitaciones': 'Solo dos años confiables. 2017 cuenta votos y 2025 votantes. El 3,62 % no se reproduce con la población del DANE (da 3,53 o 3,68): la Alcaldía usa su propia población. El 7 % es el tope de la tabla de reparto, no una meta adoptada.',
+            'Fuentes (trazabilidad)': ' · '.join(I1_URLS),
+            'Recomendación para el informe': 'Solicitar a Planeación los votos y el IPCM de 2018 a 2024, total y por zona, la población de referencia y si cuentan votos o votantes. Con los datos por zona, I1 se puede cruzar con I2.',
+            'Estado': 'Construible para 2017 (línea base) y 2025; hay que solicitar 2018–2024.'}),
         ('I2: cobertura territorial de la participación', {
             'Qué medía la matriz': 'Zonas con al menos una actividad participativa / 13 zonas oficiales.',
             'Qué pasó y por qué': 'Se mantiene (tu nota). Se agregó un respaldo con serie larga: zonas con proyectos de PP en los listados de la EFPC.',
@@ -414,7 +479,7 @@ DETALLE = {
 QA_RESUMEN = [
     '**Veredicto global:** la propuesta sirve como inventario de datos disponibles. Ningún índice se puede calcular todavía sin resolver las dudas del profe.',
     '**IREPP (PP)** es el más cercano: resueltas las dudas 9 y 10, se puede construir para 2024 y 2025.',
-    '**ICPD-6 (PDM)** saldría solo para 2022 y 2024 (por espacio verde); **ISPC (PC)** solo para 2025; **ICRCS (CS)** no tiene ningún año sin usar respaldos.',
+    '**ICPD-6 (PDM)** saldría solo para 2019, 2022 y 2024 (los cortes de espacio verde); **ISPC (PC)** solo para 2025; **ICRCS (CS)** no tiene ningún año sin usar respaldos.',
     '**No construibles con los datos públicos:** I1 original, CEP y CMA originales, VRC principal y logros de políticas públicas.',
     'QA corrigió 13 errores en los archivos de entrega (años, metas de otro universo, criterios de conteo, títulos de los listados de la EFPC). Ya están corregidos.',
     'Los datos crudos de 2024–2025 que usaron los cálculos anteriores no están en este Codespace (están en Google Drive); las descargas de hoy quedaron en data_raw_IIC/07_revision_nov2026/.',

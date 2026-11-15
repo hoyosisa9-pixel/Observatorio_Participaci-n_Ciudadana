@@ -26,7 +26,7 @@ Revisión indicador por indicador: `outputs/revision_indicadores/plan_revision.m
 | CS.PCS, CS.DSI, CS.VRC, CS.RPO, CS.ICRCS | CS | Se mantienen (definido); PCS es autorreporte (C6) | D12 | 2024–2025 |
 | PDM.SALUD Cobertura de salud | PDM | Se reemplaza (antes: aseguramiento subsidiado) | D3, D5 | 2020–2025 |
 | PDM.CM Mortalidad vial | PDM | Se mantiene; faltan 2025+ | D6 | 2024 |
-| PDM.CA Espacio público verde | PDM | Se ajusta (LB 4,66; referente 9) | D7 | 2022, medición 5,75 |
+| PDM.CA Espacio público verde | PDM | Se ajusta (urbano; LB 2019 = 4,54; referente 9) | D7, D30, D31 | cortes 2019, 2022, 2024 |
 | PDM.ILE Logro educativo | PDM | Se ajusta (cobertura neta + primera infancia) | D2, D8 | PI 2019–2025 |
 | PDM.SP Servicios públicos domiciliarios | PDM | Nuevo | D9 | por construir |
 | PDM.SEXTO | PDM | Pendiente (deporte/seguridad/vivienda/pobreza) | D10 | — |
@@ -72,11 +72,11 @@ DIM.CS  --contiene--> CS.PCS, CS.DSI, CS.VRC, CS.RPO --agrega--> CS.ICRCS
 DIM.PP  --contiene--> PP.FID, PP.EPP
 PDM.SALUD --reemplaza--> aseguramiento subsidiado ; --usa--> FUE.MINSALUD, FUE.DANE, FUE.TERRIDATA
 PDM.CM    --usa--> FUE.FORENSIS, FUE.POLICIA, FUE.DANE
-PDM.CA    --usa--> FUE.POT, FUE.AMVA, FUE.PDM ; --línea_base--> 4,66 m²/hab (2022) ; --referente--> 9 m²/hab
+PDM.CA    --usa--> FUE.POT, FUE.AMVA ; --línea_base--> 4,54 m²/hab (2019, AMVA-UNAL; D31) ; --referente--> 9 m²/hab ; --solicitar_a--> Planeación (serie anual, método AMVA)
 PDM.ILE   --usa--> FUE.TERRIDATA (cobertura neta, primera infancia), FUE.DANE ; --reemplaza_componente--> Saber 11
 PDM.SP    --usa--> FUE.TERRIDATA, FUE.SUI
 PC.VEED   --usa--> FUE.PERSONERIA, FUE.DATOSGOV
-PC.I1     --posible_doble_conteo--> PP.FID
+PC.I1     --se_reemplaza_por--> IPCM (votación PP; D28, D32) ; --línea_base--> 3,62 % (2017) ; --referente--> 7 % (tope de la escala del IPCM) ; --solicitar_a--> Planeación (2018–2024)
 PDM.CD    --candidato_a--> PDM.SEXTO
 CS.DSI    --depende_de--> metas seleccionadas del PDM (7)
 ```
@@ -90,6 +90,7 @@ CS.DSI    --depende_de--> metas seleccionadas del PDM (7)
 
 ## 6. Estado al cierre del 15-nov-2026 (las 4 dimensiones revisadas)
 - Entregas: `outputs/entrega_profe/` → `indicadores_cambios_y_datos_OCE.docx` (para el profe, cuadros sencillos) y `detalle_revision_indicadores_OCE.docx` (para Isabella). Se generan con `scripts/entregables/generar_entrega_profe.py` a partir de los .md de la misma carpeta (las dudas se leen de `dudas_para_el_profe.md`).
-- QA de construibilidad: `outputs/revision_indicadores/qa_construibilidad.md`. Ningún índice se puede calcular sin resolver las dudas. IREPP: 2024–2025 apenas se decidan las dudas 9 y 10. ICPD-6: 2022 y 2024. ISPC: 2025. ICRCS: ninguno sin respaldos.
+- QA de construibilidad: `outputs/revision_indicadores/qa_construibilidad.md`. Ningún índice se puede calcular sin resolver las dudas. IREPP: 2024–2025 apenas se decidan las dudas 9 y 10. ICPD-6: 2019, 2022 y 2024. ISPC: 2025. ICRCS: ninguno sin respaldos.
 - Cambios vigentes: PDM.CP → veedurías; PDM.CD → servicios públicos; PC.I1 → IPCM (votación PP); PC.I4 → lista fija de 3 procesos; PP.CEP → ejecución ≥ 90 % (propuesta); PP.CMA → fidelidad; CS.PCS → oportunidad de respuesta PQRSDF (propuesta).
 - Descargas de hoy con manifiesto: `data_raw_IIC/07_revision_nov2026/` (efpc_listados_pp, pp_votaciones, informes_gestion, pqrs, hacienda_ejecucion, terridata, policía, MEN). No se versionan en git.
+- PDM.CA --línea_base--> AMVA-UNAL 4,54 (2019; D31) ; --corte--> AMVA-Humboldt 4,66 (2022) ; --medición--> POT 5,75 (2024) ; --excluye--> autorreporte 5,00 (2020/2023) y 3,88 PDM ; primer dato 2013 (ICAU 4,16). Fuentes: Reporte ODS 11.7 AMVA/ONU-Hábitat 2022, ICAU 2013 Minambiente, PDM 2016-2019, PDM 2020-2023, evaluación del POT.

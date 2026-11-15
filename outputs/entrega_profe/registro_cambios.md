@@ -8,7 +8,7 @@ Origen: **Profe** = acordado en reunión · **Isabella** = decisión de Isabella
 |---|---|---|
 | 1 | Aseguramiento al régimen subsidiado → **cobertura de salud total** (2018–2025) | Profe e Isabella |
 | 2 | Mortalidad vial se mantiene, con **una sola fuente** (Policía, 2019–2025) | Profe; fuente única: Claude |
-| 3 | Espacio verde: avance de **4,66 hacia 9 m²/hab** (solo 2022 y 2024) | Profe |
+| 3 | Espacio verde urbano: avance desde la **línea base 2019 = 4,54 (AMVA)** hacia **9 m²/hab**; cortes 2022 (4,66) y 2024 (5,75), de métodos distintos; total 2024 solo como contexto. Se recomienda pedir la serie a Planeación y que la mida cada año | Avance hacia 9: profe (con LB 4,66 de 2022). Urbano y LB 2019: Isabella. Búsqueda de cortes: Claude |
 | 4 | Procesos participativos → **veedurías inscritas en la Personería** (2012–2026) | Profe e Isabella |
 | 5 | Cobertura deportiva → **servicios públicos** (acueducto, alcantarillado, aseo y energía; 2019–2024) | Profe e Isabella |
 | 6 | Logro educativo: Saber 11 → **cobertura neta**; primera infancia con **0–5 años** (2018–2024) | Profe e Isabella |
@@ -19,7 +19,7 @@ Origen: **Profe** = acordado en reunión · **Isabella** = decisión de Isabella
 | # | Cambio | Origen |
 |---|---|---|
 | 9 | I5 (sesiones) e I6 (participación virtual) **eliminados** | Profe |
-| 10 | I1 (incorporación de aportes) → **votación del presupuesto participativo (IPCM)**: se diferencia de la fidelidad de PP. Datos: 2017 y 2025; 2018–2024 por solicitar | Profe (diferenciar); Isabella y Claude |
+| 10 | I1 (incorporación de aportes) → **votación del presupuesto participativo (IPCM)**: se diferencia de la fidelidad de PP. Avance desde la **línea base 2017 = 3,62 %** hacia el **referente 7 %** (tope de la escala oficial del IPCM; el PDM no tiene meta). Datos: 2017 y 2025 (4,03 %, avance 12,1 %); 2018–2024 por solicitar a Planeación | Profe (diferenciar); Isabella y Claude; LB y referente: Isabella, por recomendación de Claude |
 | 11 | I2 (cobertura territorial) se mantiene; **respaldo nuevo**: zonas con proyectos de PP (listados EFPC), 2020–2025 (12/13 cada año; la zona 1 es industrial, según el profe) | Claude |
 | 12 | I3 (oferta formativa) se mantiene; respaldo: conteo de acciones 2023–2025 (17, 7, 20; criterios por unificar) | Claude |
 | 13 | I4 (publicación de resultados) se mantiene con una **lista fija de 3 procesos anuales** verificada por el observatorio (2021–2025) | Isabella y Claude |
