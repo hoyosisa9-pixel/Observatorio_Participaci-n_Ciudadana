@@ -1,0 +1,22 @@
+﻿candidato;anio;conteo;poblacion;tasa_100mil;tasa_TerriData;linea_base_2023_PDM;meta_2027_PDM;prom_movil_3a;fuente
+homicidio;2019;10;235397;4.25;4.2;3.7;2.7;;datos.gov.co m8fd-ahd9
+homicidio;2020;7;242371;2.89;2.9;3.7;2.7;;datos.gov.co m8fd-ahd9
+homicidio;2021;3;247649;1.21;1.2;3.7;2.7;2.78;datos.gov.co m8fd-ahd9
+homicidio;2022;9;251963;3.57;3.6;3.7;2.7;2.56;datos.gov.co m8fd-ahd9
+homicidio;2023;9;256042;3.52;3.5;3.7;2.7;2.77;datos.gov.co m8fd-ahd9
+homicidio;2024;12;260430;4.61;4.6;3.7;2.7;3.9;datos.gov.co m8fd-ahd9
+homicidio;2025;8;264637;3.02;3.0;3.7;2.7;3.72;datos.gov.co m8fd-ahd9
+hurto a personas;2019;1601;235397;680.13;680.1;632.5;631.5;;datos.gov.co 4rxi-8m8d
+hurto a personas;2020;1080;242371;445.6;445.6;632.5;631.5;;datos.gov.co 4rxi-8m8d
+hurto a personas;2021;1560;247649;629.92;629.9;632.5;631.5;;datos.gov.co 4rxi-8m8d
+hurto a personas;2022;1554;251963;616.76;616.8;632.5;631.5;;datos.gov.co 4rxi-8m8d
+hurto a personas;2023;1643;256042;641.69;641.7;632.5;631.5;;datos.gov.co 4rxi-8m8d
+hurto a personas;2024;1329;260430;510.31;510.3;632.5;631.5;;datos.gov.co 4rxi-8m8d
+hurto a personas;2025;1327;264637;501.44;497.7;632.5;631.5;;datos.gov.co 4rxi-8m8d
+lesiones personales;2019;376;235397;159.73;;113.7;112.7;;datos.gov.co jr6v-i33g
+lesiones personales;2020;239;242371;98.61;;113.7;112.7;;datos.gov.co jr6v-i33g
+lesiones personales;2021;318;247649;128.41;;113.7;112.7;;datos.gov.co jr6v-i33g
+lesiones personales;2022;316;251963;125.42;;113.7;112.7;;datos.gov.co jr6v-i33g
+lesiones personales;2023;294;256042;114.82;;113.7;112.7;;datos.gov.co jr6v-i33g
+lesiones personales;2024;245;260430;94.08;;113.7;112.7;;datos.gov.co jr6v-i33g
+lesiones personales;2025;265;264637;100.14;;113.7;112.7;;datos.gov.co jr6v-i33g
