@@ -9,7 +9,7 @@
 3. **Mismo universo.** Solo se usan metas del mismo universo que el dato. Si no hay, se usa el referente acordado.
 4. **Sin autorreportes del 100 %** como dato principal.
 5. **No redistribuir pesos.** Si falta un componente, el índice de ese año queda N/D y se anota en la brecha.
-6. **Cada indicador con todos sus años.** El indicador se construye con toda su serie disponible; el índice solo con los años en que coinciden todos sus componentes. Las tasas usan **una sola serie de población** en todo el periodo (la DANE de TerriData 2003–2026 o la PPED 2018–2042; no mezclar: en 2018 difieren, 238.221 frente a 228.836).
+6. **Cada indicador con todos sus años.** El indicador se construye con toda su serie disponible; el índice solo con los años en que coinciden todos sus componentes. Las tasas usan **una sola serie de población**: DANE vigente (VP, 8-ago-2025) = TerriData, dimensión «Descripción general», «Población total» (2018 = 228.836; 2024 = 260.430). El 238.221 de 2018 sale de otro indicador con el mismo nombre (dimensión «Censo 2005 y proyecciones DANE»): es la proyección antigua y **no se usa**. Filtrar siempre por dimensión (Analizador, 18-nov).
 7. **Salidas:** `outputs/construccion/<dimensión>/` con un CSV por dimensión (`;` y BOM): indicador, año, variables, valor, puntaje 0–100, referente, fuente, enlace, estado y brecha. Scripts en `scripts/construccion/`.
 
 ## Orden
@@ -29,17 +29,21 @@ Scripts: `scripts/construccion/pp_lectores.py` → `pp_cruce.py` → `pp_muestra
 
 Brecha: 1 de 6 años (2021). *2020: valor priorizado (en 2019 no hubo votación); 20 de 69 proyectos con contracrédito total ($3.627.742.979); obligación / valor votado = 46,34 %.
 
-## 2. Cumplimiento del PDM · ICPD-7 (D34)
-| Componente | Puntaje | Referente | Años | Brecha |
-|---|---|---|---|---|
-| Salud | cobertura total (afiliados / población DANE) | 100 % universal (D35) | **2012–2025** (afiliados en TerriData desde 2012) | — |
-| Logro educativo (ILE) | (min(100, 100·A/19) + min(100, 100·N/100,44)) / 2 | metas del PDM (D15) | **2015–2024** (cobertura neta desde 2005; primera infancia desde 2015) | 2025 sin cobertura neta; verificar la población 0–5 antes de 2018 |
-| Servicios públicos | promedio simple de 4 coberturas (D39) | **100 %** (D38) | 2019–2024 con las 4; acueducto, alcantarillado y aseo **2008–2024** | energía total solo desde 2019; 2025 |
-| Mortalidad vial | min(100, 100·7,33/O) (fórmula de la matriz) | **7,33** = reducción del PDM (−21,6 %) sobre la LB Policía 2019 (D47) | **2003–2025** (TerriData, con datos de la Policía) | 2023 atípico |
-| Espacio verde | (valor − 4,54) / (9 − 4,54) | LB 2019, referente 9 (D31) | 2019, 2022, 2024 | 2020, 2021, 2023, 2025 |
-| Veedurías | min(100, 100·valor/5,4) | LB = promedio 2019–2023 = **5,4** (D46) | 2012–2026 | listado incompleto (consecutivos 118–293) |
-| **Homicidio (nuevo)** | 100·2,7 / O, tope 100 | meta PDM 2,7 (Policía, mismo universo) | **2003–2025** (Policía y TerriData) | — |
-| **ICPD-7** | **promedio simple de los 7** (D48) | | **2019, 2022, 2024** (por espacio verde) | 2020, 2021, 2023, 2025 |
+## 2. Cumplimiento del PDM · ICPD-7 = promedio simple de 7 (D34, D48) — **CONSTRUIDO** (QA aprobado con observaciones, 18-nov)
+Script: `scripts/construccion/pdm_icpd7.py` (44 asserts; tarda unos 3 minutos porque lee la PPED cruda del DANE). Salida: `outputs/construccion/PDM/pdm_indicadores.csv`. Decisiones D57–D68. Población única = DANE VP (D61).
+
+| Componente | Serie | 2019 | 2022 | 2024 | Brecha |
+|---|---|---|---|---|---|
+| Salud (ref. 100 %) | 2012–2025 | 82,37 | 85,03 | 83,76 | 0/14 |
+| Logro educativo | 2015–2024 (2015–2018 con alerta) | 83,48 | 90,91 | 95,15 | 1/11 (2025) |
+| Servicios públicos (ref. 100 %) | 2019–2024 (2019 con alerta, D65) | 91,97 | 89,56 | 89,31 | 1/7 (2025) |
+| Mortalidad vial (ref. 7,33) | 2003–2025 | 78,43 | 63,69 | 95,45 | 0/23 |
+| Espacio verde (avance 4,54 → 9) | 2019, 2022, 2024 | 0,00 | 2,69 | 27,13 | 4/7 |
+| Veedurías (LB 5,4) | 2012–2025 | 37,04 | 74,07 | 18,52 | 19/52 consecutivos faltantes en 2019–2025 (D66) |
+| Homicidio (meta 2,7) | 2003–2025 | 63,56 | 75,59 | 58,60 | 0/23 |
+| **ICPD-7** | | **62,41 Naranja** | **68,79 Naranja** | **66,85 Naranja** | 4/7 años (2020, 2021, 2023 y 2025) |
+
+Fuentes archivadas con manifiesto en `data_raw_IIC/07_revision_nov2026/` (espacio_verde, dane_pped_edad, dane_vp_retroproyeccion, men_3y4sdmxy, personeria_jju5br3w, pdm_balance_educacion_2024). El 4,54 de 2019 se verificó visualmente en la tabla 4 del VMR del AMVA.
 
 ## 3. Participación ciudadana · ISPC = 0,30·I1 + 0,25·I2 + 0,20·I3 + 0,25·I4 (D42)
 | Indicador | Puntaje | Años | Brecha |

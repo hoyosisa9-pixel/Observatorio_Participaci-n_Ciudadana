@@ -102,3 +102,5 @@ CS.VRC    --se_reporta_como--> rango + brecha de información (D33, decidido; la
 - PDM.ICPD pasa a **7 componentes** (+ homicidio). PC.I2 con 12 zonas. Decidido el 18-nov: LB veedurías = promedio 2019–2023 (5,4); referente vial 7,33 (D47); ICPD-7 = promedio simple (D48); I3 según D49.
 - **PP CONSTRUIDO (18-nov)**: IREPP 2020 = 51,27; 2021 = N/D; 2022 = 85,51; 2023 = 89,15; 2024 = 93,56; 2025 = 95,83. Brecha 1/6. Se cruza el valor votado con la apropiación inicial de Hacienda, sumando por sufijo de 4 dígitos (cada sufijo tiene zona fija). Salidas en `outputs/construccion/PP/`. Siguiente: PDM (ICPD-7).
 PP.EPP, PP.EJ90, PP.FID, PP.IREPP --serie--> 2020, 2022–2025 ; --brecha--> 2021 (D56)
+- **PDM CONSTRUIDO (18-nov)**: ICPD-7 2019 = 62,41; 2022 = 68,79; 2024 = 66,85 (Naranja); brecha 4/7. Salidas en `outputs/construccion/PDM/`. Población única = DANE VP (TerriData «Descripción general»). Siguiente: Participación ciudadana (ISPC).
+PDM.ICPD7 --componentes--> SALUD, ILE, SP, CM, CA, VEED, HOM (1/7 cada uno) ; --años--> 2019, 2022, 2024
