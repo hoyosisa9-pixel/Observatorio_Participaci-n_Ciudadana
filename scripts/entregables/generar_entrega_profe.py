@@ -227,6 +227,28 @@ I1_URLS = [
     'Población 2025: DANE, proyección PPED 2018-2042 (264.637), la misma de las demás tasas (outputs/revision_indicadores/PDM/series_pdm.csv).',
 ]
 
+VRC_ENC = ['Año', 'Eventos', 'Con veeduría documentada', 'Sin veeduría', 'No se sabe', 'VRC mínimo', 'VRC máximo', 'Brecha de información']
+VRC_DATOS = [
+    ['2024', '3', '2', '0', '1 (audiencia del Alcalde)', '**66,7 %**', '100 %', '**33,3 %**'],
+    ['2025', '5', '1', '1', '3 (audiencia del Alcalde y Discapacidad S1 y S2)', '**20 %**', '80 %', '**60 %**'],
+]
+VRC_NOTA = ('**Cómo se construye con la brecha:** VRC mínimo = eventos con veeduría documentada / eventos (lo que no se sabe cuenta como no documentado; '
+            'coincide con el nombre del indicador, «presencia documentada»). VRC máximo = (documentada + no se sabe) / eventos. '
+            '**Brecha de información** = eventos sin soporte / eventos: dice cuánto del resultado depende de documentos que la Alcaldía no publica. '
+            'Para el índice se usaría el **mínimo**, siempre acompañado de la brecha. Eventos: audiencia del Alcalde y rendiciones sectoriales con acta o memoria '
+            '(Salud, Discapacidad, Víctimas). Con todos los eventos publicados: 2024: 50 %–100 % (brecha 50 %); 2025: 28,6 %–85,7 % (brecha 57,1 %). '
+            '**Para cerrar la brecha:** solicitar a la Alcaldía las listas de asistencia de cada evento con la casilla «¿pertenece a una veeduría? ¿cuál?»; '
+            'confirmar con la Personería que la veeduría esté inscrita, y que el observatorio asista a la audiencia del Alcalde y registre las veedurías presentes. '
+            '**Se deja así:** VRC se reporta cada año como rango, con la brecha al lado. La brecha también sirve para seguir la calidad de la información: se espera que **baje año a año** a medida que la Alcaldía publique las listas de asistencia y el observatorio lleve su propio registro, hasta que el mínimo y el máximo coincidan.')
+VRC_NECESITA = [
+    'Lista fija de eventos del año (denominador): audiencia del Alcalde y rendiciones sectoriales (Salud, Discapacidad, Víctimas, presupuesto participativo, grupos étnicos), '
+    'confirmada en enero con el cronograma de rendición de cuentas que publica la Alcaldía. La recoge el observatorio.',
+    'Lista de asistencia de cada evento con la casilla «¿pertenece a una veeduría? ¿cuál?». La produce la dependencia que organiza el evento (por confirmar quién coordina la rendición de cuentas en Envigado); la recoge el observatorio después de cada evento.',
+    'Listado de veedurías inscritas, para verificar que quien firma como veedor pertenece a una veeduría inscrita. Lo produce la Personería; el observatorio lo pide una vez al año.',
+    'Registro propio del observatorio: una fila por evento (fecha, dependencia, documento, enlace y veeduría: sí, no o sin soporte). Cierre al 31 de diciembre; búsqueda de documentos hasta el 31 de marzo (regla 17 de la guía).',
+    'Observación directa: que el observatorio asista a la audiencia del Alcalde y registre las veedurías presentes, porque es el evento que hoy queda sin dato.',
+]
+
 PC = [
     ['**I1** Incorporación de aportes', 'No hay inventario de procesos; el respaldo usaba los mismos datos de la fidelidad de PP',
      '**Se reemplaza** por la votación del presupuesto participativo (IPCM = votos / población), para diferenciarlo de PP. '
@@ -258,8 +280,9 @@ CS = [
      '**Se reemplaza** por la oportunidad de respuesta a las PQRSDF (atendidas a tiempo / recibidas)',
      'Isabella (no al autorreporte); reemplazo: Claude', '2020–2025 (informes trimestrales)'],
     ['**DSI** Información de seguimiento', 'Verificable; 0 % en 2024 y 2025', '**Se mantiene**; hay que actualizar la lista de metas del PDM', 'Profe', '2024–2025'],
-    ['**VRC** Veedurías en rendición de cuentas', 'En varios eventos no se sabe si hubo veeduría', '**Se mantiene**', 'Profe',
-     'Sin dato principal; respaldo 2024 (66,7 %) y 2025 (20 %)'],
+    ['**VRC** Veedurías en rendición de cuentas', 'En varios eventos no se sabe si hubo veeduría (incluida la audiencia del Alcalde): con la regla de la matriz queda N/D',
+     '**Se mantiene**, reportado como **rango** con la **brecha de información** al lado; la brecha debe bajar año a año (ver cuadro)', 'Profe; rango y brecha: Isabella, con la propuesta de Claude',
+     '2024: 66,7 %–100 % (brecha 33,3 %) · 2025: 20 %–80 % (brecha 60 %)'],
     ['**RPO** Respuesta a observaciones', 'El cuadro de 2025 está incompleto', '**Se mantiene**', 'Profe', '2024: 94,1 %; 2025 frágil; ampliable a 2021 y 2023'],
 ]
 
@@ -268,7 +291,7 @@ INDICES = [
      '2019, 2022 y 2024', 'Dudas 1 a 5: referentes de salud y veedurías, metas de otro universo. Espacio verde con un mismo método cada año'],
     ['**ISPC** (PC)', '0,30·I1 + 0,25·I2 + 0,20·I3 + 0,25·I4', 'Solo 2025', 'Dudas 6 a 8: I1, denominador de I2 y pesos'],
     ['**IREPP** (PP)', '0,20·EPP + 0,40·ejecución ≥ 90 % + 0,40·fidelidad', '2024 y 2025', 'Dudas 9 y 10. Resueltas, se puede construir ya'],
-    ['**ICRCS** (CS)', '(DSI + PQRSDF + VRC + RPO) / 4', 'Ninguno sin respaldos', 'VRC sin dato principal y RPO 2025 incompleto. Dudas 12 a 14'],
+    ['**ICRCS** (CS)', '(DSI + PQRSDF + VRC + RPO) / 4', '2024 (y 2025 si se completa RPO), con VRC mínimo y sumando los trimestres de PQRSDF', 'VRC como rango con brecha (duda 14) y RPO 2025 incompleto. Dudas 12 a 14'],
 ]
 
 SOLICITAR = [
@@ -279,7 +302,7 @@ SOLICITAR = [
     'Programación anual de la oferta formativa y actividades participativas por zona (Escuela de Formación, Participación).',
     'Inventario de procesos participativos con los aportes recibidos y la decisión tomada.',
     'Actas de recibo y personas atendidas por proyecto de presupuesto participativo.',
-    'Presencia de veedurías en las rendiciones de cuentas y cuadro completo de preguntas y respuestas de 2025.',
+    'Listas de asistencia de las rendiciones de cuentas 2024–2025, con la casilla de veeduría (Alcaldía), para cerrar la brecha de VRC; y cuadro completo de preguntas y respuestas de 2025.',
     'Clasificación de planteles en Saber 11 (Secretaría de Educación).',
     'Logros de políticas públicas: políticas vigentes, informes de seguimiento y metas cumplidas.',
 ]
@@ -325,6 +348,10 @@ def doc_profe():
             doc.add_heading('I1, votación del presupuesto participativo: datos y fuentes', level=2)
             tabla(doc, [2.6, 2.8, 4.4, 2.8, 11.8], I1_ENC, I1_DATOS)
             parrafo(doc, I1_NOTA)
+        if filas is CS:
+            doc.add_heading('VRC, veedurías en la rendición de cuentas: rango y brecha de información', level=2)
+            tabla(doc, [1.6, 2.0, 3.4, 2.4, 6.0, 2.8, 2.8, 3.4], VRC_ENC, VRC_DATOS)
+            parrafo(doc, VRC_NOTA)
     doc.add_heading('5. ¿Se pueden construir los índices?', level=1)
     parrafo(doc, 'Todos los componentes tienen variables con datos públicos, pero ningún índice se puede calcular todavía sin resolver las dudas de abajo. '
                  'La matriz no permite calcular con componentes faltantes ni redistribuir pesos.')
@@ -466,9 +493,18 @@ DETALLE = {
             'Datos': '2024: 0/7; 2025: 0/7. Con todo lo publicado hasta hoy: 2/7 en 2024.', 'Estado': 'Construible 2024–2025.'}),
         ('VRC: veedurías en la rendición de cuentas', {
             'Qué medía la matriz': 'Eventos de rendición de cuentas con veeduría documentada / eventos.',
-            'Qué pasó y por qué': 'Se mantiene, pero en varios eventos no se sabe si hubo veeduría.',
-            'Datos': 'Respaldo (sin mención = ausencia): 2024: 2/3 (66,7 %); 2025: 1/5 (20 %).',
-            'Limitaciones': 'Con la regla de la matriz no hay dato principal en ningún año.', 'Estado': 'No construible hoy sin respaldos.'}),
+            'Qué pasó y por qué': 'Se mantiene, pero en varios eventos no se sabe si hubo veeduría: la Alcaldía publica cuadros de preguntas o presentaciones, casi nunca el acta con asistentes. '
+                                  'La audiencia del Alcalde de 2024 y la de 2025 quedan sin dato. Con la regla de la matriz (presencia desconocida = N/D), VRC no tiene ningún año. '
+                                  'El 15-nov preguntaste cómo construirlo con la brecha y decidiste dejarlo así: se reporta como rango (mínimo y máximo) con la brecha de información al lado, y se espera que la información mejore año a año. Se le informa al profe, porque cambia la regla N/D de la matriz.',
+            'Datos': 'Eventos: audiencia del Alcalde + rendiciones sectoriales con acta o memoria. 2024: 3 eventos (2 con veeduría, 0 sin, 1 sin soporte) → 66,7 %–100 %, brecha 33,3 %. '
+                     '2025: 5 eventos (1 con, 1 sin, 3 sin soporte) → 20 %–80 %, brecha 60 %. Con todos los eventos publicados (sensibilidad): 2024: 8 eventos → 50 %–100 % (brecha 50 %); 2025: 7 → 28,6 %–85,7 % (brecha 57,1 %).',
+            'Cómo se construye': 'VRC mínimo = documentada / eventos (es el que entraría al índice; equivale al respaldo anterior «sin mención = ausencia»). VRC máximo = (documentada + sin soporte) / eventos. Brecha = sin soporte / eventos. '
+                                 'Clasificación por evento: outputs/indicadores/clasificacion_vrc.csv (con documento, página, enlace y cita). Cálculo: scripts/revision_indicadores/vrc_brecha.py → outputs/revision_indicadores/CS/vrc_brecha.csv.',
+            'Qué se necesita para seguir midiéndolo': ' · '.join(VRC_NECESITA),
+            'Limitaciones': 'El mínimo subestima si hubo veedores que no quedaron registrados. El universo cambia según qué eventos se cuenten (3 o 8 en 2024). Una invitación a veedores no prueba asistencia.',
+            'Cómo se hizo (nota de método)': 'Se revisaron los documentos publicados de cada evento de rendición de cuentas de 2024 y 2025 (actas, memorias, presentaciones, cuadros de preguntas y justificaciones). Cada evento se clasificó como «con veeduría» si el documento lo dice expresamente, «sin veeduría» si el documento integral del evento la describe sin veedurías, y «no se sabe» si el documento no permite saberlo. Una invitación no cuenta como asistencia. Con esa clasificación se calculan el mínimo, el máximo y la brecha.',
+            'Seguimiento': 'La brecha se reporta cada año y debe bajar: es la medida de cuánto mejora la información. Cuando la brecha llegue a 0, el mínimo y el máximo coinciden y VRC vuelve a ser un solo número, como pide la matriz.',
+            'Estado': 'Construible como rango para 2024 y 2025. Decisión de Isabella (15-nov); se le informa al profe en la duda 14.'}),
         ('RPO: respuesta a observaciones ciudadanas', {
             'Qué medía la matriz': 'Observaciones ciudadanas con respuesta de fondo publicada / observaciones.',
             'Qué pasó y por qué': 'Se mantiene.', 'Datos': '2024: 16/17 (94,12 %). 2025: cuadro incompleto (respaldo 1/2). Hay cuadros publicados de 2021 y 2023.',
@@ -480,7 +516,7 @@ QA_RESUMEN = [
     '**Veredicto global:** la propuesta sirve como inventario de datos disponibles. Ningún índice se puede calcular todavía sin resolver las dudas del profe.',
     '**IREPP (PP)** es el más cercano: resueltas las dudas 9 y 10, se puede construir para 2024 y 2025.',
     '**ICPD-6 (PDM)** saldría solo para 2019, 2022 y 2024 (los cortes de espacio verde); **ISPC (PC)** solo para 2025; **ICRCS (CS)** no tiene ningún año sin usar respaldos.',
-    '**No construibles con los datos públicos:** I1 original, CEP y CMA originales, VRC principal y logros de políticas públicas.',
+    '**No construibles con los datos públicos:** I1 original, CEP y CMA originales y logros de políticas públicas. VRC solo como rango con la brecha de información (propuesta).',
     'QA corrigió 13 errores en los archivos de entrega (años, metas de otro universo, criterios de conteo, títulos de los listados de la EFPC). Ya están corregidos.',
     'Los datos crudos de 2024–2025 que usaron los cálculos anteriores no están en este Codespace (están en Google Drive); las descargas de hoy quedaron en data_raw_IIC/07_revision_nov2026/.',
 ]

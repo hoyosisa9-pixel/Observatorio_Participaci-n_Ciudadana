@@ -79,6 +79,7 @@ PC.VEED   --usa--> FUE.PERSONERIA, FUE.DATOSGOV
 PC.I1     --se_reemplaza_por--> IPCM (votación PP; D28, D32) ; --línea_base--> 3,62 % (2017) ; --referente--> 7 % (tope de la escala del IPCM) ; --solicitar_a--> Planeación (2018–2024)
 PDM.CD    --candidato_a--> PDM.SEXTO
 CS.DSI    --depende_de--> metas seleccionadas del PDM (7)
+CS.VRC    --se_reporta_como--> rango + brecha de información (D33, decidido; la brecha debe bajar año a año) ; --necesita--> listas de asistencia (Alcaldía), veedurías inscritas (Personería), observación directa
 ```
 
 ## 5. Nodos: archivos clave
@@ -94,3 +95,10 @@ CS.DSI    --depende_de--> metas seleccionadas del PDM (7)
 - Cambios vigentes: PDM.CP → veedurías; PDM.CD → servicios públicos; PC.I1 → IPCM (votación PP); PC.I4 → lista fija de 3 procesos; PP.CEP → ejecución ≥ 90 % (propuesta); PP.CMA → fidelidad; CS.PCS → oportunidad de respuesta PQRSDF (propuesta).
 - Descargas de hoy con manifiesto: `data_raw_IIC/07_revision_nov2026/` (efpc_listados_pp, pp_votaciones, informes_gestion, pqrs, hacienda_ejecucion, terridata, policía, MEN). No se versionan en git.
 - PDM.CA --línea_base--> AMVA-UNAL 4,54 (2019; D31) ; --corte--> AMVA-Humboldt 4,66 (2022) ; --medición--> POT 5,75 (2024) ; --excluye--> autorreporte 5,00 (2020/2023) y 3,88 PDM ; primer dato 2013 (ICAU 4,16). Fuentes: Reporte ODS 11.7 AMVA/ONU-Hábitat 2022, ICAU 2013 Minambiente, PDM 2016-2019, PDM 2020-2023, evaluación del POT.
+
+## 7. Estado al 18-nov-2026: dudas respondidas, fase de CONSTRUCCIÓN
+- Respuestas del profe: D34–D45 en `decisiones.md`. Plan de construcción: `outputs/revision_indicadores/plan_construccion.md`.
+- Regla transversal: cada indicador e índice reporta su **brecha de información** (años o eventos sin dato).
+- PDM.ICPD pasa a **7 componentes** (+ homicidio). PC.I2 con 12 zonas. Decidido el 18-nov: LB veedurías = promedio 2019–2023 (5,4); referente vial 7,33 (D47); ICPD-7 = promedio simple (D48); I3 según D49.
+- **PP CONSTRUIDO (18-nov)**: IREPP 2020 = 51,27; 2021 = N/D; 2022 = 85,51; 2023 = 89,15; 2024 = 93,56; 2025 = 95,83. Brecha 1/6. Se cruza el valor votado con la apropiación inicial de Hacienda, sumando por sufijo de 4 dígitos (cada sufijo tiene zona fija). Salidas en `outputs/construccion/PP/`. Siguiente: PDM (ICPD-7).
+PP.EPP, PP.EJ90, PP.FID, PP.IREPP --serie--> 2020, 2022–2025 ; --brecha--> 2021 (D56)

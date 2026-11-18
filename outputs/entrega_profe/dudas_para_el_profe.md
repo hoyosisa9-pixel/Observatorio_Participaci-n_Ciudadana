@@ -25,4 +25,4 @@ Se van llenando a medida que revisamos cada dimensión.
 ## Control social
 12. **PCS.** Es un autorreporte que da 100 %. ¿Se reemplaza por la oportunidad de respuesta a las PQRSDF (serie 2020–2025, del sistema de registro de la Alcaldía)?
 13. **DSI.** ¿Se actualiza la lista de metas con la nueva selección del PDM?
-14. **VRC y RPO.** ¿Se extienden hacia atrás (VRC 2021–2023; RPO 2021 y 2023) con los documentos de rendición de cuentas publicados?
+14. **VRC y RPO.** En VRC, la mayoría de los eventos no dice si hubo veedurías (tampoco la audiencia del Alcalde), así que con la regla de la matriz queda N/D. Por eso se reporta como **rango con la brecha de información**: 2024: 66,7 %–100 % (brecha 33,3 %); 2025: 20 %–80 % (brecha 60 %), con el mínimo en el índice. La brecha debe bajar año a año a medida que mejore la información. ¿Está de acuerdo? ¿Y se extienden VRC y RPO hacia atrás (VRC 2021–2023; RPO 2021 y 2023) con los documentos publicados?

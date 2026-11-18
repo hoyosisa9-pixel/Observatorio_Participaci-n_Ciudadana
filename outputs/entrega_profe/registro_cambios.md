@@ -39,3 +39,4 @@ Origen: **Profe** = acordado en reunión · **Isabella** = decisión de Isabella
 | 19 | PCS (autorreporte, 100 %) → **oportunidad de respuesta a las PQRSDF** (2020–2025) | Isabella (no al autorreporte); reemplazo: Claude (por confirmar) |
 | 20 | DSI se mantiene; se **actualiza la lista de metas** con la nueva selección del PDM | Profe; actualización: Claude |
 | 21 | VRC y RPO se mantienen; se pueden extender hacia atrás con los documentos de rendición de cuentas | Profe; extensión: Claude (por confirmar) |
+| 22 | VRC se reporta como **rango con la brecha de información** (mínimo = veeduría documentada; máximo = documentada + sin soporte): 2024: 66,7 %–100 % (brecha 33,3 %); 2025: 20 %–80 % (brecha 60 %). Al índice entra el mínimo. Se anota qué se necesita para cerrar la brecha (listas de asistencia, Personería, observación directa) y que la brecha debe bajar año a año | Isabella (decidió dejarlo así); propuesta: Claude. Se le informa al profe |
