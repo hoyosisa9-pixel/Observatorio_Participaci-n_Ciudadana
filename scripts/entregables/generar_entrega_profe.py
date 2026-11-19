@@ -4,9 +4,11 @@
 2. outputs/entrega_profe/detalle_revision_indicadores_OCE.docx: para Isabella. Qué pasó con cada indicador, en detalle.
 
 Uso (desde la raíz, sin -I):  python3 scripts/entregables/generar_entrega_profe.py
-Contenido: outputs/entrega_profe/*.md y outputs/revision_indicadores/qa_construibilidad.md (15-nov-2026).
-Las dudas se leen de outputs/entrega_profe/dudas_para_el_profe.md. Todo es PROVISIONAL.
+Contenido: los resultados salen de outputs/construccion/{PDM,PC,PP,CS}/*_indicadores.csv (no se copian cifras a mano);
+los textos, de las decisiones (.claude/memoria/decisiones.md). Al final se verifica el contenido de los Word.
+El archivo outputs/entrega_profe/dudas_para_el_profe.md se verifica (todas respondidas), pero ya no se vuelca al Word. Todo es PROVISIONAL.
 """
+import csv
 import re
 from pathlib import Path
 
@@ -23,7 +25,7 @@ OUT = RAIZ / 'outputs' / 'entrega_profe'
 FUENTE = 'Cambria'
 GRIS = 'E7E6E6'
 AZUL = RGBColor(0x1F, 0x3A, 0x5F)
-FECHA = '15 de noviembre de 2026'
+FECHA = '19 de noviembre de 2026'
 
 
 # ------------------------------------------------------------------ utilidades de Word
@@ -147,220 +149,413 @@ def tabla(doc, anchos_cm, encabezado, filas, tam=8.5):
     return t
 
 
-# ------------------------------------------------------------------ contenido común
-ENC = ['Indicador original', 'Situación', 'Propuesta', 'Origen', 'Datos']
+
+
+# ------------------------------------------------------------------ datos de la construcción (CSV)
+CONS = RAIZ / 'outputs' / 'construccion'
+DIMS = {'PDM': 'pdm', 'PC': 'pc', 'PP': 'pp', 'CS': 'cs'}
+ANIO_MAX = 2025
+
+
+def cargar(dim):
+    ruta = CONS / dim / f'{DIMS[dim]}_indicadores.csv'
+    with open(ruta, encoding='utf-8-sig', newline='') as f:
+        return list(csv.DictReader(f, delimiter=';'))
+
+
+DATA = {d: cargar(d) for d in DIMS}
+
+
+def num(s):
+    try:
+        return float(str(s).strip().replace(',', '.'))
+    except ValueError:
+        return None
+
+
+def fmt(s, dec=2):
+    """Formatea un valor del CSV con coma decimal; los enteros llevan punto de miles."""
+    s = str(s).strip()
+    if re.fullmatch(r'-?\d+', s):
+        return f'{int(s):,}'.replace(',', '.')
+    x = num(s)
+    if x is None:
+        return s
+    return f'{x:.{dec}f}'.replace('.', ',')
+
+
+def filas(dim, codigo, tipo=None):
+    return [r for r in DATA[dim] if r['codigo'] == codigo and (tipo is None or r['tipo'] == tipo)]
+
+
+def anual(dim, codigo, tipo):
+    return [r for r in filas(dim, codigo, tipo) if r['anio'].isdigit() and int(r['anio']) <= ANIO_MAX]
+
+
+def con_dato(rs):
+    return [r for r in rs if num(r['valor']) is not None]
+
+
+def comprimir(anios):
+    anios = sorted(set(anios))
+    trozos, i = [], 0
+    while i < len(anios):
+        j = i
+        while j + 1 < len(anios) and anios[j + 1] == anios[j] + 1:
+            j += 1
+        trozos.append(str(anios[i]) if i == j else f'{anios[i]}–{anios[j]}')
+        i = j + 1
+    return ', '.join(trozos)
+
+
+def anios_dato(dim, codigo):
+    return comprimir([int(r['anio']) for r in con_dato(anual(dim, codigo, 'principal'))]) or 'ninguno'
+
+
+def maximo(dim, codigo, anio):
+    """Valor máximo del rango (fila CODIGO.MAX) si existe; solo PC y CS reportan rangos."""
+    if dim not in ('PC', 'CS'):
+        return None
+    for r in filas(dim, codigo + '.MAX'):
+        if r['anio'] == anio and num(r['valor']) is not None:
+            return r['valor']
+    return None
+
+
+def quitar_parentesis(s):
+    while True:
+        n = re.sub(r'\([^()]*\)', '', s)
+        if n == s:
+            return s
+        s = n
+
+
+COMP_PDM = {'Salud': 'Salud', 'ILE': 'Logro educativo', 'Servicios publicos': 'Servicios públicos',
+            'Mortalidad vial': 'Mortalidad vial', 'Espacio verde': 'Espacio verde',
+            'Veedurias': 'Veedurías', 'Homicidio': 'Homicidio'}
+
+
+def componentes_faltantes(dim, r):
+    """Lista legible de los componentes que faltan en un año del índice."""
+    b = quitar_parentesis(r['brecha'])
+    if dim == 'PDM':
+        resto = b.split('faltan:', 1)[1] if 'faltan:' in b else ''
+        return [COMP_PDM.get(x.strip(), x.strip()) for x in resto.split(';') if x.strip()]
+    if dim == 'PC':
+        resto = b.split('faltan', 1)[1] if 'faltan' in b else ''
+        return [x.strip() for x in resto.split(',') if x.strip()]
+    if dim == 'PP':
+        return ['EPP', 'EJ90', 'FID'] if 'tres componentes' in b else []
+    if dim == 'CS':
+        out = []
+        for x in re.findall(r'falta (\w+)', b):
+            if x == 'DSI':
+                out.append('DSI (no aplica antes de 2024)')
+            elif x == 'PQRSDF':
+                out.append('PQRSDF (portal no disponible)')
+            else:
+                out.append(x)
+        return out
+    return []
+
+
+INDICES_DEF = [
+    # nombre, dimensión, código, año inicial, año final, composición
+    ('ICPD-7 (Cumplimiento del PDM)', 'PDM', 'PDM.ICPD7', 2019, 2025,
+     'Promedio simple de 7 componentes: salud, logro educativo, servicios públicos, mortalidad vial, espacio verde, veedurías y homicidio.'),
+    ('ISPC (Participación ciudadana)', 'PC', 'PC.ISPC', 2020, 2025,
+     '0,30·I1 + 0,25·I2 + 0,20·I3 + 0,25·I4.'),
+    ('IREPP (Presupuesto participativo)', 'PP', 'PP.IREPP', 2020, 2025,
+     '0,20·EPP + 0,40·EJ90 + 0,40·FID.'),
+    ('ICRCS (Control social)', 'CS', 'CS.ICRCS', 2020, 2025,
+     '(DSI + PQRSDF + VRC + RPO) / 4.'),
+]
+SEMAFORO = 'Semáforo: Verde ≥ 90 · Amarillo 75 a < 90 · Naranja 50 a < 75 · Rojo < 50.'
+
+
+def datos_indice(dim, codigo, a0, a1):
+    """Filas [Año, Valor, Semáforo, Componentes que faltan] y (años con índice, años del periodo)."""
+    out, k = [], 0
+    rs = [r for r in anual(dim, codigo, 'indice') if a0 <= int(r['anio']) <= a1]
+    assert len(rs) == a1 - a0 + 1, (codigo, len(rs))
+    for r in rs:
+        v = num(r['valor'])
+        if v is not None:
+            k += 1
+            out.append([r['anio'], f'**{fmt(r["valor"])}**', r['semaforo'] or '—', 'Ninguno'])
+            continue
+        valor = 'N/D'
+        m = re.search(r'Rango posible segun PQRSDF.*?: (\d+\.\d+) \(P = 0\) a (\d+\.\d+)', r['nota'])
+        if m:
+            valor = f'N/D (entre {fmt(m.group(1))} y {fmt(m.group(2))} según PQRSDF)'
+        faltan = componentes_faltantes(dim, r)
+        assert faltan, (codigo, r['anio'], r['brecha'])
+        out.append([r['anio'], valor, '—', ', '.join(faltan)])
+    return out, k, len(rs)
+
+
+def linea_brecha(k, n):
+    pct = str(round((n - k) / n * 100, 1)).replace('.', ',')
+    return f'**Brecha:** años con índice / años del periodo = {k} de {n} (sin índice: {pct} %).'
+
+
+# ------------------------------------------------------------------ cuadros de indicadores por dimensión
+NOMBRES = {
+    'PDM': [('PDM.SALUD', 'Cobertura de salud (%)'), ('PDM.ILE', 'Logro educativo, ILE (0–100)'),
+            ('PDM.SP', 'Servicios públicos (%)'), ('PDM.CM', 'Mortalidad vial (por 100.000)'),
+            ('PDM.CA', 'Espacio verde urbano (m² por habitante)'), ('PDM.VEED', 'Veedurías inscritas (por año)'),
+            ('PDM.HOM', 'Homicidio (por 100.000)')],
+    'PC': [('PC.I1', 'I1 · Votación del presupuesto participativo (IPCM, %)'), ('PC.I2', 'I2 · Cobertura territorial (%)'),
+           ('PC.I3', 'I3 · Oferta formativa (%)'), ('PC.I4', 'I4 · Publicación de resultados (%)')],
+    'PP': [('PP.EPP', 'EPP · Ejecución presupuestal (%)'), ('PP.EJ90', 'EJ90 · Proyectos con ejecución ≥ 90 % (%)'),
+           ('PP.FID', 'FID · Fidelidad a lo votado (%)')],
+    'CS': [('CS.PQRSDF', 'PQRSDF · Oportunidad de respuesta (%)'), ('CS.DSI', 'DSI · Información de seguimiento (%)'),
+           ('CS.VRC', 'VRC · Veedurías en rendición de cuentas (%)'), ('CS.RPO', 'RPO · Respuesta a observaciones (%)')],
+}
+
+
+def ultimo_valor(dim, cod):
+    con = con_dato(anual(dim, cod, 'principal'))
+    if not con:
+        return 'Sin dato'
+    r = con[-1]
+    v, p, a = r['valor'], r['puntaje_0_100'], r['anio']
+    mx = maximo(dim, cod, a)
+    if mx is not None and num(mx) != num(v):
+        return f'{fmt(v)}–{fmt(mx)} (mín.–máx.; {a})'
+    if num(p) is not None and abs(num(p) - num(v)) > 0.005:
+        return f'{fmt(v)} (puntaje {fmt(p)}; {a})'
+    return f'{fmt(v)} ({a})'
+
+
+def texto_brecha(dim, cod, corto=True):
+    rs = filas(dim, cod + '.BRECHA', 'brecha')
+    if not rs:
+        return '—'
+    r = rs[0]
+    t = r['brecha'].replace('anios', 'años')
+    if corto and re.match(r'\d+ de \d+ (años|trimestres)', t):
+        t = t.split(';')[0]
+    if re.match(r'\d+ de \d+ años', t) and '%' not in t and '(' not in t and num(r['valor']) is not None:
+        t += f' ({fmt(r["valor"], 1)} %)'
+    return t
+
+
+def tabla_indicadores_dim(dim):
+    return [[nombre, anios_dato(dim, cod), ultimo_valor(dim, cod), texto_brecha(dim, cod)] for cod, nombre in NOMBRES[dim]]
+
+
+ENC_IND = ['Indicador', 'Años con dato', 'Último valor (puntaje)', 'Brecha de información']
+W_IND = [7.0, 4.4, 5.6, 6.8]
+
+
+# ------------------------------------------------------------------ cuadros de cambios (los mismos para los dos Word)
+ENC = ['Indicador original', 'Situación', 'Decisión', 'Origen', 'Datos']
+
+
+def serie(dim, cod, extra=''):
+    return f'{anios_dato(dim, cod)}{extra}'
+
 
 PDM = [
-    ['**Aseguramiento al régimen subsidiado**', 'El dato del subsidiado no era fácil de conseguir; la meta del PDM (99,5 %) es solo de ese régimen',
-     '**Se reemplaza** por la cobertura de salud total (afiliados / población DANE)', 'Profe (reunión 1) e Isabella; confirmado el 12-nov',
-     '2018–2025 (TerriData). Sin meta del mismo universo'],
-    ['**Mortalidad vial**', 'Forensis 2025 no se puede consultar y mezclar fuentes cambia la medida',
-     '**Se mantiene**, con una sola fuente: Policía Nacional', 'Profe; fuente única: Claude', '2019–2025. Meta 8 por 100.000, de Movilidad (otro universo)'],
+    ['**Aseguramiento al régimen subsidiado**', 'La meta del PDM (99,5 %) es solo del régimen subsidiado y ese dato no era fácil de conseguir',
+     '**Se reemplaza** por la cobertura de salud total (afiliados / población DANE). Referente: **100 %** (cobertura universal)',
+     'Profe (reuniones 1 y 2; referente 100 %)', serie('PDM', 'PDM.SALUD')],
+    ['**Mortalidad vial**', 'Mezclar fuentes cambia la medida; la meta de 8 es de Movilidad, otro universo',
+     '**Se mantiene** con una fuente (Policía Nacional). Referente del mismo universo: **7,33** por 100.000 (la reducción del PDM aplicada a la línea base 2019 de la Policía)',
+     'Profe (no mezclar universos); referente: Isabella', serie('PDM', 'PDM.CM')],
     ['**Espacio público verde**', 'Con la meta del PDM (3,88 m²) daba 100 sin exigencia',
-     '**Se ajusta**: avance desde la **línea base 2019 = 4,54 m²/hab** (AMVA) hacia el referente de 9 m²/hab', 'Profe (12-nov: avance hacia 9 m²); línea base 2019: Isabella',
-     'Cortes de espacio verde urbano: 2019: 4,54 (AMVA) · 2022: 4,66 (AMVA) · 2024: 5,75 (POT). Avance: 2,7 % en 2022 y 27,1 % en 2024. No hay dato anual (ver cuadro de fuentes)'],
+     '**Se ajusta**: avance desde la **línea base 2019 = 4,54 m²/hab** hacia **9 m²/hab**. Cortes de 2019, 2022 y 2024; se pide a Planeación la serie anual',
+     'Profe (hacia 9 m²); línea base 2019: Isabella', serie('PDM', 'PDM.CA', ' (cortes de estudios distintos)')],
     ['**Implementación de procesos participativos**', 'No hay cifra ni método oficial publicado',
-     '**Se reemplaza** por el número anual de veedurías inscritas en la Personería', 'Profe (notas de reunión) e Isabella',
-     '2012–2026 (datos.gov.co). El listado parece incompleto'],
+     '**Se reemplaza** por las veedurías inscritas en la Personería, con línea base **5,4** al año (promedio 2019–2023)',
+     'Profe e Isabella', serie('PDM', 'PDM.VEED', '; el listado parece incompleto')],
     ['**Cobertura deportiva**', 'No hay tasa oficial del Índer',
-     '**Se reemplaza** por servicios públicos: acueducto, alcantarillado, aseo y energía (promedio simple)', 'Profe (12-nov) e Isabella',
-     '2019–2024 (TerriData). Meta 99,9 %, de otro universo'],
+     '**Se reemplaza** por servicios públicos: promedio simple de acueducto, alcantarillado, aseo y energía. Referente: **100 %**',
+     'Profe e Isabella', serie('PDM', 'PDM.SP', '; 2019 con alerta de comparabilidad')],
     ['**Índice de logro educativo**', 'La clasificación de planteles en Saber 11 no es pública',
-     '**Se ajusta**: Saber 11 → cobertura neta; se conserva primera infancia (0–5 años)', 'Profe (reunión 1 y 12-nov) e Isabella',
-     '2018–2024 (TerriData, MinEducación)'],
-    ['— Sexta medida', 'Quedó abierta el 12-nov', 'Ver duda 1', 'Profe', 'Homicidio, hurto y lesiones personales 2019–2025 (Policía)'],
-    ['— Logros de políticas públicas', 'Dimensión para el observatorio futuro', 'Solo variables por solicitar', 'Profe (reunión 1)', 'Sin datos'],
+     '**Se ajusta**: Saber 11 → cobertura neta; se conserva primera infancia (0–5 años). Promedio simple', 'Profe e Isabella',
+     serie('PDM', 'PDM.ILE', '; 2015–2018 con alerta')],
+    ['**Sexta medida**', 'Quedó abierta el 12-nov',
+     '**Se agrega homicidio como 7.º componente** (seguridad). Meta del PDM 2,7 por 100.000 (Policía, mismo universo). El índice pasa a ICPD-7: promedio simple, 1/7 cada uno',
+     'Profe', serie('PDM', 'PDM.HOM')],
+    ['**Logros de políticas públicas**', 'Dimensión para el observatorio futuro', 'Solo variables por solicitar', 'Profe', 'Sin datos'],
 ]
 
-PDM_COMP = [
-    ['Cobertura de salud', 'Afiliados y población', '2018–2025', 'No: la del PDM es solo del subsidiado'],
-    ['Logro educativo', 'Cobertura neta, niños atendidos y población de 0–5 años', '2018–2024', 'Sí (19 % y 100,44 %)'],
-    ['Servicios públicos', 'Coberturas de acueducto, alcantarillado, aseo y energía', '2019–2024', 'Sí, 99,9 %, pero de otro universo (el aseo no tiene)'],
-    ['Mortalidad vial', 'Muertes en tránsito y población', '2019–2025', 'Sí, 8 por 100.000, pero de otro universo'],
-    ['Espacio verde urbano', 'm² verdes urbanos por habitante', '**2019 (línea base), 2022 y 2024** (cortes de distintos estudios)', 'Referente 9 m² (no se usa la meta del PDM de 3,88)'],
-    ['Veedurías (en vez de procesos participativos)', 'Veedurías inscritas por año', '2012–2026', 'No hay meta en el PDM'],
+PC = [
+    ['**I1** Incorporación de aportes', 'No hay inventario de procesos; el respaldo repetía los datos de la fidelidad de PP',
+     '**Se reemplaza** por la votación del presupuesto participativo (IPCM = votos / población). Avance desde la **línea base 2017 = 3,68 %** hacia **7 %** (tope de la escala oficial)',
+     'Profe (diferenciar de PP); Isabella (línea base y referente)', serie('PC', 'PC.I1', '; 2018 sin votación')],
+    ['**I2** Cobertura territorial', 'El dato principal solo existe para 2024–2025',
+     '**Se mantiene**, con **12 zonas** (la zona 1 es industrial). 2025 con alerta: falta la lista de asambleas por zona', 'Profe', serie('PC', 'PC.I2')],
+    ['**I3** Oferta formativa', 'Solo 2025 tiene denominador, y es reconstruido',
+     '**Se mantiene**: 2025 = **21 de 25** acciones. Respaldo: número de acciones para la ciudadanía (2023–2025)', 'Profe; Isabella', serie('PC', 'PC.I3')],
+    ['**I4** Publicación de resultados', 'No hay inventario oficial de procesos cerrados',
+     '**Se mantiene** con una **lista fija de 3 procesos** que el observatorio verifica en el portal. 2025 como rango (falta la rendición de PP)',
+     'Profe e Isabella', serie('PC', 'PC.I4')],
+    ['**I5** e **I6**', '—', '**Eliminados**', 'Profe (reunión 1)', '—'],
 ]
 
+PP = [
+    ['**EPP** Ejecución presupuestal', 'Hay dato de Hacienda por proyecto', '**Se mantiene**. Sin el rubro de déficit fiscal', 'Profe', serie('PP', 'PP.EPP', ' (2021 sin dato)')],
+    ['**CEP** Entrega de proyectos', 'No hay actas de recibo; «terminado» solo existe como autorreporte',
+     '**Se reemplaza** por **EJ90**: proyectos con ejecución ≥ 90 % (Hacienda). «Terminados» queda solo como respaldo', 'Profe', serie('PP', 'PP.EJ90')],
+    ['**CMA** Metas de atención', 'El plan de acción mide actividades, no personas', '**Se reemplaza** por **FID**: fidelidad a lo votado', 'Profe', serie('PP', 'PP.FID')],
+    ['**IREPP**', 'Serie corta (solo 2024–2025)', 'Pesos 20/40/40. La serie se amplía a **2020–2025**; 2021 queda sin dato (solo 39 de 89 proyectos se pudieron verificar)',
+     'Profe (pesos); Isabella (serie)', '2020–2025'],
+]
+
+CS = [
+    ['**PCS** Promoción del control social', 'Autorreporte: 1 de 1 estrategia = 100 %',
+     '**Se reemplaza** por **PQRSDF**: oportunidad de respuesta (atendidas en términos / recibidas)', 'Profe; Isabella (no al autorreporte)',
+     'Sin dato: los informes del portal de la Alcaldía no están disponibles'],
+    ['**DSI** Información de seguimiento', 'La lista de metas estaba desactualizada',
+     '**Se mantiene** con **10 metas** de resultado del PDM; rango (mín.–máx.) con brecha', 'Profe', serie('CS', 'CS.DSI')],
+    ['**VRC** Veedurías en rendición de cuentas', 'En varios eventos no se sabe si hubo veeduría',
+     '**Se mantiene**, como **rango** (mín.–máx.) con la **brecha de información**; al índice entra el mínimo', 'Profe; Isabella', serie('CS', 'CS.VRC')],
+    ['**RPO** Respuesta a observaciones', 'El cuadro de 2025 es corto',
+     '**Se mantiene**; 2021 como rango; 2025 con alerta', 'Profe', serie('CS', 'CS.RPO')],
+]
+
+# Espacio verde: cortes y fuentes (los avances salen del CSV)
 EV_ENC = ['Año', 'm² por habitante', 'Avance hacia 9 m²', 'Quién lo midió', 'Fuente (documento, tabla y página)']
-EV_CORTES = [
-    ['**2019**', '**4,54**', '0 % (línea base)', 'Área Metropolitana (AMVA) con la Universidad Nacional, estudio de conectividad ecológica (2020)',
-     'Reporte Metropolitano Voluntario ODS 11.7, AMVA y ONU-Hábitat (2022), tabla 4, p. 24'],
-    ['2022', '4,66', '2,7 %', 'AMVA con el Instituto Humboldt, actualización del Plan Maestro de Espacios Públicos Verdes Urbanos',
-     'Nota del Instituto Humboldt (2023), gráfico por municipio; repetido en el diagnóstico del POT, tabla 39, pp. 86-87'],
-    ['2024', '5,75', '27,1 %', 'Alcaldía de Envigado, diagnóstico de la revisión del POT (criterio del AMVA, inventario propio)',
-     'Diagnóstico del POT, dimensión funcional (espacio público), tabla 39, pp. 86-87: 1.382.762 m² / 240.655 habitantes urbanos (DANE 2024)'],
-]
+
+
+def ev_cortes():
+    av = {r['anio']: r['puntaje_0_100'] for r in con_dato(anual('PDM', 'PDM.CA', 'principal'))}
+    val = {r['anio']: r['valor'] for r in con_dato(anual('PDM', 'PDM.CA', 'principal'))}
+    assert (val['2019'], val['2022'], val['2024']) == ('4.54', '4.66', '5.75'), val
+    return [
+        ['**2019**', f'**{fmt(val["2019"])}**', '0 % (línea base)', 'Área Metropolitana (AMVA) con la Universidad Nacional (2020)',
+         'Reporte Metropolitano Voluntario ODS 11.7, AMVA y ONU-Hábitat (2022), tabla 4, p. 24'],
+        ['2022', fmt(val['2022']), f'{fmt(av["2022"], 1)} %', 'AMVA con el Instituto Humboldt',
+         'Instituto Humboldt (2023); diagnóstico del POT, tabla 39, pp. 86-87'],
+        ['2024', fmt(val['2024']), f'{fmt(av["2024"], 1)} %', 'Alcaldía de Envigado (diagnóstico del POT, criterio del AMVA)',
+         'Diagnóstico del POT, tabla 39, pp. 86-87: 1.382.762 m² / 240.655 habitantes urbanos'],
+    ]
+
+
+EV_NOTA_CORTA = ('Son cortes de estudios distintos, no una serie anual. Se solicita a Planeación la serie completa desde 2019 con el método del AMVA, '
+                 'para que la mida cada año en el seguimiento del POT.')
 EV_NOTA = ('Avance = (valor del año − 4,54) / (9 − 4,54). Son **cortes de estudios distintos, no una serie anual**: el dato no se publica cada año '
            'y el de 2024 usa otro inventario, así que parte del avance puede deberse al cambio de método. '
            '**Recomendación para el informe:** solicitar a **Planeación** la serie completa desde 2019 con la metodología del AMVA, y proponer que '
            '**Planeación la mida cada año** en el seguimiento del POT (expediente municipal), con el mismo método, y que la **Secretaría de Medio Ambiente** '
            'la reporte en el seguimiento del PDM. Se descartan el 3,88 del PDM (sin fuente ni método), los 5,00 de 2020 y 2023 (autorreporte) y el '
-           'verde total 2024 (69,41, incluye las reservas rurales).')
+           'verde total 2024 (69,41, incluye las reservas rurales). Con la población de la VP de 2024 el valor sería 5,54 (nota de sensibilidad).')
 EV_URLS = [
     '2019 (4,54): Reporte ODS 11.7, AMVA y ONU-Hábitat (2022), tabla 4, p. 24, y tabla 5, p. 25: https://urbanpolicyplatform.org/wp-content/uploads/2023/06/VMR-EPV-VALLE-DE-ABURRA.pdf',
-    '2022 (4,66): Instituto Humboldt (2023), https://www.humboldt.org.co/noticias/espacios-publicos-verdes-urbanos-en-el-valle-de-aburra-un-reto-de-conservacion '
-    '(gráfico: https://cdn.prod.website-files.com/64df6dd37ac6a0dbb9d03cb3/6591f459139e1daa37e628c9_Instituto-Humboldt-plan.jpg, columna 2022, fila Envigado).',
+    '2022 (4,66): Instituto Humboldt (2023), https://www.humboldt.org.co/noticias/espacios-publicos-verdes-urbanos-en-el-valle-de-aburra-un-reto-de-conservacion',
     '2024 (5,75): diagnóstico del POT, dimensión funcional (espacio público), tabla 39, pp. 86-87: https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002925/146211_8-dimension-funcional-_-espacio-publico.pdf',
-    'Contexto 2013 (4,16): Minambiente, Informe Nacional de Calidad Ambiental Urbana 2013, tabla 16, p. 41: https://www.minambiente.gov.co/wp-content/uploads/2021/06/Informe_Nacional_de_Calidad_Ambiental_Urbana_poblacion_100.000_y_500.000_habitantes._Ano_2013.pdf',
     'Descartado 3,88 (LB 2023 del PDM 2024-2027): apéndice 9.1.2 del PDM, fila 129: https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx',
-    'Búsqueda completa (todos los años, valores descartados y motivos): outputs/revision_indicadores/PDM/espacio_verde_serie.md; verificación de QA: outputs/revision_indicadores/PDM/qa_espacio_verde.md.',
+    'Búsqueda completa: outputs/revision_indicadores/PDM/espacio_verde_serie.md; verificación de QA: outputs/revision_indicadores/PDM/qa_espacio_verde.md.',
 ]
 
-I1_ENC = ['Año de la votación', 'Votos', 'IPCM', 'Avance hacia 7 %', 'Fuente (documento y página)']
-I1_DATOS = [
-    ['**2017**', '8.221 votos', '**3,62 %** (oficial)', '0 % (línea base)', 'Planeación, Informe de Priorización Participativa del Presupuesto (11-oct-2017), p. 7 y 12'],
-    ['2018', '—', '—', '—', 'No publicado: por solicitar'],
-    ['2019', '0', '—', '—', 'No hubo votación: los recursos alcanzaron para todos los proyectos (informe de auditoría de la priorización 2019)'],
-    ['2020–2024', '—', '—', '—', 'No publicado: por solicitar (el documento de 2023 es una imagen escaneada)'],
-    ['2025', '10.662 votantes', '4,03 % (calculado con la población DANE: 264.637)', '12,1 %', 'Informe de gestión por dependencias 2025, p. 92 del PDF (votación del 11 al 24 de agosto)'],
-]
-I1_NOTA = ('IPCM = votos de la priorización del presupuesto participativo / población × 100. Avance = (IPCM − 3,62) / (7 − 3,62). '
-           '**El PDM 2024-2027 no tiene meta** de participación en el presupuesto participativo (solo «ejercicios realizados: 1 al año»), así que se usa como referente '
-           'el **7 %, tope de la escala oficial** con la que Planeación reparte los recursos (tramos de 1–2,99 %, 3–4,99 % y 5–6,99 %; informe de 2017, p. 6). '
-           '**Cuidado:** 2017 cuenta votos y 2025 votantes; la Alcaldía usa su propia población (el 3,62 % no sale exacto con el DANE). '
-           '**Recomendación para el informe:** solicitar a **Planeación** los votos y el IPCM de 2018 a 2024, total y por zona, la población de referencia y si cuentan votos o votantes.')
-I1_URLS = [
-    '2017 (8.221 votos; IPCM 3,62 %; escala de tramos en la p. 6): https://www.envigado.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/000288/14376_informepriorizacionparticipativadelpresupuesto11deoctubrede2017.pdf',
-    '2019 (sin votación): https://www.envigado.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/000106/5254_informe-ejecutivo-auditoria-priorizacion-participativa-del-presupuesto-2019.pdf',
-    '2025 (10.662 votantes, p. 92 del PDF): https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/003058/152890_2025informegestiondependencias.pdf',
-    'Sin meta en el PDM: apéndice 9.1.1 del plan indicativo, fila 539 («Ejercicios de presupuesto participativo realizados», 1 por año): https://alcaldia-municipal-de-envigado-en-antioquia.micolombiadigital.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/002340/116989_apendice91planindicativo27052024.xlsx',
-    'Población 2025: DANE, proyección PPED 2018-2042 (264.637), la misma de las demás tasas (outputs/revision_indicadores/PDM/series_pdm.csv).',
-]
-
-VRC_ENC = ['Año', 'Eventos', 'Con veeduría documentada', 'Sin veeduría', 'No se sabe', 'VRC mínimo', 'VRC máximo', 'Brecha de información']
-VRC_DATOS = [
-    ['2024', '3', '2', '0', '1 (audiencia del Alcalde)', '**66,7 %**', '100 %', '**33,3 %**'],
-    ['2025', '5', '1', '1', '3 (audiencia del Alcalde y Discapacidad S1 y S2)', '**20 %**', '80 %', '**60 %**'],
-]
-VRC_NOTA = ('**Cómo se construye con la brecha:** VRC mínimo = eventos con veeduría documentada / eventos (lo que no se sabe cuenta como no documentado; '
-            'coincide con el nombre del indicador, «presencia documentada»). VRC máximo = (documentada + no se sabe) / eventos. '
-            '**Brecha de información** = eventos sin soporte / eventos: dice cuánto del resultado depende de documentos que la Alcaldía no publica. '
-            'Para el índice se usaría el **mínimo**, siempre acompañado de la brecha. Eventos: audiencia del Alcalde y rendiciones sectoriales con acta o memoria '
-            '(Salud, Discapacidad, Víctimas). Con todos los eventos publicados: 2024: 50 %–100 % (brecha 50 %); 2025: 28,6 %–85,7 % (brecha 57,1 %). '
-            '**Para cerrar la brecha:** solicitar a la Alcaldía las listas de asistencia de cada evento con la casilla «¿pertenece a una veeduría? ¿cuál?»; '
-            'confirmar con la Personería que la veeduría esté inscrita, y que el observatorio asista a la audiencia del Alcalde y registre las veedurías presentes. '
-            '**Se deja así:** VRC se reporta cada año como rango, con la brecha al lado. La brecha también sirve para seguir la calidad de la información: se espera que **baje año a año** a medida que la Alcaldía publique las listas de asistencia y el observatorio lleve su propio registro, hasta que el mínimo y el máximo coincidan.')
 VRC_NECESITA = [
-    'Lista fija de eventos del año (denominador): audiencia del Alcalde y rendiciones sectoriales (Salud, Discapacidad, Víctimas, presupuesto participativo, grupos étnicos), '
-    'confirmada en enero con el cronograma de rendición de cuentas que publica la Alcaldía. La recoge el observatorio.',
-    'Lista de asistencia de cada evento con la casilla «¿pertenece a una veeduría? ¿cuál?». La produce la dependencia que organiza el evento (por confirmar quién coordina la rendición de cuentas en Envigado); la recoge el observatorio después de cada evento.',
-    'Listado de veedurías inscritas, para verificar que quien firma como veedor pertenece a una veeduría inscrita. Lo produce la Personería; el observatorio lo pide una vez al año.',
-    'Registro propio del observatorio: una fila por evento (fecha, dependencia, documento, enlace y veeduría: sí, no o sin soporte). Cierre al 31 de diciembre; búsqueda de documentos hasta el 31 de marzo (regla 17 de la guía).',
-    'Observación directa: que el observatorio asista a la audiencia del Alcalde y registre las veedurías presentes, porque es el evento que hoy queda sin dato.',
-]
-
-PC = [
-    ['**I1** Incorporación de aportes', 'No hay inventario de procesos; el respaldo usaba los mismos datos de la fidelidad de PP',
-     '**Se reemplaza** por la votación del presupuesto participativo (IPCM = votos / población), para diferenciarlo de PP. '
-     'Avance desde la **línea base 2017 = 3,62 %** hacia el **referente 7 %** (tope de la escala oficial del IPCM)',
-     'Profe (diferenciar); Isabella y Claude; LB 2017 y referente 7 %: Isabella',
-     '2017: 3,62 % (oficial) · 2025: 4,03 % (10.662 votantes / población DANE): avance 12,1 %. 2019 sin votación; 2018–2024 por solicitar (ver cuadro de fuentes)'],
-    ['**I2** Cobertura territorial', 'El dato principal solo existe para 2024–2025',
-     '**Se mantiene**; respaldo: zonas con proyectos de PP', 'Profe; respaldo: Claude',
-     '2024: 13/13; 2025: 12/13. Respaldo 2020–2025: 12/13 cada año (la zona 1 es industrial)'],
-    ['**I3** Oferta formativa', 'Solo 2025 tiene denominador, y es reconstruido',
-     '**Se mantiene**; respaldo: número de acciones realizadas', '—', 'Tasa 2025: 83,3 %. Conteo 2023–2025: 17, 7 y 20 (criterios por unificar)'],
-    ['**I4** Publicación de resultados', 'No hay inventario oficial de procesos cerrados',
-     '**Se mantiene** con una lista fija de 3 procesos anuales que el observatorio verifica en el portal', 'Isabella y Claude', '2021–2025'],
-    ['**I5** e **I6**', '—', '**Eliminados**', 'Profe (reunión 1)', '—'],
-]
-
-PP = [
-    ['**EPP** Ejecución presupuestal', 'Hay dato de Hacienda por proyecto', '**Se mantiene**', 'Profe', '2024: 98,7 %; 2025: 98,8 %'],
-    ['**CEP** Entrega de proyectos', 'No hay actas de recibo; «terminado» solo existe como autorreporte',
-     '**Se reemplaza** por la ejecución según los proyectos que sí se hicieron. Propuesta: proyectos con ejecución ≥ 90 % (Hacienda); terminados como respaldo',
-     'Profe; variante verificable: Claude', '2024: 96 %; 2025: 93,4 %'],
-    ['**CMA** Metas de atención', 'El plan de acción mide actividades, no personas', '**Se reemplaza** por la fidelidad a lo votado', 'Profe',
-     '2024: 76,5 %; 2025: 95,1 %'],
-    ['Respaldos', '—', 'Fidelidad en dinero, tasa de compromiso y equidad entre zonas', 'Claude (aceptado)', '2024–2025'],
-]
-
-CS = [
-    ['**PCS** Promoción del control social', 'Autorreporte: 1 de 1 estrategia = 100 % en 2024 y 2025',
-     '**Se reemplaza** por la oportunidad de respuesta a las PQRSDF (atendidas a tiempo / recibidas)',
-     'Isabella (no al autorreporte); reemplazo: Claude', '2020–2025 (informes trimestrales)'],
-    ['**DSI** Información de seguimiento', 'Verificable; 0 % en 2024 y 2025', '**Se mantiene**; hay que actualizar la lista de metas del PDM', 'Profe', '2024–2025'],
-    ['**VRC** Veedurías en rendición de cuentas', 'En varios eventos no se sabe si hubo veeduría (incluida la audiencia del Alcalde): con la regla de la matriz queda N/D',
-     '**Se mantiene**, reportado como **rango** con la **brecha de información** al lado; la brecha debe bajar año a año (ver cuadro)', 'Profe; rango y brecha: Isabella, con la propuesta de Claude',
-     '2024: 66,7 %–100 % (brecha 33,3 %) · 2025: 20 %–80 % (brecha 60 %)'],
-    ['**RPO** Respuesta a observaciones', 'El cuadro de 2025 está incompleto', '**Se mantiene**', 'Profe', '2024: 94,1 %; 2025 frágil; ampliable a 2021 y 2023'],
-]
-
-INDICES = [
-    ['**ICPD-6** (PDM)', 'Bienestar = salud + logro educativo + servicios públicos; territorio = mortalidad vial + espacio verde + veedurías',
-     '2019, 2022 y 2024', 'Dudas 1 a 5: referentes de salud y veedurías, metas de otro universo. Espacio verde con un mismo método cada año'],
-    ['**ISPC** (PC)', '0,30·I1 + 0,25·I2 + 0,20·I3 + 0,25·I4', 'Solo 2025', 'Dudas 6 a 8: I1, denominador de I2 y pesos'],
-    ['**IREPP** (PP)', '0,20·EPP + 0,40·ejecución ≥ 90 % + 0,40·fidelidad', '2024 y 2025', 'Dudas 9 y 10. Resueltas, se puede construir ya'],
-    ['**ICRCS** (CS)', '(DSI + PQRSDF + VRC + RPO) / 4', '2024 (y 2025 si se completa RPO), con VRC mínimo y sumando los trimestres de PQRSDF', 'VRC como rango con brecha (duda 14) y RPO 2025 incompleto. Dudas 12 a 14'],
+    'Lista fija de eventos del año (denominador): audiencia del Alcalde y rendiciones sectoriales, confirmada en enero con el cronograma de rendición de cuentas. La recoge el observatorio.',
+    'Lista de asistencia de cada evento con la casilla «¿pertenece a una veeduría? ¿cuál?». La produce la dependencia que organiza el evento; la recoge el observatorio.',
+    'Listado de veedurías inscritas, para verificar que quien firma como veedor pertenece a una veeduría inscrita (Personería, una vez al año).',
+    'Registro propio del observatorio: una fila por evento (fecha, dependencia, documento, enlace y veeduría: sí, no o sin soporte).',
+    'Observación directa: que el observatorio asista a la audiencia del Alcalde y registre las veedurías presentes.',
 ]
 
 SOLICITAR = [
-    'Espacio público verde urbano por habitante, año por año desde 2019 y con la metodología del AMVA (Planeación). Que Planeación lo mida cada año en el seguimiento del POT y la Secretaría de Medio Ambiente lo reporte en el PDM.',
-    'Votos de presupuesto participativo e IPCM por año y por zona, 2018–2024, con la población de referencia y si se cuentan votos o votantes (Planeación).',
-    'Apropiación, compromisos y obligaciones por proyecto de presupuesto participativo, 2020–2023 (Hacienda o Planeación).',
-    'Listado histórico completo de veedurías inscritas (Personería).',
-    'Programación anual de la oferta formativa y actividades participativas por zona (Escuela de Formación, Participación).',
-    'Inventario de procesos participativos con los aportes recibidos y la decisión tomada.',
-    'Actas de recibo y personas atendidas por proyecto de presupuesto participativo.',
-    'Listas de asistencia de las rendiciones de cuentas 2024–2025, con la casilla de veeduría (Alcaldía), para cerrar la brecha de VRC; y cuadro completo de preguntas y respuestas de 2025.',
-    'Clasificación de planteles en Saber 11 (Secretaría de Educación).',
+    'Votos de presupuesto participativo de 2019, 2020 y 2024, y desde 2018 por zona (Planeación).',
+    'Población de referencia del IPCM y si se cuentan votos o votantes (Planeación).',
+    'Lista de asambleas por zona de 2025, para el indicador de cobertura territorial (Subdirección de Participación Ciudadana).',
+    'Programación anual de la Escuela de Formación (oferta formativa programada, 2020–2024).',
+    'REC rural de 2016 a 2020 (cobertura de servicios públicos): hoy esos años tienen rural = 0 (Planeación).',
+    'Espacio verde urbano año por año desde 2019 con el método del AMVA (Planeación, en el seguimiento del POT).',
+    'Listado completo de veedurías inscritas (Personería): el listado público parece incompleto.',
+    'Plan de acción 2021 con los códigos de proyecto de presupuesto participativo, o el decreto de liquidación o las fichas BPIN (Planeación).',
+    'Informes trimestrales de PQRSDF 2020–2025 (Secretaría General), si el portal sigue sin responder.',
+    'Listas de asistencia de las rendiciones de cuentas, con la casilla de veeduría (Alcaldía), para cerrar la brecha de VRC.',
+    'Rendición de cuentas del presupuesto participativo 2025 (se hará en el último trimestre de 2026).',
     'Logros de políticas públicas: políticas vigentes, informes de seguimiento y metas cumplidas.',
 ]
 
+# Decisiones: (D, tema, decisión, origen, va en el Word del profe)
+DECISIONES = [
+    ('D34, D48', 'Índice del PDM', 'Siete componentes: salud, logro educativo, servicios públicos, mortalidad vial, espacio verde, veedurías y homicidio como séptimo (seguridad). Promedio simple: cada uno pesa 1/7.', 'Profe (7 componentes); Isabella (promedio simple)', True),
+    ('D35', 'Referente de salud', '100 % (cobertura universal), porque la meta del PDM (99,5 %) es solo del régimen subsidiado.', 'Profe', True),
+    ('D36, D46, D68', 'Referente de veedurías', 'Línea base = promedio de 2019 a 2023 = 5,4 veedurías al año. Puntaje = 100 × valor / 5,4, con tope 100.', 'Profe (línea base); Isabella (5,4)', True),
+    ('D31, D37, D59', 'Espacio verde', 'Línea base 2019 = 4,54 (AMVA) hacia 9 m²/hab; cortes 2019, 2022 y 2024 (5,75, valor publicado). Se pide a Planeación la serie anual con el método del AMVA.', 'Profe (hacia 9); Isabella (línea base 2019, urbano)', True),
+    ('D38, D47', 'Metas de otro universo', 'No se usan. Servicios públicos: referente 100 %. Mortalidad vial: 7,33 por 100.000 = la reducción del PDM (8 / 10,2) aplicada a la línea base 2019 de la Policía (9,35).', 'Profe (no mezclar); Isabella (7,33)', True),
+    ('D39, D50, D65', 'Servicios públicos', 'Promedio simple de las 4 coberturas desde 2019. Acueducto, alcantarillado y aseo desde 2008 solo como contexto. 2019 se mantiene, con alerta (el REC rural de 2016–2020 no es comparable).', 'Profe; Isabella', True),
+    ('D15, D16, D27, D57', 'Logro educativo', 'Promedio simple de cobertura neta y primera infancia (0–5 años). 2015–2018 con alerta de comparabilidad.', 'Isabella', True),
+    ('D58, D63', 'Homicidio', 'Se mantiene la meta 2,7 del PDM (misma fuente y universo: Policía). Incluye el feminicidio. Nota: la línea base 3,7 del PDM usó otra población.', 'Profe (meta); Isabella', True),
+    ('D60', 'Semáforo', 'El mismo para todas las dimensiones: Verde ≥ 90, Amarillo 75 a < 90, Naranja 50 a < 75, Rojo < 50.', 'Propuesta aceptada', True),
+    ('D61, D62, D64, D66', 'Población y veedurías (método)', 'Población única: DANE vigente (8-ago-2025). Brecha de veedurías = consecutivos que faltan en el año / (listados + faltantes).', 'Propuesta aceptada; Isabella', False),
+    ('D32, D40, D69', 'I1: votación de PP', 'Se reemplaza por el IPCM (votos / población). Línea base 2017 = 3,68 % con población DANE (la cifra oficial, 3,62 %, queda en nota); referente 7 %. El año es el de la votación.', 'Profe; Isabella', True),
+    ('D41, D73', 'I2: zonas', '12 zonas (sin la zona 1, industrial). 2025 = 12/12 con alerta: es un agregado de la Alcaldía; se solicita la lista de asambleas por zona.', 'Profe; Isabella', True),
+    ('D29, D40, D70, D74', 'I4: lista fija', 'Tres procesos: votación de PP, rendición de cuentas del Alcalde y rendición de PP. 2025 como rango (mín. 2/3, máx. 3/3); se actualiza cuando se publique la rendición de PP.', 'Profe; Isabella', True),
+    ('D42', 'Pesos del ISPC', 'Se mantienen: 30/25/20/25.', 'Profe', True),
+    ('D49, D72', 'I3: oferta formativa', 'Tasa solo en 2025: 21/25 = 84,00 (denominador reconstruido; se cuenta el diplomado en Gestión Pública). Respaldo: conteo 17, 7 y 20 acciones para la ciudadanía.', 'Profe; Isabella', True),
+    ('D71', 'Consulta del portal', 'Se autoriza consultar el portal de la Alcaldía (incluida su API) para los votos de PP y archivar las noticias como fuente.', 'Isabella', False),
+    ('D43', 'EJ90 en lugar de CEP', 'Principal: proyectos con ejecución ≥ 90 % (Hacienda, verificable). «Terminados» (autorreporte) solo como respaldo.', 'Profe', True),
+    ('D24', 'FID en lugar de CMA', 'Fidelidad a lo votado: proyectos cuya apropiación coincide con el valor votado (±1 %) / proyectos votados.', 'Profe', True),
+    ('D44', 'Pesos del IREPP', 'Se mantienen: 20/40/40.', 'Profe', True),
+    ('D44, D53, D56', 'Serie de PP', 'Se calcula 2020–2025 y se reporta la brecha. Un año se calcula solo si se verifica al menos el 50 % de sus proyectos: 2021 queda sin dato (39 de 89).', 'Profe; Isabella', True),
+    ('D51, D52, D54, D55', 'Reglas de cruce de PP', 'Se excluye el rubro de déficit fiscal (2.3.7.06). Llave de cruce: valor votado = apropiación inicial; los cruces dudosos cuentan como no verificados.', 'Isabella', False),
+    ('D45, D78, D82', 'PQRSDF en lugar de PCS', 'Oportunidad de respuesta (atendidas en términos / total). El año se arma con informes que cubran 12 meses sin repetirse; principal: sistema BPMS.', 'Profe; Isabella', True),
+    ('D45, D75, D79', 'DSI', 'Lista de 10 metas de resultado del PDM, como rango (mín. = valores con fecha de publicación verificada) con brecha. Años 2024 y 2025.', 'Profe; Isabella', True),
+    ('D33, D45, D77, D81', 'VRC', 'Rango: mínimo = veeduría documentada / eventos (entra al índice); máximo suma los eventos sin soporte; la brecha debe bajar año a año. Se extiende a 2021–2023 cuando vuelva el portal.', 'Profe; Isabella', True),
+    ('D76, D80', 'RPO', '2025 = 1/2 con alerta (cuadro corto). 2021 como rango (84,62–100). Universo: audiencia del Alcalde, sin felicitaciones.', 'Isabella', True),
+    ('D45', 'Brecha de información', 'Siempre se reporta: años sin dato / años del periodo. Un índice se calcula solo si están todos sus componentes; no se redistribuyen pesos.', 'Profe', True),
+]
 
-def leer_dudas():
-    """Devuelve [(sección, [texto])] desde dudas_para_el_profe.md."""
-    secciones, actual = [], None
-    for linea in (OUT / 'dudas_para_el_profe.md').read_text(encoding='utf-8').splitlines():
-        if linea.startswith('## '):
-            actual = (linea[3:].strip(), [])
-            secciones.append(actual)
-        elif actual and re.match(r'^\d+b?\. ', linea):
-            actual[1].append(linea.strip())
-        elif actual and linea.strip().startswith('- ') and actual[1]:
-            actual[1][-1] += ' ' + linea.strip()[2:]
-    return [s for s in secciones if s[1]]
+
+# ------------------------------------------------------------------ bloques reutilizables
+def bloque_indices(doc, anchos=(2.2, 6.4, 2.8, 7.2)):
+    """Un cuadro por índice: Año | Valor | Semáforo | Componentes que faltan."""
+    parrafo(doc, 'Un índice se calcula solo en los años en que están todos sus componentes; no se redistribuyen pesos. ' + SEMAFORO)
+    for nombre, dim, cod, a0, a1, formula in INDICES_DEF:
+        doc.add_heading(nombre, level=2)
+        parrafo(doc, f'{formula} Periodo: {a0}–{a1}.')
+        filas_, k, n = datos_indice(dim, cod, a0, a1)
+        brecha_csv = filas(dim, cod + '.BRECHA', 'brecha')[0]['brecha']
+        assert f'{n - k} de {n}' in brecha_csv, (cod, k, n, brecha_csv)
+        tabla(doc, list(anchos), ['Año', 'Valor', 'Semáforo', 'Componentes que faltan'], filas_, tam=9)
+        parrafo(doc, linea_brecha(k, n))
+        if cod == 'CS.ICRCS':
+            parrafo(doc, '**Falta PQRSDF** porque los archivos del portal de la Alcaldía no están disponibles (el servidor da error desde el 19-nov). '
+                         'Se muestra el rango posible de 2024 y 2025 según el valor que tome PQRSDF (de 0 a 100). Se completa cuando el portal responda.')
+        if cod == 'PC.ISPC':
+            mx = filas('PC', 'PC.ISPC.MAX')[0]
+            parrafo(doc, f'En 2025, I4 entra con su mínimo (2/3). Cuando se publique la rendición de PP 2025, el ISPC sería {fmt(mx["valor"])}.')
+
+
+def cuadro_indicadores(doc, dim, titulo='Indicadores: datos disponibles', anchos=None):
+    doc.add_heading(titulo, level=2)
+    tabla(doc, anchos or W_IND, ENC_IND, tabla_indicadores_dim(dim), tam=9)
 
 
 # ------------------------------------------------------------------ documento 1: para el profe
+TITULOS = (('PDM', '1. Cumplimiento del Plan de Desarrollo (PDM)', PDM), ('PC', '2. Participación ciudadana', PC),
+           ('PP', '3. Presupuesto participativo', PP), ('CS', '4. Control social', CS))
+
+
 def doc_profe():
     doc = nuevo_documento(horizontal=True)
-    doc.add_paragraph(style='Title').add_run('Indicadores del Observatorio: cambios y datos disponibles')
+    doc.add_paragraph(style='Title').add_run('Indicadores del Observatorio: cambios y resultados')
     parrafo(doc, f'Isabella Hoyos Álvarez · {FECHA} · Resultados **provisionales**')
-    parrafo(doc, 'Revisión de los indicadores de la matriz, dimensión por dimensión, según lo acordado en las reuniones. '
-                 'Criterios: que haya **serie en el tiempo**, que los datos sean **públicos y encontrables** sin solicitarlos a Planeación, '
-                 'que **no se use autorreporte** y que la meta sea del **mismo universo** que el dato. '
-                 'Donde no había datos, se buscó una variable parecida que sí los tuviera.')
-    # sin la columna «Origen»: es solo para la trazabilidad de Isabella (va en el documento detallado)
+    parrafo(doc, 'Cambios acordados en la matriz y resultados de la construcción de los cuatro índices. '
+                 'Criterios: serie en el tiempo, datos públicos, sin autorreporte y meta del mismo universo que el dato.')
+    # el Word del profe no lleva la columna «Origen» (va solo en el documento detallado)
     sin_origen = [c for c in range(len(ENC)) if ENC[c] != 'Origen']
-    w = [4.8, 6.2, 7.6, 5.8]
-    for titulo, filas in (('1. Cumplimiento del Plan de Desarrollo (PDM)', PDM), ('2. Participación ciudadana', PC),
-                          ('3. Presupuesto participativo', PP), ('4. Control social', CS)):
+    w = [4.6, 5.6, 9.2, 4.4]
+    for dim, titulo, filas_ in TITULOS:
         doc.add_heading(titulo, level=1)
-        tabla(doc, w, [ENC[c] for c in sin_origen], [[f[c] for c in sin_origen] for f in filas])
-        if filas is PDM:
-            doc.add_heading('Variables para construir el índice del PDM', level=2)
-            tabla(doc, [6.0, 8.4, 3.8, 6.2], ['Componente', 'Variables', 'Años con datos', 'Meta para pasarlo a puntaje 0–100'], PDM_COMP)
-            doc.add_heading('Espacio público verde: datos y fuentes', level=2)
-            tabla(doc, [1.6, 2.6, 2.8, 7.6, 9.8], EV_ENC, EV_CORTES)
-            parrafo(doc, EV_NOTA)
-        if filas is PC:
-            doc.add_heading('I1, votación del presupuesto participativo: datos y fuentes', level=2)
-            tabla(doc, [2.6, 2.8, 4.4, 2.8, 11.8], I1_ENC, I1_DATOS)
-            parrafo(doc, I1_NOTA)
-        if filas is CS:
-            doc.add_heading('VRC, veedurías en la rendición de cuentas: rango y brecha de información', level=2)
-            tabla(doc, [1.6, 2.0, 3.4, 2.4, 6.0, 2.8, 2.8, 3.4], VRC_ENC, VRC_DATOS)
-            parrafo(doc, VRC_NOTA)
-    doc.add_heading('5. ¿Se pueden construir los índices?', level=1)
-    parrafo(doc, 'Todos los componentes tienen variables con datos públicos, pero ningún índice se puede calcular todavía sin resolver las dudas de abajo. '
-                 'La matriz no permite calcular con componentes faltantes ni redistribuir pesos.')
-    tabla(doc, [3.4, 8.8, 3.6, 8.6], ['Índice', 'Componentes con los cambios', 'Años con todos los componentes', 'Qué falta'], INDICES)
-    doc.add_heading('6. Dudas para decidir', level=1)
-    for seccion, items in leer_dudas():
-        doc.add_heading(seccion, level=2)
-        for it in items:
-            escribir(doc.add_paragraph(), it)
+        tabla(doc, w, [ENC[c] for c in sin_origen], [[f[c] for c in sin_origen] for f in filas_])
+        cuadro_indicadores(doc, dim)
+        if dim == 'PDM':
+            doc.add_heading('Espacio verde: cortes y fuentes', level=2)
+            tabla(doc, [1.4, 2.6, 2.8, 7.0, 10.0], EV_ENC, ev_cortes())
+            parrafo(doc, EV_NOTA_CORTA)
+    doc.add_heading('5. Resultados de los índices', level=1)
+    bloque_indices(doc)
+    doc.add_heading('6. Decisiones tomadas', level=1)
+    tabla(doc, [5.0, 18.8], ['Tema', 'Decisión'], [[f'**{t}**', d] for _, t, d, _, v in DECISIONES if v], tam=9)
     doc.add_heading('7. Variables por solicitar (informe futuro)', level=1)
     vinetas(doc, SOLICITAR)
     ruta = OUT / 'indicadores_cambios_y_datos_OCE.docx'
@@ -369,192 +564,201 @@ def doc_profe():
 
 
 # ------------------------------------------------------------------ documento 2: detalle para Isabella
-DETALLE = {
-    'Cumplimiento del Plan de Desarrollo (PDM)': [
-        ('Cobertura de salud (antes: aseguramiento al régimen subsidiado)', {
-            'Qué medía la matriz': 'Logro = 100 × cobertura observada del régimen subsidiado / meta (99,5 %). Línea base 99,5 % en 2022.',
-            'Qué pasó y por qué': 'En la reunión 1 el profe dijo que, si el dato no estaba fácil, se reemplazara por discapacidad, inclusión o cobertura de salud. '
-                                  'Elegiste la cobertura total, que cubre a toda la población. El 12-nov se confirmó, con la advertencia de que la meta debe ser del mismo universo.',
-            'Datos': 'Afiliados al SGSSS (contributivo + subsidiado + especiales) / población DANE (una sola proyección). TerriData, archivo completo de Envigado. '
-                     '2018: 82,71 % · 2019: 82,37 · 2020: 82,29 · 2021: 85,21 · 2022: 85,03 · 2023: 84,23 · 2024: 83,76 · 2025: 83,06.',
-            'Limitaciones': 'La única meta del PDM es del subsidiado (99,5 %), así que no sirve para la cobertura total. Falta decidir el referente (duda 2).',
-            'Estado': 'Construible en cuanto se decida el referente.'}),
-        ('Mortalidad vial', {
-            'Qué medía la matriz': 'Logro de reducción frente a la meta de 8 muertes por 100.000 habitantes (línea base 10,2 en 2023, Secretaría de Movilidad).',
-            'Qué pasó y por qué': 'Se mantiene (12-nov). Se usa solo la Policía Nacional en toda la serie: Forensis 2025 no se puede consultar y mezclar fuentes cambia la medida (decisión de control de calidad).',
-            'Datos': 'Muertes en accidentes de tránsito en Envigado (datos.gov.co, ha6j-pa2r) / población DANE. Tasas: 2019: 9,35 · 2020: 4,95 · 2021: 8,48 · '
-                     '2022: 11,51 · 2023: 16,79 · 2024: 7,68 · 2025: 11,34.',
-            'Limitaciones': 'La meta 8 es de Movilidad, otro universo. El salto de 2023 (43 muertes) no tiene explicación en los datos.',
-            'Estado': 'Construible; falta decidir cómo usar una meta de otro universo (duda 4b).'}),
-        ('Espacio público verde', {
-            'Qué medía la matriz': 'Logro = espacio verde observado / meta del PDM (3,88 m² por habitante, estable).',
-            'Qué pasó y por qué': 'El 12-nov el profe cuestionó que diera 100 sin exigencia y propuso medir el avance desde la línea base del AMVA (4,66 m², 2022) hacia el referente de 9 m². '
-                                  'El 15-nov decidiste usar el espacio verde URBANO y tomar como línea base el corte de 2019 (4,54, AMVA), el primero con la metodología del AMVA, para ver la evolución en 2022 y 2024. '
-                                  'No se espera una serie continua: el dato no se publica cada año.',
-            'Datos': 'Espacio verde urbano en tres cortes: 2019: 4,54 (AMVA con la Universidad Nacional, Reporte ODS 11.7, tabla 4); 2022: 4,66 (AMVA con el Instituto Humboldt; tabla 39 del POT); 2024: 5,75 = 1.382.762 m² / 240.655 habitantes urbanos (diagnóstico del POT, tabla 39). Primer dato propio de Envigado: 2013, 4,16 (Minambiente, ICAU). Contexto: verde total 2024 = 69,41 (incluye las reservas rurales; el POT advierte que está distorsionado). No hay variable de espacio verde en TerriData.',
-            'Limitaciones': 'Los tres cortes no son comparables: distintos productores, poblaciones y delimitación (2019 incluye suelo de expansión; 2024 solo suelo urbano). El 4,54 no se puede reproducir con los datos del reporte. Se descartan el 3,88 del PDM (sin método declarado) y los 5,00 de 2020 y 2023 (autorreporte). El diagnóstico del POT da 4,22 en una página y 4,66 en su tabla 39.',
-            'Avance hacia 9 m² (línea base 2019 = 4,54)': '2019: 0 % · 2022: (4,66 − 4,54) / (9 − 4,54) = 2,7 % · 2024: (5,75 − 4,54) / (9 − 4,54) = 27,1 %. En valores: +0,12 m² (2019–2022) y +1,09 m² (2022–2024).',
-            'Fuentes (trazabilidad)': ' · '.join(EV_URLS),
-            'Recomendación para el informe': 'Solicitar a Planeación la serie completa desde 2019 con la metodología del AMVA. Proponer que Planeación la mida cada año en el seguimiento del POT (expediente municipal) y que la Secretaría de Medio Ambiente, responsable del indicador en el PDM, la reporte con ese mismo método.',
-            'Estado': 'Construible para 2019 (línea base), 2022 y 2024 como cortes, no como tendencia.'}),
-        ('Veedurías ciudadanas inscritas (antes: implementación de procesos participativos)', {
-            'Qué medía la matriz': 'Logro de implementación de los procesos de participación ciudadana (meta 100 %, Planeación). Era un autorreporte y no había cifra oficial.',
-            'Qué pasó y por qué': 'Tus notas dicen «cambiar por número de veedurías ciudadanas»; confirmaste que era para este indicador, cuya categoría en la matriz es «Participación ciudadana».',
-            'Datos': 'Conjunto «Veedurías Ciudadanas Personería Envigado» (datos.gov.co, jju5-br3w). Inscritas por año: 2019: 2 · 2020: 4 · 2021: 11 · 2022: 4 · 2023: 6 · 2024: 1 · 2025: 5.',
-            'Limitaciones': 'Los consecutivos van del 118 al 293, pero solo hay 45 registros: el listado parece incompleto. No hay meta en el PDM (duda 3). '
-                            'El conjunto trae nombres y correos: solo se usan conteos.',
-            'Estado': 'Construible con un referente; conviene pedir a la Personería el listado completo.'}),
-        ('Servicios públicos domiciliarios (antes: cobertura deportiva)', {
-            'Qué medía la matriz': 'Logro de cobertura de servicios deportivos (meta 6 %, Índer). No hay tasa oficial publicada.',
-            'Qué pasó y por qué': 'El 12-nov se acordó trabajar con acueducto, alcantarillado, energía y aseo, con cobertura total (no solo urbana) y sin internet. '
-                                  'Recordaste que reemplaza a deporte. Se propone promedio simple, como el resto de la matriz.',
-            'Datos': 'TerriData (REC de Superservicios; UPME/IPSE para energía). Promedio de las 4 coberturas: 2019: 91,97 · 2020: 77,22 · 2021: 89,74 · 2022: 89,56 · 2023: 89,76 · 2024: 89,31.',
-            'Limitaciones': 'Caída a ~68 % en 2020 y zona rural en 0 de 2016 a 2020 (problemas de registro). Cobertura rural baja (acueducto 17,9 % en 2024), '
-                            'probablemente porque los acueductos veredales no están registrados. La meta (99,9 %) viene de la Encuesta de Calidad de Vida: otro universo. El aseo no tiene meta.',
-            'Estado': 'Construible; falta decidir el uso de la meta (dudas 4b y 5).'}),
-        ('Índice de logro educativo', {
-            'Qué medía la matriz': 'ILE = (logro de atención integral a primera infancia + logro de colegios oficiales que mejoran su categoría en Saber 11) / 2, con tope de 100 en cada parte.',
-            'Qué pasó y por qué': 'En la reunión 1 el profe pidió transformarlo para ver la evolución en años. El 12-nov encontraste en TerriData la cobertura neta y se acordó combinarla con primera infancia. '
-                                  'Decidiste usar 0–5 años porque reproduce mejor la línea base del PDM (16,56 frente a 16,3; con 0–6 da 14,02).',
-            'Datos': 'Cobertura neta (TerriData/MinEducación) y niños atendidos / población 0–5 (TerriData, DANE). ILE: 2018: 83,39 · 2019: 83,48 · 2020: 86,24 · 2021: 89,18 · 2022: 90,91 · 2023: 93,21 · 2024: 95,15.',
-            'Limitaciones': 'El numerador de primera infancia incluye mujeres gestantes y la fuente cambia en 2024 (informe de gestión). La cobertura neta de 2025 no está publicada.',
-            'Estado': 'Construible 2018–2024.'}),
-        ('Sexta medida', {
-            'Qué pasó y por qué': 'El 12-nov se acordaron cinco líneas y quedó abierta una sexta. Con las veedurías en el lugar de procesos participativos, el índice ya tiene seis componentes; '
-                                  'falta saber si el profe quiere además una medida de seguridad (duda 1).',
-            'Datos': 'Policía/MinDefensa, 2019–2025 (tasas por 100.000). Homicidio: 4,25 · 2,89 · 1,21 · 3,57 · 3,52 · 4,61 · 3,02 (meta 2,7). '
-                     'Hurto a personas: 680,1 … 501,4 (meta 631,5). Lesiones personales: 159,7 … 100,1 (meta 112,7).',
-            'Limitaciones': 'Hurto y lesiones ya están por debajo de su meta desde 2024: darían 100 fijo. El homicidio tiene pocos casos al año y la tasa salta mucho.',
-            'Estado': 'Construible si el profe lo pide; se recomienda homicidio.'}),
-    ],
-    'Participación ciudadana': [
-        ('I1: votación del presupuesto participativo (antes: incorporación de aportes)', {
-            'Qué medía la matriz': 'Procesos cerrados que incorporaron un aporte ciudadano / procesos cerrados con aportes.',
-            'Qué pasó y por qué': 'No hay inventario de procesos. El respaldo que se tenía usaba los mismos datos de la fidelidad de PP, y el profe pidió diferenciarlos. '
-                                  'Elegiste la opción A: la fidelidad se queda solo en PP y I1 pasa a medir la participación en la votación (IPCM, el índice oficial que usa la Alcaldía). '
-                                  'El 15-nov elegiste medirlo como avance desde la línea base 2017 (3,62 %) hacia el referente de 7 %, el tope de la escala oficial del IPCM, porque el PDM no tiene meta.',
-            'Datos': '2017: 8.221 votos, IPCM 3,62 % (informe de Planeación, 11-oct-2017, p. 7 y 12). 2019: no hubo votación. 2025: 10.662 votantes (informe de gestión 2025, p. 92 del PDF; verificado el 15-nov) / 264.637 habitantes (DANE) = 4,03 %.',
-            'Avance hacia 7 % (línea base 2017 = 3,62 %)': '2017: 0 % · 2025: (4,03 − 3,62) / (7 − 3,62) = 12,1 %. Puntaje simple (IPCM / 7): 51,7 en 2017 y 57,6 en 2025.',
-            'Limitaciones': 'Solo dos años confiables. 2017 cuenta votos y 2025 votantes. El 3,62 % no se reproduce con la población del DANE (da 3,53 o 3,68): la Alcaldía usa su propia población. El 7 % es el tope de la tabla de reparto, no una meta adoptada.',
-            'Fuentes (trazabilidad)': ' · '.join(I1_URLS),
-            'Recomendación para el informe': 'Solicitar a Planeación los votos y el IPCM de 2018 a 2024, total y por zona, la población de referencia y si cuentan votos o votantes. Con los datos por zona, I1 se puede cruzar con I2.',
-            'Estado': 'Construible para 2017 (línea base) y 2025; hay que solicitar 2018–2024.'}),
-        ('I2: cobertura territorial de la participación', {
-            'Qué medía la matriz': 'Zonas con al menos una actividad participativa / 13 zonas oficiales.',
-            'Qué pasó y por qué': 'Se mantiene (tu nota). Se agregó un respaldo con serie larga: zonas con proyectos de PP en los listados de la EFPC.',
-            'Datos': 'Principal: 2024: 13/13; 2025: 12/13. Respaldo 2020–2025: 12/13 todos los años (falta siempre la zona 1, que es industrial según el profe).',
-            'Limitaciones': 'Falta decidir si el denominador es 13 o 12 zonas (duda 7b). Los listados de la EFPC se titulan «proyectos ejecutados».',
-            'Estado': 'Construible 2024–2025; respaldo 2020–2025.'}),
-        ('I3: oferta formativa', {
-            'Qué medía la matriz': 'Acciones formativas para la ciudadanía realizadas / programadas.',
-            'Qué pasó y por qué': 'Se mantiene, con el número de acciones como respaldo.',
-            'Datos': 'Tasa 2025: 20/24 (83,3 %), con denominador reconstruido. Conteo: 2023: 17 (informe de Control Interno, proyecto 0541); 2024: 7; 2025: 20.',
-            'Limitaciones': 'Los criterios de conteo no son iguales (2024 incluye acciones para servidores). El dato de 2023 lo reportó Planeación sin evidencias cargadas.',
-            'Estado': 'Construible solo para 2025; el conteo hay que unificarlo.'}),
-        ('I4: publicación de resultados participativos', {
-            'Qué medía la matriz': 'Procesos cerrados con resultados publicados / procesos cerrados.',
-            'Qué pasó y por qué': 'Se descartó el Índice de Participación del DNP porque mide participación electoral. Decidiste conservar I4 con una lista fija de procesos anuales que verifica el observatorio.',
-            'Datos': 'Lista: votación de PP, rendición de cuentas del Alcalde, rendición de cuentas de PP. 2021: 3/3 · 2022: 3/3 (por confirmar) · 2023: 3/3 · 2024: 3/3 · 2025: 2/2.',
-            'Limitaciones': 'Con tres procesos cada uno pesa 33 puntos. Falta confirmar en el portal las respuestas de la rendición del Alcalde 2022.',
-            'Estado': 'Construible 2021–2025.'}),
-        ('I5 e I6', {'Qué pasó y por qué': 'Eliminados por decisión del profe en la reunión 1.', 'Estado': 'Fuera.'}),
-    ],
-    'Presupuesto participativo': [
-        ('EPP: ejecución presupuestal', {
-            'Qué medía la matriz': 'Obligaciones / apropiación definitiva de los recursos de PP.',
-            'Qué pasó y por qué': 'Se mantiene; el 12-nov el indicador de PP se dio por definido.',
-            'Datos': '2024: 98,69 % (50 de 51 proyectos cruzados con Hacienda); 2025: 98,83 %; 2026, primer semestre: 23,26 %.',
-            'Limitaciones': 'Solo 2024–2025: la ejecución de Hacienda de 2020–2023 viene por rubro presupuestal, no por proyecto.',
-            'Estado': 'Construible 2024–2025.'}),
-        ('CEP → ejecución según los proyectos que sí se hicieron', {
-            'Qué medía la matriz': 'Proyectos con todas las entregas completas y verificadas / proyectos con entrega exigible.',
-            'Qué pasó y por qué': 'No hay actas de recibo. El profe propuso medir la ejecución según los proyectos que sí se hicieron (tu nota «algo sobre ejecución de presupuesto»). '
-                                  'Como el único dato de «terminado» es autorreporte, se propone como principal la proporción de proyectos con ejecución ≥ 90 % (Hacienda).',
-            'Datos': 'Ejecución ≥ 90 %: 2024: 48/50 (96 %); 2025: 57/61 (93,4 %). Terminados (autorreporte): 2025: 49/61 (80,3 %).',
-            'Limitaciones': 'Ejecución presupuestal no es lo mismo que entrega física. Falta la decisión del profe (duda 9).',
-            'Estado': 'Construible 2024–2025.'}),
-        ('CMA → fidelidad a lo votado', {
-            'Qué medía la matriz': 'Personas atendidas frente a la meta de atención de cada proyecto.',
-            'Qué pasó y por qué': 'El plan de acción mide actividades, no personas. Se reemplaza por la fidelidad a lo votado, la propuesta del profe.',
-            'Datos': 'Proyectos cuya apropiación coincide con el valor votado (±1 %) / proyectos votados. 2024: 39/51 (76,47 %); 2025: 58/61 (95,08 %).',
-            'Limitaciones': '2026 necesita el valor votado por proyecto.',
-            'Estado': 'Construible 2024–2025.'}),
-    ],
-    'Control social': [
-        ('PCS → oportunidad de respuesta a las PQRSDF', {
-            'Qué medía la matriz': 'Estrategias de promoción del control social ejecutadas / programadas.',
-            'Qué pasó y por qué': 'Es un autorreporte que da 100 % (1 de 1), y dijiste que eso no sirve. Se propone la oportunidad de respuesta a las PQRSDF, que sale del sistema de registro.',
-            'Datos': 'Informes trimestrales de PQRSDF (Secretaría General), años completos 2020–2025. Verificado: 4.º trimestre de 2023: 3.544 / 4.149 = 85 %.',
-            'Limitaciones': 'El total incluye solicitudes pendientes dentro del plazo; el informe usa dos sistemas (BPMS y SAC); algunas se cierran tarde en el sistema.',
-            'Estado': 'Construible con trabajo: sumar los trimestres con una regla fija.'}),
-        ('DSI: información de seguimiento', {
-            'Qué medía la matriz': 'Metas del PDM con valor observado publicado / metas seleccionadas.',
-            'Qué pasó y por qué': 'Se mantiene. Hay que actualizar la lista de metas, usando indicadores que el PDM sí tiene con meta.',
-            'Datos': '2024: 0/7; 2025: 0/7. Con todo lo publicado hasta hoy: 2/7 en 2024.', 'Estado': 'Construible 2024–2025.'}),
-        ('VRC: veedurías en la rendición de cuentas', {
-            'Qué medía la matriz': 'Eventos de rendición de cuentas con veeduría documentada / eventos.',
-            'Qué pasó y por qué': 'Se mantiene, pero en varios eventos no se sabe si hubo veeduría: la Alcaldía publica cuadros de preguntas o presentaciones, casi nunca el acta con asistentes. '
-                                  'La audiencia del Alcalde de 2024 y la de 2025 quedan sin dato. Con la regla de la matriz (presencia desconocida = N/D), VRC no tiene ningún año. '
-                                  'El 15-nov preguntaste cómo construirlo con la brecha y decidiste dejarlo así: se reporta como rango (mínimo y máximo) con la brecha de información al lado, y se espera que la información mejore año a año. Se le informa al profe, porque cambia la regla N/D de la matriz.',
-            'Datos': 'Eventos: audiencia del Alcalde + rendiciones sectoriales con acta o memoria. 2024: 3 eventos (2 con veeduría, 0 sin, 1 sin soporte) → 66,7 %–100 %, brecha 33,3 %. '
-                     '2025: 5 eventos (1 con, 1 sin, 3 sin soporte) → 20 %–80 %, brecha 60 %. Con todos los eventos publicados (sensibilidad): 2024: 8 eventos → 50 %–100 % (brecha 50 %); 2025: 7 → 28,6 %–85,7 % (brecha 57,1 %).',
-            'Cómo se construye': 'VRC mínimo = documentada / eventos (es el que entraría al índice; equivale al respaldo anterior «sin mención = ausencia»). VRC máximo = (documentada + sin soporte) / eventos. Brecha = sin soporte / eventos. '
-                                 'Clasificación por evento: outputs/indicadores/clasificacion_vrc.csv (con documento, página, enlace y cita). Cálculo: scripts/revision_indicadores/vrc_brecha.py → outputs/revision_indicadores/CS/vrc_brecha.csv.',
-            'Qué se necesita para seguir midiéndolo': ' · '.join(VRC_NECESITA),
-            'Limitaciones': 'El mínimo subestima si hubo veedores que no quedaron registrados. El universo cambia según qué eventos se cuenten (3 o 8 en 2024). Una invitación a veedores no prueba asistencia.',
-            'Cómo se hizo (nota de método)': 'Se revisaron los documentos publicados de cada evento de rendición de cuentas de 2024 y 2025 (actas, memorias, presentaciones, cuadros de preguntas y justificaciones). Cada evento se clasificó como «con veeduría» si el documento lo dice expresamente, «sin veeduría» si el documento integral del evento la describe sin veedurías, y «no se sabe» si el documento no permite saberlo. Una invitación no cuenta como asistencia. Con esa clasificación se calculan el mínimo, el máximo y la brecha.',
-            'Seguimiento': 'La brecha se reporta cada año y debe bajar: es la medida de cuánto mejora la información. Cuando la brecha llegue a 0, el mínimo y el máximo coinciden y VRC vuelve a ser un solo número, como pide la matriz.',
-            'Estado': 'Construible como rango para 2024 y 2025. Decisión de Isabella (15-nov); se le informa al profe en la duda 14.'}),
-        ('RPO: respuesta a observaciones ciudadanas', {
-            'Qué medía la matriz': 'Observaciones ciudadanas con respuesta de fondo publicada / observaciones.',
-            'Qué pasó y por qué': 'Se mantiene.', 'Datos': '2024: 16/17 (94,12 %). 2025: cuadro incompleto (respaldo 1/2). Hay cuadros publicados de 2021 y 2023.',
-            'Estado': 'Construible 2024; 2021 y 2023 con trabajo.'}),
-    ],
-}
-
-QA_RESUMEN = [
-    '**Veredicto global:** la propuesta sirve como inventario de datos disponibles. Ningún índice se puede calcular todavía sin resolver las dudas del profe.',
-    '**IREPP (PP)** es el más cercano: resueltas las dudas 9 y 10, se puede construir para 2024 y 2025.',
-    '**ICPD-6 (PDM)** saldría solo para 2019, 2022 y 2024 (los cortes de espacio verde); **ISPC (PC)** solo para 2025; **ICRCS (CS)** no tiene ningún año sin usar respaldos.',
-    '**No construibles con los datos públicos:** I1 original, CEP y CMA originales y logros de políticas públicas. VRC solo como rango con la brecha de información (propuesta).',
-    'QA corrigió 13 errores en los archivos de entrega (años, metas de otro universo, criterios de conteo, títulos de los listados de la EFPC). Ya están corregidos.',
-    'Los datos crudos de 2024–2025 que usaron los cálculos anteriores no están en este Codespace (están en Google Drive); las descargas de hoy quedaron en data_raw_IIC/07_revision_nov2026/.',
+SCRIPTS = [
+    ('PP', 'outputs/construccion/PP/pp_indicadores.csv',
+     'scripts/construccion/pp_lectores.py → pp_cruce.py → pp_muestra_manual.py → pp_irepp.py',
+     'También: pp_cruce_proyectos.csv, pp_ajustes.csv y pp_muestra_manual.csv'),
+    ('PDM', 'outputs/construccion/PDM/pdm_indicadores.csv', 'scripts/construccion/pdm_icpd7.py',
+     '44 asserts; tarda unos 3 minutos (lee la PPED cruda del DANE)'),
+    ('PC', 'outputs/construccion/PC/pc_indicadores.csv', 'scripts/construccion/pc_ispc.py', '56 asserts; tarda unos 3 minutos'),
+    ('CS', 'outputs/construccion/CS/cs_indicadores.csv', 'scripts/construccion/cs_descargas.py → cs_icrcs.py',
+     '48 asserts; el CSV solo se escribe si pasan todos'),
 ]
+NOMBRE_DIM = {'PDM': 'Cumplimiento del Plan de Desarrollo (PDM)', 'PC': 'Participación ciudadana',
+              'PP': 'Presupuesto participativo', 'CS': 'Control social'}
+CMD_PQRSDF = ('python3 scripts/construccion/cs_descargas.py && python3 scripts/construccion/cs_icrcs.py '
+              '&& python3 scripts/entregables/generar_entrega_profe.py')
+
+
+def primer_enlace(s):
+    m = re.search(r'https?://[^\s;]+', s)
+    return m.group(0) if m else s
+
+
+def resumen(texto, n=230):
+    texto = re.sub(r'\s+', ' ', texto).strip().replace('anios', 'años').replace('anio', 'año')
+    return texto if len(texto) <= n else texto[:n].rsplit(' ', 1)[0] + '…'
+
+
+def alertas(dim, cod, maximo_n=3):
+    """Alertas distintas de la columna nota, resumidas."""
+    vistas, out = set(), []
+    for r in anual(dim, cod, 'principal'):
+        for trozo in r['nota'].split('ALERTA')[1:]:
+            t = resumen(trozo.strip(' :'))
+            clave = t[:50]
+            if clave not in vistas:
+                vistas.add(clave)
+                out.append(t)
+    return out[:maximo_n]
+
+
+def pegar_serie(doc, dim, cod, nombre):
+    doc.add_heading(nombre, level=3)
+    rs = anual(dim, cod, 'principal')
+    con = con_dato(rs)
+    ref = con[-1] if con else rs[-1]
+    parrafo(doc, f'**Referente:** {resumen(ref["referente"], 200)}. **Fuente:** {resumen(ref["fuente"], 190)}. '
+                 f'**Enlace:** {primer_enlace(ref["enlace"])}')
+    cuerpo = []
+    for r in rs:
+        nd = ''
+        if num(r['valor']) is None:
+            nd = resumen(r['brecha'].replace('sin dato: ', '').replace('anios', 'años'), 95)
+        elif r['brecha'] and r['brecha'] != 'con dato' and dim == 'PDM' and cod == 'PDM.VEED':
+            nd = resumen(r['brecha'].replace('con dato; ', ''), 95)
+        mx = maximo(dim, cod, r['anio'])
+        val = fmt(r['valor']) if mx is None or num(mx) == num(r['valor']) else f'{fmt(r["valor"])}–{fmt(mx)}'
+        nd_den = '' if r['numerador'] in ('', 'N/D') else f'{fmt(r["numerador"])} / {fmt(r["denominador"])}' if r['denominador'] else fmt(r['numerador'])
+        cuerpo.append([r['anio'], nd_den, val, fmt(r['puntaje_0_100']) if num(r['puntaje_0_100']) is not None else '—',
+                       r['semaforo'] or '—', nd])
+    tabla(doc, [1.4, 3.5, 2.3, 1.9, 2.0, 6.4], ['Año', 'Numerador / denominador', 'Valor', 'Puntaje', 'Semáforo', 'Dato faltante / nota'],
+          cuerpo, tam=8)
+    parrafo(doc, f'**Brecha:** {texto_brecha(dim, cod, corto=False)}.')
+    al = alertas(dim, cod)
+    if not al:  # sin alertas explícitas: se resume el método de la última fila
+        al = [resumen(ref['nota'], 230)]
+    al = [('Alerta ' + t if t.startswith(('de ', '(')) else t) for t in al]
+    for t in al:
+        escribir(doc.add_paragraph(style='List Bullet'), f'**Alerta o método:** {t[0].upper() + t[1:]}', 9)
 
 
 def doc_detalle():
     doc = nuevo_documento(horizontal=False)
-    doc.add_paragraph(style='Title').add_run('Revisión de indicadores: qué pasó con cada uno')
+    doc.add_paragraph(style='Title').add_run('Revisión de indicadores: cambios y resultados de la construcción')
     parrafo(doc, f'Documento de trabajo para Isabella · {FECHA} · Todo es **provisional**')
-    doc.add_heading('Cómo se hizo la revisión', level=1)
+    doc.add_heading('Resumen', level=1)
     vinetas(doc, [
-        'Se partió de la matriz de los profesores, de tus notas de las reuniones 1 y 2 y del informe de la reunión del 12-nov.',
-        'Se revisó dimensión por dimensión: PDM, Participación ciudadana, Presupuesto participativo y Control social.',
-        'Criterios: serie en el tiempo, datos públicos y encontrables, sin autorreporte, meta del mismo universo y las mismas dimensiones.',
-        'Los datos se buscaron en TerriData, datos.gov.co, MinEducación, la Policía, la Personería, la EFPC y los informes de la Alcaldía.',
-        'Cada paso lo revisó un agente de control de calidad (QA), que verificó cifras contra la fuente y encontró errores que ya se corrigieron.',
-        'Los archivos de apoyo están en outputs/entrega_profe/ (cuadros, dudas y registro de cambios) y outputs/revision_indicadores/ (series, scripts y reportes de QA).',
+        'Se construyeron los cuatro índices con todos los años que tiene cada indicador. Los CSV están en outputs/construccion/<dimensión>/ y los genera un script por dimensión.',
+        '**IREPP (PP):** 2020–2025, sin 2021 (solo 39 de 89 proyectos verificados). **ICPD-7 (PDM):** 2019, 2022 y 2024 (espacio verde solo tiene tres cortes). '
+        '**ISPC (PC):** solo 2025. **ICRCS (CS):** ningún año, porque falta PQRSDF (portal caído).',
+        'Todo es Provisional. QA aprobó con observaciones las cuatro dimensiones (18 y 19-nov).',
+        'Los datos crudos están en Google Drive y las descargas de esta revisión en data_raw_IIC/07_revision_nov2026/ (con manifiesto).',
     ])
-    doc.add_heading('Resultado del control de calidad: ¿se pueden construir?', level=1)
-    vinetas(doc, QA_RESUMEN)
-    tabla(doc, [2.6, 6.2, 3.0, 5.6], ['Índice', 'Componentes', 'Años con todos', 'Qué falta'], INDICES, tam=8)
-    for dim, indicadores in DETALLE.items():
-        doc.add_heading(dim, level=1)
-        for nombre, campos in indicadores:
-            doc.add_heading(nombre, level=2)
-            for campo, texto in campos.items():
-                escribir(doc.add_paragraph(), f'**{campo}:** {texto}')
-    doc.add_heading('Variables por solicitar (informe futuro)', level=1)
-    vinetas(doc, SOLICITAR)
+    doc.add_heading('Resultados de los índices', level=1)
+    bloque_indices(doc, (2.0, 5.4, 2.6, 7.4))
+
+    for dim, _, filas_ in TITULOS:
+        doc.add_heading(NOMBRE_DIM[dim], level=1)
+        doc.add_heading('Cambios frente a la matriz', level=2)
+        tabla(doc, [3.0, 3.2, 5.2, 2.7, 3.4], ENC, filas_, tam=8)
+        cuadro_indicadores(doc, dim, 'Resumen de los indicadores', [4.6, 3.4, 4.8, 4.6])
+        doc.add_heading('Serie completa de cada indicador', level=2)
+        for cod, nombre in NOMBRES[dim]:
+            pegar_serie(doc, dim, cod, nombre)
+        if dim == 'PDM':
+            doc.add_heading('Espacio verde: cortes y fuentes', level=2)
+            tabla(doc, [1.4, 2.0, 2.2, 5.0, 6.8], EV_ENC, ev_cortes(), tam=8)
+            parrafo(doc, EV_NOTA)
+            vinetas(doc, EV_URLS)
+        if dim == 'CS':
+            doc.add_heading('Qué se necesita para seguir midiendo VRC', level=2)
+            vinetas(doc, VRC_NECESITA)
+        doc.add_heading('Scripts y archivos', level=2)
+        d, csv_, scr, nota = [s for s in SCRIPTS if s[0] == dim][0]
+        vinetas(doc, [f'**CSV:** {csv_}', f'**Scripts:** {scr}', nota])
+
+    doc.add_heading('Decisiones tomadas (con número y origen)', level=1)
+    parrafo(doc, 'Los números D remiten a .claude/memoria/decisiones.md. Origen: Profe, Isabella o propuesta aceptada.')
+    tabla(doc, [2.0, 3.0, 8.2, 4.3], ['D', 'Tema', 'Decisión', 'Origen'],
+          [[d, f'**{t}**', x, o] for d, t, x, o, _ in DECISIONES], tam=8)
+
+    doc.add_heading('Pendientes', level=1)
+    vinetas(doc, [
+        '**PQRSDF (CS):** el portal de la Alcaldía no responde desde el 19-nov y faltan 23 de los 24 informes trimestrales. '
+        'Cuando vuelva: `' + CMD_PQRSDF + '`. Con eso el ICRCS 2024 y 2025 deja de ser N/D.',
+        '**Actas de Salud 2021–2023:** hay que clasificarlas a mano (con veeduría, sin veeduría o no se sabe) para extender VRC a 2021–2023.',
+        '**Discapacidad y Víctimas 2021–2023:** buscar sus rendiciones en la API del portal, para que el universo de VRC sea el mismo de 2024–2025.',
+        '**Solicitudes a Planeación y otras dependencias:** ' + ' '.join(f'({i}) {t}' for i, t in enumerate(SOLICITAR, 1)),
+        '**Rendición de PP 2025:** se hará en el último trimestre de 2026; entonces se actualiza I4 2025 y el ISPC 2025.',
+        '**Trazabilidad del PDM (QA):** archivar las fuentes de espacio verde y la PPED por edad con su manifiesto; corregir la nota de servicios públicos; anotar las veedurías 291–292 (registro de 2026).',
+        '**Nota de PP 2020:** revisar la frase «en 2019 no hubo votación»: la vigencia 2020 sí se votó en 2019; la que no se votó fue la vigencia 2019.',
+    ])
     ruta = OUT / 'detalle_revision_indicadores_OCE.docx'
     doc.save(ruta)
     return ruta
 
 
+# ------------------------------------------------------------------ verificaciones
+PROHIBIDAS_PROFE = ('origen', 'claude', 'asistente')
+ESPERADOS = {'ICPD-7': ('2019', '62,41'), 'ISPC': ('2025', '61,62'), 'IREPP': ('2025', '95,83')}
+
+
+def texto_completo(d):
+    partes = [p.text for p in d.paragraphs]
+    for t in d.tables:
+        partes += [c.text for f in t.rows for c in f.cells]
+    for s in d.sections:
+        partes += [p.text for p in s.footer.paragraphs] + [p.text for p in s.header.paragraphs]
+    return '\n'.join(partes)
+
+
+def verificar(ruta, profe):
+    d = Document(ruta)
+    sec = d.sections[0]
+    util = (sec.page_width - sec.left_margin - sec.right_margin) / 360000
+    # 1) anchos de cada tabla menores que el ancho útil
+    for i, t in enumerate(d.tables):
+        ancho = sum(c.width.cm for c in t.rows[0].cells)
+        assert ancho <= util + 0.01, (ruta.name, 'tabla', i, round(ancho, 2), round(util, 2))
+    # 2) palabras prohibidas en el Word del profe
+    if profe:
+        txt = texto_completo(d).lower()
+        for p in PROHIBIDAS_PROFE:
+            assert p not in txt, (ruta.name, 'contiene', p)
+        assert 'Origen' not in [c.text for c in d.tables[0].rows[0].cells]
+    # 3) valores de los índices (cuadro bajo el título del índice)
+    tablas = {t._tbl: t for t in d.tables}
+    titulo, hallados = '', {}
+    for el in d.element.body.iterchildren():
+        if el.tag == qn('w:p'):
+            st = el.find(qn('w:pPr'))
+            if st is not None and st.find(qn('w:pStyle')) is not None and 'Heading' in st.find(qn('w:pStyle')).get(qn('w:val')):
+                titulo = ''.join(x.text or '' for x in el.iter(qn('w:t')))
+        elif el.tag == qn('w:tbl') and titulo:
+            t = tablas[el]
+            enc = [c.text for c in t.rows[0].cells]
+            if enc[:3] == ['Año', 'Valor', 'Semáforo']:
+                for clave in ESPERADOS:
+                    if titulo.startswith(clave):
+                        hallados[clave] = {f.cells[0].text: f.cells[1].text for f in t.rows[1:]}
+    for clave, (anio, valor) in ESPERADOS.items():
+        assert hallados[clave][anio] == valor, (ruta.name, clave, anio, hallados[clave].get(anio))
+    # y contra los CSV
+    for _, dim, cod, a0, a1, _f in INDICES_DEF:
+        clave = cod.split('.')[1].replace('ICPD7', 'ICPD-7')
+        for r in anual(dim, cod, 'indice'):
+            if a0 <= int(r['anio']) <= a1 and num(r['valor']) is not None:
+                assert hallados[clave][r['anio']] == fmt(r['valor']), (ruta.name, clave, r['anio'])
+    return d, len(d.paragraphs), len(d.tables), [len(t.rows) for t in d.tables]
+
+
 def main():
-    for ruta in (doc_profe(), doc_detalle()):
-        d = Document(ruta)
-        print(ruta.relative_to(RAIZ), '| párrafos:', len(d.paragraphs), '| tablas:', len(d.tables))
+    rutas = (doc_profe(), doc_detalle())
+    for ruta, profe in zip(rutas, (True, False)):
+        d, np_, nt, filas_ = verificar(ruta, profe)
+        titulos = [p.text for p in d.paragraphs if p.style.name.startswith('Heading 1')]
+        print(ruta.relative_to(RAIZ), '| párrafos:', np_, '| tablas:', nt)
+        print('  secciones:', titulos)
+        print('  filas por tabla:', filas_)
+    # las dudas del profe deben estar todas marcadas como respondidas
+    dudas = (OUT / 'dudas_para_el_profe.md').read_text(encoding='utf-8')
+    n_dudas = len(re.findall(r'^\d+b?\. ', dudas, flags=re.M))
+    n_resp = len(re.findall(r'Respondida', dudas))
+    assert n_dudas == n_resp == 16, (n_dudas, n_resp)
+    print('Asserts OK: sin «Origen», «Claude» ni «asistente» en el Word del profe; IREPP 2025 = 95,83, '
+          'ICPD-7 2019 = 62,41, ISPC 2025 = 61,62 en ambos Word y coinciden con los CSV; anchos de tabla dentro del ancho útil; '
+          f'{n_resp} dudas respondidas.')
 
 
 if __name__ == '__main__':
