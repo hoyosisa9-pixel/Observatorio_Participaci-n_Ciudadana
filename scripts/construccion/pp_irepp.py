@@ -30,8 +30,8 @@ PROV = "Provisional"
 FECHA = "2026-11-18"
 FECHA_ACT = {}   # fecha_consulta por anio (del manifiesto de cada fuente; se llena desde el cruce)
 MOT_2026 = "vigencia en curso: 2026 no tiene cierre; fuera del periodo y del indice"
-NOTA_2020 = ("2020: en 2019 NO hubo votacion (los recursos alcanzaron para todos los proyectos; informe de auditoria de la "
-             "priorizacion 2019) y en 2020 el 'valor votado' del listado EFPC es en realidad el valor PRIORIZADO; "
+NOTA_2020 = ("2020: la vigencia 2020 se priorizo en 2019 (convencion: el anio de la votacion es t-1; Acuerdo 038/2016, art. 15A) y no hay cifra de votos publicada; "
+             "el 'valor votado' del listado EFPC de 2020 corresponde a esa priorizacion de 2019 y es en realidad el valor PRIORIZADO (la que no se voto fue la vigencia 2019, en la priorizacion de 2018: informe de auditoria de la priorizacion 2019, p. 3); "
              "ademas, varios proyectos verificados quedaron con apropiacion definitiva en cero (el PDF muestra el traslado contracredito de todo su valor; "
              "la causa no consta en el documento).")
 
@@ -273,7 +273,7 @@ for cod, nombre in (("PP.EPP", "EPP"), ("PP.EJ90", "EJ90"), ("PP.FID", "FID"), (
          100 * len(sin) / len(PERIODO), "", "", "", "", sem=False, puntaje=False,
          nota="Anios con dato: " + ", ".join(map(str, con)) + "; sin dato: " + (", ".join(map(str, sin)) or "ninguno")
               + (f" ({mot})" if sin else "") + ". Brecha = anios sin dato / anios del periodo. El 2026 queda fuera (vigencia en curso). "
-              "2020 se calcula con el valor priorizado (en 2019 no hubo votacion). 2021 N/D por D56 (decision de la usuaria): solo se calcula un anio si se verifica al menos el 50 % de sus proyectos.")
+              "2020 se calcula con el valor priorizado en la priorizacion de 2019 (la vigencia 2019, priorizada en 2018, fue la que no se voto). 2021 N/D por D56 (decision de la usuaria): solo se calcula un anio si se verifica al menos el 50 % de sus proyectos.")
     FILAS[-1]["brecha"] = f"{len(sin)} de {len(PERIODO)} anios sin dato"
 
 SALIDA.parent.mkdir(parents=True, exist_ok=True)

@@ -104,3 +104,5 @@ CS.VRC    --se_reporta_como--> rango + brecha de información (D33, decidido; la
 PP.EPP, PP.EJ90, PP.FID, PP.IREPP --serie--> 2020, 2022–2025 ; --brecha--> 2021 (D56)
 - **PDM CONSTRUIDO (18-nov)**: ICPD-7 2019 = 62,41; 2022 = 68,79; 2024 = 66,85 (Naranja); brecha 4/7. Salidas en `outputs/construccion/PDM/`. Población única = DANE VP (TerriData «Descripción general»). Siguiente: Participación ciudadana (ISPC).
 PDM.ICPD7 --componentes--> SALUD, ILE, SP, CM, CA, VEED, HOM (1/7 cada uno) ; --años--> 2019, 2022, 2024
+- **PC CONSTRUIDO (18-nov)**: ISPC 2025 = 61,62 (Naranja; 69,95 si se publica la rendición de PP 2025). I1 (votos de PP): 2017 = 8.221, 2021 = 16.828, 2022 = 12.541, 2023 = 9.156, 2025 = 10.662; 2018 sin votación. Brecha del ISPC: 5/6. Salidas en `outputs/construccion/PC/`. Siguiente: Control social (ICRCS).
+PC.I1 --convención--> año de la votación (vigencia t+1) ; --LB--> 3,68 (VP) ; PC.I2 --denominador--> 12 ; PC.ISPC --años--> 2025

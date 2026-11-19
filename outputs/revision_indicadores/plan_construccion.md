@@ -45,14 +45,21 @@ Script: `scripts/construccion/pdm_icpd7.py` (44 asserts; tarda unos 3 minutos po
 
 Fuentes archivadas con manifiesto en `data_raw_IIC/07_revision_nov2026/` (espacio_verde, dane_pped_edad, dane_vp_retroproyeccion, men_3y4sdmxy, personeria_jju5br3w, pdm_balance_educacion_2024). El 4,54 de 2019 se verificó visualmente en la tabla 4 del VMR del AMVA.
 
-## 3. Participación ciudadana · ISPC = 0,30·I1 + 0,25·I2 + 0,20·I3 + 0,25·I4 (D42)
-| Indicador | Puntaje | Años | Brecha |
-|---|---|---|---|
-| I1 IPCM | (IPCM − 3,62) / (7 − 3,62) (D32) | 2017, 2025 | 2018 y 2020–2024 por solicitar; 2019 sin votación |
-| I2 cobertura territorial | zonas con actividad / **12** (D41) | 2024, 2025; respaldo 2020–2025 | 2020–2023 solo respaldo |
-| I3 oferta formativa | realizadas / programadas | 2025 (denominador reconstruido) | sin programación publicada en ningún año; respaldo: conteo 17, 7, 20, solo ciudadanía (D49) |
-| I4 publicación de resultados | procesos con resultados / 3 procesos fijos (D29) | 2021–2025 | 2022 por confirmar |
-| **ISPC** | | **2025** | demás años N/D (I1 e I3) |
+## 3. Participación ciudadana · ISPC = 0,30·I1 + 0,25·I2 + 0,20·I3 + 0,25·I4 (D42) — **CONSTRUIDO** (QA aprobado con observaciones, 18-nov)
+Script: `scripts/construccion/pc_ispc.py` (56 asserts; tarda unos 3 minutos). Salida: `outputs/construccion/PC/pc_indicadores.csv`. Decisiones D69–D74. Convención: el año es el año calendario de la actividad participativa (I1 = votación para la vigencia t+1; I4 = año de la vigencia).
+
+| Año | I1 votos → IPCM → puntaje (LB 3,68; ref. 7) | I2 (12 zonas) | I3 | I4 | ISPC |
+|---|---|---|---|---|---|
+| 2017 | 8.221 → 3,68 % → 0 (LB) | | | | |
+| 2018 | no hubo votación | | | | |
+| 2020 | sin dato | sin dato | sin dato | 2/3 | N/D |
+| 2021 | 16.828 → 6,80 % → 93,83 | sin dato | sin dato | 3/3 | N/D |
+| 2022 | 12.541 → 4,98 % → 39,08 | sin dato | sin dato | 3/3 | N/D |
+| 2023 | 9.156 → 3,58 % → 0 | sin dato | sin dato | 3/3 | N/D |
+| 2024 | sin dato | 12/12 | sin dato | 3/3 | N/D |
+| 2025 | 10.662 → 4,03 % → 10,51 | 12/12 (alerta D73) | 21/25 = 84,00 | 2/3 (rango hasta 3/3, D74) | **61,62 Naranja** (máx. 69,95) |
+
+Brechas: I1 3/8 años, I2 4/6, I3 5/6, I4 0/6 (2 de 18 proceso-años sin documento), ISPC 5/6. Fuentes de I4 archivadas en `data_raw_IIC/07_revision_nov2026/rendicion_cuentas/`; los votos, en `noticias_alcaldia/`.
 
 ## 4. Control social · ICRCS = (DSI + PQRSDF + VRC + RPO) / 4 (D45)
 | Indicador | Puntaje | Años | Brecha |

@@ -109,3 +109,29 @@ Todo resultado sigue siendo **Provisional**.
 - D67 (usuaria). **Veedurías 2012–2018 llevan puntaje**, como 2019–2025, con nota de listado incompleto (11 de 120 consecutivos).
 - D68 (usuaria). **La LB de veedurías se mantiene en 5,4** (D46). Se anota el límite: si se contaran los faltantes seguros de 2019–2021, la LB sería 7,8.
 - Pendientes de trazabilidad del PDM (QA): archivar las fuentes de espacio verde (VMR del AMVA, nota del Humboldt y PDF 146211 del POT) y la PPED por edad con su manifiesto; corregir la nota de SP; 66,18 → 66,17; anotar las veedurías 291–292 (año de registro 2026); anotar el universo de ILE (gestantes frente a solo niños en 2024–2025); «causa no documentada» en la cobertura neta de 2015; que el script falle si falta pypdf.
+
+## Participación ciudadana: fichas finales (Analizador 18-nov) y decisiones de la usuaria
+- D69 (usuaria). **LB de I1 = 3,68**: la IPCM de 2017 con la población DANE VP (8.221 / 223.456). La cifra oficial 3,62 queda en nota. Puntaje = min(100, max(0, 100·(IPCM − 3,68)/(7 − 3,68))). D32 cambia solo en la LB; el referente sigue en 7 %.
+- D70 (usuaria). **I4 2025 como rango con brecha** (precedente D33): al índice va el mínimo, 2/3 = 66,67; máximo 3/3; brecha 1/3. La rendición de PP 2025 se hará en el último trimestre de 2026, y se actualiza cuando se publique.
+- D71 (usuaria). **Autoriza consultar el portal de la Alcaldía (www.envigado.gov.co, incluida su API `api/v1/contents/<alias>`)** para obtener los votos de PP de 2022 y archivar las noticias como fuente.
+- Hallazgos del Analizador (18-nov):
+  - **Convención de I1: el año es el de la votación**; los proyectos se ejecutan en t+1 (Acuerdo 038/2016, art. 15A). El año sin votación es **2018** (vigencia 2019), no 2019. En 2019 sí hubo votación, para la vigencia 2020 [S].
+  - Votos: 2017 = 8.221; **2021 = 16.828** (noticia de la Alcaldía, 1-oct-2021); 2025 = 10.662. No hay cifra en 2019, 2020, 2022 (por leer), 2023 ni 2024.
+  - I2 2024 y 2025 = 12/12. I3 solo tiene tasa en 2025 (20/24). I4 2022 confirmado (doc 92036, pp. 8–11). I4 2020 = 2/3 (no se encontró la rendición del Alcalde).
+  - ISPC: solo se puede calcular en 2025 (≈ 61,49, Naranja). Brecha 5/6.
+  - **Hay que revisar la nota de PP 2020** («en 2019 no hubo votación»): la vigencia 2020 sí se votó en 2019; la que no se votó fue la vigencia 2019.
+- **Votos de PP (I1) por año de votación** (búsqueda en la API del portal con `keyword`, 18-nov; archivo `data_raw_IIC/07_revision_nov2026/noticias_alcaldia/`):
+  - 2017 = 8.221;
+  - 2018 = no hubo votación;
+  - 2019 = sin cifra;
+  - 2020 = sin cifra final (5.100 parciales, 360 Radio);
+  - **2021 = 16.828** (noticia del 1-oct-2021);
+  - **2022 = 12.541** (noticia del 13-sep-2022, vigencia 2023);
+  - **2023 = 9.156** (noticia del 11-sep-2023, vigencia 2024);
+  - 2024 = sin cifra publicada;
+  - 2025 = 10.662 votantes directos (informe de gestión 2025, p. 92; el boletín 175 dice «más de 12.000 participaron», es decir, inscritos);
+  - 2026 = «más de 14 mil» (fuera del periodo).
+- D72 (usuaria, 18-nov; QA de PC aprobada con observaciones). **I3 2025 = 21/25 = 84,00.** Se cuenta el diplomado en Gestión Pública, porque la fuente (informe de gestión 2025, p. 88) no dice que haya sido para servidores. ISPC 2025 = 61,62.
+- D73 (usuaria). **I2 2025 = 12/12 se mantiene, con alerta.** Es un agregado reportado por la Alcaldía, sin lista por zona; el respaldo de PP da 12/12. Hay que solicitar la lista de asambleas por zona.
+- D74. **I4 2025 sigue como rango (D70).** Búsqueda del 18-nov: la rendición de PP de la vigencia 2025 no está publicada en el portal. Las convocatorias encontradas son de feb-2024 (vigencia 2023). Se anota la contradicción: el plan indicativo, consecutivo 528, marca AVANCE 2026 = 1.
+- Convención del ISPC (QA): el año es el año calendario de la actividad participativa. En I1 corresponde a la votación para la vigencia t+1; en I4, al año de la vigencia.
