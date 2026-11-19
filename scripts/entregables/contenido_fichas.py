@@ -350,7 +350,7 @@ def _contracredito():
 
 def _universo_2021():
     return ce.gep.pp_universo_2021().replace('(publicada', '(publicada').replace('2021: el universo', 'En 2021 el universo') + (
-        ' Hay un cálculo de sensibilidad en las filas PP.SENS2021 de la hoja «Datos».' if ce.gep.pp_universo_2021() else '')
+        ' Hay un cálculo de sensibilidad en las filas PP.SENS2021 de la hoja «Detalle».' if ce.gep.pp_universo_2021() else '')
 
 
 def _pp_comun():
@@ -660,8 +660,8 @@ _INDICADORES = {
 def _fuentes_txt(cod):
     out = []
     for f, enl, mas in fuentes_lista(cod):
-        out.append('• ' + f + (('\n   Enlace: ' + '\n   '.join(enl)) if enl else '') + (f'\n   (y {mas} enlaces más; ver la hoja «Datos» del Excel)' if mas else ''))
-    return '\n'.join(out) or 'Ver la hoja «Datos» del Excel.'
+        out.append('• ' + f + (('\n   Enlace: ' + '\n   '.join(enl)) if enl else '') + (f'\n   (y {mas} enlaces más; ver las hojas «Datos» y «Detalle» del Excel)' if mas else ''))
+    return '\n'.join(out) or 'Ver las hojas «Datos» y «Detalle» del Excel.'
 
 
 def construir_fichas():
@@ -843,7 +843,7 @@ _FUENTE_SERIE = {
     'PP.FID': 'Ejecuciones presupuestales de la Alcaldía (egresos de Hacienda y plan de acción de 2025) + listas de proyectos de PP (lista oficial en 2021; listado EFPC en los demás años)',
     'CS.PQRSDF': 'Informes trimestrales de PQRSDF de la Secretaría General de la Alcaldía (24 informes)',
     'CS.DSI': 'Plan de Desarrollo 2024–2027 (Apéndice 9.1.2) y las fuentes que nombra para cada meta',
-    'CS.VRC': 'Actas, memorias y cuadros de preguntas de las rendiciones de cuentas de la Alcaldía (detalle en «Datos», filas CS.VRC.EVENTO)',
+    'CS.VRC': 'Actas, memorias y cuadros de preguntas de las rendiciones de cuentas de la Alcaldía (detalle en «Detalle», filas CS.VRC.EVENTO)',
     'CS.RPO': 'Cuadros de preguntas y respuestas de la audiencia pública de rendición de cuentas del Alcalde',
 }
 

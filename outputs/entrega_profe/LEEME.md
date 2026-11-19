@@ -11,7 +11,7 @@ Estado al 19-nov-2026 (todo Provisional). Los resultados vigentes están en los 
 | `registro_cambios.md` | Lista corta de todos los cambios y sus orígenes | **Vigente** |
 | `dudas_para_el_profe.md` | Las 16 dudas, todas respondidas, con la decisión posterior de Isabella aparte | **Vigente** (cerrada) |
 | `1_PDM.md`, `2_PC.md`, `3_PP.md`, `4_CS.md` | Cuadros de la revisión del 15-nov | **Histórico** (valores y decisiones anteriores) |
-| `../entrega_powerbi/base_indicadores_OCE.xlsx` | Excel completo: sirve para el profe (hojas Inicio, Índices, Indicadores y Ficha metodológica) y para Power BI (hoja Datos) (`scripts/entregables/generar_base_powerbi.py`) | **Vigente** |
+| `../entrega_powerbi/base_indicadores_OCE.xlsx` | Excel como base de datos con fórmulas, 5 hojas (Léame, Índices, Datos, Indicadores, Detalle); sirve para el profe y para Power BI (`scripts/entregables/generar_base_powerbi.py`, `excel_formulas.py`) | **Vigente** |
 
 Soporte técnico: `outputs/construccion/` (CSV por dimensión), `scripts/construccion/` (scripts) y `outputs/revision_indicadores/` (series y QA).
 Para regenerar todo después de cambiar los datos (los informes de PQRSDF y las actas ya están en `data_raw_IIC/07_revision_nov2026/`, obtenidos del Google Drive de Isabella porque el portal dio HTTP 500; si el portal vuelve, `cs_descargas.py` solo baja lo que falte): `python3 scripts/construccion/cs_descargas.py && python3 scripts/construccion/cs_icrcs.py && python3 scripts/entregables/generar_entrega_profe.py && python3 scripts/entregables/generar_base_powerbi.py`

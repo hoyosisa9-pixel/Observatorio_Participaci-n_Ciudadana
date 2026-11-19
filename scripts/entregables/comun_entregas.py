@@ -304,7 +304,7 @@ def fuentes_lista(cod, max_fuentes=6, max_enlaces=2):
                 cod_det = r['codigo']
                 det += [u for u in re.findall(r'https?://[^\s;]+', r['enlace']) if u not in det]
         if det:
-            salida.append((f'Documentos de cada evento (acta, memoria o cuadro de preguntas): detalle en las filas {cod_det} de la hoja «Datos» del Excel',
+            salida.append((f'Documentos de cada evento (acta, memoria o cuadro de preguntas): detalle en las filas {cod_det} de la hoja «Detalle» del Excel',
                            det[:max_enlaces], max(len(det) - max_enlaces, 0)))
     return salida
 

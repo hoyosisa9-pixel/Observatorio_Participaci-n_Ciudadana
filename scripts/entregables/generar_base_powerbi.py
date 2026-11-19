@@ -21,6 +21,7 @@ Si cambian los CSV de construcción (p. ej. al completar las rendiciones de Disc
 """
 import csv
 import re
+import zipfile
 from collections import Counter, OrderedDict
 from datetime import date
 from pathlib import Path
@@ -32,7 +33,7 @@ from openpyxl.worksheet.table import Table, TableStyleInfo
 
 import comun_entregas as ce
 import contenido_fichas as cf
-import hojas_excel
+import excel_formulas
 
 RAIZ = Path(__file__).resolve().parents[2]
 SALIDA = RAIZ / 'outputs' / 'entrega_powerbi' / 'base_indicadores_OCE.xlsx'
@@ -370,122 +371,125 @@ def main():
     assert cs_got.keys() == cs_csv.keys() and all((cs_got[a] is None and cs_csv[a] is None) or (cs_got[a] is not None and cs_csv[a] is not None and abs(cs_got[a] - cs_csv[a]) < 0.005) for a in cs_got), ('ICRCS distinto del CSV', cs_got, cs_csv)
     assert len([x for x in f_ind if x[0] == 'CS']) == 6 and len([x for x in f_ind if x[0] == 'PDM']) == 7
 
-    # ---------------- hoja Datos (tabla larga desnormalizada para Power BI)
-    cat = {d[0]: d for d in dim_ind}
-    color = {n: c for n, _d, _h, c, _o in SEMAFORO}
-    col_datos = ['id_dato', 'dimension', 'nombre_dimension', 'codigo', 'indicador', 'nombre_corto', 'tipo', 'codigo_base', 'entra_al_indice',
-                 'codigo_indice', 'orden_dimension', 'orden_indicador', 'anio', 'subperiodo', 'tipo_periodo', 'periodo', 'unidad', 'sentido',
-                 'peso_en_indice', 'numerador', 'denominador', 'valor', 'valor_min', 'valor_max', 'valor_texto', 'puntaje_0_100', 'semaforo',
-                 'color_semaforo', 'tiene_dato', 'vigencia_en_curso', 'brecha', 'referente', 'fuente', 'enlace', 'enlace_principal',
-                 'fecha_consulta', 'fecha_consulta_fecha', 'estado', 'nota']
-    f_datos = []
-
-    for f in f_hechos:
-        d = cat[f[2]]
-        f_datos.append([f[0], f[1], d[4], f[2], f[3], d[2], f[4], d[7], d[11], d[6], d[5], d[10], f[5], f[6], f[7], f[8], d[13], d[14],
-                        f[16], f[9], f[10], f[11], f[12], f[13], f[14], f[15], f[17], color.get(f[17]), f[18], f[27], f[19], f[20],
-                        f[21], f[22], f[23], f[24], f[25], f[26], f[28]])
-    for x in f_br:   # filas de brecha: periodo en texto, anio vacío; valor = brecha en %
-        d = cat[x[1]]
-        f_datos.append([f'{x[1]}|{x[4]}', x[0], d[4], x[1], x[2], d[2], x[3], d[7], d[11], d[6], d[5], d[10], None, None, 'Periodo', x[4], d[13], d[14],
-                        None, x[5], x[6], x[7], None, None, None, None, None, None, 'Sí', 'No', x[8], None, None, None, None, None, None, 'Provisional', x[9]])
-    f_datos.sort(key=lambda r: (r[10], r[11], r[3], r[12] if r[12] is not None else 9999, r[13] or '', str(r[15])))
-    assert all(len(r) == len(col_datos) for r in f_datos)
-    assert len({r[0] for r in f_datos}) == len(f_datos), 'id_dato repetido'
-    assert 'origen' not in [c.lower() for c in col_datos]
-    assert sum(1 for r in f_datos if r[6] == 'brecha') == len(f_br)
-    assert sum(1 for r in f_datos if r[6] != 'brecha') == len(f_hechos)
-    # unidad y sentido de las fichas = los del catálogo
+    # ---------------- libro con fórmulas (ver excel_formulas.py)
     fichas = cf.construir_fichas()
+    cat_u = {d[0]: d for d in dim_ind}
     for f in fichas:
-        assert (f['unidad'], f['sentido']) == (cat[f['codigo']][13], cat[f['codigo']][14]), f['codigo']
-    n_princ = sum(1 for d in dim_ind if d[8] == 'principal')
-    n_idx = sum(1 for d in dim_ind if d[8] == 'indice')
-    assert len(fichas) == n_princ + n_idx and {f['codigo'] for f in fichas} == {d[0] for d in dim_ind if d[11] == 'Sí'}
+        assert (f['unidad'], f['sentido']) == (cat_u[f['codigo']][13], cat_u[f['codigo']][14]), f['codigo']
+    info = excel_formulas.construir(hechos, brechas, fichas, dim_ind, codigo_base, SALIDA, FECHA, leame)
 
-    # series para la hoja Indicadores: {código: {año: (puntaje, semáforo, valor, máximo)}}
-    serie = {}
-    for f in f_hechos:
-        if f[4] in ('principal', 'indice') and f[7] == 'Año' and f[5] <= ANIO_CORTE:
-            serie.setdefault(f[2], {})[f[5]] = (f[15], f[17], f[11], f[13])
-    maximos_idx = {}
-    for f in f_hechos:
-        if f[2] in ('PC.ISPC.MAX', 'CS.ICRCS.MAX') and f[11] is not None and f[5] <= ANIO_CORTE:
-            maximos_idx.setdefault(f[2][:-4], {})[f[5]] = f[11]
-    brechas_txt = {f['codigo']: f['brecha'] for f in fichas}
-    nombres = {c: (cat[c][2] or cat[c][1]) for c in brechas_txt}
-
-    # ---------------- libro (5 hojas)
-    wb = Workbook()
-    dic_datos = [(c, DICC_DATOS[c]) for c in col_datos]
-    assert all(c in DICC_DATOS for c in col_datos), [c for c in col_datos if c not in DICC_DATOS]
-    hojas_excel.hoja_inicio(wb, FECHA, col_datos, dic_datos)
-    hojas_excel.hoja_indices(wb, fichas, maximos_idx)
-    hojas_excel.hoja_indicadores(wb, fichas, serie, nombres, brechas_txt)
-    _ws_ficha, n_extra = hojas_excel.hoja_ficha(wb, fichas)
-    ws = hoja(wb, 'Datos', col_datos, f_datos,
-              formatos={'numerador': '#,##0.##', 'denominador': '#,##0.##', 'valor': '0.00', 'valor_min': '0.00', 'valor_max': '0.00',
-                        'puntaje_0_100': '0.00', 'peso_en_indice': '0.000', 'anio': '0', 'fecha_consulta_fecha': 'yyyy-mm-dd'},
-              anchos={'id_dato': 28, 'indicador': 45, 'nombre_corto': 30, 'nota': 60, 'fuente': 50, 'enlace': 50, 'enlace_principal': 50,
-                      'brecha': 40, 'referente': 30, 'nombre_dimension': 30, 'unidad': 24})
-    ws.freeze_panes = ws.cell(2, 5)
-    hojas_excel.horizontal(ws, '1:1')
-    assert wb.sheetnames == ['Inicio', 'Índices', 'Indicadores', 'Ficha metodológica', 'Datos']
-
-    # ningún texto del libro lleva «origen», «Claude» ni «asistente», ni atribuciones, ni números de decisión
-    for ws_ in wb.worksheets:
-        for fila in ws_.iter_rows():
-            for c in fila:
-                if isinstance(c.value, str):
-                    assert not ce.palabras_prohibidas(c.value), (ws_.title, c.coordinate, c.value[:80])
-                    assert not ce.ano_suelto(c.value), (ws_.title, c.coordinate, ce.ano_suelto(c.value)[:2])   # «ano» suelto = falta la eñe
-                    assert not re.search(r'\bD\d{1,3}\b|usuaria|Isabella|Analizador', c.value), (ws_.title, c.coordinate, c.value[:80])
-
-    SALIDA.parent.mkdir(parents=True, exist_ok=True)
-    wb.save(SALIDA)
-
-    # ---------------- verificación del archivo guardado
+    # ---------------- verificación del archivo guardado (valores guardados = CSV)
     import openpyxl
-    wl = openpyxl.load_workbook(SALIDA)
-    assert wl.sheetnames == ['Inicio', 'Índices', 'Indicadores', 'Ficha metodológica', 'Datos']
-    assert list(wl['Datos'].tables) == ['Datos'] and len(wl['Datos'].tables) == 1 and sum(len(w.tables) for w in wl.worksheets) == 1
-    assert wl['Datos'].max_row - 1 == len(f_datos)
-    wi = wl['Índices']
-    cab = next(r for r in range(1, 30) if wi.cell(r, 1).value == 'Índice')
-    anios_h = [int(wi.cell(cab, j).value) for j in range(3, 10)]
-    assert anios_h == list(range(2019, 2026))
-    for k, cod in enumerate(ce.NOMBRE_INDICE, 1):
-        assert wi.cell(cab + k, 1).value == ce.NOMBRE_INDICE[cod]
-        vals = ce.valores_indice(cod)
-        for j, a in enumerate(anios_h):
-            got, esp = wi.cell(cab + k, 3 + j).value, vals.get(a, (None, ''))[0]
-            assert (esp is None and got == '—') or (esp is not None and abs(got - esp) < 0.005), (cod, a, got, esp)
-    got = {(wi.cell(cab + k, 1).value, a): wi.cell(cab + k, 3 + j).value for k in range(1, 5) for j, a in enumerate(anios_h)}
-    assert abs(got[('IREPP', 2025)] - 95.83) < 0.005 and abs(got[('ICPD-7', 2019)] - 62.41) < 0.005 and abs(got[('ISPC', 2025)] - 61.62) < 0.005
-    assert abs(got[('ICRCS', 2024)] - 60.59) < 0.005 and abs(got[('ICRCS', 2025)] - 38.18) < 0.005
-    # Indicadores: el puntaje de cada celda coincide con Datos
-    wd = {(r[3], r[12]): r[25] for r in f_datos if r[6] in ('principal', 'indice') and r[14] == 'Año'}
-    wn = wl['Indicadores']
-    anios_i = {j: int(wn.cell(4, j).value) for j in range(7, 7 + len(hojas_excel.ANIOS_VISTA))}
-    n_celdas = 0
-    for r in range(5, wn.max_row + 1):
-        nom = wn.cell(r, 1).value
-        if wn.cell(r, 2).value == 'Puntaje 0–100':
-            cod = next(c for c, n in nombres.items() if n == nom and (wn.cell(r, 3).value == cat[c][13]))
-            for j, a in anios_i.items():
-                v = wn.cell(r, j).value
-                esp = wd.get((cod, a))
-                assert (v == '—' and esp is None) or (esp is not None and abs(v - esp) < 1e-9), (cod, a, v, esp)
-                n_celdas += 1
-    assert n_celdas == (n_princ + n_idx) * len(hojas_excel.ANIOS_VISTA)
-    nf = wl['Ficha metodológica']
-    assert nf.max_row - 1 == len(fichas) + 2
-    texto_ficha = ' '.join(str(c.value) for row in nf.iter_rows() for c in row if c.value)
-    assert all(cod in texto_ficha for cod in ce.matriz()), 'faltan indicadores de la matriz original en la ficha'
-    assert all(w.page_setup.orientation == 'landscape' for w in wl.worksheets)
-    print(f'{SALIDA.relative_to(RAIZ)} | Datos {len(f_datos)} filas x {len(col_datos)} columnas ({len(f_hechos)} de hechos + {len(f_br)} de brecha) | '
-          f'Indicadores {n_princ + n_idx} indicadores | Ficha {len(fichas)} + 2 eliminados | Índices 4 x 7 años')
-    print('hojas:', wl.sheetnames)
+    wd = openpyxl.load_workbook(SALIDA, data_only=True)
+    wf = openpyxl.load_workbook(SALIDA)
+    assert wd.sheetnames == ['Léame', 'Índices', 'Datos', 'Indicadores', 'Detalle'], wd.sheetnames
+    assert sorted(t for w in wf.worksheets for t in w.tables) == ['Datos', 'Detalle', 'Indicadores', 'Indices']
+    assert 'fullCalcOnLoad="1"' in zipfile.ZipFile(SALIDA).read('xl/workbook.xml').decode()
+    csvv = {(r['codigo'], r['anio']): r for r in hechos}
+    tab = lambda w, n: [dict(zip([c.value for c in w[n][1]], row)) for row in w[n].iter_rows(min_row=2, values_only=True)]
+    ind = tab(wd, 'Índices')
+    assert len(ind) == 25
+    for r in ind:
+        esp = num(csvv[(r['codigo'], str(r['anio']))]['valor'])
+        assert (r['puntaje'] in (None, '') and esp is None) or abs(r['puntaje'] - esp) <= 0.005, r
+        assert r['tiene_dato'] == ('Sí' if esp is not None else 'No')
+        mx = csvv.get((r['codigo'] + '.MAX', str(r['anio'])))
+        if r['puntaje_max'] not in (None, ''):
+            assert mx and abs(r['puntaje_max'] - num(mx['valor'])) <= 0.005, r
+    got = {(r['codigo'], r['anio']): r for r in ind}
+    clave = {('PP.IREPP', 2020): 57.98, ('PP.IREPP', 2021): 90.71, ('PP.IREPP', 2025): 95.83, ('PDM.ICPD7', 2019): 62.41, ('PC.ISPC', 2025): 61.62,
+             ('CS.ICRCS', 2024): 60.59, ('CS.ICRCS', 2025): 38.18}
+    for k, v in clave.items():
+        assert abs(got[k]['puntaje'] - v) <= 0.005, (k, got[k]['puntaje'], v)
+    for k, v in {('PC.ISPC', 2025): 69.95, ('CS.ICRCS', 2024): 79.47, ('CS.ICRCS', 2025): 55.71}.items():
+        assert abs(got[k]['puntaje_max'] - v) <= 0.005, (k, got[k]['puntaje_max'], v)
+    dat = tab(wd, 'Datos')
+    assert len(dat) == sum(1 for r in hechos if r['tipo'] == 'principal' and r['tipo_periodo'] == 'Año' and r['anio_num'] <= ANIO_CORTE)
+    assert len({r['id'] for r in dat}) == len(dat)
+    for r in dat:
+        esp = num(csvv[(r['codigo'], str(r['anio']))]['puntaje_0_100'])
+        assert (r['puntaje'] in (None, '') and esp is None) or abs(r['puntaje'] - esp) <= 0.005, (r['id'], r['puntaje'], esp)
+        assert r['tiene_dato'] in ('Sí', 'No', 'No aplica')
+    cat_ = {r['codigo']: r for r in tab(wd, 'Indicadores')}
+    assert len(cat_) == 22
+    for cod, (s_, t_) in {'PDM.ICPD7': (4, 7), 'PC.ISPC': (5, 6), 'CS.ICRCS': (4, 6), 'PC.I1': (2, 8), 'PC.I2': (1, 6), 'PP.IREPP': (0, 6)}.items():
+        assert (cat_[cod]['brecha_sin_dato'], cat_[cod]['brecha_total']) == (s_, t_), (cod, cat_[cod]['brecha_sin_dato'], cat_[cod]['brecha_total'])
+    assert (cat_['PDM.VEED']['brecha_sin_dato'], cat_['PDM.VEED']['brecha_total']) == (19, 52)
+    assert (cat_['CS.PQRSDF']['brecha_sin_dato'], cat_['CS.PQRSDF']['brecha_total']) == (0, 24)
+    assert (cat_['CS.DSI']['brecha_sin_dato'], cat_['CS.DSI']['brecha_total']) == (5, 20)
+    assert abs(cat_['PDM.SALUD']['peso'] - 1 / 7) < 1e-12 and abs(cat_['PP.EJ90']['peso'] - 0.4) < 1e-12
+    for fila in tab(wd, 'Detalle'):
+        assert fila['codigo'] not in ('PDM.CM.TD', 'PDM.HOM.TD', 'PDM.POB') and not str(fila['codigo']).endswith('.MAX') and fila['anio'] <= ANIO_CORTE
+    # sin color de semáforo, sin palabras prohibidas, sin números de decisión, sin nombres, sin «ano» suelta
+    for w in wf.worksheets:
+        for row in w.iter_rows():
+            for c in row:
+                if c.fill is not None and c.fill.fgColor is not None and str(c.fill.fgColor.rgb)[-6:] in ('C8E6C9', 'FFF3B0', 'FFD8A8', 'F5B7B1'):
+                    raise AssertionError(('color de semáforo', w.title, c.coordinate))
+                if isinstance(c.value, str):
+                    assert not ce.palabras_prohibidas(c.value), (w.title, c.coordinate, c.value[:80])
+                    assert not re.search(r'\bD\d{1,3}\b|usuaria|Isabella|Analizador', c.value), (w.title, c.coordinate, c.value[:80])
+                    assert not ce.ano_suelto(c.value), (w.title, c.coordinate)
+    nform = sum(1 for w in wf.worksheets for row in w.iter_rows() for c in row if isinstance(c.value, str) and c.value.startswith('='))
+    assert all(not re.search(r'XLOOKUP|(?<![A-Z])IFS\(|MINIFS|LET\(|ROUND', c.value) for w in wf.worksheets for row in w.iter_rows() for c in row
+               if isinstance(c.value, str) and c.value.startswith('='))
+    print(f"{SALIDA.relative_to(RAIZ)} | Índices {info['indices']} filas | Datos {info['datos']} x 20 | Indicadores {info['indicadores']} x 23 | Detalle {info['detalle']} x 17 | fórmulas {nform}")
+    print('hojas:', wd.sheetnames)
+
+
+def leame(ws, fecha):
+    """Hoja Léame (texto)."""
+    L = [
+        ('Base de datos de indicadores del Observatorio Ciudadano de Envigado (OCE)', 'T'),
+        (f'Generada el {fecha}. Todos los resultados son PROVISIONALES.', ''),
+        ('', ''),
+        ('Qué es este archivo', 'S'),
+        ('Reúne los cuatro índices del observatorio (cumplimiento del PDM, participación ciudadana, presupuesto participativo y control social), los indicadores que los componen y sus datos de base, con su serie por año.', ''),
+        ('Es una base de datos con fórmulas: cambie una entrada y se recalculan el valor, el puntaje, el semáforo (propuesta) y el índice. Cada cifra trae su fuente, su enlace y su fecha de consulta.', ''),
+        ('', ''),
+        ('Las tablas y cómo se relacionan', 'S'),
+        ('Indicadores: catálogo de 22 filas (los 18 indicadores principales y los 4 índices) con definición, unidad, sentido, peso, método del puntaje, línea base, referente, brecha y fuente.', ''),
+        ('Datos: una fila por indicador principal y año (hasta 2025): numerador, denominador, valor, puntaje de 0 a 100 y semáforo (propuesta). Se relaciona con Indicadores por codigo.', ''),
+        ('Indices: una fila por índice y año: puntaje del índice, máximo (si hay rango) y semáforo (propuesta). Se relaciona con Indicadores por codigo.', ''),
+        ('Detalle: entradas de apoyo (subcomponentes, respaldos, eventos, metas y trimestres). Se relaciona con Indicadores por codigo_padre.', ''),
+        ('', ''),
+        ('La cadena de cálculo', 'S'),
+        ('Entradas (Detalle y las columnas numerador, denominador y valor de Datos) → valor (columna valor) → puntaje de 0 a 100 (columna puntaje) → índice (hoja Índices) → brecha (hoja Indicadores).', ''),
+        ('Las fórmulas están en las propias celdas y usan solo funciones clásicas (IF, OR, MIN, MAX, COUNTIFS, SUMIFS y AVERAGEIFS). No hay redondeos: el formato muestra 2 decimales, pero el cálculo usa todos.', ''),
+        ('Los métodos del puntaje (columna metodo_puntaje de Indicadores): proporcion (el valor ya es el puntaje), tope (máximo 100), inverso (menor es mejor), avance (desde la línea base hacia el referente), veedurias y promedio.', ''),
+        ('', ''),
+        ('Reglas', 'S'),
+        ('No se redistribuyen pesos: un índice solo se calcula si están todos sus componentes del año (componentes_con_dato = componentes). Si falta uno, el puntaje queda vacío.', ''),
+        ('«Sin dato» no es cero: una celda vacía significa que no hay dato publicado o verificable. «No aplica» (por ejemplo, el año sin votación) no cuenta en la brecha.', ''),
+        ('Rango mínimo–máximo: valor es el mínimo (solo lo documentado) y entra al índice; valor_max suma lo no verificable (sin_verificar); brecha_rango = valor_max − valor. El puntaje_max del índice suma esas brechas con su peso.', ''),
+        ('Brecha de información: años (o trimestres, consecutivos o metas) sin dato / total del periodo. Se calcula con fórmula en Indicadores; veedurías, PQRSDF y DSI traen su propia unidad.', ''),
+        ('Población: todas las tasas usan las proyecciones del DANE vigentes al 8-ago-2025 (VP). El año 2026 está en curso y no se incluye.', ''),
+        ('Semáforo (propuesta, por validar): Verde ≥ 90; Amarillo 75 a < 90; Naranja 50 a < 75; Rojo < 50, sobre el puntaje. En los indicadores con rango se asigna con el mínimo.', ''),
+        ('', ''),
+        ('Diccionario corto', 'S'),
+        ('id: clave única (código|año). dimension: PDM, PC, PP o CS. codigo: código del indicador o índice (ver Indicadores). anio: año (en PC.I1 es el año de la votación; en PP, la vigencia).', ''),
+        ('numerador / denominador: variables del cálculo. sin_verificar: parte del numerador que no se pudo verificar (rango). valor: valor del indicador. puntaje: puntaje de 0 a 100.', ''),
+        ('tiene_dato: Sí, No o No aplica. motivo_sin_dato: por qué no hay dato. fuente, enlace y otros_enlaces: de dónde sale. fecha_consulta y nota: trazabilidad y método.', ''),
+        ('sentido: mayor es mejor o menor es mejor (mortalidad vial y homicidio). unidad: unidad del valor. peso: peso del indicador en el índice de su dimensión.', ''),
+        ('', ''),
+        ('Nota para Power BI', 'S'),
+        ('Importe las tablas Datos, Indices e Indicadores; Detalle es opcional. Las fórmulas traen su valor guardado, así que se pueden leer sin recalcular.', ''),
+        ('Relaciones: Indicadores[codigo] 1 → * Datos[codigo] y 1 → * Indices[codigo]; Detalle[codigo_padre] * → 1 Indicadores[codigo].', ''),
+        ('Tipos: anio como número entero; enlace y enlace_principal como URL. El color del semáforo no viene en el archivo: defínalo con reglas sobre puntaje (≥ 90, ≥ 75, ≥ 50).', ''),
+        ('No sume valor entre indicadores: tienen unidades distintas. Para comparar use puntaje. Los filtros útiles: dimension, codigo y anio.', ''),
+        ('', ''),
+        ('Cómo se generó', 'S'),
+        ('Con scripts/entregables/generar_base_powerbi.py, a partir de los resultados de la construcción (outputs/construccion/*/..._indicadores.csv). Si los resultados se actualizan, se vuelve a correr.', ''),
+    ]
+    from openpyxl.styles import Alignment, Font
+    ws.sheet_view.showGridLines = False
+    ws.column_dimensions['A'].width = 150
+    for i, (t, e) in enumerate(L, 1):
+        c = ws.cell(i, 1, t)
+        c.font = Font(name='Arial', size=14 if e == 'T' else 11 if e == 'S' else 10, bold=e in ('T', 'S'), color='1F4E78' if e else '000000')
+        c.alignment = Alignment(wrap_text=True, vertical='top')
+        if len(t) > 150:
+            ws.row_dimensions[i].height = 14 * (len(t) // 150 + 1)
 
 
 if __name__ == '__main__':
