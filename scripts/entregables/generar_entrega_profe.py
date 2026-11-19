@@ -270,7 +270,7 @@ INDICES_DEF = [
     ('ICRCS (Control social)', 'CS', 'CS.ICRCS', 2020, 2025,
      '(DSI + PQRSDF + VRC + RPO) / 4.'),
 ]
-SEMAFORO = 'Semáforo: Verde ≥ 90 · Amarillo 75 a < 90 · Naranja 50 a < 75 · Rojo < 50.'
+SEMAFORO = 'Semáforo (propuesta): Verde ≥ 90 · Amarillo 75 a < 90 · Naranja 50 a < 75 · Rojo < 50.'
 
 
 def datos_indice(dim, codigo, a0, a1):
@@ -296,7 +296,7 @@ def datos_indice(dim, codigo, a0, a1):
 
 def linea_brecha(k, n):
     pct = str(round((n - k) / n * 100, 1)).replace('.', ',')
-    return f'**Brecha:** años con índice / años del periodo = {k} de {n} (sin índice: {pct} %).'
+    return f'**Brecha:** {n - k} de {n} años sin índice ({pct} %).'
 
 
 # ------------------------------------------------------------------ cuadros de indicadores por dimensión
@@ -314,12 +314,21 @@ NOMBRES = {
 }
 
 
+def valor_fila(r):
+    """Valor a mostrar. I1 (IPCM) se recalcula con numerador / denominador para no redondear dos veces."""
+    if r['codigo'] == 'PC.I1' and num(r['numerador']) is not None and num(r['denominador']):
+        exacto = 100 * num(r['numerador']) / num(r['denominador'])
+        assert abs(exacto - num(r['valor'])) < 0.001, (r['anio'], exacto, r['valor'])
+        return repr(exacto)
+    return r['valor']
+
+
 def ultimo_valor(dim, cod):
     con = con_dato(anual(dim, cod, 'principal'))
     if not con:
         return 'Sin dato'
     r = con[-1]
-    v, p, a = r['valor'], r['puntaje_0_100'], r['anio']
+    v, p, a = valor_fila(r), r['puntaje_0_100'], r['anio']
     mx = maximo(dim, cod, a)
     if mx is not None and num(mx) != num(v):
         return f'{fmt(v)}–{fmt(mx)} (mín.–máx.; {a})'
@@ -329,20 +338,38 @@ def ultimo_valor(dim, cod):
 
 
 def texto_brecha(dim, cod, corto=True):
+    """Formato homogéneo: «N de M <unidad> sin dato (X %)»; el detalle va después solo si corto=False."""
     rs = filas(dim, cod + '.BRECHA', 'brecha')
     if not rs:
         return '—'
     r = rs[0]
     t = r['brecha'].replace('anios', 'años')
-    if corto and re.match(r'\d+ de \d+ (años|trimestres)', t):
-        t = t.split(';')[0]
-    if re.match(r'\d+ de \d+ años', t) and '%' not in t and '(' not in t and num(r['valor']) is not None:
-        t += f' ({fmt(r["valor"], 1)} %)'
-    return t
+    pct = f'{fmt(r["valor"], 1)} %'
+    pares = re.findall(r'(\d+)/(\d+)', t)
+    if cod == 'CS.DSI' and pares:
+        n, m = sum(int(a) for a, _ in pares), sum(int(b) for _, b in pares)
+        assert abs(100 * n / m - num(r['valor'])) < 0.01, (n, m, r['valor'])
+        base, resto = f'{n} de {m} metas (año × meta) no verificables ({pct})', t
+    elif re.match(r'\d+ de \d+ ', t):
+        cabeza, _, resto = t.partition(';')
+        if '%' in cabeza:  # ya trae el porcentaje (veedurías)
+            base = cabeza.strip()
+        else:
+            extra = re.search(r'\s*\(([^()]*)\)$', cabeza)
+            base = f'{re.sub(r"\s*\([^()]*\)$", "", cabeza).strip()} ({pct})'
+            resto = ((extra.group(1) + '; ') if extra else '') + resto
+    else:
+        base, resto = t, ''
+    return base if corto or not resto.strip() else f'{base}; {resto.strip()}'
 
 
 def tabla_indicadores_dim(dim):
     return [[nombre, anios_dato(dim, cod), ultimo_valor(dim, cod), texto_brecha(dim, cod)] for cod, nombre in NOMBRES[dim]]
+
+
+AVISO_PP2020 = ('**PP 2020:** 20 de 69 proyectos con contracrédito total ($3.627.742.979); la ejecución presupuestal (82,42) no lo refleja; '
+                'obligación / valor votado = 46,34 %; la vigencia 2020 se priorizó en 2019.')
+assert any('3.627.742.979' in r['nota'] for r in DATA['PP']) and any('46.34' in r['nota'] or '46,34' in r['nota'] for r in DATA['PP'])
 
 
 ENC_IND = ['Indicador', 'Años con dato', 'Último valor (puntaje)', 'Brecha de información']
@@ -389,7 +416,7 @@ PC = [
     ['**I2** Cobertura territorial', 'El dato principal solo existe para 2024–2025',
      '**Se mantiene**, con **12 zonas** (la zona 1 es industrial). 2025 con alerta: falta la lista de asambleas por zona', 'Profe', serie('PC', 'PC.I2')],
     ['**I3** Oferta formativa', 'Solo 2025 tiene denominador, y es reconstruido',
-     '**Se mantiene**: 2025 = **21 de 25** acciones. Respaldo: número de acciones para la ciudadanía (2023–2025)', 'Profe; Isabella', serie('PC', 'PC.I3')],
+     '**Se mantiene**: 2025 = **21 de 25** acciones. Respaldo: número de acciones para la ciudadanía (2023–2025)', 'Isabella (D49, D72)', serie('PC', 'PC.I3')],
     ['**I4** Publicación de resultados', 'No hay inventario oficial de procesos cerrados',
      '**Se mantiene** con una **lista fija de 3 procesos** que el observatorio verifica en el portal. 2025 como rango (falta la rendición de PP)',
      'Profe e Isabella', serie('PC', 'PC.I4')],
@@ -397,7 +424,7 @@ PC = [
 ]
 
 PP = [
-    ['**EPP** Ejecución presupuestal', 'Hay dato de Hacienda por proyecto', '**Se mantiene**. Sin el rubro de déficit fiscal', 'Profe', serie('PP', 'PP.EPP', ' (2021 sin dato)')],
+    ['**EPP** Ejecución presupuestal', 'Hay dato de Hacienda por proyecto', '**Se mantiene**. Sin el rubro de déficit fiscal', 'Profe (mantener); Isabella (excluir déficit, D51)', serie('PP', 'PP.EPP', ' (2021 sin dato)')],
     ['**CEP** Entrega de proyectos', 'No hay actas de recibo; «terminado» solo existe como autorreporte',
      '**Se reemplaza** por **EJ90**: proyectos con ejecución ≥ 90 % (Hacienda). «Terminados» queda solo como respaldo', 'Profe', serie('PP', 'PP.EJ90')],
     ['**CMA** Metas de atención', 'El plan de acción mide actividades, no personas', '**Se reemplaza** por **FID**: fidelidad a lo votado', 'Profe', serie('PP', 'PP.FID')],
@@ -410,11 +437,11 @@ CS = [
      '**Se reemplaza** por **PQRSDF**: oportunidad de respuesta (atendidas en términos / recibidas)', 'Profe; Isabella (no al autorreporte)',
      'Sin dato: los informes del portal de la Alcaldía no están disponibles'],
     ['**DSI** Información de seguimiento', 'La lista de metas estaba desactualizada',
-     '**Se mantiene** con **10 metas** de resultado del PDM; rango (mín.–máx.) con brecha', 'Profe', serie('CS', 'CS.DSI')],
+     '**Se mantiene** con **10 metas** de resultado del PDM; rango (mín.–máx.) con brecha', 'Profe (mantener); Isabella (lista de 10, D75/D79)', serie('CS', 'CS.DSI')],
     ['**VRC** Veedurías en rendición de cuentas', 'En varios eventos no se sabe si hubo veeduría',
-     '**Se mantiene**, como **rango** (mín.–máx.) con la **brecha de información**; al índice entra el mínimo', 'Profe; Isabella', serie('CS', 'CS.VRC')],
+     '**Se mantiene**, como **rango** (mín.–máx.) con la **brecha de información**; al índice entra el mínimo', 'Profe (mantener); Isabella (rango y brecha, D33; extensión, D77)', serie('CS', 'CS.VRC')],
     ['**RPO** Respuesta a observaciones', 'El cuadro de 2025 es corto',
-     '**Se mantiene**; 2021 como rango; 2025 con alerta', 'Profe', serie('CS', 'CS.RPO')],
+     '**Se mantiene**; 2021 como rango; 2025 con alerta', 'Profe (mantener); Isabella (2021 y 2025, D76/D80)', serie('CS', 'CS.RPO')],
 ]
 
 # Espacio verde: cortes y fuentes (los avances salen del CSV)
@@ -478,19 +505,19 @@ SOLICITAR = [
 DECISIONES = [
     ('D34, D48', 'Índice del PDM', 'Siete componentes: salud, logro educativo, servicios públicos, mortalidad vial, espacio verde, veedurías y homicidio como séptimo (seguridad). Promedio simple: cada uno pesa 1/7.', 'Profe (7 componentes); Isabella (promedio simple)', True),
     ('D35', 'Referente de salud', '100 % (cobertura universal), porque la meta del PDM (99,5 %) es solo del régimen subsidiado.', 'Profe', True),
-    ('D36, D46, D68', 'Referente de veedurías', 'Línea base = promedio de 2019 a 2023 = 5,4 veedurías al año. Puntaje = 100 × valor / 5,4, con tope 100.', 'Profe (línea base); Isabella (5,4)', True),
+    ('D36, D46, D68', 'Referente de veedurías', 'Línea base = promedio de 2019 a 2023 = 5,4 veedurías al año. Puntaje = 100 × valor / 5,4, con tope 100.', 'Profe (con línea base, reunión 2); Isabella (promedio 2019–2023 = 5,4)', True),
     ('D31, D37, D59', 'Espacio verde', 'Línea base 2019 = 4,54 (AMVA) hacia 9 m²/hab; cortes 2019, 2022 y 2024 (5,75, valor publicado). Se pide a Planeación la serie anual con el método del AMVA.', 'Profe (hacia 9); Isabella (línea base 2019, urbano)', True),
-    ('D38, D47', 'Metas de otro universo', 'No se usan. Servicios públicos: referente 100 %. Mortalidad vial: 7,33 por 100.000 = la reducción del PDM (8 / 10,2) aplicada a la línea base 2019 de la Policía (9,35).', 'Profe (no mezclar); Isabella (7,33)', True),
-    ('D39, D50, D65', 'Servicios públicos', 'Promedio simple de las 4 coberturas desde 2019. Acueducto, alcantarillado y aseo desde 2008 solo como contexto. 2019 se mantiene, con alerta (el REC rural de 2016–2020 no es comparable).', 'Profe; Isabella', True),
+    ('D38, D47, D83', 'Metas de otro universo', 'No se usan. Servicios públicos: referente 100 % (decisión). Mortalidad vial: 7,33 por 100.000 = la reducción del PDM (8 / 10,2) aplicada a la línea base 2019 de la Policía (9,35).', 'Profe (no mezclar universos); Isabella (7,33 y 100 % de servicios públicos)', True),
+    ('D39, D50, D65', 'Servicios públicos', 'Promedio simple de las 4 coberturas desde 2019; referente 100 % (decisión). Acueducto, alcantarillado y aseo: 2009–2018 solo como contexto (2008 y 2010 vienen vacíos). 2019 se mantiene, con alerta (el REC rural de 2016–2020 no es comparable).', 'Profe; Isabella', True),
     ('D15, D16, D27, D57', 'Logro educativo', 'Promedio simple de cobertura neta y primera infancia (0–5 años). 2015–2018 con alerta de comparabilidad.', 'Isabella', True),
-    ('D58, D63', 'Homicidio', 'Se mantiene la meta 2,7 del PDM (misma fuente y universo: Policía). Incluye el feminicidio. Nota: la línea base 3,7 del PDM usó otra población.', 'Profe (meta); Isabella', True),
-    ('D60', 'Semáforo', 'El mismo para todas las dimensiones: Verde ≥ 90, Amarillo 75 a < 90, Naranja 50 a < 75, Rojo < 50.', 'Propuesta aceptada', True),
+    ('D58, D63', 'Homicidio', 'Se mantiene la meta 2,7 del PDM (misma fuente y universo: Policía). Incluye el feminicidio. Nota: la línea base 3,7 del PDM usó otra población.', 'Profe (meta 2,7); Isabella (mantenerla con nota)', True),
+    ('D60, D84', 'Semáforo (propuesta)', 'Propuesta para que el profe la valide, igual en todas las dimensiones: Verde ≥ 90, Amarillo 75 a < 90, Naranja 50 a < 75, Rojo < 50.', 'Propuesta aceptada; rótulo «propuesta»: Isabella', True),
     ('D61, D62, D64, D66', 'Población y veedurías (método)', 'Población única: DANE vigente (8-ago-2025). Brecha de veedurías = consecutivos que faltan en el año / (listados + faltantes).', 'Propuesta aceptada; Isabella', False),
     ('D32, D40, D69', 'I1: votación de PP', 'Se reemplaza por el IPCM (votos / población). Línea base 2017 = 3,68 % con población DANE (la cifra oficial, 3,62 %, queda en nota); referente 7 %. El año es el de la votación.', 'Profe; Isabella', True),
     ('D41, D73', 'I2: zonas', '12 zonas (sin la zona 1, industrial). 2025 = 12/12 con alerta: es un agregado de la Alcaldía; se solicita la lista de asambleas por zona.', 'Profe; Isabella', True),
     ('D29, D40, D70, D74', 'I4: lista fija', 'Tres procesos: votación de PP, rendición de cuentas del Alcalde y rendición de PP. 2025 como rango (mín. 2/3, máx. 3/3); se actualiza cuando se publique la rendición de PP.', 'Profe; Isabella', True),
     ('D42', 'Pesos del ISPC', 'Se mantienen: 30/25/20/25.', 'Profe', True),
-    ('D49, D72', 'I3: oferta formativa', 'Tasa solo en 2025: 21/25 = 84,00 (denominador reconstruido; se cuenta el diplomado en Gestión Pública). Respaldo: conteo 17, 7 y 20 acciones para la ciudadanía.', 'Profe; Isabella', True),
+    ('D49, D72', 'I3: oferta formativa', 'Tasa solo en 2025: 21/25 = 84,00 (denominador reconstruido; se cuenta el diplomado en Gestión Pública). Respaldo: conteo 17, 7 y 21 acciones para la ciudadanía.', 'Isabella', True),
     ('D71', 'Consulta del portal', 'Se autoriza consultar el portal de la Alcaldía (incluida su API) para los votos de PP y archivar las noticias como fuente.', 'Isabella', False),
     ('D43', 'EJ90 en lugar de CEP', 'Principal: proyectos con ejecución ≥ 90 % (Hacienda, verificable). «Terminados» (autorreporte) solo como respaldo.', 'Profe', True),
     ('D24', 'FID en lugar de CMA', 'Fidelidad a lo votado: proyectos cuya apropiación coincide con el valor votado (±1 %) / proyectos votados.', 'Profe', True),
@@ -498,15 +525,16 @@ DECISIONES = [
     ('D44, D53, D56', 'Serie de PP', 'Se calcula 2020–2025 y se reporta la brecha. Un año se calcula solo si se verifica al menos el 50 % de sus proyectos: 2021 queda sin dato (39 de 89).', 'Profe; Isabella', True),
     ('D51, D52, D54, D55', 'Reglas de cruce de PP', 'Se excluye el rubro de déficit fiscal (2.3.7.06). Llave de cruce: valor votado = apropiación inicial; los cruces dudosos cuentan como no verificados.', 'Isabella', False),
     ('D45, D78, D82', 'PQRSDF en lugar de PCS', 'Oportunidad de respuesta (atendidas en términos / total). El año se arma con informes que cubran 12 meses sin repetirse; principal: sistema BPMS.', 'Profe; Isabella', True),
-    ('D45, D75, D79', 'DSI', 'Lista de 10 metas de resultado del PDM, como rango (mín. = valores con fecha de publicación verificada) con brecha. Años 2024 y 2025.', 'Profe; Isabella', True),
-    ('D33, D45, D77, D81', 'VRC', 'Rango: mínimo = veeduría documentada / eventos (entra al índice); máximo suma los eventos sin soporte; la brecha debe bajar año a año. Se extiende a 2021–2023 cuando vuelva el portal.', 'Profe; Isabella', True),
-    ('D76, D80', 'RPO', '2025 = 1/2 con alerta (cuadro corto). 2021 como rango (84,62–100). Universo: audiencia del Alcalde, sin felicitaciones.', 'Isabella', True),
-    ('D45', 'Brecha de información', 'Siempre se reporta: años sin dato / años del periodo. Un índice se calcula solo si están todos sus componentes; no se redistribuyen pesos.', 'Profe', True),
+    ('D45, D75, D79', 'DSI', 'Lista de 10 metas de resultado del PDM, como rango (mín. = valores con fecha de publicación verificada) con brecha. Años 2024 y 2025.', 'Profe (mantener); Isabella (lista de 10, D75/D79)', True),
+    ('D33, D45, D77, D81', 'VRC', 'Rango: mínimo = veeduría documentada / eventos (entra al índice); máximo suma los eventos sin soporte; la brecha debe bajar año a año. Se extiende a 2021–2023 cuando vuelva el portal.', 'Profe (mantener); Isabella (rango y brecha, D33; extensión, D77)', True),
+    ('D76, D80', 'RPO', '2025 = 1/2 con alerta (cuadro corto). 2021 como rango (84,62–100). Universo: audiencia del Alcalde, sin felicitaciones.', 'Profe (mantener); Isabella (2021 y 2025, D76/D80)', True),
+    ('D45', 'Brecha de información', 'Siempre se reporta: años (o eventos) sin dato / años del periodo.', 'Isabella (regla de la usuaria)', True),
+    ('—', 'Sin redistribuir pesos', 'Un índice se calcula solo si están todos sus componentes; no se redistribuyen pesos.', 'Matriz / guía metodológica (regla 15)', True),
 ]
 
 
 # ------------------------------------------------------------------ bloques reutilizables
-def bloque_indices(doc, anchos=(2.2, 6.4, 2.8, 7.2)):
+def bloque_indices(doc, anchos=(2.2, 6.0, 3.4, 7.2)):
     """Un cuadro por índice: Año | Valor | Semáforo | Componentes que faltan."""
     parrafo(doc, 'Un índice se calcula solo en los años en que están todos sus componentes; no se redistribuyen pesos. ' + SEMAFORO)
     for nombre, dim, cod, a0, a1, formula in INDICES_DEF:
@@ -515,7 +543,7 @@ def bloque_indices(doc, anchos=(2.2, 6.4, 2.8, 7.2)):
         filas_, k, n = datos_indice(dim, cod, a0, a1)
         brecha_csv = filas(dim, cod + '.BRECHA', 'brecha')[0]['brecha']
         assert f'{n - k} de {n}' in brecha_csv, (cod, k, n, brecha_csv)
-        tabla(doc, list(anchos), ['Año', 'Valor', 'Semáforo', 'Componentes que faltan'], filas_, tam=9)
+        tabla(doc, list(anchos), ['Año', 'Valor', 'Semáforo (propuesta)', 'Componentes que faltan'], filas_, tam=9)
         parrafo(doc, linea_brecha(k, n))
         if cod == 'CS.ICRCS':
             parrafo(doc, '**Falta PQRSDF** porque los archivos del portal de la Alcaldía no están disponibles (el servidor da error desde el 19-nov). '
@@ -548,6 +576,8 @@ def doc_profe():
         doc.add_heading(titulo, level=1)
         tabla(doc, w, [ENC[c] for c in sin_origen], [[f[c] for c in sin_origen] for f in filas_])
         cuadro_indicadores(doc, dim)
+        if dim == 'PP':
+            parrafo(doc, AVISO_PP2020)
         if dim == 'PDM':
             doc.add_heading('Espacio verde: cortes y fuentes', level=2)
             tabla(doc, [1.4, 2.6, 2.8, 7.0, 10.0], EV_ENC, ev_cortes())
@@ -577,7 +607,7 @@ SCRIPTS = [
 NOMBRE_DIM = {'PDM': 'Cumplimiento del Plan de Desarrollo (PDM)', 'PC': 'Participación ciudadana',
               'PP': 'Presupuesto participativo', 'CS': 'Control social'}
 CMD_PQRSDF = ('python3 scripts/construccion/cs_descargas.py && python3 scripts/construccion/cs_icrcs.py '
-              '&& python3 scripts/entregables/generar_entrega_profe.py')
+              '&& python3 scripts/entregables/generar_entrega_profe.py && python3 scripts/entregables/generar_base_powerbi.py')
 
 
 def primer_enlace(s):
@@ -618,11 +648,12 @@ def pegar_serie(doc, dim, cod, nombre):
         elif r['brecha'] and r['brecha'] != 'con dato' and dim == 'PDM' and cod == 'PDM.VEED':
             nd = resumen(r['brecha'].replace('con dato; ', ''), 95)
         mx = maximo(dim, cod, r['anio'])
-        val = fmt(r['valor']) if mx is None or num(mx) == num(r['valor']) else f'{fmt(r["valor"])}–{fmt(mx)}'
+        vv = valor_fila(r)
+        val = fmt(vv) if mx is None or num(mx) == num(r['valor']) else f'{fmt(vv)}–{fmt(mx)}'
         nd_den = '' if r['numerador'] in ('', 'N/D') else f'{fmt(r["numerador"])} / {fmt(r["denominador"])}' if r['denominador'] else fmt(r['numerador'])
         cuerpo.append([r['anio'], nd_den, val, fmt(r['puntaje_0_100']) if num(r['puntaje_0_100']) is not None else '—',
                        r['semaforo'] or '—', nd])
-    tabla(doc, [1.4, 3.5, 2.3, 1.9, 2.0, 6.4], ['Año', 'Numerador / denominador', 'Valor', 'Puntaje', 'Semáforo', 'Dato faltante / nota'],
+    tabla(doc, [1.4, 3.4, 2.2, 1.8, 2.4, 6.1], ['Año', 'Numerador / denominador', 'Valor', 'Puntaje', 'Semáforo (propuesta)', 'Dato faltante / nota'],
           cuerpo, tam=8)
     parrafo(doc, f'**Brecha:** {texto_brecha(dim, cod, corto=False)}.')
     al = alertas(dim, cod)
@@ -646,7 +677,7 @@ def doc_detalle():
         'Los datos crudos están en Google Drive y las descargas de esta revisión en data_raw_IIC/07_revision_nov2026/ (con manifiesto).',
     ])
     doc.add_heading('Resultados de los índices', level=1)
-    bloque_indices(doc, (2.0, 5.4, 2.6, 7.4))
+    bloque_indices(doc, (2.0, 5.0, 3.0, 7.4))
 
     for dim, _, filas_ in TITULOS:
         doc.add_heading(NOMBRE_DIM[dim], level=1)
@@ -656,6 +687,8 @@ def doc_detalle():
         doc.add_heading('Serie completa de cada indicador', level=2)
         for cod, nombre in NOMBRES[dim]:
             pegar_serie(doc, dim, cod, nombre)
+        if dim == 'PP':
+            parrafo(doc, AVISO_PP2020)
         if dim == 'PDM':
             doc.add_heading('Espacio verde: cortes y fuentes', level=2)
             tabla(doc, [1.4, 2.0, 2.2, 5.0, 6.8], EV_ENC, ev_cortes(), tam=8)
@@ -681,8 +714,6 @@ def doc_detalle():
         '**Discapacidad y Víctimas 2021–2023:** buscar sus rendiciones en la API del portal, para que el universo de VRC sea el mismo de 2024–2025.',
         '**Solicitudes a Planeación y otras dependencias:** ' + ' '.join(f'({i}) {t}' for i, t in enumerate(SOLICITAR, 1)),
         '**Rendición de PP 2025:** se hará en el último trimestre de 2026; entonces se actualiza I4 2025 y el ISPC 2025.',
-        '**Trazabilidad del PDM (QA):** archivar las fuentes de espacio verde y la PPED por edad con su manifiesto; corregir la nota de servicios públicos; anotar las veedurías 291–292 (registro de 2026).',
-        '**Nota de PP 2020:** revisar la frase «en 2019 no hubo votación»: la vigencia 2020 sí se votó en 2019; la que no se votó fue la vigencia 2019.',
     ])
     ruta = OUT / 'detalle_revision_indicadores_OCE.docx'
     doc.save(ruta)
@@ -728,7 +759,7 @@ def verificar(ruta, profe):
         elif el.tag == qn('w:tbl') and titulo:
             t = tablas[el]
             enc = [c.text for c in t.rows[0].cells]
-            if enc[:3] == ['Año', 'Valor', 'Semáforo']:
+            if enc[:3] == ['Año', 'Valor', 'Semáforo (propuesta)']:
                 for clave in ESPERADOS:
                     if titulo.startswith(clave):
                         hallados[clave] = {f.cells[0].text: f.cells[1].text for f in t.rows[1:]}

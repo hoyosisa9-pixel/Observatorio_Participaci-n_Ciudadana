@@ -1,3 +1,5 @@
+**HISTÓRICO (revisión del 15-nov). Los resultados vigentes están en los Word y en outputs/construccion/; las decisiones, en registro_cambios.md.**
+
 # Dimensión: Cumplimiento del Plan de Desarrollo Municipal (PDM)
 
 **Estado:** cerrada (provisional). Pendiente solo lo que está en `dudas_para_el_profe.md`.

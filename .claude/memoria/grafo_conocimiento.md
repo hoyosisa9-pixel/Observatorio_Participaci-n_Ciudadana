@@ -23,15 +23,15 @@ Revisión indicador por indicador: `outputs/revision_indicadores/plan_revision.m
 | PC.VEED Veedurías inscritas en la Personería | PDM (reemplaza a CP) | Movido al PDM | D26 | 2012–2026 (listado incompleto) |
 | PC.I5, PC.I6 | PC | Eliminado | D1 | — |
 | PC.ISPC Índice | PC | Recalcular con la nueva selección | — | — |
-| CS.PCS, CS.DSI, CS.VRC, CS.RPO, CS.ICRCS | CS | Se mantienen (definido); PCS es autorreporte (C6) | D12 | 2024–2025 |
+| CS.PQRSDF (reemplaza a CS.PCS), CS.DSI (10 metas), CS.VRC, CS.RPO, CS.ICRCS | CS | Construido parcial; PQRSDF pendiente por el portal | D45, D75–D82 | ver §7 |
 | PDM.SALUD Cobertura de salud | PDM | Se reemplaza (antes: aseguramiento subsidiado) | D3, D5 | 2020–2025 |
 | PDM.CM Mortalidad vial | PDM | Se mantiene; faltan 2025+ | D6 | 2024 |
 | PDM.CA Espacio público verde | PDM | Se ajusta (urbano; LB 2019 = 4,54; referente 9) | D7, D30, D31 | cortes 2019, 2022, 2024 |
 | PDM.ILE Logro educativo | PDM | Se ajusta (cobertura neta + primera infancia) | D2, D8 | PI 2019–2025 |
 | PDM.SP Servicios públicos domiciliarios | PDM | Nuevo | D9 | por construir |
-| PDM.SEXTO | PDM | Pendiente (deporte/seguridad/vivienda/pobreza) | D10 | — |
+| PDM.HOM Homicidio (7.º componente) | PDM | Nuevo, construido | D34, D58 | 2003–2025 |
 | PDM.CP Procesos participativos | PDM | Se reemplaza por veedurías inscritas (PC.VEED se mueve aquí) | D26 | veedurías 2012–2026 |
-| PDM.CD Servicios deportivos | PDM | Se reemplaza (candidato a SEXTO) | D10, D11 | — |
+| PDM.CD Servicios deportivos | PDM | Reemplazado por servicios públicos | D17 | — |
 | PDM.ICPD Índice agregado | PDM | Recalcular con la nueva selección | — | — |
 | PDM.POLPUB Logros de políticas públicas | PDM | Pendiente | — | — |
 
@@ -46,7 +46,7 @@ Revisión indicador por indicador: `outputs/revision_indicadores/plan_revision.m
 PDM.SALUD --sin_meta_mismo_universo--> Ap.9.1.2 (solo subsidiado)
 PDM.CA    --tres_cifras_en_conflicto--> 3,88 (PDM 2023) | 4,66 (AMVA 2022) | 5,75 (POT)
 PDM.CM    --no_mezclar--> Forensis vs. Policía ; meta de Movilidad
-PDM.SEXTO --candidatos--> homicidio (1), hurto (2), lesiones personales (por evaluar)
+PDM.HOM  --es--> 7.º componente del ICPD-7 (D34)
 PDM.ILE   --limitación--> numerador con gestantes; fuente cambia en 2024
 ```
 
@@ -65,10 +65,10 @@ FUE.PERSONERIA · FUE.SUI (Superservicios) · FUE.ICFES · FUE.MDM (Medición de
 
 ## 4. Aristas
 ```
-DIM.PDM --contiene--> PDM.SALUD, PDM.CM, PDM.CA, PDM.ILE, PDM.SP, PDM.SEXTO --agrega--> PDM.ICPD
+DIM.PDM --contiene--> PDM.SALUD, PDM.ILE, PDM.SP, PDM.CM, PDM.CA, PDM.VEED, PDM.HOM --agrega--> PDM.ICPD7 (promedio simple)
 DIM.PC  --contiene--> PC.I1, PC.I2, PC.I3, PC.I4 --agrega--> PC.ISPC
 PDM.CP  --reemplazado_por--> PC.VEED (veedurías inscritas, D26)
-DIM.CS  --contiene--> CS.PCS, CS.DSI, CS.VRC, CS.RPO --agrega--> CS.ICRCS
+DIM.CS  --contiene--> CS.PQRSDF, CS.DSI, CS.VRC, CS.RPO --agrega--> CS.ICRCS
 DIM.PP  --contiene--> PP.FID, PP.EPP
 PDM.SALUD --reemplaza--> aseguramiento subsidiado ; --usa--> FUE.MINSALUD, FUE.DANE, FUE.TERRIDATA
 PDM.CM    --usa--> FUE.FORENSIS, FUE.POLICIA, FUE.DANE
@@ -76,9 +76,9 @@ PDM.CA    --usa--> FUE.POT, FUE.AMVA ; --línea_base--> 4,54 m²/hab (2019, AMVA
 PDM.ILE   --usa--> FUE.TERRIDATA (cobertura neta, primera infancia), FUE.DANE ; --reemplaza_componente--> Saber 11
 PDM.SP    --usa--> FUE.TERRIDATA, FUE.SUI
 PC.VEED   --usa--> FUE.PERSONERIA, FUE.DATOSGOV
-PC.I1     --se_reemplaza_por--> IPCM (votación PP; D28, D32) ; --línea_base--> 3,62 % (2017) ; --referente--> 7 % (tope de la escala del IPCM) ; --solicitar_a--> Planeación (2018–2024)
-PDM.CD    --candidato_a--> PDM.SEXTO
-CS.DSI    --depende_de--> metas seleccionadas del PDM (7)
+PC.I1     --se_reemplaza_por--> IPCM (votación PP; D28, D32) ; --línea_base--> 3,68 % (2017, población VP; D69) ; --referente--> 7 % (tope de la escala del IPCM) ; --solicitar_a--> Planeación (2018–2024)
+PDM.CD    --reemplazado_por--> PDM.SP
+CS.DSI    --depende_de--> 10 metas del PDM ligadas al ICPD-7 (D75)
 CS.VRC    --se_reporta_como--> rango + brecha de información (D33, decidido; la brecha debe bajar año a año) ; --necesita--> listas de asistencia (Alcaldía), veedurías inscritas (Personería), observación directa
 ```
 
@@ -89,7 +89,7 @@ CS.VRC    --se_reporta_como--> rango + brecha de información (D33, decidido; la
 - Revisión en curso: `outputs/revision_indicadores/`
 - Datos crudos: **no están en este Codespace** (solo inventarios); ZIP en Google Drive.
 
-## 6. Estado al cierre del 15-nov-2026 (las 4 dimensiones revisadas)
+## 6. Estado al cierre del 15-nov-2026 (HISTÓRICO: superado por la §7)
 - Entregas: `outputs/entrega_profe/` → `indicadores_cambios_y_datos_OCE.docx` (para el profe, cuadros sencillos) y `detalle_revision_indicadores_OCE.docx` (para Isabella). Se generan con `scripts/entregables/generar_entrega_profe.py` a partir de los .md de la misma carpeta (las dudas se leen de `dudas_para_el_profe.md`).
 - QA de construibilidad: `outputs/revision_indicadores/qa_construibilidad.md`. Ningún índice se puede calcular sin resolver las dudas. IREPP: 2024–2025 apenas se decidan las dudas 9 y 10. ICPD-6: 2019, 2022 y 2024. ISPC: 2025. ICRCS: ninguno sin respaldos.
 - Cambios vigentes: PDM.CP → veedurías; PDM.CD → servicios públicos; PC.I1 → IPCM (votación PP); PC.I4 → lista fija de 3 procesos; PP.CEP → ejecución ≥ 90 % (propuesta); PP.CMA → fidelidad; CS.PCS → oportunidad de respuesta PQRSDF (propuesta).
@@ -108,3 +108,4 @@ PDM.ICPD7 --componentes--> SALUD, ILE, SP, CM, CA, VEED, HOM (1/7 cada uno) ; --
 PC.I1 --convención--> año de la votación (vigencia t+1) ; --LB--> 3,68 (VP) ; PC.I2 --denominador--> 12 ; PC.ISPC --años--> 2025
 - **CS CONSTRUIDO PARCIAL (19-nov)**: el ICRCS es N/D en todos los años porque falta PQRSDF (portal caído). Rangos posibles: 2024 = 40,20–65,20 y 2025 = 17,50–42,50. DSI = 10 metas (D75), 2024 0–40 y 2025 0–10. VRC 2024 = 66,67 y 2025 = 20. RPO 2021 = 84,62–100, 2023 = 0, 2024 = 94,12, 2025 = 50. CS.PCS fue reemplazado por CS.PQRSDF. Salidas en `outputs/construccion/CS/`.
 CS.PQRSDF --fuente--> informes trimestrales BPMS (SAC como respaldo) ; --pendiente--> cs_descargas.py cuando responda el portal
+- **Cierre 19-nov**: QA final aprobado con observaciones. Entregas: los Word en `outputs/entrega_profe/` y la base para Power BI en `outputs/entrega_powerbi/base_indicadores_OCE.xlsx`. Pendiente: PQRSDF (servidor de archivos de la Alcaldía con error 500).

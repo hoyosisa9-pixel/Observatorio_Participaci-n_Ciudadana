@@ -12,7 +12,8 @@
 4. **Espacio verde.** Línea base 2019 (4,54, AMVA) en lugar de 2022 (4,66); cortes 2022 (2,7 %) y 2024 (27,1 %). ¿Se solicita a Planeación la serie completa desde 2019 con el método del AMVA y se propone que la mida cada año?
    - **Respondida:** sí; línea base 2019 = 4,54 hacia 9 m²/hab, y se pide la serie anual a Planeación.
 4b. **Metas de otro universo.** Servicios públicos (99,9 %, de la Encuesta de Calidad de Vida) y mortalidad vial (8, de Movilidad): ¿se usan igual, con nota, o se fija otro referente?
-   - **Respondida:** no se comparan metas de otro universo. Servicios públicos: referente 100 %. Mortalidad vial: 7,33 (la reducción del PDM aplicada a la línea base 2019 de la Policía).
+   - **Respondida:** no usar metas de otro universo.
+   - Decisión posterior de Isabella: mortalidad vial con referente 7,33 (la reducción del PDM aplicada a la línea base 2019 de la Policía); servicios públicos con referente 100 % (cobertura universal).
 5. **Servicios públicos.** ¿Promedio simple de las 4 coberturas y el aseo sin meta?
    - **Respondida:** sí, promedio simple de las 4 coberturas desde 2019.
 
@@ -32,12 +33,15 @@
 10. **Pesos del IREPP.** ¿Se mantienen 20/40/40?
    - **Respondida:** sí, se mantienen.
 11. **Serie.** ¿Se solicita la ejecución por proyecto de 2020–2023?
-   - **Respondida:** PP se calcula 2020–2025 y se reporta la brecha de información (2021 queda sin dato).
+   - **Respondida:** calcular PP con 2024–2025 y reportar la brecha de información.
+   - Decisión posterior de Isabella: extender PP a 2020–2025 con el mismo método (2021 queda sin dato).
 
 ## Control social
 12. **PCS.** ¿Se reemplaza por la oportunidad de respuesta a las PQRSDF?
    - **Respondida:** sí. Falta el dato porque los archivos del portal no están disponibles.
 13. **DSI.** ¿Se actualiza la lista de metas con la nueva selección del PDM?
-   - **Respondida:** sí, con 10 metas del PDM y con brecha de información. Regla: la brecha siempre se reporta.
+   - **Respondida:** sí, con la lista de metas actualizada y con brecha de información.
+   - Decisión posterior de Isabella: la lista queda en 10 metas de resultado del PDM; «la brecha siempre se reporta» es una regla suya.
 14. **VRC y RPO.** VRC como rango con la brecha de información; ¿se extienden VRC y RPO hacia atrás?
-   - **Respondida:** sí. VRC = rango (mín.–máx.) con brecha, y se extiende a 2021–2023; RPO 2021 como rango.
+   - **Respondida:** VRC como rango (mín.–máx.) con la brecha de información.
+   - Decisión posterior de Isabella: extender VRC a 2021–2023 y mostrar RPO 2021 como rango.

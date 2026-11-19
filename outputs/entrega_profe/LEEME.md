@@ -1,15 +1,15 @@
-# Entrega al profe: indicadores, cambios y datos disponibles
+# Entrega al profe: indicadores, cambios y resultados
 
-Aquí se va guardando lo que ya está listo para mandarle al profe, una dimensión a la vez. Al final se arma un Word corto con todo.
+Estado al 19-nov-2026 (todo Provisional). Los resultados vigentes están en los dos Word, en `outputs/construccion/` y en la base para Power BI.
 
-| Archivo | Dimensión | Estado |
+| Archivo | Contenido | Estado |
 |---|---|---|
-| `1_PDM.md` | Cumplimiento del PDM | Lista (con dudas) |
-| `2_PC.md` | Participación ciudadana | Lista (con dudas) |
-| `3_PP.md` | Presupuesto participativo | Lista (con dudas) |
-| `4_CS.md` | Control social | En revisión |
-| `dudas_para_el_profe.md` | Todas | Se actualiza con cada dimensión |
-| `registro_cambios.md` | Todas | Lista corta de todos los cambios con su origen (para el Word) |
+| `indicadores_cambios_y_datos_OCE.docx` | Word para el profe: cambios, resultados de los índices, decisiones y variables por solicitar | **Vigente** (lo genera `scripts/entregables/generar_entrega_profe.py`) |
+| `detalle_revision_indicadores_OCE.docx` | Word para Isabella: series completas, fuentes, scripts, decisiones con número y origen, pendientes | **Vigente** (mismo generador) |
+| `registro_cambios.md` | Lista corta de todos los cambios y sus orígenes | **Vigente** |
+| `dudas_para_el_profe.md` | Las 16 dudas, todas respondidas, con la decisión posterior de Isabella aparte | **Vigente** (cerrada) |
+| `1_PDM.md`, `2_PC.md`, `3_PP.md`, `4_CS.md` | Cuadros de la revisión del 15-nov | **Histórico** (valores y decisiones anteriores) |
+| `../entrega_powerbi/base_indicadores_OCE.xlsx` | Base en Excel para el tablero de Power BI (`scripts/entregables/generar_base_powerbi.py`) | **Vigente** |
 
-Cada dimensión trae: el cuadro de cambios (original → actual, motivo y origen), las variables con las que contamos, la viabilidad del índice y las variables por solicitar.
-Soporte técnico (series, scripts y control de calidad): `outputs/revision_indicadores/`.
+Soporte técnico: `outputs/construccion/` (CSV por dimensión), `scripts/construccion/` (scripts) y `outputs/revision_indicadores/` (series y QA).
+Para regenerar todo cuando vuelva el portal de la Alcaldía: `python3 scripts/construccion/cs_descargas.py && python3 scripts/construccion/cs_icrcs.py && python3 scripts/entregables/generar_entrega_profe.py && python3 scripts/entregables/generar_base_powerbi.py`

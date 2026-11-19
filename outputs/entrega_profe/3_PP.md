@@ -1,3 +1,5 @@
+**HISTÓRICO (revisión del 15-nov). Los resultados vigentes están en los Word y en outputs/construccion/; las decisiones, en registro_cambios.md.**
+
 # Dimensión: Presupuesto participativo (PP)
 
 **Estado:** en revisión. Lo marcado **«Propuesta (Claude), por confirmar»** no está decidido.

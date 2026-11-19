@@ -27,7 +27,7 @@ Scripts: `scripts/construccion/pp_lectores.py` → `pp_cruce.py` → `pp_muestra
 | 2024 | 99,15 | 47/51 = 92,16 | 47/51 = 92,16 | 93,56 Verde |
 | 2025 | 98,83 | 57/61 = 93,44 | 59/61 = 96,72 | 95,83 Verde |
 
-Brecha: 1 de 6 años (2021). *2020: valor priorizado (en 2019 no hubo votación); 20 de 69 proyectos con contracrédito total ($3.627.742.979); obligación / valor votado = 46,34 %.
+Brecha: 1 de 6 años (2021). *2020: valor priorizado (la vigencia 2020 se priorizó en 2019; la que no se votó fue la vigencia 2019, priorización de 2018); 20 de 69 proyectos con contracrédito total ($3.627.742.979); obligación / valor votado = 46,34 %.
 
 ## 2. Cumplimiento del PDM · ICPD-7 = promedio simple de 7 (D34, D48) — **CONSTRUIDO** (QA aprobado con observaciones, 18-nov)
 Script: `scripts/construccion/pdm_icpd7.py` (44 asserts; tarda unos 3 minutos porque lee la PPED cruda del DANE). Salida: `outputs/construccion/PDM/pdm_indicadores.csv`. Decisiones D57–D68. Población única = DANE VP (D61).
