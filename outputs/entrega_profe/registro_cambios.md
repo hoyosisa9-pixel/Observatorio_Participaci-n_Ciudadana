@@ -40,11 +40,11 @@ Origen: **Profe** = acordado en reunión o respondido por el profe · **Isabella
 ## Control social (ICRCS)
 | # | Cambio | Origen |
 |---|---|---|
-| 23 | PCS (autorreporte, 100 %) → **oportunidad de respuesta a las PQRSDF** (sistema BPMS; el año se arma con informes que cubren 12 meses sin repetirse). **Sin dato:** el portal de la Alcaldía no responde desde el 19-nov (23 de 24 informes pendientes) | Profe; Isabella |
+| 23 | PCS (autorreporte, 100 %) → **oportunidad de respuesta a las PQRSDF** (sistema BPMS hasta 2025 T1 y Débora desde mayo de 2025; el año se arma con informes que cubren 12 meses sin repetirse). **Calculada 2020–2025** con los 24 informes trimestrales, que se obtuvieron del ZIP original del Google Drive de Isabella porque el portal dio HTTP 500: 83,49 · 85,81 · 82,73 · 84,61 · 81,59 · 82,71. La columna «Sin respuesta» de 2020–2021 va al máximo (90,37 y 96,56, D86). **Alertas:** plazos ampliados por el Decreto 491 solo hasta el 17-may-2022; salto de 2024 (+64 % de recibidas por reclasificación); sistema Débora desde mayo de 2025; el indicador subestima la oportunidad | Profe; Isabella |
 | 24 | DSI se mantiene con **10 metas de resultado del PDM**, como rango con brecha: 2024 = 0–40 y 2025 = 0–10 | Profe (mantener); Isabella (lista de 10, D75/D79) |
-| 25 | VRC se mantiene como **rango con la brecha de información**: 2024 = 66,7–100 % (brecha 33,3 %), 2025 = 20–80 % (brecha 60 %); al índice entra el mínimo. Se extiende a 2021–2023 cuando vuelva el portal | Profe (mantener); Isabella (rango y brecha, D33; extensión, D77) |
-| 26 | RPO se mantiene: 2021 como rango (84,62–100), 2023 = 0, 2024 = 94,12 y 2025 = 50 con alerta (cuadro corto) | Profe (mantener); Isabella (2021 y 2025, D76/D80) |
-| 27 | **Resultado:** ICRCS sin índice en 2020–2025 porque falta PQRSDF; rango posible 2024 = 40,20–65,20 y 2025 = 17,50–42,50 | Construcción |
+| 25 | VRC se mantiene como **rango con la brecha de información**: 2021 = 50–100 %, 2022 y 2023 = 66,7–100 %, 2024 = 66,7–100 % (brecha 33,3 %), 2025 = 20–80 % (brecha 60 %); al índice entra el mínimo. 2021–2023 solo con la audiencia del Alcalde y las actas de Salud (clasificadas a mano); faltan Discapacidad y Víctimas | Profe (mantener); Isabella (rango y brecha, D33; extensión, D77/D81) |
+| 26 | RPO se mantiene: **2021 como rango 0–100** (mínimo 0 porque no está probado que el 23449 se publicara a más tardar el 31-dic-2021; daría 84,62 si se confirma), 2023 = 0, 2024 = 94,12 y 2025 = 50 con alerta (cuadro corto). El 40433 y el 40434 son encuestas, no respuestas escritas | Profe (mantener); Isabella (2021 y 2025, D76/D80/D87) |
+| 27 | **Resultado:** ICRCS 2024 = **60,59 (Naranja)** y 2025 = **38,18 (Rojo)**; con los máximos de los componentes 79,47 y 55,71. 2020–2023 sin índice porque DSI solo aplica desde 2024 (brecha 4 de 6 años) | Construcción |
 
 ## Reglas transversales
 | # | Cambio | Origen |

@@ -12,4 +12,4 @@ Estado al 19-nov-2026 (todo Provisional). Los resultados vigentes están en los 
 | `../entrega_powerbi/base_indicadores_OCE.xlsx` | Base en Excel para el tablero de Power BI (`scripts/entregables/generar_base_powerbi.py`) | **Vigente** |
 
 Soporte técnico: `outputs/construccion/` (CSV por dimensión), `scripts/construccion/` (scripts) y `outputs/revision_indicadores/` (series y QA).
-Para regenerar todo cuando vuelva el portal de la Alcaldía: `python3 scripts/construccion/cs_descargas.py && python3 scripts/construccion/cs_icrcs.py && python3 scripts/entregables/generar_entrega_profe.py && python3 scripts/entregables/generar_base_powerbi.py`
+Para regenerar todo después de cambiar los datos (los informes de PQRSDF y las actas ya están en `data_raw_IIC/07_revision_nov2026/`, obtenidos del Google Drive de Isabella porque el portal dio HTTP 500; si el portal vuelve, `cs_descargas.py` solo baja lo que falte): `python3 scripts/construccion/cs_descargas.py && python3 scripts/construccion/cs_icrcs.py && python3 scripts/entregables/generar_entrega_profe.py && python3 scripts/entregables/generar_base_powerbi.py`

@@ -61,19 +61,19 @@ Script: `scripts/construccion/pc_ispc.py` (56 asserts; tarda unos 3 minutos). Sa
 
 Brechas: I1 3/8 años, I2 4/6, I3 5/6, I4 0/6 (2 de 18 proceso-años sin documento), ISPC 5/6. Fuentes de I4 archivadas en `data_raw_IIC/07_revision_nov2026/rendicion_cuentas/`; los votos, en `noticias_alcaldia/`.
 
-## 4. Control social · ICRCS = (DSI + PQRSDF + VRC + RPO) / 4 — **CONSTRUIDO PARCIAL** (QA aprobado con observaciones, 19-nov; falta PQRSDF por la caída del portal)
-Scripts: `scripts/construccion/cs_descargas.py` (descarga idempotente) → `scripts/construccion/cs_icrcs.py` (48 asserts; el CSV solo se escribe si pasan todos). Salida: `outputs/construccion/CS/cs_indicadores.csv`. Decisiones D75–D82. VRC, RPO y DSI entran con su mínimo.
+## 4. Control social · ICRCS = (DSI + PQRSDF + VRC + RPO) / 4 — **CONSTRUIDO** (QA aprobado con observaciones, 20-nov)
+Scripts: `cs_extraer_de_drive.py` (archivos del ZIP de Drive, D85) / `cs_descargas.py` → `cs_icrcs.py` (56 asserts). Salida: `outputs/construccion/CS/cs_indicadores.csv`. Decisiones D75–D87. VRC, RPO y DSI entran con su mínimo.
 
 | Año | PQRSDF | DSI (mín.–máx.) | VRC (mín.–máx.) | RPO | ICRCS |
 |---|---|---|---|---|---|
-| 2020 | N/D | no aplica | N/D | N/D | N/D |
-| 2021 | N/D | no aplica | pendiente de descarga | 84,62–100 | N/D |
-| 2022 | N/D | no aplica | pendiente | N/D | N/D |
-| 2023 | solo T4 = 85,42 | no aplica | pendiente | 0 (fuera de ventana) | N/D |
-| 2024 | N/D | 0–40 | 66,67–100 | 94,12 | N/D: entre 40,20 y 65,20 según PQRSDF |
-| 2025 | N/D | 0–10 | 20–80 | 50 (alerta) | N/D: entre 17,50 y 42,50 según PQRSDF |
+| 2020 | 83,49 | no aplica | N/D | N/D | N/D |
+| 2021 | 85,81 | no aplica | 50–100 | 0–100 (D87) | N/D |
+| 2022 | 82,73 | no aplica | 66,67–100 | N/D | N/D |
+| 2023 | 84,61 | no aplica | 66,67–100 | 0 (fuera de ventana) | N/D |
+| 2024 | 81,59 | 0–40 | 66,67–100 | 94,12 | **60,59 Naranja** (máx. 79,47) |
+| 2025 | 82,71 | 0–10 | 20–80 | 50 (alerta) | **38,18 Rojo** (máx. 55,71) |
 
-**Pendiente (portal www.envigado.gov.co caído desde el 19-nov):** 23 de los 24 informes de PQRSDF y las actas de Salud 2021–2023. Cuando responda: `python3 scripts/construccion/cs_descargas.py` y luego `python3 scripts/construccion/cs_icrcs.py`. Las actas se clasifican a mano. Hay que buscar también las rendiciones de Discapacidad y Víctimas 2021–2023 en la API.
+Alertas de PQRSDF: Decreto 491 hasta el 17-may-2022; +64 % de volumen en 2024 por reclasificación; sistema Débora desde mayo de 2025. VRC 2021–2023 es solo Alcalde + Salud.
 
 ## Cierre
 - Actualizar los dos Word (cuadros con valores, puntajes y brecha), `registro_cambios.md` y la memoria.

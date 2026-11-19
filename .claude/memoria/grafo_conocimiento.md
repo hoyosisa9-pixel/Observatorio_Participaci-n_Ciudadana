@@ -23,7 +23,7 @@ Revisión indicador por indicador: `outputs/revision_indicadores/plan_revision.m
 | PC.VEED Veedurías inscritas en la Personería | PDM (reemplaza a CP) | Movido al PDM | D26 | 2012–2026 (listado incompleto) |
 | PC.I5, PC.I6 | PC | Eliminado | D1 | — |
 | PC.ISPC Índice | PC | Recalcular con la nueva selección | — | — |
-| CS.PQRSDF (reemplaza a CS.PCS), CS.DSI (10 metas), CS.VRC, CS.RPO, CS.ICRCS | CS | Construido parcial; PQRSDF pendiente por el portal | D45, D75–D82 | ver §7 |
+| CS.PQRSDF (reemplaza a CS.PCS), CS.DSI (10 metas), CS.VRC, CS.RPO, CS.ICRCS | CS | Construido (20-nov): ICRCS 2024 = 60,59, 2025 = 38,18 | D45, D75–D82 | ver §7 |
 | PDM.SALUD Cobertura de salud | PDM | Se reemplaza (antes: aseguramiento subsidiado) | D3, D5 | 2020–2025 |
 | PDM.CM Mortalidad vial | PDM | Se mantiene; faltan 2025+ | D6 | 2024 |
 | PDM.CA Espacio público verde | PDM | Se ajusta (urbano; LB 2019 = 4,54; referente 9) | D7, D30, D31 | cortes 2019, 2022, 2024 |
@@ -109,3 +109,5 @@ PC.I1 --convención--> año de la votación (vigencia t+1) ; --LB--> 3,68 (VP) ;
 - **CS CONSTRUIDO PARCIAL (19-nov)**: el ICRCS es N/D en todos los años porque falta PQRSDF (portal caído). Rangos posibles: 2024 = 40,20–65,20 y 2025 = 17,50–42,50. DSI = 10 metas (D75), 2024 0–40 y 2025 0–10. VRC 2024 = 66,67 y 2025 = 20. RPO 2021 = 84,62–100, 2023 = 0, 2024 = 94,12, 2025 = 50. CS.PCS fue reemplazado por CS.PQRSDF. Salidas en `outputs/construccion/CS/`.
 CS.PQRSDF --fuente--> informes trimestrales BPMS (SAC como respaldo) ; --pendiente--> cs_descargas.py cuando responda el portal
 - **Cierre 19-nov**: QA final aprobado con observaciones. Entregas: los Word en `outputs/entrega_profe/` y la base para Power BI en `outputs/entrega_powerbi/base_indicadores_OCE.xlsx`. Pendiente: PQRSDF (servidor de archivos de la Alcaldía con error 500).
+- **CS COMPLETADO (20-nov)**: PQRSDF 24/24 trimestres extraídos del ZIP de Drive (D85). ICRCS 2024 = 60,59 Naranja; 2025 = 38,18 Rojo. Supera la línea «CS CONSTRUIDO PARCIAL».
+FUE.DRIVE_ZIP --respaldo_de--> FUE.PORTAL_ENVIGADO (archivos idénticos al inventario; IDs fuera del repositorio)

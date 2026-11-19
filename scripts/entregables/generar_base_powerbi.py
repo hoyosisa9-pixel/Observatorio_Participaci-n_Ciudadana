@@ -14,7 +14,7 @@ y escribe outputs/entrega_powerbi/base_indicadores_OCE.xlsx con tablas de Excel 
   diccionario    descripción de cada columna
 
 Se corre desde la raíz: python3 scripts/entregables/generar_base_powerbi.py
-Cuando se completen las PQRSDF (cs_descargas.py + cs_icrcs.py), basta con volver a correrlo.
+Si cambian los CSV de construcción (p. ej. al completar las rendiciones de Discapacidad y Víctimas con cs_icrcs.py), basta con volver a correrlo.
 """
 import csv
 import re
@@ -190,6 +190,7 @@ UNIDAD_BASE = {
     'PC.I2': PCT, 'PC.I3': PCT, 'PC.I4': PCT, 'PP.IREPP': PUNT, 'PP.EPP': PCT, 'PP.EJ90': PCT, 'PP.FID': PCT,
     'CS.ICRCS': PUNT, 'CS.PQRSDF': PCT, 'CS.DSI': PCT, 'CS.VRC': PCT, 'CS.RPO': PCT,
 }
+UNIDAD_BRECHA = {'CS.PQRSDF.BRECHA': 'trimestres sin informe legible / 24 trimestres (%)', 'CS.DSI.BRECHA': 'metas-año no verificables / metas-año (%)'}
 UNIDAD_COD = {
     'PDM.ILE.LA': PUNT, 'PDM.ILE.LN': PUNT, 'PDM.POB': 'habitantes', 'PDM.POB05': 'habitantes',
     'PDM.CM.TD': TASA, 'PDM.HOM.TD': TASA, 'PDM.VEED.MAX': 'conteo (veedurías inscritas)',
@@ -281,7 +282,7 @@ def main():
         peso = num(v['pesos'].most_common(1)[0][0]) if v['pesos'] else None
         anios = sorted({r['anio_num'] for r in hechos if r['codigo'] == c and tiene_dato(r)})
         nombre = NOMBRE_DETALLE.get(c) or v['nombres'].most_common(1)[0][0]
-        unidad = 'años sin dato / años del periodo (%)' if tipo == 'brecha' else (UNIDAD_COD.get(c) or UNIDAD_BASE.get(base, PCT))
+        unidad = UNIDAD_BRECHA.get(c, 'años sin dato / años del periodo (%)') if tipo == 'brecha' else (UNIDAD_COD.get(c) or UNIDAD_BASE.get(base, PCT))
         if tipo == 'brecha':
             sentido = 'menor es mejor'
         elif tipo == 'detalle' or c in SIN_SENTIDO:
@@ -403,7 +404,10 @@ def main():
     for (d, a), v in esperados.items():
         got = [x[5] for x in f_ind if x[0] == d and x[4] == a]
         assert got and abs(got[0] - v) < 0.005, (d, a, got)
-    assert all(x[5] is None for x in f_ind if x[0] == 'CS'), 'ICRCS debería ser N/D mientras falte PQRSDF'
+    cs_csv = {int(r['anio']): (None if r['valor'] in ('N/D', '') else float(r['valor']))
+              for r in csv.DictReader((RAIZ / 'outputs' / 'construccion' / 'CS' / 'cs_indicadores.csv').open(encoding='utf-8-sig'), delimiter=';') if r['codigo'] == 'CS.ICRCS'}
+    cs_got = {x[4]: x[5] for x in f_ind if x[0] == 'CS'}
+    assert cs_got.keys() == cs_csv.keys() and all((cs_got[a] is None and cs_csv[a] is None) or (cs_got[a] is not None and cs_csv[a] is not None and abs(cs_got[a] - cs_csv[a]) < 0.005) for a in cs_got), ('ICRCS distinto del CSV', cs_got, cs_csv)
     assert len([x for x in f_ind if x[0] == 'CS']) == 6 and len([x for x in f_ind if x[0] == 'PDM']) == 7
 
     # ---------------- libro
@@ -453,7 +457,7 @@ def main():
         ('Brecha de información = 1 - [% años con dato]', False),
         ('', False),
         ('Advertencias', True),
-        ('Control social (ICRCS) está sin dato en todos los años: faltan los informes de PQRSDF porque el servidor de archivos de la Alcaldía no responde desde el 19-nov-2026. La nota del índice trae el rango posible.', False),
+        ('Control social (ICRCS): hay índice en 2024 y 2025 (PQRSDF 2020–2025 completa, leída de los 24 informes trimestrales). 2020–2023 quedan sin índice porque DSI solo aplica desde 2024. Alertas: PQRSDF no es homogénea entre años (plazos ampliados por el Decreto 491 hasta el 17-may-2022, con 2022 T2 mixto; en 2024 las recibidas suben 64 % por reclasificación de lo que ingresa y no debe leerse como tendencia; el sistema pasa de BPMS a Débora en mayo de 2025), subestima la oportunidad real, y DSI, VRC y RPO se leen en su mínimo con rango (columna del máximo en CS.ICRCS.MAX; RPO 2021 va de 0 a 100). La brecha de PQRSDF se mide en trimestres (0 de 24), no en años.', False),
         ('Los cortes de espacio verde (2019, 2022, 2024) son de estudios distintos: no son una tendencia.', False),
         ('Cada fila trae su fuente, enlace y fecha de consulta. Los datos se pueden rastrear hasta el documento original.', False),
         ('Los textos de indicador, nota, brecha, referente y fuente se exportan con tildes (tabla TILDES del script); los CSV de construcción no se modifican.', False),

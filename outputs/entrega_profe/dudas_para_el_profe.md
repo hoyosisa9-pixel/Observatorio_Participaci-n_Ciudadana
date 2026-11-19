@@ -38,7 +38,7 @@
 
 ## Control social
 12. **PCS.** ¿Se reemplaza por la oportunidad de respuesta a las PQRSDF?
-   - **Respondida:** sí. Falta el dato porque los archivos del portal no están disponibles.
+   - **Respondida:** sí. Calculada 2020–2025 con los informes trimestrales de PQRSDF (obtenidos del Google Drive de Isabella porque el portal dio error), con alertas de comparabilidad: plazos ampliados por el Decreto 491 hasta el 17-may-2022, salto del volumen en 2024 y sistema Débora desde mayo de 2025.
 13. **DSI.** ¿Se actualiza la lista de metas con la nueva selección del PDM?
    - **Respondida:** sí, con la lista de metas actualizada y con brecha de información.
    - Decisión posterior de Isabella: la lista queda en 10 metas de resultado del PDM; «la brecha siempre se reporta» es una regla suya.
