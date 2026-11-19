@@ -61,14 +61,19 @@ Script: `scripts/construccion/pc_ispc.py` (56 asserts; tarda unos 3 minutos). Sa
 
 Brechas: I1 3/8 años, I2 4/6, I3 5/6, I4 0/6 (2 de 18 proceso-años sin documento), ISPC 5/6. Fuentes de I4 archivadas en `data_raw_IIC/07_revision_nov2026/rendicion_cuentas/`; los votos, en `noticias_alcaldia/`.
 
-## 4. Control social · ICRCS = (DSI + PQRSDF + VRC + RPO) / 4 (D45)
-| Indicador | Puntaje | Años | Brecha |
-|---|---|---|---|
-| PQRSDF (antes PCS) | atendidas a tiempo / recibidas, suma de trimestres | 2020–2025 | trimestres faltantes |
-| DSI | metas con información de seguimiento / metas de la lista **actualizada** | 2024, 2025 | metas sin dato publicado |
-| VRC | mínimo (al índice), máximo y brecha (D33) | 2024, 2025 | 33,3 % y 60 % |
-| RPO | con respuesta de fondo / observaciones | 2024; 2025 incompleto | 2025 |
-| **ICRCS** | | **2024** (2025 si se completa RPO) | |
+## 4. Control social · ICRCS = (DSI + PQRSDF + VRC + RPO) / 4 — **CONSTRUIDO PARCIAL** (QA aprobado con observaciones, 19-nov; falta PQRSDF por la caída del portal)
+Scripts: `scripts/construccion/cs_descargas.py` (descarga idempotente) → `scripts/construccion/cs_icrcs.py` (48 asserts; el CSV solo se escribe si pasan todos). Salida: `outputs/construccion/CS/cs_indicadores.csv`. Decisiones D75–D82. VRC, RPO y DSI entran con su mínimo.
+
+| Año | PQRSDF | DSI (mín.–máx.) | VRC (mín.–máx.) | RPO | ICRCS |
+|---|---|---|---|---|---|
+| 2020 | N/D | no aplica | N/D | N/D | N/D |
+| 2021 | N/D | no aplica | pendiente de descarga | 84,62–100 | N/D |
+| 2022 | N/D | no aplica | pendiente | N/D | N/D |
+| 2023 | solo T4 = 85,42 | no aplica | pendiente | 0 (fuera de ventana) | N/D |
+| 2024 | N/D | 0–40 | 66,67–100 | 94,12 | N/D: entre 40,20 y 65,20 según PQRSDF |
+| 2025 | N/D | 0–10 | 20–80 | 50 (alerta) | N/D: entre 17,50 y 42,50 según PQRSDF |
+
+**Pendiente (portal www.envigado.gov.co caído desde el 19-nov):** 23 de los 24 informes de PQRSDF y las actas de Salud 2021–2023. Cuando responda: `python3 scripts/construccion/cs_descargas.py` y luego `python3 scripts/construccion/cs_icrcs.py`. Las actas se clasifican a mano. Hay que buscar también las rendiciones de Discapacidad y Víctimas 2021–2023 en la API.
 
 ## Cierre
 - Actualizar los dos Word (cuadros con valores, puntajes y brecha), `registro_cambios.md` y la memoria.

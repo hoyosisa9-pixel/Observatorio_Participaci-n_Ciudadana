@@ -106,3 +106,5 @@ PP.EPP, PP.EJ90, PP.FID, PP.IREPP --serie--> 2020, 2022–2025 ; --brecha--> 202
 PDM.ICPD7 --componentes--> SALUD, ILE, SP, CM, CA, VEED, HOM (1/7 cada uno) ; --años--> 2019, 2022, 2024
 - **PC CONSTRUIDO (18-nov)**: ISPC 2025 = 61,62 (Naranja; 69,95 si se publica la rendición de PP 2025). I1 (votos de PP): 2017 = 8.221, 2021 = 16.828, 2022 = 12.541, 2023 = 9.156, 2025 = 10.662; 2018 sin votación. Brecha del ISPC: 5/6. Salidas en `outputs/construccion/PC/`. Siguiente: Control social (ICRCS).
 PC.I1 --convención--> año de la votación (vigencia t+1) ; --LB--> 3,68 (VP) ; PC.I2 --denominador--> 12 ; PC.ISPC --años--> 2025
+- **CS CONSTRUIDO PARCIAL (19-nov)**: el ICRCS es N/D en todos los años porque falta PQRSDF (portal caído). Rangos posibles: 2024 = 40,20–65,20 y 2025 = 17,50–42,50. DSI = 10 metas (D75), 2024 0–40 y 2025 0–10. VRC 2024 = 66,67 y 2025 = 20. RPO 2021 = 84,62–100, 2023 = 0, 2024 = 94,12, 2025 = 50. CS.PCS fue reemplazado por CS.PQRSDF. Salidas en `outputs/construccion/CS/`.
+CS.PQRSDF --fuente--> informes trimestrales BPMS (SAC como respaldo) ; --pendiente--> cs_descargas.py cuando responda el portal
