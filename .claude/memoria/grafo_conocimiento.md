@@ -100,14 +100,19 @@ CS.VRC    --se_reporta_como--> rango + brecha de información (D33, decidido; la
 - Respuestas del profe: D34–D45 en `decisiones.md`. Plan de construcción: `outputs/revision_indicadores/plan_construccion.md`.
 - Regla transversal: cada indicador e índice reporta su **brecha de información** (años o eventos sin dato).
 - PDM.ICPD pasa a **7 componentes** (+ homicidio). PC.I2 con 12 zonas. Decidido el 18-nov: LB veedurías = promedio 2019–2023 (5,4); referente vial 7,33 (D47); ICPD-7 = promedio simple (D48); I3 según D49.
-- **PP CONSTRUIDO (18-nov)**: IREPP 2020 = 51,27; 2021 = N/D; 2022 = 85,51; 2023 = 89,15; 2024 = 93,56; 2025 = 95,83. Brecha 1/6. Se cruza el valor votado con la apropiación inicial de Hacienda, sumando por sufijo de 4 dígitos (cada sufijo tiene zona fija). Salidas en `outputs/construccion/PP/`. Siguiente: PDM (ICPD-7).
-PP.EPP, PP.EJ90, PP.FID, PP.IREPP --serie--> 2020, 2022–2025 ; --brecha--> 2021 (D56)
+- **PP CONSTRUIDO (18-nov; actualizado 19-nov con D88/D89)**: IREPP 2020 = 57,98; 2021 = 90,71 (lista oficial, 45 proyectos sin INDER); 2022 = 85,51; 2023 = 89,15; 2024 = 93,56; 2025 = 95,83. Brecha 0/6. Se cruza el valor votado con la apropiación inicial de Hacienda, sumando por sufijo de 4 dígitos (cada sufijo tiene zona fija). Salidas en `outputs/construccion/PP/`. Siguiente: PDM (ICPD-7).
+PP.EPP, PP.EJ90, PP.FID, PP.IREPP --serie--> 2020–2025 ; --universo_2021--> lista oficial 29399 (D88) ; --rubros--> 2.3 + 2.4 (D89)
 - **PDM CONSTRUIDO (18-nov)**: ICPD-7 2019 = 62,41; 2022 = 68,79; 2024 = 66,85 (Naranja); brecha 4/7. Salidas en `outputs/construccion/PDM/`. Población única = DANE VP (TerriData «Descripción general»). Siguiente: Participación ciudadana (ISPC).
 PDM.ICPD7 --componentes--> SALUD, ILE, SP, CM, CA, VEED, HOM (1/7 cada uno) ; --años--> 2019, 2022, 2024
-- **PC CONSTRUIDO (18-nov)**: ISPC 2025 = 61,62 (Naranja; 69,95 si se publica la rendición de PP 2025). I1 (votos de PP): 2017 = 8.221, 2021 = 16.828, 2022 = 12.541, 2023 = 9.156, 2025 = 10.662; 2018 sin votación. Brecha del ISPC: 5/6. Salidas en `outputs/construccion/PC/`. Siguiente: Control social (ICRCS).
+- **PC CONSTRUIDO (18-nov)**: ISPC 2025 = 61,62 (Naranja; 69,95 si se publica la rendición de PP 2025). I1 (votos de PP): 2017 = 8.221, 2020 = 9.956, 2021 = 16.828, 2022 = 12.541, 2023 = 9.156, 2025 = 10.662; 2018 sin votación. Brecha del ISPC: 5/6. Salidas en `outputs/construccion/PC/`. Siguiente: Control social (ICRCS).
 PC.I1 --convención--> año de la votación (vigencia t+1) ; --LB--> 3,68 (VP) ; PC.I2 --denominador--> 12 ; PC.ISPC --años--> 2025
 - **CS CONSTRUIDO PARCIAL (19-nov)**: el ICRCS es N/D en todos los años porque falta PQRSDF (portal caído). Rangos posibles: 2024 = 40,20–65,20 y 2025 = 17,50–42,50. DSI = 10 metas (D75), 2024 0–40 y 2025 0–10. VRC 2024 = 66,67 y 2025 = 20. RPO 2021 = 84,62–100, 2023 = 0, 2024 = 94,12, 2025 = 50. CS.PCS fue reemplazado por CS.PQRSDF. Salidas en `outputs/construccion/CS/`.
 CS.PQRSDF --fuente--> informes trimestrales BPMS (SAC como respaldo) ; --pendiente--> cs_descargas.py cuando responda el portal
 - **Cierre 19-nov**: QA final aprobado con observaciones. Entregas: los Word en `outputs/entrega_profe/` y la base para Power BI en `outputs/entrega_powerbi/base_indicadores_OCE.xlsx`. Pendiente: PQRSDF (servidor de archivos de la Alcaldía con error 500).
 - **CS COMPLETADO (20-nov)**: PQRSDF 24/24 trimestres extraídos del ZIP de Drive (D85). ICRCS 2024 = 60,59 Naranja; 2025 = 38,18 Rojo. Supera la línea «CS CONSTRUIDO PARCIAL».
 FUE.DRIVE_ZIP --respaldo_de--> FUE.PORTAL_ENVIGADO (archivos idénticos al inventario; IDs fuera del repositorio)
+
+## 8. Estado al 19-nov-2026 (noche): brechas del Drive cerradas
+- Aplicadas D88–D91: PP con brecha 0/6; PC I1 2/8 e I2 1/6; el ISPC sigue solo en 2025.
+- Entregables vigentes: el Excel de 5 hojas (`outputs/entrega_powerbi/base_indicadores_OCE.xlsx`) y en `outputs/entrega_profe/` el Word resumido, el Word detallado del profe, la ficha metodológica y el Word de Isabella.
+PC.I1.ZONAS --zonas--> 2–13 (la zona 1, industrial, no tiene plan zonal) ; PC.I1 --denominador--> población total (Decreto 242/2017, p. 31)

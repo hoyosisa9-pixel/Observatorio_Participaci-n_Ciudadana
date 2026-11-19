@@ -109,3 +109,32 @@ def leer_roca_2025():
                     "descripcion": str(r[ix["desc"]] or ""), "ok": True, "ap_ini": f_("ini"), "ap_def": f_("dfn"),
                     "comp": f_("comp"), "obl": f_("obl")})
     return out
+
+
+def leer_lista_2021():
+    """Lista oficial 'Proyectos Priorizacion Participativa del Presupuesto vigencia 2021' (pp_listados_oficiales/2021proyectosppp.pdf,
+    publicada por el portal el 23-feb-2022). Cada proyecto: zona, unidad ejecutora, nombre y valor; la zona abre el registro y
+    el valor lo cierra (un digito suelto dentro del nombre, como 'Zona 5', no abre registro)."""
+    doc = pymupdf.open(BASE / "pp_listados_oficiales/2021proyectosppp.pdf")
+    regs, cur, esperando_zona = [], None, True
+    for pn, pg in enumerate(doc, 1):
+        for l in (x.strip() for x in pg.get_text().splitlines()):
+            if not l or l.startswith(("Proyectos", "Zona", "Unidad", "Valor", "pesos", "colombianos")) and cur is None:
+                continue
+            if esperando_zona and re.fullmatch(r"\d{1,2}", l):
+                cur, esperando_zona = {"zona": int(l), "txt": [], "pagina": pn}, False
+                continue
+            if cur is None:
+                continue
+            if re.fullmatch(r"\d{1,3}(?:\.\d{3})+", l):
+                cur["valor"] = float(l.replace(".", ""))
+                regs.append(cur)
+                cur, esperando_zona = None, True
+            else:
+                cur["txt"].append(l)
+    out = []
+    for r in regs:
+        t = " ".join(r["txt"])
+        inder = "Inder" in t[:30]
+        out.append({"zona": r["zona"], "nombre": t, "valor": r["valor"], "pagina": r["pagina"], "inder": inder, "zona_heredada": False})
+    return out

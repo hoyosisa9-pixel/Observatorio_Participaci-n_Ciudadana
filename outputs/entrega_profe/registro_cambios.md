@@ -20,8 +20,8 @@ Origen: **Profe** = acordado en reunión o respondido por el profe · **Isabella
 | # | Cambio | Origen |
 |---|---|---|
 | 10 | I5 (sesiones) e I6 (participación virtual) **eliminados** | Profe |
-| 11 | I1 (incorporación de aportes) → **votación del presupuesto participativo (IPCM)**: avance desde la **línea base 2017 = 3,68 %** (población DANE; la cifra oficial, 3,62 %, queda en nota) hacia **7 %**. Datos: 2017, 2021 (6,80 %), 2022, 2023 y 2025 (4,03 %); 2018 sin votación; 2019, 2020 y 2024 sin cifra | Profe (diferenciar de PP); Isabella (línea base y referente) |
-| 12 | I2 (cobertura territorial) se mantiene con **12 zonas** (la zona 1 es industrial): 2024 y 2025 = 12/12; 2025 con alerta (agregado de la Alcaldía; falta la lista por zona) | Profe; Isabella |
+| 11 | I1 (incorporación de aportes) → **votación del presupuesto participativo (IPCM)**: avance desde la **línea base 2017 = 3,68 %** (población DANE; la cifra oficial, 3,62 %, queda en nota) hacia **7 %**. Datos: 2017, 2020 (9.956 votos; 4,11 %), 2021 (6,80 %), 2022, 2023 y 2025 (4,03 %); 2018 sin votación; 2019 y 2024 sin cifra (brecha 2 de 8). El denominador es la población total, como define el Decreto 242 de 2017 (p. 31) | Profe (diferenciar de PP); Isabella (línea base y referente) |
+| 12 | I2 (cobertura territorial) se mantiene con **12 zonas** (la zona 1 es industrial): 2020, 2021, 2022, 2024 y 2025 = 12/12; 2023 sin dato (brecha 1 de 6). 2020–2022 con alerta: hay documentos por zona (fichas de 2020, programación de 2021, votos de 2022 por zona según los planes zonales) pero no actas de asistencia; 2025 con alerta (agregado de la Alcaldía) | Profe; Isabella |
 | 13 | I3 (oferta formativa): 2025 = **21/25 = 84,00** (denominador reconstruido); respaldo: conteo 17, 7 y 21 acciones para la ciudadanía (2023–2025) | Isabella (D49, D72) |
 | 14 | I4 (publicación de resultados) se mantiene con una **lista fija de 3 procesos** (2020–2025); 2025 como rango (mín. 2/3, máx. 3/3) hasta que se publique la rendición de PP | Profe e Isabella |
 | 15 | ISPC mantiene los pesos 30/25/20/25. **Resultado:** solo 2025 tiene índice (61,62, Naranja; con I4 = 3/3 sería 69,95); brecha 5 de 6 años | Profe; construcción |
@@ -34,8 +34,8 @@ Origen: **Profe** = acordado en reunión o respondido por el profe · **Isabella
 | 18 | CEP (entrega de proyectos) → **EJ90**: proyectos con ejecución ≥ 90 % (Hacienda); «terminados» (autorreporte) solo como respaldo | Profe |
 | 19 | CMA (metas de atención) → **FID**: fidelidad a lo votado | Profe |
 | 20 | Respaldos: fidelidad monetaria, tasa de compromiso, equidad entre zonas y cobertura del cruce | Propuesta aceptada |
-| 21 | **Serie ampliada a 2020–2025** (antes solo 2024–2025). Un año se calcula solo si se verifica al menos el 50 % de sus proyectos: **2021 queda sin dato** (39 de 89) | Profe; Isabella |
-| 22 | IREPP mantiene los pesos 20/40/40. **Resultado:** 51,27 (2020), 85,51 (2022), 89,15 (2023), 93,56 (2024) y 95,83 (2025); brecha 1 de 6 años | Profe; construcción |
+| 21 | **Serie ampliada a 2020–2025** (antes solo 2024–2025). Un año se calcula solo si se verifica al menos el 50 % de sus proyectos. 2021 se calcula con la **lista oficial de 45 proyectos** (sin los 12 del INDER; con ellos daría 92,69). El cruce incluye los proyectos de Salud (Fondo Local de Salud) | Profe; Isabella |
+| 22 | IREPP mantiene los pesos 20/40/40. **Resultado:** 57,98 (2020), 90,71 (2021), 85,51 (2022), 89,15 (2023), 93,56 (2024) y 95,83 (2025); brecha 0 de 6 años | Profe; construcción |
 
 ## Control social (ICRCS)
 | # | Cambio | Origen |

@@ -13,7 +13,9 @@ SALIDA = RAIZ / "outputs/construccion/PP/pp_muestra_manual.csv"
 # (anio, sufijo, paginas del PDF leidas)
 MUESTRA = [
     (2020, "0216", "14"), (2020, "0475", "21"), (2020, "0480", "24"), (2020, "0252", "29"), (2020, "0447", "31"), (2020, "0495", "20"),
+    (2020, "0314", "19"), (2020, "0466", "19"),   # rubros 2.4 (Fondo Local de Salud), D89
     (2021, "0407", "94, 96"), (2021, "0232", "94, 96"), (2021, "0647", "128"), (2021, "0396", "94, 96"), (2021, "0234", "94, 96"),
+    (2021, "0257", "128"), (2021, "0656", "110"),   # lista oficial 29399 (D88); 0656 = desempate de Z4, rubro 2.4
     (2022, "0407", "78, 79"), (2022, "0704", "115, 117"), (2022, "0710", "53"), (2022, "0698", "66"), (2022, "0234", "78, 79"),
     (2023, "0407", "64, 65"), (2023, "0729", "91, 92"), (2023, "0735", "64, 65"), (2023, "0400", "64, 65"), (2023, "0386", "64, 65"),
     (2024, "0677", "43"), (2024, "0665", "42"), (2024, "0667", "43"), (2024, "0669", "43"), (2024, "0671", "43"), (2024, "0673", "43"),
@@ -24,7 +26,10 @@ filas = []
 with open(CRUCE, encoding="utf-8-sig", newline="") as f:
     P = list(csv.DictReader(f, delimiter=";"))
 for a, suf, pg in MUESTRA:
-    x = next(r for r in P if r["anio"] == str(a) and r["codigo_sufijo"] == suf)
+    x = next((r for r in P if r["anio"] == str(a) and r["codigo_sufijo"] == suf), None)
+    if x is None:   # revisado antes del cambio de universo de 2021 (D88) y ya no esta en el cruce vigente
+        print("fuera del universo vigente:", a, suf)
+        continue
     filas.append({"anio": a, "id_efpc": x["id_efpc"], "codigo_sufijo": suf, "paginas_pdf_leidas": pg, "valor_votado": x["valor_votado"],
                   "apropiacion_inicial": x["apropiacion_inicial"], "apropiacion_definitiva": x["apropiacion_definitiva_sin_2_3_7_06"],
                   "obligacion": x["obligacion_sin_2_3_7_06"], "tipo_cruce": x["tipo_cruce"],

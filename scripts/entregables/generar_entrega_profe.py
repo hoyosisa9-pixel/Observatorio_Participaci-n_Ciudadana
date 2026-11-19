@@ -363,13 +363,78 @@ def texto_brecha(dim, cod, corto=True):
     return base if corto or not resto.strip() else f'{base}; {resto.strip()}'
 
 
+
+# ------------------------------------------------------------------ textos que dependen de los CSV (PP y PC)
+def txt_csv(dim, cod):
+    return ' '.join(r['nota'] + ' ' + r['brecha'] + ' ' + r['referente'] for r in DATA[dim] if r['codigo'] == cod)
+
+
+def pp_anios_sin_dato():
+    """[(año, motivo corto)] de los años 2020–2025 sin IREPP."""
+    out = []
+    for r in anual('PP', 'PP.IREPP', 'indice'):
+        if num(r['valor']) is None and 2020 <= int(r['anio']) <= 2025:
+            m = quitar_parentesis(re.sub(r'^sin dato:\s*', '', r['brecha'])).split(';')[0].strip().replace('anios', 'años')
+            out.append((int(r['anio']), m[:200]))
+    return out
+
+
+def pp_sin_dato_txt():
+    sd = pp_anios_sin_dato()
+    return ('; '.join(f'{a} queda sin dato' for a, _m in sd) + '.') if sd else 'Todos los años de 2020 a 2025 tienen índice.'
+
+
+def pp_universo_2021():
+    """Universo de PP 2021 (lista oficial sin los proyectos del INDER) y sensibilidad con todos, según el CSV."""
+    t = txt_csv('PP', 'PP.EPP')
+    r21 = [r for r in DATA['PP'] if r['codigo'] == 'PP.EPP' and r['anio'] == '2021']
+    if 'lista oficial' not in ' '.join(r['nota'] for r in r21):
+        return ''
+    n21 = r21[0]['nota']
+    tot = re.search(r'(\d+) proyectos, \$', n21)
+    inder = re.search(r'sin los (\d+) proyectos del INDER', n21)
+    sens = [r for r in DATA['PP'] if r['codigo'] == 'PP.SENS2021.IREPP' and r['anio'] == '2021']
+    ej = [r for r in DATA['PP'] if r['codigo'] == 'PP.EJ90' and r['anio'] == '2021'][0]
+    txt = f'2021: el universo es la lista oficial de proyectos de la vigencia (publicada el 23-feb-2022), sin los {inder.group(1) if inder else "…"} proyectos del INDER: {ej["denominador"]} proyectos'
+    if sens and tot:
+        txt += f'; con los {tot.group(1)} proyectos el IREPP sería {fmt(sens[0]["valor"])}'
+    return txt + '.'
+
+
+def pp_rubros24():
+    m = re.search(r'incluye los rubros 2\.4 \(Fondo Local de Salud\): (\d+) proyectos', txt_csv('PP', 'PP.EPP'))
+    return f'El cruce de 2020 incluye los rubros 2.4 (Fondo Local de Salud): {m.group(1)} proyectos de Salud cruzan al peso.' if m else ''
+
+
+def aviso_pp2020():
+    c = [r for r in DATA['PP'] if r['codigo'] == 'PP.CONTRACREDITO' and r['anio'] == '2020']
+    if not c:
+        return ''
+    monto = re.search(r'\$([\d\.]+)', c[0]['nota'])
+    e = [r for r in DATA['PP'] if r['codigo'] == 'PP.EPP' and r['anio'] == '2020'][0]
+    m = re.search(r'valor votado de los verificados = ([\d\.]+) %', e['nota'])
+    t = (f'**PP 2020:** {c[0]["numerador"]} de {c[0]["denominador"]} proyectos con contracrédito total' + (f' (${monto.group(1)})' if monto else '') +
+         f'; la ejecución presupuestal ({fmt(e["valor"])}) no lo refleja' + (f'; obligación / valor votado = {fmt(m.group(1))} %' if m else '') +
+         '; la vigencia 2020 se priorizó en 2019.')
+    return ' '.join(x for x in (t, pp_rubros24(), pp_universo_2021()) if x)
+
+
+def pc_votos_txt():
+    rs = [r for r in anual('PC', 'PC.I1', 'principal') if num(r['valor']) is not None]
+    return '; '.join(f'{r["anio"]}: {fmt(r["numerador"])} votos' for r in rs)
+
+
+def pc_anios_nd(cod):
+    """Años 2017–2025 con «sin dato» (no «no aplica») del indicador de PC."""
+    return comprimir([int(r['anio']) for r in anual('PC', cod, 'principal') if r['valor'] == 'N/D' and r['brecha'].startswith('sin dato')])
+
+
 def tabla_indicadores_dim(dim):
     return [[nombre, anios_dato(dim, cod), ultimo_valor(dim, cod), texto_brecha(dim, cod)] for cod, nombre in NOMBRES[dim]]
 
 
-AVISO_PP2020 = ('**PP 2020:** 20 de 69 proyectos con contracrédito total ($3.627.742.979); la ejecución presupuestal (82,42) no lo refleja; '
-                'obligación / valor votado = 46,34 %; la vigencia 2020 se priorizó en 2019.')
-assert any('3.627.742.979' in r['nota'] for r in DATA['PP']) and any('46.34' in r['nota'] or '46,34' in r['nota'] for r in DATA['PP'])
+AVISO_PP2020 = aviso_pp2020()
+assert 'PP 2020' in AVISO_PP2020 and '$' in AVISO_PP2020, 'las cifras de PP 2020 cambiaron en el CSV: revisar aviso_pp2020()'
 
 
 ENC_IND = ['Indicador', 'Años con dato', 'Último valor (puntaje)', 'Brecha de información']
@@ -412,9 +477,9 @@ PDM = [
 PC = [
     ['**I1** Incorporación de aportes', 'No hay inventario de procesos; el respaldo repetía los datos de la fidelidad de PP',
      '**Se reemplaza** por la votación del presupuesto participativo (IPCM = votos / población). Avance desde la **línea base 2017 = 3,68 %** hacia **7 %** (tope de la escala oficial)',
-     'Profe (diferenciar de PP); Isabella (línea base y referente)', serie('PC', 'PC.I1', '; 2018 sin votación')],
-    ['**I2** Cobertura territorial', 'El dato principal solo existe para 2024–2025',
-     '**Se mantiene**, con **12 zonas** (la zona 1 es industrial). 2025 con alerta: falta la lista de asambleas por zona', 'Profe', serie('PC', 'PC.I2')],
+     'Profe (diferenciar de PP); Isabella (línea base y referente)', serie('PC', 'PC.I1', '; 2018 sin votación; sin cifra: ' + pc_anios_nd('PC.I1'))],
+    ['**I2** Cobertura territorial', 'El dato principal existe para ' + anios_dato('PC', 'PC.I2'),
+     '**Se mantiene**, con **12 zonas** (la zona 1 es industrial). Con alerta: es cobertura documental (fichas, programación y votación por zona), sin actas de asistencia; se solicita la lista de asambleas por zona', 'Profe', serie('PC', 'PC.I2')],
     ['**I3** Oferta formativa', 'Solo 2025 tiene denominador, y es reconstruido',
      '**Se mantiene**: 2025 = **21 de 25** acciones. Respaldo: número de acciones para la ciudadanía (2023–2025)', 'Isabella (D49, D72)', serie('PC', 'PC.I3')],
     ['**I4** Publicación de resultados', 'No hay inventario oficial de procesos cerrados',
@@ -424,11 +489,11 @@ PC = [
 ]
 
 PP = [
-    ['**EPP** Ejecución presupuestal', 'Hay dato de Hacienda por proyecto', '**Se mantiene**. Sin el rubro de déficit fiscal', 'Profe (mantener); Isabella (excluir déficit, D51)', serie('PP', 'PP.EPP', ' (2021 sin dato)')],
+    ['**EPP** Ejecución presupuestal', 'Hay dato de Hacienda por proyecto', '**Se mantiene**. Sin el rubro de déficit fiscal', 'Profe (mantener); Isabella (excluir déficit, D51)', serie('PP', 'PP.EPP', ' (' + pp_sin_dato_txt() + ')' if pp_anios_sin_dato() else '')],
     ['**CEP** Entrega de proyectos', 'No hay actas de recibo; «terminado» solo existe como autorreporte',
      '**Se reemplaza** por **EJ90**: proyectos con ejecución ≥ 90 % (Hacienda). «Terminados» queda solo como respaldo', 'Profe', serie('PP', 'PP.EJ90')],
     ['**CMA** Metas de atención', 'El plan de acción mide actividades, no personas', '**Se reemplaza** por **FID**: fidelidad a lo votado', 'Profe', serie('PP', 'PP.FID')],
-    ['**IREPP**', 'Serie corta (solo 2024–2025)', 'Pesos 20/40/40. La serie se amplía a **2020–2025**; 2021 queda sin dato (solo 39 de 89 proyectos se pudieron verificar)',
+    ['**IREPP**', 'Serie corta (solo 2024–2025)', 'Pesos 20/40/40. La serie se amplía a **2020–2025**. ' + pp_sin_dato_txt() + ' ' + pp_universo_2021(),
      'Profe (pesos); Isabella (serie)', '2020–2025'],
 ]
 
@@ -487,14 +552,13 @@ VRC_NECESITA = [
 ]
 
 SOLICITAR = [
-    'Votos de presupuesto participativo de 2019, 2020 y 2024, y desde 2018 por zona (Planeación).',
+    f'Votos de presupuesto participativo de {pc_anios_nd("PC.I1").replace(", ", " y ")}, y desde 2018 por zona (Planeación).',
     'Población de referencia del IPCM y si se cuentan votos o votantes (Planeación).',
-    'Lista de asambleas por zona de 2025, para el indicador de cobertura territorial (Subdirección de Participación Ciudadana).',
+    'Lista de asambleas y actas de asistencia por zona, para respaldar el indicador de cobertura territorial (Subdirección de Participación Ciudadana).',
     'Programación anual de la Escuela de Formación (oferta formativa programada, 2020–2024).',
     'REC rural de 2016 a 2020 (cobertura de servicios públicos): hoy esos años tienen rural = 0 (Planeación).',
     'Espacio verde urbano año por año desde 2019 con el método del AMVA (Planeación, en el seguimiento del POT).',
     'Listado completo de veedurías inscritas (Personería): el listado público parece incompleto.',
-    'Plan de acción 2021 con los códigos de proyecto de presupuesto participativo, o el decreto de liquidación o las fichas BPIN (Planeación).',
     'Listas de asistencia de las rendiciones de cuentas, con la casilla de veeduría (Alcaldía), para cerrar la brecha de VRC.',
     'Rendición de cuentas del presupuesto participativo 2025 (se hará en el último trimestre de 2026).',
     'Logros de políticas públicas: políticas vigentes, informes de seguimiento y metas cumplidas.',
@@ -510,10 +574,10 @@ DECISIONES = [
     ('D39, D50, D65', 'Servicios públicos', 'Promedio simple de las 4 coberturas desde 2019; referente 100 % (decisión). Acueducto, alcantarillado y aseo: 2009–2018 solo como contexto (2008 y 2010 vienen vacíos). 2019 se mantiene, con alerta (el REC rural de 2016–2020 no es comparable).', 'Profe; Isabella', True),
     ('D15, D16, D27, D57', 'Logro educativo', 'Promedio simple de cobertura neta y primera infancia (0–5 años). 2015–2018 con alerta de comparabilidad.', 'Isabella', True),
     ('D58, D63', 'Homicidio', 'Se mantiene la meta 2,7 del PDM (misma fuente y universo: Policía). Incluye el feminicidio. Nota: la línea base 3,7 del PDM usó otra población.', 'Profe (meta 2,7); Isabella (mantenerla con nota)', True),
-    ('D60, D84', 'Semáforo (propuesta)', 'Propuesta para que el profe la valide, igual en todas las dimensiones: Verde ≥ 90, Amarillo 75 a < 90, Naranja 50 a < 75, Rojo < 50.', 'Propuesta aceptada; rótulo «propuesta»: Isabella', True),
+    ('D60, D84', 'Semáforo (propuesta)', 'Propuesta por validar, igual en todas las dimensiones: Verde ≥ 90, Amarillo 75 a < 90, Naranja 50 a < 75, Rojo < 50.', 'Propuesta aceptada; rótulo «propuesta»: Isabella', True),
     ('D61, D62, D64, D66', 'Población y veedurías (método)', 'Población única: DANE vigente (8-ago-2025). Brecha de veedurías = consecutivos que faltan en el año / (listados + faltantes).', 'Propuesta aceptada; Isabella', False),
-    ('D32, D40, D69', 'I1: votación de PP', 'Se reemplaza por el IPCM (votos / población). Línea base 2017 = 3,68 % con población DANE (la cifra oficial, 3,62 %, queda en nota); referente 7 %. El año es el de la votación.', 'Profe; Isabella', True),
-    ('D41, D73', 'I2: zonas', '12 zonas (sin la zona 1, industrial). 2025 = 12/12 con alerta: es un agregado de la Alcaldía; se solicita la lista de asambleas por zona.', 'Profe; Isabella', True),
+    ('D32, D40, D69', 'I1: votación de PP', 'Se reemplaza por el IPCM (votos / población). Línea base 2017 = 3,68 % con población DANE (la cifra oficial, 3,62 %, queda en nota); referente 7 %. El año es el de la votación. Votos usados: ' + pc_votos_txt() + '.', 'Profe; Isabella', True),
+    ('D41, D73', 'I2: zonas', '12 zonas (sin la zona 1, industrial). Los años con dato (' + anios_dato('PC', 'PC.I2') + ') dan 12/12 con alerta: es cobertura documental por zona, sin actas de asistencia; se solicita la lista de asambleas por zona.', 'Profe; Isabella', True),
     ('D29, D40, D70, D74', 'I4: lista fija', 'Tres procesos: votación de PP, rendición de cuentas del Alcalde y rendición de PP. 2025 como rango (mín. 2/3, máx. 3/3); se actualiza cuando se publique la rendición de PP.', 'Profe; Isabella', True),
     ('D42', 'Pesos del ISPC', 'Se mantienen: 30/25/20/25.', 'Profe', True),
     ('D49, D72', 'I3: oferta formativa', 'Tasa solo en 2025: 21/25 = 84,00 (denominador reconstruido; se cuenta el diplomado en Gestión Pública). Respaldo: conteo 17, 7 y 21 acciones para la ciudadanía.', 'Isabella', True),
@@ -521,7 +585,7 @@ DECISIONES = [
     ('D43', 'EJ90 en lugar de CEP', 'Principal: proyectos con ejecución ≥ 90 % (Hacienda, verificable). «Terminados» (autorreporte) solo como respaldo.', 'Profe', True),
     ('D24', 'FID en lugar de CMA', 'Fidelidad a lo votado: proyectos cuya apropiación coincide con el valor votado (±1 %) / proyectos votados.', 'Profe', True),
     ('D44', 'Pesos del IREPP', 'Se mantienen: 20/40/40.', 'Profe', True),
-    ('D44, D53, D56', 'Serie de PP', 'Se calcula 2020–2025 y se reporta la brecha. Un año se calcula solo si se verifica al menos el 50 % de sus proyectos: 2021 queda sin dato (39 de 89).', 'Profe; Isabella', True),
+    ('D44, D53, D56', 'Serie de PP', 'Se calcula 2020–2025 y se reporta la brecha. Un año se calcula solo si se verifica al menos el 50 % de sus proyectos. ' + pp_sin_dato_txt() + ' ' + pp_universo_2021(), 'Profe; Isabella', True),
     ('D51, D52, D54, D55', 'Reglas de cruce de PP', 'Se excluye el rubro de déficit fiscal (2.3.7.06). Llave de cruce: valor votado = apropiación inicial; los cruces dudosos cuentan como no verificados.', 'Isabella', False),
     ('D45, D78, D82', 'PQRSDF en lugar de PCS', 'Oportunidad de respuesta (atendidas en términos / total). El año se arma con informes que cubran 12 meses sin repetirse; principal: sistema BPMS.', 'Profe; Isabella', True),
     ('D45, D75, D79', 'DSI', 'Lista de 10 metas de resultado del PDM, como rango (mín. = valores con fecha de publicación verificada) con brecha. Años 2024 y 2025.', 'Profe (mantener); Isabella (lista de 10, D75/D79)', True),
@@ -672,7 +736,7 @@ def doc_detalle():
     doc.add_heading('Resumen', level=1)
     vinetas(doc, [
         'Se construyeron los cuatro índices con todos los años que tiene cada indicador. Los CSV están en outputs/construccion/<dimensión>/ y los genera un script por dimensión.',
-        '**IREPP (PP):** 2020–2025, sin 2021 (solo 39 de 89 proyectos verificados). **ICPD-7 (PDM):** 2019, 2022 y 2024 (espacio verde solo tiene tres cortes). '
+        '**IREPP (PP):** ' + comprimir([a for a, (v, _s) in ((int(r['anio']), (num(r['valor']), '')) for r in anual('PP', 'PP.IREPP', 'indice')) if v is not None]) + (' (' + pp_sin_dato_txt() + ')' if pp_anios_sin_dato() else '') + '. **ICPD-7 (PDM):** 2019, 2022 y 2024 (espacio verde solo tiene tres cortes). '
         '**ISPC (PC):** solo 2025. **ICRCS (CS):** 2024 y 2025 (PQRSDF ya está completa 2020–2025; 2020–2023 no tienen índice porque DSI solo aplica desde 2024).',
         'Todo es Provisional. QA aprobó con observaciones las cuatro dimensiones (18 y 19-nov).',
         'Los datos crudos están en Google Drive y las descargas de esta revisión en data_raw_IIC/07_revision_nov2026/ (con manifiesto).',
@@ -743,6 +807,12 @@ def texto_completo(d):
     return '\n'.join(partes)
 
 
+# Excepción explícita: la línea de autoría de la portada del Word del profe («Isabella Hoyos Álvarez · fecha · …») SÍ lleva el nombre,
+# porque ella es la autora del documento y se lo envía al profe. El filtro de nombres no se aplica a esa línea.
+AUTORIA = 'Isabella Hoyos Álvarez'
+NOMBRES_PROHIBIDOS_PROFE = ('Isabella', 'Francisco', 'usuaria', 'Analizador')
+
+
 def verificar(ruta, profe):
     d = Document(ruta)
     sec = d.sections[0]
@@ -751,11 +821,17 @@ def verificar(ruta, profe):
     for i, t in enumerate(d.tables):
         ancho = sum(c.width.cm for c in t.rows[0].cells)
         assert ancho <= util + 0.01, (ruta.name, 'tabla', i, round(ancho, 2), round(util, 2))
+    assert not re.findall(r'\bano\b(?!-\d)', re.sub(r'https?://\S+', '', texto_completo(d))), (ruta.name, 'palabra «ano» sin tilde')
     # 2) palabras prohibidas en el Word del profe
     if profe:
         txt = texto_completo(d).lower()
         for p in PROHIBIDAS_PROFE:
             assert p not in txt, (ruta.name, 'contiene', p)
+        sin_autoria = '\n'.join(l for l in texto_completo(d).split('\n') if not l.startswith(AUTORIA))
+        assert AUTORIA in texto_completo(d), 'falta la línea de autoría de la portada'
+        for n in NOMBRES_PROHIBIDOS_PROFE:
+            assert n not in sin_autoria, (ruta.name, 'contiene el nombre', n)
+        assert not re.search(r'\bD\d{1,3}\b', sin_autoria), (ruta.name, 'número de decisión', re.findall(r'.{20}\bD\d{1,3}\b.{10}', sin_autoria)[:3])
         assert 'Origen' not in [c.text for c in d.tables[0].rows[0].cells]
     # 3) valores de los índices (cuadro bajo el título del índice)
     tablas = {t._tbl: t for t in d.tables}

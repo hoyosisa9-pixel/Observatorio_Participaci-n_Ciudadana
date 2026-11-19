@@ -34,12 +34,14 @@ DIF_MIN = 1000          # pesos: tope minimo de la "diferencia minima" entre val
 DIF_REL = 0.0002        # ... o 0,02 % del valor votado, lo que sea mayor (la diferencia minima exige confirmar con nombre y zona)
 DEFICIT = "23706"       # rubro 2.3.7.06 (financiacion de deficit fiscal)
 FECHA = "2026-11-18"
+LISTA_2021 = "Lista oficial de proyectos de PP 2021 (doc. 29399)"   # D88; el listado EFPC de 2021 queda solo como referencia (iniciativas sometidas a votacion)
+URL_OFICIAL_2021 = "https://www.envigado.gov.co/sites/alcaldia-municipal-de-envigado-en-antioquia/content/files/000588/29399_2021proyectosppp.pdf"
 
 
 def _fechas():
     """fecha_consulta por archivo, tomada del manifiesto de cada carpeta."""
     out = {}
-    for carpeta in ("efpc_listados_pp", "hacienda_ejecucion", "plan_accion_2025"):
+    for carpeta in ("efpc_listados_pp", "hacienda_ejecucion", "plan_accion_2025", "pp_listados_oficiales"):
         with open(L.BASE / carpeta / "manifiesto.csv", encoding="utf-8", newline="") as f:
             for r in csv.DictReader(f):
                 out[f"{carpeta}/{r['archivo']}"] = r["fecha_consulta"]
@@ -59,15 +61,18 @@ FUENTES = {
 COLS = ["anio", "id_efpc", "zona", "nombre_efpc", "valor_votado", "codigo_sufijo", "apropiacion_inicial",
         "apropiacion_definitiva_sin_2_3_7_06", "compromiso_sin_2_3_7_06", "obligacion_sin_2_3_7_06", "excluido_2_3_7_06_apropiacion",
         "excluido_2_3_7_06_obligacion", "diferencia_votado_menos_inicial", "tipo_cruce", "pagina_pdf",
-        "fuente_valor", "fuente", "enlace_ejecucion", "enlace_listado_efpc", "fecha_consulta", "fecha_consulta_listado", "observacion"]
+        "fuente_valor", "fuente", "enlace_ejecucion", "enlace_listado_efpc", "fecha_consulta", "fecha_consulta_listado", "unidad_inder", "observacion"]
 
 
-def agrupar(filas):
+PREFIJOS = ("23", "24")   # D89: inversion (2.3) y Fondo Local de Salud (2.4)
+
+
+def agrupar(filas, prefijos=PREFIJOS):
     """sufijo -> estadisticas de los rubros de inversion (prefijo 23), separando el 2.3.7.06."""
     g = defaultdict(lambda: {"ini": 0.0, "dfn": 0.0, "obl": 0.0, "comp": 0.0, "x_dfn": 0.0, "x_obl": 0.0, "rows": [],
                              "pag": [], "desc": []})
     for r in filas:
-        if not r["rubro"].startswith("23") or not r["ok"]:
+        if not r["rubro"].startswith(prefijos) or not r["ok"]:
             continue
         s = g[r["sufijo"]]
         if r["rubro"].startswith(DEFICIT):
@@ -167,7 +172,7 @@ def cruzar(anio, efpc, g, nombres=None):
         if (anio, e["id"]) in ASIGNACION_SUFIJO:
             suf, zz = ASIGNACION_SUFIJO[(anio, e["id"])]
             if suf in g and abs(g[suf]["ini"] - e["valor"]) < 1:
-                cand[i] = [{suf: "suma del sufijo"}, "exacto", f"D55: sufijo {suf} asignado a {zz} (cada sufijo conserva su zona en todos los anios; el valor coincide al peso); "]
+                cand[i] = [{suf: "suma del sufijo"}, "exacto", f"D55/D88: sufijo {suf} asignado a {zz}; el valor coincide al peso con su apropiacion inicial; "]
     reclamos = defaultdict(list)
     for i, k in enumerate(cand):
         if (anio, efpc[i]["id"]) in DUPLICADOS:
@@ -225,7 +230,8 @@ FORZADOS_NO_VERIFICADO = {}   # D54 (18-nov): se retiro EFPC2024-Z9-4; el cruce 
 
 # D55 (18-nov): 2022. Z6-5 es duplicado de Z6-2 (mismo proyecto 0347); cada sufijo conserva su zona en todos los anios.
 DUPLICADOS = {(2022, "EFPC2022-Z6-5"): "EFPC2022-Z6-2"}
-ASIGNACION_SUFIJO = {(2022, "EFPC2022-Z3-4"): ("0346", "zona 3"), (2022, "EFPC2022-Z9-4"): ("0348", "zona 9"),
+ASIGNACION_SUFIJO = {(2021, "PPP2021-Z4-1"): ("0656", "zona 4 (rendicion 2022saludz42021, p. 2: 'Proyecto 656'; D88)"),
+                     (2022, "EFPC2022-Z3-4"): ("0346", "zona 3"), (2022, "EFPC2022-Z9-4"): ("0348", "zona 9"),
                      (2022, "EFPC2022-Z6-2"): ("0347", "zona 6")}
 
 
@@ -251,17 +257,43 @@ def nombres_de(anio, g):
 def cargar():
     todas = []
     for a in ANIOS:
-        efpc = L.leer_efpc(a)
+        efpc = L.leer_lista_2021() if a == 2021 else L.leer_efpc(a)   # D88: 2021 = lista oficial 29399
         cont = defaultdict(int)
         for e in efpc:
             cont[e["zona"]] += 1
-            e["id"] = f"EFPC{a}-Z{e['zona']}-{cont[e['zona']]}"
+            e["id"] = f"{'PPP' if a == 2021 else 'EFPC'}{a}-Z{e['zona']}-{cont[e['zona']]}"
             e["pag_efpc"] = e["pagina"]
         filas = L.leer_roca_2025() if a == 2025 else L.leer_hacienda(a)
         g = agrupar(filas)
         r = cruzar(a, efpc, g, nombres_de(a, g))
+        if a >= 2022:   # D89: agregar los rubros 2.4 no cambia nada de 2022 a 2025
+            r23 = cruzar(a, [dict(e) for e in efpc], agrupar(filas, ("23",)), nombres_de(a, agrupar(filas, ("23",))))
+            clave = lambda t: [(x["id"], x["codigo_sufijo"], x["tipo"], x["ini"], x["dfn"], x["obl"]) for x in t]
+            assert clave(r) == clave(r23), f"D89: los rubros 2.4 cambian el cruce de {a}"
+        if a == 2020:   # D89: siete proyectos de Salud (rubros 2.4) cruzan al peso
+            esp = {"EFPC2020-Z2-1": "0314", "EFPC2020-Z5-4": "0466", "EFPC2020-Z6-5": "0441", "EFPC2020-Z7-4": "0328",
+                   "EFPC2020-Z8-5": "0470", "EFPC2020-Z9-4": "0330", "EFPC2020-Z12-5": "0472"}
+            got = {x["id"]: (x["codigo_sufijo"], x["tipo"]) for x in r}
+            assert all(got[k] == (v, "exacto") for k, v in esp.items()), got
+            assert [x["id"] for x in r if x["tipo"] == "no verificado"] == ["EFPC2020-Z3-5"] and \
+                [x["valor_votado"] for x in r if x["id"] == "EFPC2020-Z3-5"] == [64600000.0]
+        if a == 2021:   # D88
+            assert len(efpc) == 57 and sum(e["valor"] for e in efpc) == 15679980705 and sum(e["inder"] for e in efpc) == 12
+            ant = dict(ASIGNACION_SUFIJO)
+            ASIGNACION_SUFIJO.pop((2021, "PPP2021-Z4-1"))
+            sin = cruzar(a, [dict(e) for e in efpc], g, {})
+            ASIGNACION_SUFIJO.update(ant)
+            assert sum(1 for x in sin if x["tipo"] != "no verificado") == 56, "D88: se esperaban 56 coincidencias unicas"
+            z4 = next(x for x in sin if x["id"] == "PPP2021-Z4-1")
+            assert z4["tipo"] == "no verificado" and all(c in z4["obs"] for c in ("0201", "0574", "0599", "0656")), z4["obs"]
+            assert all(x["tipo"] != "no verificado" for x in r)
+            vv = {(e["zona"], e["valor"]) for e in efpc}
+            old = {(e["zona"], e["valor"]) for e in L.leer_efpc(2021)}
+            assert (7, 228035489.0) in vv and (13, 847708884.0) in vv
+            assert (7, 228035490.0) in old and (13, 847708885.0) in old   # el listado EFPC difiere 1 peso de la lista oficial
         for x, e in zip(r, efpc):
             x["pag_efpc"] = e["pag_efpc"]
+            x["inder"] = e.get("inder", False)
             if (a, x["id"]) in FORZADOS_NO_VERIFICADO:
                 x["obs"] = (f"[{x['tipo']} por regla -> sufijo {x['codigo_sufijo']}] " if x["codigo_sufijo"] else "") + FORZADOS_NO_VERIFICADO[(a, x["id"])]
                 x["regla_sufijo"], x["regla_tipo"] = x["codigo_sufijo"], x["tipo"]
@@ -285,10 +317,10 @@ def escribir(filas):
                         "apropiacion_definitiva_sin_2_3_7_06": f_(x["dfn"]), "compromiso_sin_2_3_7_06": f_(x["comp"]), "obligacion_sin_2_3_7_06": f_(x["obl"]),
                         "excluido_2_3_7_06_apropiacion": f_(x["x_dfn"]), "excluido_2_3_7_06_obligacion": f_(x["x_obl"]),
                         "diferencia_votado_menos_inicial": f_(x["dif"]), "tipo_cruce": x["tipo"],
-                        "pagina_pdf": (f"{pag}" if a != 2025 else pag) + (f" | listado EFPC p. {x['pag_efpc']}" if pag else f"listado EFPC p. {x['pag_efpc']}"),
+                        "pagina_pdf": (f"{pag}" if a != 2025 else pag) + (f" | {LISTA_2021 if a == 2021 else 'listado EFPC'} p. {x['pag_efpc']}" if pag else f"{LISTA_2021 if a == 2021 else 'listado EFPC'} p. {x['pag_efpc']}"),
                         "fuente_valor": "plan_accion_roca" if a == 2025 else "hacienda",
-                        "fuente": fv[0], "enlace_ejecucion": fv[1], "enlace_listado_efpc": URL_EFPC.format(a=a),
-                        "fecha_consulta": FECHAS[fv[2]], "fecha_consulta_listado": FECHAS[f"efpc_listados_pp/Proyectos_PP_{a}.pdf"], "observacion": x["obs"]})
+                        "fuente": fv[0], "enlace_ejecucion": fv[1], "enlace_listado_efpc": URL_OFICIAL_2021 if a == 2021 else URL_EFPC.format(a=a),
+                        "fecha_consulta": FECHAS[fv[2]], "fecha_consulta_listado": FECHAS["pp_listados_oficiales/2021proyectosppp.pdf" if a == 2021 else f"efpc_listados_pp/Proyectos_PP_{a}.pdf"], "unidad_inder": ("si" if x.get("inder") else "no") if a == 2021 else "", "observacion": x["obs"]})
 
 
 def ajustes(T):

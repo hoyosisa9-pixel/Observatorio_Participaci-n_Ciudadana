@@ -160,3 +160,23 @@ Todo resultado sigue siendo **Provisional**.
 - **Corrección de D80 y D81 (QA, 20-nov):** el 40433 NO trae respuestas escritas: es una encuesta (Microsoft Forms) de la rendición de PP 2021, y el 40434 es la encuesta de evaluación de la audiencia. Las preguntas 4 y 9 quedaron en 0 por el criterio de fondo (23449, pp. 2-3: «se la vamos a contestar…»). El 40433 sale de VRC por ser una encuesta, no un evento.
 - **Alertas de comparabilidad de PQRSDF:** el Decreto 491 amplió plazos **hasta el 17-may-2022** (Ley 2207), así que 2022 T3–T4 se mide con plazos ordinarios. En 2024 el volumen sube un 64 % por reclasificación de lo que ingresa (118962, p. 9). El sistema Débora rige desde mayo de 2025. El indicador subestima la oportunidad (144255, p. 25).
 - D78 queda superada: el ICRCS ya está completo para 2024 y 2025.
+
+## Revisión del Drive (20-nov): brechas que se cierran
+- D88 (usuaria). **Universo de PP 2021 = 45 proyectos sin INDER**, tomados de la lista oficial 29399 «Proyectos PPP vigencia 2021», que está en el ZIP 01 y la publicó el portal el 23-feb-2022. Los 57 proyectos con INDER van como sensibilidad. El listado EFPC 2021 son iniciativas sometidas a votación. Desempate de Z4 ($100 M): queda el 0656, según la rendición 2022saludz42021, p. 2. Resultado: IREPP 2021 = 90,71 (sensibilidad con 57 = 92,69).
+- D89 (usuaria). **El cruce de PP incluye los rubros 2.4 (Fondo Local de Salud)** además de los 2.3. En 2020, 7 proyectos de Salud coinciden al peso. Resultado: IREPP 2020 = 57,98 (antes 51,27); obligación / votado 2020 = 54,53 % (antes 46,34 %).
+- D90 (usuaria). **I2 2020–2022 = 12/12, con alerta.** La evidencia son documentos por zona: las fichas de los espacios zonales de 2020, la programación de los espacios zonales de 2021 y la socialización y votación de 2022 más los talleres de los planes zonales. No hay actas de asistencia. 2023 queda N/D.
+- D91 (usuaria). **I4 2020 se mantiene en 2/3.** El periódico de rendición 2020 (57151) existe, pero no trae preguntas y respuestas.
+- Datos nuevos:
+  - **Votos de PP 2020 = 9.956** (4306, p. 1: «proyectos priorizados 2021»).
+  - Votos de PP 2022 por zona según los planes zonales: suman 12.541.
+  - **Denominador del IPCM = población total** (Decreto 242/2017, p. 31). El decreto también dice que hay un voto por cada zona habilitada (p. 13) y que no se vota si el recurso alcanza (p. 15).
+  - Acuerdo 007/2025: la rendición de PP se hace en el último trimestre; habrá cofinanciación desde 2026; la zona 1 pasa a rural si tiene al menos 1.000 habitantes.
+  - Las veedurías de jju5-br3w parecen ser solo las vigentes [S].
+  - Ruta pública para I3: contratos de la Escuela en SECOP II.
+
+## Aplicación de D88–D91 y Excel de 5 hojas (19/20-nov)
+- **PP:** IREPP 2020 = 57,98 Naranja, 2021 = 90,71 Verde, 2022 = 85,51, 2023 = 89,15, 2024 = 93,56, 2025 = 95,83. Brecha 0/6. 2020 tiene 1 proyecto sin verificar (Z3-5, $64,6 M).
+- **PC:** I1 2020 = 9.956 votos / 242.371 → 4,108 % → 12,88. Brechas: I1 2/8 (2019 y 2024) e I2 1/6 (2023). Los votos por zona de los planes zonales corresponden a las **zonas 2 a 13**; el plan no dice el año, pero se atribuye a 2022 porque suma exactamente 12.541. El ISPC no cambia (2025 = 61,62).
+- **Excel rediseñado a 5 hojas** (pedido de la usuaria: «que no lleve tanta cosa»): Inicio, Índices, Indicadores, Ficha metodológica y Datos (una sola tabla para Power BI). Las hojas viejas pasaron a columnas de Datos o a Inicio.
+- **Autoría:** el nombre de la usuaria se mantiene como autora en la portada del Word resumido para el profe. Es su documento; el filtro de nombres no aplica a esa línea.
+- QA final (19-nov): todas las cifras están verificadas contra la fuente. Se rechazó solo por forma (un «D7» en Datos, «ano» sin eñe, la etiqueta de la fuente de PP 2021 y marcas internas), y esas correcciones están en curso.

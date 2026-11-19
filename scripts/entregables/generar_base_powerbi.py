@@ -12,6 +12,9 @@ y escribe outputs/entrega_powerbi/base_indicadores_OCE.xlsx con tablas de Excel 
   dim_semaforo   rangos del semáforo (propuesta, D60 y D84)
   fuentes        fuentes y enlaces citados
   diccionario    descripción de cada columna
+  resumen        los cuatro índices por año en formato ancho, para leer (sin Power BI)
+  cambios        qué pasó con cada indicador de la matriz original y por qué
+  ficha_metodologica  una fila por indicador principal e índice con su metodología (mismas columnas que la ficha en Word)
 
 Se corre desde la raíz: python3 scripts/entregables/generar_base_powerbi.py
 Si cambian los CSV de construcción (p. ej. al completar las rendiciones de Discapacidad y Víctimas con cs_icrcs.py), basta con volver a correrlo.
@@ -26,6 +29,10 @@ from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.table import Table, TableStyleInfo
+
+import comun_entregas as ce
+import contenido_fichas as cf
+import hojas_excel
 
 RAIZ = Path(__file__).resolve().parents[2]
 SALIDA = RAIZ / 'outputs' / 'entrega_powerbi' / 'base_indicadores_OCE.xlsx'
@@ -43,21 +50,7 @@ DIMENSIONES = [
     ('CS', 'Control social', 'CS.ICRCS', 'ICRCS',
      '(DSI + PQRSDF + VRC + RPO) / 4', 'CS/cs_indicadores.csv'),
 ]
-NOMBRE_TABLERO = {
-    'PDM.ICPD7': 'Índice de cumplimiento del PDM (ICPD-7)', 'PDM.SALUD': 'Cobertura en salud', 'PDM.ILE': 'Logro educativo',
-    'PDM.SP': 'Servicios públicos domiciliarios', 'PDM.CM': 'Mortalidad vial', 'PDM.CA': 'Espacio público verde urbano',
-    'PDM.VEED': 'Veedurías ciudadanas inscritas', 'PDM.HOM': 'Homicidio',
-    'PC.ISPC': 'Índice de participación ciudadana (ISPC)', 'PC.I1': 'Votación del presupuesto participativo',
-    'PC.I2': 'Cobertura territorial de la participación', 'PC.I3': 'Cumplimiento de la oferta formativa',
-    'PC.I4': 'Publicación de resultados participativos',
-    'PP.IREPP': 'Índice de presupuesto participativo (IREPP)', 'PP.EPP': 'Ejecución presupuestal del PP',
-    'PP.EJ90': 'Proyectos con ejecución ≥ 90 %', 'PP.FID': 'Fidelidad a lo votado',
-    'CS.ICRCS': 'Índice de control social (ICRCS)', 'CS.PQRSDF': 'Oportunidad de respuesta a las PQRSDF',
-    'CS.DSI': 'Disponibilidad de información de seguimiento', 'CS.VRC': 'Veedurías en la rendición de cuentas',
-    'CS.RPO': 'Respuesta a observaciones ciudadanas',
-}
-SEMAFORO = [('Verde', 90, 100, '#2E7D32', 1), ('Amarillo', 75, 90, '#F9A825', 2),
-            ('Naranja', 50, 75, '#EF6C00', 3), ('Rojo', 0, 50, '#C62828', 4)]
+# NOMBRE_TABLERO, SEMAFORO, UNIDAD_BASE y MENOR_ES_MEJOR viven en comun_entregas.py (los usan también las fichas metodológicas)
 
 ARIAL = 'Arial'
 ENC_FILL = PatternFill('solid', start_color='1F4E78')
@@ -65,66 +58,10 @@ ENC_FONT = Font(name=ARIAL, bold=True, color='FFFFFF', size=10)
 CUERPO = Font(name=ARIAL, size=10)
 
 
-# ---------------------------------------------------------------- textos: tildes
-# Tabla visible de reemplazos (palabras completas, sin distinguir mayúsculas). Se aplica solo al exportar
-# (indicador, nota, brecha, referente y fuente); los CSV de construcción no se tocan ni se aplica dentro de URL.
-TILDES = {
-    'anios': 'años', 'anio': 'año', 'poblacion': 'población', 'alcaldia': 'Alcaldía', 'regimen': 'régimen',
-    'regimenes': 'regímenes', 'educacion': 'educación', 'participacion': 'participación', 'informacion': 'información',
-    'publicos': 'públicos', 'publicas': 'públicas', 'publicacion': 'publicación', 'veedurias': 'veedurías',
-    'veeduria': 'veeduría', 'rendicion': 'rendición', 'ejecucion': 'ejecución', 'votacion': 'votación',
-    'indice': 'índice', 'indices': 'índices', 'dimension': 'dimensión', 'formacion': 'formación', 'atencion': 'atención',
-    'ninos': 'niños', 'ninas': 'niñas', 'minimo': 'mínimo', 'minimos': 'mínimos', 'maximo': 'máximo', 'maximos': 'máximos',
-    'numero': 'número', 'diagnostico': 'diagnóstico', 'revision': 'revisión', 'gestion': 'gestión',
-    'metodologia': 'metodología', 'segun': 'según', 'tambien': 'también', 'despues': 'después', 'ademas': 'además',
-    'analisis': 'análisis', 'policia': 'Policía', 'secretaria': 'Secretaría', 'planeacion': 'Planeación',
-    'personeria': 'Personería', 'area': 'área', 'terminos': 'términos', 'termino': 'término', 'proyeccion': 'proyección',
-    'proyecciones': 'proyecciones', 'definicion': 'definición', 'formula': 'fórmula', 'contracredito': 'contracrédito',
-    'apropiacion': 'apropiación', 'obligacion': 'obligación', 'unico': 'único', 'unica': 'única', 'diseno': 'diseño',
-    'reunion': 'reunión', 'comite': 'comité', 'caida': 'caída', 'categoria': 'categoría', 'intervencion': 'intervención',
-    'intervenciones': 'intervenciones', 'felicitacion': 'felicitación', 'felicitaciones': 'felicitaciones',
-    'invitacion': 'invitación', 'remision': 'remisión', 'pagina': 'página', 'paginas': 'páginas',
-    'ciudadania': 'ciudadanía', 'politica': 'política', 'politicas': 'políticas', 'ultimo': 'último', 'ultima': 'última',
-    'habitat': 'hábitat', 'fisico': 'físico', 'deficit': 'déficit', 'liquidacion': 'liquidación', 'razon': 'razón',
-    'verificacion': 'verificación', 'clasificacion': 'clasificación', 'afiliacion': 'afiliación', 'cobertura': 'cobertura',
-    'metrica': 'métrica', 'tecnica': 'técnica', 'tecnico': 'técnico', 'economia': 'economía', 'demografica': 'demográfica',
-    'accion': 'acción', 'solucion': 'solución', 'funcion': 'función', 'orden': 'orden', 'ocupacion': 'ocupación',
-    'cuadros': 'cuadros', 'evaluacion': 'evaluación', 'asignacion': 'asignación', 'estimacion': 'estimación',
-    'ubicacion': 'ubicación', 'situacion': 'situación', 'direccion': 'dirección', 'resolucion': 'resolución',
-    'comparacion': 'comparación', 'conversion': 'conversión', 'seccion': 'sección', 'sesion': 'sesión', 'sesiones': 'sesiones',
-    'audiencia': 'audiencia', 'matricula': 'matrícula', 'relacion': 'relación', 'tenia': 'tenía', 'habia': 'había',
-    'mayoria': 'mayoría', 'energia': 'energía', 'mineducacion': 'MinEducación', 'apendice': 'apéndice',
-    'descripcion': 'descripción', 'programacion': 'programación', 'priorizacion': 'priorización', 'seria': 'sería',
-    'daria': 'daría', 'mediria': 'mediría', 'implicaria': 'implicaría', 'pasaria': 'pasaría', 'podria': 'podría',
-    'reduccion': 'reducción', 'convencion': 'convención', 'retroproyeccion': 'retroproyección', 'construccion': 'construcción',
-    'medicion': 'medición', 'decision': 'decisión', 'auditoria': 'auditoría', 'subdireccion': 'subdirección',
-    'mencion': 'mención', 'identicos': 'idénticos', 'delimitacion': 'delimitación', 'presentacion': 'presentación',
-    'formulacion': 'formulación', 'contradiccion': 'contradicción', 'transicion': 'transición', 'inscripcion': 'inscripción',
-    'observacion': 'observación', 'version': 'versión', 'excluia': 'excluía', 'electrica': 'eléctrica', 'republica': 'República',
-    'asi': 'así', 'capacitacion': 'capacitación', 'actualizacion': 'actualización', 'proporcion': 'proporción', 'grafico': 'gráfico', 'organizaciones': 'organizaciones', 'sera': 'será', 'unicamente': 'únicamente', 'ultimos': 'últimos', 'numeros': 'números', 'biologica': 'biológica', 'ecologica': 'ecológica', 'tematica': 'temática', 'cronologico': 'cronológico',
-}
-TILDES = {k: v for k, v in TILDES.items() if k != v}
-_RE_URL = re.compile(r'(https?://\S+)')
-_RE_PAL = re.compile(r'\b(' + '|'.join(sorted(TILDES, key=len, reverse=True)) + r')\b', re.IGNORECASE)
-_RE_ANOS = re.compile(r'(\d)(\s*)anos\b')
+# tildes() y TILDES viven en comun_entregas.py (se comparten con los Word de la entrega al profe)
+from comun_entregas import (MENOR_ES_MEJOR, NOMBRE_TABLERO, PCT, PUNT, SEMAFORO, TASA, TILDES, UNIDAD_BASE,  # noqa: E402
+                            para_profe, tildes)
 
-
-def _cambia(m):
-    original, nuevo = m.group(0), TILDES[m.group(0).lower()]
-    if original.isupper() and len(original) > 1:
-        return nuevo.upper()
-    return nuevo[0].upper() + nuevo[1:] if original[0].isupper() else nuevo
-
-
-def tildes(texto):
-    """Reemplazo controlado de palabras completas sin tilde; no toca las URL."""
-    if not texto:
-        return texto
-    trozos = _RE_URL.split(texto)
-    for i in range(0, len(trozos), 2):
-        t = _RE_ANOS.sub(r'\1\2años', trozos[i])
-        trozos[i] = _RE_PAL.sub(_cambia, t)
-    return ''.join(trozos)
 
 
 def num(t):
@@ -158,7 +95,7 @@ def leer():
         for r in csv.DictReader(ruta.open(encoding='utf-8-sig'), delimiter=';'):
             r = {k: (v or '').strip() for k, v in r.items()}
             for campo in ('indicador', 'nota', 'brecha', 'referente', 'fuente', 'enlace', 'fecha_consulta', 'valor'):
-                r[campo] = tildes(r[campo])
+                r[campo] = para_profe(r[campo])  # tildes y sin números de decisión ni atribuciones
             r['dimension'] = dim
             p = periodo(r['anio'])
             if r['tipo'] == 'brecha' or p is None:
@@ -183,13 +120,6 @@ BASE_ESPECIAL = {
     'PP.FID_MON': 'PP.FID', 'PP.COMP': 'PP.EPP', 'PP.EQUIDAD': 'PP.EPP', 'PP.TERMINADOS': 'PP.EJ90',
     'PP.COBERTURA': 'PP.IREPP', 'PP.CONTRACREDITO': 'PP.IREPP', 'PDM.POB': 'PDM.ICPD7', 'PDM.POB05': 'PDM.ILE',
 }
-PCT, PUNT, TASA = '%', 'puntaje 0–100', 'tasa por 100.000 hab.'
-UNIDAD_BASE = {
-    'PDM.ICPD7': PUNT, 'PDM.SALUD': PCT, 'PDM.ILE': PUNT, 'PDM.SP': PCT, 'PDM.CM': TASA, 'PDM.CA': 'm²/hab',
-    'PDM.VEED': 'conteo (veedurías inscritas)', 'PDM.HOM': TASA, 'PC.ISPC': PUNT, 'PC.I1': '% (IPCM: votos / población)',
-    'PC.I2': PCT, 'PC.I3': PCT, 'PC.I4': PCT, 'PP.IREPP': PUNT, 'PP.EPP': PCT, 'PP.EJ90': PCT, 'PP.FID': PCT,
-    'CS.ICRCS': PUNT, 'CS.PQRSDF': PCT, 'CS.DSI': PCT, 'CS.VRC': PCT, 'CS.RPO': PCT,
-}
 UNIDAD_BRECHA = {'CS.PQRSDF.BRECHA': 'trimestres sin informe legible / 24 trimestres (%)', 'CS.DSI.BRECHA': 'metas-año no verificables / metas-año (%)'}
 UNIDAD_COD = {
     'PDM.ILE.LA': PUNT, 'PDM.ILE.LN': PUNT, 'PDM.POB': 'habitantes', 'PDM.POB05': 'habitantes',
@@ -201,7 +131,6 @@ UNIDAD_COD = {
     'CS.DSI.META': 'clasificación (texto)', 'CS.VRC.EVENTO': 'clasificación (texto)', 'PC.ISPC.MAX': PUNT, 'CS.ICRCS.MAX': PUNT,
     'PC.I2.RESP': PCT,
 }
-MENOR_ES_MEJOR = {'PDM.CM', 'PDM.HOM', 'PDM.CM.TD', 'PDM.HOM.TD'}
 SIN_SENTIDO = {'PDM.POB', 'PDM.POB05', 'PC.I3.CONTEO', 'PC.I1.POB14', 'PP.COBERTURA', 'PP.CONTRACREDITO'}
 # nombres genéricos del catálogo para las filas de detalle (sin mencionar un elemento concreto)
 NOMBRE_DETALLE = {
@@ -217,6 +146,9 @@ def codigo_base(c):
     c = c[:-len('.BRECHA')] if c.endswith('.BRECHA') else c
     if c in BASE_ESPECIAL:
         return BASE_ESPECIAL[c]
+    m = re.fullmatch(r'PP\.SENS\d{4}\.(\w+)', c)   # sensibilidades de PP (p. ej. PP.SENS2021.EPP) -> el indicador al que apoyan
+    if m:
+        return 'PP.' + m.group(1)
     return '.'.join(c.split('.')[:2])
 
 
@@ -249,6 +181,34 @@ def hoja(wb, nombre, columnas, filas, formatos=None, anchos=None, titulo_tabla=N
         t.tableStyleInfo = TableStyleInfo(name='TableStyleMedium2', showRowStripes=True)
         ws.add_table(t)
     return ws
+
+
+DICC_DATOS = {
+    'id_dato': 'Clave única: codigo|periodo (en filas de detalle se agrega |n: una por meta, evento o trimestre)',
+    'dimension': 'PDM, PC, PP o CS', 'nombre_dimension': 'Nombre completo de la dimensión',
+    'codigo': 'Código único del indicador o índice (por ejemplo PDM.SALUD, PC.I2, CS.ICRCS)', 'indicador': 'Nombre completo del indicador',
+    'nombre_corto': 'Nombre corto para mostrar en el tablero (solo índices e indicadores principales)',
+    'tipo': 'indice (el índice de la dimensión), principal (indicador que entra al índice), subcomponente, respaldo, detalle, contexto o brecha. Para el tablero principal use indice y principal',
+    'codigo_base': 'Indicador al que pertenece la fila (los respaldos, subcomponentes, detalles y brechas apuntan a su indicador principal)',
+    'entra_al_indice': 'Sí para los índices y los indicadores principales', 'codigo_indice': 'Código del índice de la dimensión',
+    'orden_dimension': 'Orden de la dimensión: PDM 1, PC 2, PP 3, CS 4', 'orden_indicador': 'Orden dentro de la tabla: el índice primero y después sus componentes, respaldos y detalles',
+    'anio': 'Año (número). En PQRSDF trimestral es el año del trimestre. PP = vigencia; PC.I1 = año de la votación. Vacío en las filas de brecha',
+    'subperiodo': 'T1–T4 o S1–S2 cuando el dato es trimestral o semestral; vacío si es anual', 'tipo_periodo': 'Año, Trimestre, Semestre o Periodo (filas de brecha)',
+    'periodo': 'Periodo tal como viene en la fuente (2024, 2023-T4, 2012-2025 en las brechas)', 'unidad': '%, tasa por 100.000 hab., m²/hab, conteo, puntaje 0–100, habitantes, clasificación (texto) o la unidad de la brecha',
+    'sentido': 'mayor es mejor, menor es mejor (mortalidad vial, homicidio y brechas) o no aplica (detalles y conteos de apoyo)',
+    'peso_en_indice': 'Peso del indicador en el índice de su dimensión (1/7 = 0,143 en el ICPD-7)',
+    'numerador': 'Numerador o primera variable del cálculo (conteos, pesos, habitantes). En las brechas: unidades sin dato',
+    'denominador': 'Denominador o segunda variable del cálculo. En las brechas: total del periodo',
+    'valor': 'Valor del indicador (número). En los indicadores en rango es el mínimo. Vacío si no hay dato. En las brechas: porcentaje de brecha',
+    'valor_min': 'Mínimo del rango (PQRSDF, DSI, VRC, RPO, I4 2025); vacío si no hay rango', 'valor_max': 'Máximo del rango; sale de la fila .MAX del mismo año',
+    'valor_texto': 'Texto original cuando no hay número (N/D, no aplica, pendiente…)', 'puntaje_0_100': 'Puntaje de 0 a 100 que entra al índice',
+    'semaforo': 'Verde, Amarillo, Naranja o Rojo (propuesta; ver Inicio)', 'color_semaforo': 'Color del semáforo en hexadecimal, para el tablero',
+    'tiene_dato': 'Sí si hay número o si la brecha empieza por «con dato»; No si no hay dato (no es un cero)',
+    'vigencia_en_curso': 'Sí si el año (2026) está en curso y no se califica', 'brecha': '«con dato» o «sin dato: motivo»; en las filas de brecha, el texto de la brecha del periodo',
+    'referente': 'Meta, línea base o referente usado para el puntaje', 'fuente': 'Documento, tabla o página de la fuente', 'enlace': 'Enlace(s) a la fuente (puede haber varios)',
+    'enlace_principal': 'Primera dirección web de la columna enlace', 'fecha_consulta': 'Fecha(s) de consulta, tal como se registró',
+    'fecha_consulta_fecha': 'Primera fecha de consulta como fecha de Excel', 'estado': 'Provisional', 'nota': 'Método, supuestos y alertas',
+}
 
 
 def main():
@@ -410,131 +370,122 @@ def main():
     assert cs_got.keys() == cs_csv.keys() and all((cs_got[a] is None and cs_csv[a] is None) or (cs_got[a] is not None and cs_csv[a] is not None and abs(cs_got[a] - cs_csv[a]) < 0.005) for a in cs_got), ('ICRCS distinto del CSV', cs_got, cs_csv)
     assert len([x for x in f_ind if x[0] == 'CS']) == 6 and len([x for x in f_ind if x[0] == 'PDM']) == 7
 
-    # ---------------- libro
+    # ---------------- hoja Datos (tabla larga desnormalizada para Power BI)
+    cat = {d[0]: d for d in dim_ind}
+    color = {n: c for n, _d, _h, c, _o in SEMAFORO}
+    col_datos = ['id_dato', 'dimension', 'nombre_dimension', 'codigo', 'indicador', 'nombre_corto', 'tipo', 'codigo_base', 'entra_al_indice',
+                 'codigo_indice', 'orden_dimension', 'orden_indicador', 'anio', 'subperiodo', 'tipo_periodo', 'periodo', 'unidad', 'sentido',
+                 'peso_en_indice', 'numerador', 'denominador', 'valor', 'valor_min', 'valor_max', 'valor_texto', 'puntaje_0_100', 'semaforo',
+                 'color_semaforo', 'tiene_dato', 'vigencia_en_curso', 'brecha', 'referente', 'fuente', 'enlace', 'enlace_principal',
+                 'fecha_consulta', 'fecha_consulta_fecha', 'estado', 'nota']
+    f_datos = []
+
+    for f in f_hechos:
+        d = cat[f[2]]
+        f_datos.append([f[0], f[1], d[4], f[2], f[3], d[2], f[4], d[7], d[11], d[6], d[5], d[10], f[5], f[6], f[7], f[8], d[13], d[14],
+                        f[16], f[9], f[10], f[11], f[12], f[13], f[14], f[15], f[17], color.get(f[17]), f[18], f[27], f[19], f[20],
+                        f[21], f[22], f[23], f[24], f[25], f[26], f[28]])
+    for x in f_br:   # filas de brecha: periodo en texto, anio vacío; valor = brecha en %
+        d = cat[x[1]]
+        f_datos.append([f'{x[1]}|{x[4]}', x[0], d[4], x[1], x[2], d[2], x[3], d[7], d[11], d[6], d[5], d[10], None, None, 'Periodo', x[4], d[13], d[14],
+                        None, x[5], x[6], x[7], None, None, None, None, None, None, 'Sí', 'No', x[8], None, None, None, None, None, None, 'Provisional', x[9]])
+    f_datos.sort(key=lambda r: (r[10], r[11], r[3], r[12] if r[12] is not None else 9999, r[13] or '', str(r[15])))
+    assert all(len(r) == len(col_datos) for r in f_datos)
+    assert len({r[0] for r in f_datos}) == len(f_datos), 'id_dato repetido'
+    assert 'origen' not in [c.lower() for c in col_datos]
+    assert sum(1 for r in f_datos if r[6] == 'brecha') == len(f_br)
+    assert sum(1 for r in f_datos if r[6] != 'brecha') == len(f_hechos)
+    # unidad y sentido de las fichas = los del catálogo
+    fichas = cf.construir_fichas()
+    for f in fichas:
+        assert (f['unidad'], f['sentido']) == (cat[f['codigo']][13], cat[f['codigo']][14]), f['codigo']
+    n_princ = sum(1 for d in dim_ind if d[8] == 'principal')
+    n_idx = sum(1 for d in dim_ind if d[8] == 'indice')
+    assert len(fichas) == n_princ + n_idx and {f['codigo'] for f in fichas} == {d[0] for d in dim_ind if d[11] == 'Sí'}
+
+    # series para la hoja Indicadores: {código: {año: (puntaje, semáforo, valor, máximo)}}
+    serie = {}
+    for f in f_hechos:
+        if f[4] in ('principal', 'indice') and f[7] == 'Año' and f[5] <= ANIO_CORTE:
+            serie.setdefault(f[2], {})[f[5]] = (f[15], f[17], f[11], f[13])
+    maximos_idx = {}
+    for f in f_hechos:
+        if f[2] in ('PC.ISPC.MAX', 'CS.ICRCS.MAX') and f[11] is not None and f[5] <= ANIO_CORTE:
+            maximos_idx.setdefault(f[2][:-4], {})[f[5]] = f[11]
+    brechas_txt = {f['codigo']: f['brecha'] for f in fichas}
+    nombres = {c: (cat[c][2] or cat[c][1]) for c in brechas_txt}
+
+    # ---------------- libro (5 hojas)
     wb = Workbook()
-    ws = wb.active
-    ws.title = 'LEEME'
-    texto = [
-        ('Base de datos de indicadores del Observatorio Ciudadano de Envigado (OCE)', True),
-        (f'Generada el {FECHA}. Todos los resultados son PROVISIONALES.', False),
-        ('', False),
-        ('Qué contiene', True),
-        ('hechos: una fila por indicador y periodo (año o trimestre). Es la tabla principal del tablero.', False),
-        ('indices: los cuatro índices por año, hasta 2025 (ICPD-7 desde 2019; ISPC, IREPP e ICRCS desde 2020). Atajo de «hechos» con tipo = indice.', False),
-        ('brechas: brecha de información de cada indicador e índice en su periodo completo.', False),
-        ('dim_dimension, dim_indicador, dim_anio, dim_semaforo: tablas de dimensiones para relacionar y filtrar.', False),
-        ('fuentes: documentos y enlaces citados. diccionario: qué significa cada columna.', False),
-        ('', False),
-        ('Convención de años', True),
-        ('PP: el año es el de la vigencia (el año en que se ejecutan los proyectos).', False),
-        ('PC.I1 (votación): el año es el de la votación; los proyectos se ejecutan en t+1.', False),
-        ('Los demás indicadores: el año del dato. PC.I4: año de la vigencia. PQRSDF: año del trimestre.', False),
-        ('Periodos: el ICPD-7 va desde 2019; ISPC, IREPP e ICRCS, desde 2020. Los indicadores traen todos los años que tengan (p. ej. salud desde 2012).', False),
-        ('2026 está en curso: las filas de 2026 llevan vigencia_en_curso = Sí y no entran a «indices».', False),
-        ('', False),
-        ('Relaciones sugeridas en Power BI (modelo estrella)', True),
-        ('hechos[codigo] → dim_indicador[codigo] (muchos a uno)', False),
-        ('dim_indicador[dimension] → dim_dimension[dimension] (muchos a uno). Es la única ruta hacia dim_dimension: hechos → dim_indicador → dim_dimension.', False),
-        ('No cree una relación directa hechos[dimension] → dim_dimension[dimension]: crearía una ruta ambigua (si la quiere, déjela inactiva y úsela con USERELATIONSHIP).', False),
-        ('hechos[anio] → dim_anio[anio] (muchos a uno)', False),
-        ('hechos[semaforo] → dim_semaforo[semaforo] (muchos a uno; filas sin semáforo quedan en blanco)', False),
-        ('indices[codigo] y brechas[codigo] → dim_indicador[codigo]; indices[anio] → dim_anio[anio]; indices[semaforo] → dim_semaforo[semaforo].', False),
-        ('', False),
-        ('Cómo leer los datos', True),
-        ('tipo: indice (el índice de la dimensión), principal (componente que entra al índice), subcomponente, respaldo, detalle o contexto (no entran al índice).', False),
-        ('Para el tablero principal filtre tipo = indice o tipo = principal. Los demás tipos sirven para el detalle y la trazabilidad.', False),
-        ('tiene_dato = Sí si hay número o si la columna brecha empieza por «con dato». valor vacío + tiene_dato = No: no hay dato publicado para ese periodo (ver brecha y nota). No es un cero.', False),
-        ('valor_texto: texto original cuando no hay número (N/D, no aplica, pendiente, con veeduría, etc.).', False),
-        ('valor_min / valor_max: rango de VRC, RPO, DSI, I4 (2025) y PQRSDF. valor es el mínimo; valor_max sale de la fila .MAX del mismo año.', False),
-        ('puntaje_0_100: el puntaje que entra al índice. Semáforo (propuesta, para validar con el profe): Verde ≥ 90, Amarillo 75 a < 90, Naranja 50 a < 75, Rojo < 50.', False),
-        ('subperiodo: T1–T4 o S1–S2 en Control social (informes trimestrales de PQRSDF). Para series anuales filtre tipo_periodo = Año.', False),
-        ('dim_indicador: unidad, sentido (mayor o menor es mejor), orden_dimension, orden_indicador y codigo_base (indicador al que pertenece cada respaldo, subcomponente o detalle).', False),
-        ('', False),
-        ('Medidas DAX sugeridas', True),
-        ('Valor índice = SELECTEDVALUE(indices[valor])', False),
-        ('Color semáforo (propuesta) = LOOKUPVALUE(dim_semaforo[color_hex], dim_semaforo[semaforo], SELECTEDVALUE(indices[semaforo]))', False),
-        ('% años con dato = DIVIDE(COUNTROWS(FILTER(indices, indices[tiene_dato] = "Sí")), COUNTROWS(indices))', False),
-        ('Brecha de información = 1 - [% años con dato]', False),
-        ('', False),
-        ('Advertencias', True),
-        ('Control social (ICRCS): hay índice en 2024 y 2025 (PQRSDF 2020–2025 completa, leída de los 24 informes trimestrales). 2020–2023 quedan sin índice porque DSI solo aplica desde 2024. Alertas: PQRSDF no es homogénea entre años (plazos ampliados por el Decreto 491 hasta el 17-may-2022, con 2022 T2 mixto; en 2024 las recibidas suben 64 % por reclasificación de lo que ingresa y no debe leerse como tendencia; el sistema pasa de BPMS a Débora en mayo de 2025), subestima la oportunidad real, y DSI, VRC y RPO se leen en su mínimo con rango (columna del máximo en CS.ICRCS.MAX; RPO 2021 va de 0 a 100). La brecha de PQRSDF se mide en trimestres (0 de 24), no en años.', False),
-        ('Los cortes de espacio verde (2019, 2022, 2024) son de estudios distintos: no son una tendencia.', False),
-        ('Cada fila trae su fuente, enlace y fecha de consulta. Los datos se pueden rastrear hasta el documento original.', False),
-        ('Los textos de indicador, nota, brecha, referente y fuente se exportan con tildes (tabla TILDES del script); los CSV de construcción no se modifican.', False),
-        ('', False),
-        ('Origen técnico', True),
-        ('Generado por scripts/entregables/generar_base_powerbi.py a partir de outputs/construccion/*/..._indicadores.csv.', False),
-    ]
-    for t, negrita in texto:
-        ws.append([t])
-        ws.cell(ws.max_row, 1).font = Font(name=ARIAL, size=12 if ws.max_row == 1 else 10, bold=negrita)
-    ws.column_dimensions['A'].width = 130
+    dic_datos = [(c, DICC_DATOS[c]) for c in col_datos]
+    assert all(c in DICC_DATOS for c in col_datos), [c for c in col_datos if c not in DICC_DATOS]
+    hojas_excel.hoja_inicio(wb, FECHA, col_datos, dic_datos)
+    hojas_excel.hoja_indices(wb, fichas, maximos_idx)
+    hojas_excel.hoja_indicadores(wb, fichas, serie, nombres, brechas_txt)
+    _ws_ficha, n_extra = hojas_excel.hoja_ficha(wb, fichas)
+    ws = hoja(wb, 'Datos', col_datos, f_datos,
+              formatos={'numerador': '#,##0.##', 'denominador': '#,##0.##', 'valor': '0.00', 'valor_min': '0.00', 'valor_max': '0.00',
+                        'puntaje_0_100': '0.00', 'peso_en_indice': '0.000', 'anio': '0', 'fecha_consulta_fecha': 'yyyy-mm-dd'},
+              anchos={'id_dato': 28, 'indicador': 45, 'nombre_corto': 30, 'nota': 60, 'fuente': 50, 'enlace': 50, 'enlace_principal': 50,
+                      'brecha': 40, 'referente': 30, 'nombre_dimension': 30, 'unidad': 24})
+    ws.freeze_panes = ws.cell(2, 5)
+    hojas_excel.horizontal(ws, '1:1')
+    assert wb.sheetnames == ['Inicio', 'Índices', 'Indicadores', 'Ficha metodológica', 'Datos']
 
-    hoja(wb, 'hechos', col_hechos, f_hechos,
-         formatos={'numerador': '#,##0.##', 'denominador': '#,##0.##', 'valor': '0.00', 'valor_min': '0.00', 'valor_max': '0.00',
-                   'puntaje_0_100': '0.00', 'peso_en_indice': '0.000', 'anio': '0', 'fecha_consulta_fecha': 'yyyy-mm-dd'},
-         anchos={'indicador': 45, 'nota': 60, 'fuente': 50, 'enlace': 50, 'enlace_principal': 50, 'brecha': 40, 'referente': 30})
-    hoja(wb, 'indices', ['dimension', 'nombre_dimension', 'codigo', 'indice', 'anio', 'valor', 'semaforo', 'tiene_dato', 'vigencia_en_curso', 'nota'],
-         f_ind, formatos={'valor': '0.00', 'anio': '0'}, anchos={'nota': 70, 'indice': 40})
-    hoja(wb, 'brechas', ['dimension', 'codigo', 'indicador', 'tipo', 'periodo', 'sin_dato', 'total', 'brecha_pct', 'brecha', 'nota'], f_br,
-         formatos={'brecha_pct': '0.00'}, anchos={'indicador': 45, 'brecha': 45, 'nota': 60})
-    hoja(wb, 'dim_dimension', ['dimension', 'nombre_dimension', 'codigo_indice', 'indice', 'formula_indice', 'orden_dimension'],
-         [[d[0], d[1], d[2], d[3], d[4], ORDEN_DIM[d[0]]] for d in DIMENSIONES], anchos={'formula_indice': 80})
-    hoja(wb, 'dim_indicador', col_cat, dim_ind, formatos={'peso_en_indice': '0.000'},
-         anchos={'indicador': 50, 'nombre_tablero': 45, 'referente': 40, 'unidad': 30})
-    hoja(wb, 'dim_anio', ['anio', 'periodo_pdm'],
-         [[a, 'PDM 2024-2027' if a >= 2024 else ('PDM 2020-2023' if a >= 2020 else ('PDM 2016-2019' if a >= 2016 else 'Anterior'))]
-          for a in anios_dim], formatos={'anio': '0'})
-    hoja(wb, 'dim_semaforo', ['semaforo', 'desde', 'hasta', 'color_hex', 'orden', 'estado'],
-         [list(s) + ['Propuesta (D60, D84): por validar con el profe'] for s in SEMAFORO], anchos={'estado': 45})
-    hoja(wb, 'fuentes', ['id_fuente', 'fuente', 'enlace', 'dimensiones', 'filas_que_la_citan', 'fecha_consulta'], f_fu,
-         anchos={'fuente': 80, 'enlace': 70})
-
-    dicc = [
-        ('hechos', 'id_hecho', 'Clave única: código|periodo (en filas de detalle se agrega |n, una por elemento: meta, evento o trimestre)'),
-        ('hechos', 'dimension', 'PDM, PC, PP o CS (ver dim_dimension)'),
-        ('hechos', 'codigo', 'Código único del indicador (ver dim_indicador)'),
-        ('hechos', 'indicador', 'Nombre del indicador'),
-        ('hechos', 'tipo', 'indice, principal, subcomponente, respaldo, detalle o contexto'),
-        ('hechos', 'anio', 'Año (número). En PQRSDF trimestral es el año del trimestre. PP = vigencia; PC.I1 = año de la votación'),
-        ('hechos', 'subperiodo', 'T1–T4 o S1–S2 cuando el dato es trimestral o semestral; vacío si es anual'),
-        ('hechos', 'tipo_periodo', 'Año, Trimestre o Semestre'),
-        ('hechos', 'periodo', 'Periodo tal como viene en la fuente (2024, 2023-T4)'),
-        ('hechos', 'numerador / denominador', 'Variables del cálculo (conteos, pesos, habitantes, etc.)'),
-        ('hechos', 'valor', 'Valor del indicador (número). En los indicadores en rango es el mínimo. Vacío si no hay dato'),
-        ('hechos', 'valor_min / valor_max', 'Rango mínimo y máximo de VRC, RPO, DSI, I4 (2025) y PQRSDF. El máximo sale de la fila .MAX del mismo año; vacío si no hay rango'),
-        ('hechos', 'valor_texto', 'Texto original cuando no hay número (N/D, no aplica, pendiente, con veeduría…)'),
-        ('hechos', 'puntaje_0_100', 'Puntaje normalizado que entra al índice'),
-        ('hechos', 'peso_en_indice', 'Peso del componente en el índice de su dimensión'),
-        ('hechos', 'semaforo', 'Verde, Amarillo, Naranja o Rojo (propuesta; ver dim_semaforo)'),
-        ('hechos', 'tiene_dato', 'Sí si hay número o si la brecha empieza por «con dato» (clasificaciones con dato); No en N/D, pendiente, desconocida o sin dato'),
-        ('hechos', 'brecha', '«con dato» o «sin dato: motivo»'),
-        ('hechos', 'referente', 'Meta, línea base o referente usado para el puntaje'),
-        ('hechos', 'fuente / enlace / fecha_consulta', 'Trazabilidad del dato (texto con tildes; el enlace puede traer varias URL)'),
-        ('hechos', 'enlace_principal', 'Primera URL de la columna enlace; vacía si no hay'),
-        ('hechos', 'fecha_consulta_fecha', 'Fecha real (AAAA-MM-DD) tomada de fecha_consulta; la primera si hay varias; vacía si el texto no trae fecha'),
-        ('hechos', 'estado', 'Provisional'),
-        ('hechos', 'vigencia_en_curso', 'Sí si el año (2026) está en curso y no tiene cierre; No en los demás'),
-        ('hechos', 'nota', 'Método, supuestos y alertas'),
-        ('indices', '(todas)', 'Igual que hechos, solo para los cuatro índices y hasta 2025; vigencia_en_curso siempre es No'),
-        ('brechas', 'sin_dato / total / brecha_pct', 'Años (o trimestres, eventos, metas) sin dato, total del periodo y porcentaje'),
-        ('dim_indicador', 'entra_al_indice', 'Sí para índices y componentes principales'),
-        ('dim_indicador', 'nombre_tablero', 'Nombre corto para mostrar en el tablero (índices y componentes principales)'),
-        ('dim_indicador', 'unidad', 'Unidad del valor: %, tasa por 100.000 hab., m²/hab, conteo, puntaje 0–100, habitantes, clasificación (texto)'),
-        ('dim_indicador', 'sentido', 'mayor es mejor, menor es mejor (mortalidad vial, homicidio y brechas) o no aplica (detalles y conteos de apoyo)'),
-        ('dim_indicador', 'orden_dimension / orden_indicador', 'Orden para ordenar el tablero: PDM 1, PC 2, PP 3, CS 4; el índice primero y después sus componentes, respaldos y detalles'),
-        ('dim_indicador', 'codigo_base', 'Código del indicador al que pertenece la fila (sin sufijos .MAX, .BRECHA, .TRIM, .META, .EVENTO, .TODO, .AMPLIO, etc.)'),
-        ('dim_indicador', 'primer/ultimo_anio_con_dato, anios_con_dato', 'Cobertura temporal real del indicador'),
-        ('dim_dimension', 'orden_dimension', 'Orden de la dimensión en el tablero'),
-        ('dim_semaforo', 'desde / hasta', 'Rango del puntaje (desde inclusive, hasta exclusivo; Verde incluye 100)'),
-        ('dim_semaforo', 'estado', 'Propuesta (D60, D84): los rangos se validan con el profe'),
-    ]
-    hoja(wb, 'diccionario', ['tabla', 'columna', 'descripcion'], [list(d) for d in dicc], anchos={'descripcion': 90})
+    # ningún texto del libro lleva «origen», «Claude» ni «asistente», ni atribuciones, ni números de decisión
+    for ws_ in wb.worksheets:
+        for fila in ws_.iter_rows():
+            for c in fila:
+                if isinstance(c.value, str):
+                    assert not ce.palabras_prohibidas(c.value), (ws_.title, c.coordinate, c.value[:80])
+                    assert not ce.ano_suelto(c.value), (ws_.title, c.coordinate, ce.ano_suelto(c.value)[:2])   # «ano» suelto = falta la eñe
+                    assert not re.search(r'\bD\d{1,3}\b|usuaria|Isabella|Analizador', c.value), (ws_.title, c.coordinate, c.value[:80])
 
     SALIDA.parent.mkdir(parents=True, exist_ok=True)
     wb.save(SALIDA)
-    print(f'{SALIDA.relative_to(RAIZ)} | hechos {len(f_hechos)} ({len(col_hechos)} columnas) | indices {len(f_ind)} | brechas {len(f_br)} | '
-          f'indicadores {len(dim_ind)} ({len(col_cat)} columnas) | fuentes {len(f_fu)}')
+
+    # ---------------- verificación del archivo guardado
+    import openpyxl
+    wl = openpyxl.load_workbook(SALIDA)
+    assert wl.sheetnames == ['Inicio', 'Índices', 'Indicadores', 'Ficha metodológica', 'Datos']
+    assert list(wl['Datos'].tables) == ['Datos'] and len(wl['Datos'].tables) == 1 and sum(len(w.tables) for w in wl.worksheets) == 1
+    assert wl['Datos'].max_row - 1 == len(f_datos)
+    wi = wl['Índices']
+    cab = next(r for r in range(1, 30) if wi.cell(r, 1).value == 'Índice')
+    anios_h = [int(wi.cell(cab, j).value) for j in range(3, 10)]
+    assert anios_h == list(range(2019, 2026))
+    for k, cod in enumerate(ce.NOMBRE_INDICE, 1):
+        assert wi.cell(cab + k, 1).value == ce.NOMBRE_INDICE[cod]
+        vals = ce.valores_indice(cod)
+        for j, a in enumerate(anios_h):
+            got, esp = wi.cell(cab + k, 3 + j).value, vals.get(a, (None, ''))[0]
+            assert (esp is None and got == '—') or (esp is not None and abs(got - esp) < 0.005), (cod, a, got, esp)
+    got = {(wi.cell(cab + k, 1).value, a): wi.cell(cab + k, 3 + j).value for k in range(1, 5) for j, a in enumerate(anios_h)}
+    assert abs(got[('IREPP', 2025)] - 95.83) < 0.005 and abs(got[('ICPD-7', 2019)] - 62.41) < 0.005 and abs(got[('ISPC', 2025)] - 61.62) < 0.005
+    assert abs(got[('ICRCS', 2024)] - 60.59) < 0.005 and abs(got[('ICRCS', 2025)] - 38.18) < 0.005
+    # Indicadores: el puntaje de cada celda coincide con Datos
+    wd = {(r[3], r[12]): r[25] for r in f_datos if r[6] in ('principal', 'indice') and r[14] == 'Año'}
+    wn = wl['Indicadores']
+    anios_i = {j: int(wn.cell(4, j).value) for j in range(7, 7 + len(hojas_excel.ANIOS_VISTA))}
+    n_celdas = 0
+    for r in range(5, wn.max_row + 1):
+        nom = wn.cell(r, 1).value
+        if wn.cell(r, 2).value == 'Puntaje 0–100':
+            cod = next(c for c, n in nombres.items() if n == nom and (wn.cell(r, 3).value == cat[c][13]))
+            for j, a in anios_i.items():
+                v = wn.cell(r, j).value
+                esp = wd.get((cod, a))
+                assert (v == '—' and esp is None) or (esp is not None and abs(v - esp) < 1e-9), (cod, a, v, esp)
+                n_celdas += 1
+    assert n_celdas == (n_princ + n_idx) * len(hojas_excel.ANIOS_VISTA)
+    nf = wl['Ficha metodológica']
+    assert nf.max_row - 1 == len(fichas) + 2
+    texto_ficha = ' '.join(str(c.value) for row in nf.iter_rows() for c in row if c.value)
+    assert all(cod in texto_ficha for cod in ce.matriz()), 'faltan indicadores de la matriz original en la ficha'
+    assert all(w.page_setup.orientation == 'landscape' for w in wl.worksheets)
+    print(f'{SALIDA.relative_to(RAIZ)} | Datos {len(f_datos)} filas x {len(col_datos)} columnas ({len(f_hechos)} de hechos + {len(f_br)} de brecha) | '
+          f'Indicadores {n_princ + n_idx} indicadores | Ficha {len(fichas)} + 2 eliminados | Índices 4 x 7 años')
+    print('hojas:', wl.sheetnames)
 
 
 if __name__ == '__main__':

@@ -35,6 +35,14 @@ NOTA_2020 = ("2020: la vigencia 2020 se priorizo en 2019 (convencion: el anio de
              "ademas, varios proyectos verificados quedaron con apropiacion definitiva en cero (el PDF muestra el traslado contracredito de todo su valor; "
              "la causa no consta en el documento).")
 
+LISTA_2021 = "Lista oficial de proyectos de PP 2021 (doc. 29399)"   # mismo rotulo que pp_cruce.py; el EFPC de 2021 es solo referencia
+
+
+def listado(a):
+    """Rotulo del listado de proyectos del anio (2021 = lista oficial; los demas, el listado EFPC)."""
+    return LISTA_2021 if a == 2021 else "listado de proyectos votados (EFPC)"
+
+
 COLS = ["indicador", "codigo", "tipo", "anio", "numerador", "denominador", "valor", "puntaje_0_100",
         "peso_en_indice", "semaforo", "referente", "fuente", "enlace", "fecha_consulta", "estado", "brecha", "nota"]
 
@@ -82,8 +90,10 @@ def fila(ind, cod, tipo, anio, n=None, d=None, v=None, peso="", ref="100 %", fue
 
 
 # ------------------------------------------------------------------ calculos por anio
-def calcular(anio):
-    P = [r for r in CR if r["anio"] == str(anio) and r["tipo_cruce"] != "duplicado del listado"]   # D55: duplicados fuera del universo
+def calcular(anio, con_inder=False):
+    """2021: principal = 45 proyectos sin INDER (D88); con_inder=True = sensibilidad con los 57 de la lista oficial."""
+    P = [r for r in CR if r["anio"] == str(anio) and r["tipo_cruce"] != "duplicado del listado"
+         and (con_inder or r["unidad_inder"] != "si")]   # D55: duplicados fuera del universo
     ver = [r for r in P if r["tipo_cruce"] != "no verificado"]
     n_vot, n_ver = len(P), len(ver)
     res = {"n_vot": n_vot, "n_ver": n_ver, "cobertura": n_ver / n_vot,
@@ -128,8 +138,9 @@ def calcular(anio):
 
 
 R_ALL = {a: calcular(a) for a in PERIODO}
+R_SENS_2021 = calcular(2021, con_inder=True)
 for _a, _r in R_ALL.items():
-    FECHA_ACT[_a] = f"{_r['fecha']} (ejecucion); {_r['fecha_l']} (listado EFPC)" if _r["fecha"] != _r["fecha_l"] else _r["fecha"]
+    FECHA_ACT[_a] = f"{_r['fecha']} (ejecucion); {_r['fecha_l']} ({'lista oficial 29399' if _a == 2021 else 'listado EFPC'})" if _r["fecha"] != _r["fecha_l"] else _r["fecha"]
 # anios con indicador: hay cruce y la cobertura alcanza el minimo
 R = {a: r for a, r in R_ALL.items() if r["n_ver"] and r["cobertura"] >= COBERTURA_MIN}
 
@@ -169,7 +180,7 @@ for a in PERIODO + [2026]:
                               ("EJ90, proyectos con ejecucion >= 90 %", "PP.EJ90", PESOS["EJ90"]),
                               ("FID, fidelidad a lo votado", "PP.FID", PESOS["FID"])):
             fila(ind, cod, "principal", a, None, None, None, pes, fuente=ra["fuente"], enlace=ra["enlace"] + " ; " + efpc,
-                 brecha="sin dato: " + mot, nota=f"Listado EFPC {a}: {ra['n_vot']} proyectos votados; verificados {ra['n_ver']}.")
+                 brecha="sin dato: " + mot, nota=f"{listado(a)[0].upper() + listado(a)[1:]}: {ra['n_vot']} proyectos votados; verificados {ra['n_ver']}.")
         fila("IREPP, indice de ejecucion y fidelidad del PP", "PP.IREPP", "indice", a, None, None, None, "",
              fuente=ra["fuente"], enlace=ra["enlace"] + " ; " + efpc, brecha="sin dato: faltan los tres componentes (" + mot + ")",
              nota="No se redistribuyen pesos; el indice solo se calcula con los tres componentes.")
@@ -181,7 +192,7 @@ for a in PERIODO + [2026]:
                       "Detalle en pp_cruce_proyectos.csv. No entra al indice.")
         continue
     enl = ra["enlace"] + " ; " + efpc
-    fu = ra["fuente"] + " + listado de proyectos votados (EFPC)"
+    fu = ra["fuente"] + " + " + listado(a)
     cob = (f"Cruce: {ra['exactos']} exactos, {ra['minimos']} con diferencia minima y {len(ra['noverif'])} no verificados de {ra['n_vot']} "
            "votados; los no verificados cuentan en el denominador de EJ90 y FID, no suman al numerador y quedan fuera de EPP (D52).")
     cr = ra["con_rubro"]
@@ -193,6 +204,12 @@ for a in PERIODO + [2026]:
                    f"${pe(ex_ob)} de obligacion en {ex_n} proyectos. Con el rubro incluido: EPP {cr['epp'][2]:.2f}, "
                    f"EJ90 {cr['ej90'][0]}/{cr['ej90'][1]} = {cr['ej90'][2]:.2f}, FID {cr['fid'][0]}/{cr['fid'][1]} = {cr['fid'][2]:.2f}.")
     extra = (" " + NOTA_2020) if a == 2020 else ""
+    if a == 2021:
+        extra += (" D88: el universo es la lista oficial 29399 'Proyectos PPP vigencia 2021' (publicada el 23-feb-2022; 57 proyectos, $15.679.980.705) sin los 12 proyectos del INDER "
+                  "('Promocion zona X en movimiento') = 45 proyectos. El listado EFPC 2021 (89 filas) son iniciativas sometidas a votacion, no el universo. "
+                  "Sensibilidad con los 57: ver las filas PP.SENS2021.")
+    if a == 2020:
+        extra += " D89: el cruce incluye los rubros 2.4 (Fondo Local de Salud): 7 proyectos de Salud cruzan al peso."
     if a == 2024:
         extra += (" Los nombres de proyecto usados para confirmar y desempatar cruces de 2024 vienen de un archivo derivado "
                   "(outputs/indicadores/pp_proyectos.csv), sin manifiesto propio. D54: EFPC2024-Z9-4 cruza con el sufijo 0755.")
@@ -252,6 +269,13 @@ for a in PERIODO + [2026]:
          num_vacio=True, sem=False, puntaje=False,
          nota=(f"Definicion de scripts/sistema_simplificado/calcular.py: EPP zonal mas alto (zona {mx[0]}: {mx[1]:.2f}) menos EPP zonal "
                f"mas bajo (zona {mn[0]}: {mn[1]:.2f}), en puntos; {nz} zonas con proyectos verificados. Solo contexto."))
+    if a == 2021:
+        rs = R_SENS_2021
+        iv_s = sum(PESOS[k] * rs[k.lower()][2] for k in PESOS)
+        for cod, nom, n, d, v in (("PP.SENS2021.EPP", "EPP", rs["epp"][0], rs["epp"][1], rs["epp"][2]), ("PP.SENS2021.EJ90", "EJ90", rs["ej90"][0], rs["ej90"][1], rs["ej90"][2]),
+                                  ("PP.SENS2021.FID", "FID", rs["fid"][0], rs["fid"][1], rs["fid"][2]), ("PP.SENS2021.IREPP", "IREPP", None, None, iv_s)):
+            fila(f"Sensibilidad 2021 con los 57 proyectos (incluye INDER): {nom}", cod, "respaldo", a, n, d, v, "", "", fu, enl, sem=False, puntaje=False,
+                 num_vacio=(n is None), nota="D88: sensibilidad; el principal excluye los 12 proyectos del INDER. No entra al indice.")
     if a == 2025:
         f = [e for e in ENT if e["anio"] == "2025" and e["cuenta_en_defecto_pe"] == "1" and e["pec_todas_filas_dic_100"] != ""]
         pec = sum(1 for e in f if e["pec_todas_filas_dic_100"] == "1")
@@ -273,8 +297,19 @@ for cod, nombre in (("PP.EPP", "EPP"), ("PP.EJ90", "EJ90"), ("PP.FID", "FID"), (
          100 * len(sin) / len(PERIODO), "", "", "", "", sem=False, puntaje=False,
          nota="Anios con dato: " + ", ".join(map(str, con)) + "; sin dato: " + (", ".join(map(str, sin)) or "ninguno")
               + (f" ({mot})" if sin else "") + ". Brecha = anios sin dato / anios del periodo. El 2026 queda fuera (vigencia en curso). "
-              "2020 se calcula con el valor priorizado en la priorizacion de 2019 (la vigencia 2019, priorizada en 2018, fue la que no se voto). 2021 N/D por D56 (decision de la usuaria): solo se calcula un anio si se verifica al menos el 50 % de sus proyectos.")
+              "2020 se calcula con el valor priorizado en la priorizacion de 2019 (la vigencia 2019, priorizada en 2018, fue la que no se voto). Regla: un anio se calcula solo si se verifica al menos el 50 % de sus proyectos."
+              + (" Sin dato: " + ", ".join(map(str, sin)) + "." if sin else " Todos los anios tienen dato."))
     FILAS[-1]["brecha"] = f"{len(sin)} de {len(PERIODO)} anios sin dato"
+
+# ------------------------------------------------------------------ asserts de resultados (QA final)
+_ESP = {2020: 57.98, 2021: 90.71, 2022: 85.51, 2023: 89.15, 2024: 93.56, 2025: 95.83}
+for _a, _v in _ESP.items():
+    assert irepp(_a) is not None and round(irepp(_a), 2) == _v, ("IREPP", _a, irepp(_a), _v)
+assert round(sum(PESOS[k] * R_SENS_2021[k.lower()][2] for k in PESOS), 2) == 92.69, "sensibilidad 2021 (57 proyectos)"
+_ob = sum(num(r["obligacion_sin_2_3_7_06"]) for r in R_ALL[2020]["ver"])
+_vo = sum(num(r["valor_votado"]) for r in R_ALL[2020]["ver"])
+assert round(100 * _ob / _vo, 2) == 54.53, ("obligacion / votado 2020", 100 * _ob / _vo)
+assert listado(2021) == "Lista oficial de proyectos de PP 2021 (doc. 29399)"
 
 SALIDA.parent.mkdir(parents=True, exist_ok=True)
 with open(SALIDA, "w", encoding="utf-8-sig", newline="") as f:

@@ -20,14 +20,14 @@ Scripts: `scripts/construccion/pp_lectores.py` → `pp_cruce.py` → `pp_muestra
 
 | Año | EPP | EJ90 | FID | IREPP |
 |---|---|---|---|---|
-| 2020* | 82,42 | 22/69 = 31,88 | 38/69 = 55,07 | 51,27 Naranja |
-| 2021 | N/D (39/89 verificados < 50 %, D56) | | | |
+| 2020* | 87,01 | 29/69 = 42,03 | 41/69 = 59,42 | 57,98 Naranja |
+| 2021** | 98,02 | 43/45 = 95,56 | 37/45 = 82,22 | 90,71 Verde |
 | 2022 | 94,22 | 32/39 = 82,05 | 33/39 = 84,62 | 85,51 Amarillo |
 | 2023 | 97,03 | 34/39 = 87,18 | 34/39 = 87,18 | 89,15 Amarillo |
 | 2024 | 99,15 | 47/51 = 92,16 | 47/51 = 92,16 | 93,56 Verde |
 | 2025 | 98,83 | 57/61 = 93,44 | 59/61 = 96,72 | 95,83 Verde |
 
-Brecha: 1 de 6 años (2021). *2020: valor priorizado (la vigencia 2020 se priorizó en 2019; la que no se votó fue la vigencia 2019, priorización de 2018); 20 de 69 proyectos con contracrédito total ($3.627.742.979); obligación / valor votado = 46,34 %.
+Brecha: 0 de 6 años. *2020: valor priorizado. Incluye los rubros 2.4 del Fondo Local de Salud (D89). 20 de 69 proyectos tienen contracrédito total ($3.627.742.979). Obligación / valor votado = 54,53 %. **2021: lista oficial 29399 con 45 proyectos sin INDER (D88). La sensibilidad con los 57 da 92,69.
 
 ## 2. Cumplimiento del PDM · ICPD-7 = promedio simple de 7 (D34, D48) — **CONSTRUIDO** (QA aprobado con observaciones, 18-nov)
 Script: `scripts/construccion/pdm_icpd7.py` (44 asserts; tarda unos 3 minutos porque lee la PPED cruda del DANE). Salida: `outputs/construccion/PDM/pdm_indicadores.csv`. Decisiones D57–D68. Población única = DANE VP (D61).
@@ -52,14 +52,14 @@ Script: `scripts/construccion/pc_ispc.py` (56 asserts; tarda unos 3 minutos). Sa
 |---|---|---|---|---|---|
 | 2017 | 8.221 → 3,68 % → 0 (LB) | | | | |
 | 2018 | no hubo votación | | | | |
-| 2020 | sin dato | sin dato | sin dato | 2/3 | N/D |
-| 2021 | 16.828 → 6,80 % → 93,83 | sin dato | sin dato | 3/3 | N/D |
-| 2022 | 12.541 → 4,98 % → 39,08 | sin dato | sin dato | 3/3 | N/D |
+| 2020 | 9.956 → 4,11 % → 12,88 | 12/12 (alerta D90) | sin dato | 2/3 (D91) | N/D |
+| 2021 | 16.828 → 6,80 % → 93,83 | 12/12 (alerta D90) | sin dato | 3/3 | N/D |
+| 2022 | 12.541 → 4,98 % → 39,08 (respaldo por zona 2–13) | 12/12 (alerta D90) | sin dato | 3/3 | N/D |
 | 2023 | 9.156 → 3,58 % → 0 | sin dato | sin dato | 3/3 | N/D |
 | 2024 | sin dato | 12/12 | sin dato | 3/3 | N/D |
 | 2025 | 10.662 → 4,03 % → 10,51 | 12/12 (alerta D73) | 21/25 = 84,00 | 2/3 (rango hasta 3/3, D74) | **61,62 Naranja** (máx. 69,95) |
 
-Brechas: I1 3/8 años, I2 4/6, I3 5/6, I4 0/6 (2 de 18 proceso-años sin documento), ISPC 5/6. Fuentes de I4 archivadas en `data_raw_IIC/07_revision_nov2026/rendicion_cuentas/`; los votos, en `noticias_alcaldia/`.
+Brechas: I1 2/8 años, I2 1/6, I3 5/6, I4 0/6 (2 de 18 proceso-años sin documento), ISPC 5/6. Fuentes de I4 archivadas en `data_raw_IIC/07_revision_nov2026/rendicion_cuentas/`; los votos, en `noticias_alcaldia/`.
 
 ## 4. Control social · ICRCS = (DSI + PQRSDF + VRC + RPO) / 4 — **CONSTRUIDO** (QA aprobado con observaciones, 20-nov)
 Scripts: `cs_extraer_de_drive.py` (archivos del ZIP de Drive, D85) / `cs_descargas.py` → `cs_icrcs.py` (56 asserts). Salida: `outputs/construccion/CS/cs_indicadores.csv`. Decisiones D75–D87. VRC, RPO y DSI entran con su mínimo.

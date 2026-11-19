@@ -13,7 +13,11 @@ Insumos (data_raw_IIC/07_revision_nov2026/, cada carpeta con manifiesto.csv):
   informes_gestion/152890_...pdf, ig2023.pdf            votantes 2025 (p. 92), asambleas 2025 (p. 92), oferta formativa 2025 (p. 88) y 2023 (pp. 50-51)
   informes_gestion_2024/131997_...pdf                   oferta formativa 2024 (p. 63)
   plan_indicativo/180505_...xlsx                        consecutivos 520-531 (asambleas, formacion, rendicion de PP)
-  rendicion_cuentas/                                    documentos archivados de I4 (rendicion del Alcalde y de PP) y anteproyecto del PDM (p. 53)
+  rendicion_cuentas/                                    documentos archivados de I4 (rendicion del Alcalde y de PP), periodico de rendicion 2020 y anteproyecto del PDM (p. 53)
+  pp_votaciones/proyectos-priorizados-2021.pdf          votos de la votacion de 2020 (doc 4306, p. 1)
+  planes_zonales_2023/                                  votos de PP por zona en 2022 (planes zonales de desarrollo 2023-2030, tablas de resultado; respaldo)
+  pc_cobertura_zonal/                                   fichas de los espacios zonales de 2020 (93) y programacion de espacios zonales 2021 (respaldo de I2)
+  normativa_pp/                                         Decreto 242 de 2017 (pp. 13, 15 y 31) y Acuerdo 007 de 2025
   efpc_listados_pp/                                     listados de PP (proceso 'votacion de PP' de I4)
   data_raw_IIC/inventario_detallado_IIC.csv             enlaces de todos los documentos de rendicion de cuentas (I4); solo uno por proceso y anio esta archivado
   outputs/indicadores/soporte_conteos.csv               asambleas zonales de formulacion del PDM 2024 (anteproyecto 115749, p. 53)
@@ -150,13 +154,35 @@ def rc_pdf(idd, pag):
     return pdf_pag(RAW / "rendicion_cuentas" / rc_arch(idd), pag)
 
 
-check("Archivo rendicion_cuentas: 12 documentos con sha256 y bytes iguales al manifiesto", len(RC) == 12)
+check("Archivo rendicion_cuentas: documentos de I4 y anteproyecto presentes; todos con sha256 y bytes iguales al manifiesto",
+      all(any(n.startswith(f"{i}_") or n.startswith(str(i)) for n in RC) for i in (6385, 23449, 92036, 115926, 129738, 149610, 5930, 35775, 59050, 112890, 161584, 115749, "2020periodico")), str(len(RC)))
 check("Doc 6385 (pagina 'Rendicion de Cuentas 2020'): es de la Secretaria de Salud, no del Alcalde", "Secretaría de Salud de Envigado Rendición de cuentas 2020" in rc_pdf(6385, 2))
 check("Doc 92036 (rendicion del Alcalde 2022), p. 8: 'Respuestas a preguntas'", "Respuestas a preguntas" in rc_pdf(92036, 8))
 check("Anteproyecto PDM (115749), p. 53: asambleas entre el 29 de enero y el 17 de febrero", "29 de enero y el 17 de febrero" in rc_pdf(115749, 53) and "asambleas zonales" in rc_pdf(115749, 53))
+PER20 = "2020periodicorendicioncuentas.pdf"
+_rp = pypdf.PdfReader(str(RAW / "rendicion_cuentas" / PER20))
+_tp = norm(" ".join((pg_.extract_text() or "") for pg_ in _rp.pages))
+check("Periodico de rendicion de cuentas 2020 (doc 57151): 36 paginas, 'Audiencia Publica de RENDICION DE CUENTAS 2020' del Alcalde, sin preguntas y respuestas (D91)",
+      len(_rp.pages) == 36 and "Audiencia Pública de REN" in _tp and "ALCALDE" in _tp and not re.search(r"pregunta", _tp, re.I), f"{len(_rp.pages)} pp.")
 check("Doc 23449 (2021), 115926 (2023), 129738 (2024) y 149610 (2025): ejercicio/respuestas de rendicion de cuentas del Alcalde",
       "RENDICIÓN DE CUENTAS DEL SEÑOR ALCALDE" in rc_pdf(23449, 1) and "Rendición de cuentas II semestre 2023" in rc_pdf(115926, 1)
       and "Rendición de Cuentas 2024" in rc_pdf(129738, 1) and "Rendición de Cuentas 2025" in rc_pdf(149610, 1))
+
+# ================================================================== normativa (Decreto 242 de 2017 y Acuerdo 007 de 2025)
+DEC_F, DEC_U, _ = man("normativa_pp", "decreto-242-de-2017.pdf")
+ACU_F, ACU_U, _ = man("normativa_pp", "Acuerdo-007-de-2025.pdf")
+DEC = RAW / "normativa_pp" / "decreto-242-de-2017.pdf"
+check("Decreto 242 de 2017, p. 13: espacios zonales para la divulgacion y priorizacion; voto con acreditacion de residencia",
+      "espacios zonales para la divulgación y priorización" in pdf_pag(DEC, 13) and "acreditar su residencia" in pdf_pag(DEC, 13))
+check("Decreto 242 de 2017, p. 15: zonas de planificacion e indice de participacion ciudadana (IPC) por zona",
+      "zonas de planificación" in pdf_pag(DEC, 15) and "índice de participación ciudadana (IPC) por zona" in pdf_pag(DEC, 15))
+check("Decreto 242 de 2017, p. 31: IPC por zona = poblacion que participa / poblacion total de la zona",
+      "población que participa en la priorización sobre la cantidad de la población total de la zona" in pdf_pag(DEC, 31))
+check("Acuerdo 007 de 2025, p. 1: Comites Zonales de Planeacion Participativa en las trece (13) zonas (modifica el Acuerdo 033 de 2022)",
+      "trece (13) zonas" in pdf_pag(RAW / "normativa_pp" / "Acuerdo-007-de-2025.pdf", 1) and "modifica el acuerdo 033 de 2022" in pdf_pag(RAW / "normativa_pp" / "Acuerdo-007-de-2025.pdf", 1))
+NORMA_ZONAS = ("Marco normativo: Decreto 242 de 2017 (pp. 13 y 15: espacios zonales de divulgacion y priorizacion; zonas de planificacion) y Acuerdo 007 de 2025, norma vigente (Comites Zonales de Planeacion Participativa en las 13 zonas del municipio). ")
+NORMA_POB = ("Decreto 242 de 2017, p. 31: el indice de participacion por zona se define como poblacion que participa / poblacion total de la zona (respalda usar poblacion total y no la de 14 anios y mas); "
+             "p. 13: el voto exige acreditar residencia o domicilio en el municipio. ")
 
 # ================================================================== poblacion (TerriData, DANE VP)
 TD_ARCH = "TerriData05266.txt.zip"
@@ -197,14 +223,19 @@ for anio, arch, esperado in ((2021, "api_2021_16828votos.json", "16.828"), (2022
     check(f"Votos {anio} = {esperado}: aparece en el titulo o el cuerpo de la noticia ({arch})", esperado in cuerpo and d_["creationDate"][:4] == str(anio),
           d_["creationDate"][:10])
     NOT[anio] = (f_, web, d_["creationDate"][:10], d_["name"])
+F20, U20, _ = man("pp_votaciones", "proyectos-priorizados-2021.pdf")
+A20 = PP_VOT / "proyectos-priorizados-2021.pdf"
+t20 = pdf_pag(A20, 1)
+check("Votos 2020 = 9.956: 'Sumamos 9.956 votos en PPP', doc 4306 'proyectos-priorizados-2021', p. 1 (proyectos para el 2021)", "Sumamos 9.956 votos" in t20 and "para el año 2021" in t20)
 IG25 = "152890_2025informegestiondependencias.pdf"
 F25, U25, _ = man("informes_gestion", IG25)
 P25 = RAW / "informes_gestion" / IG25
 t92 = pdf_pag(P25, 92)
 check("Informe de gestion 2025, p. 92: '10,662 votantes directos'", "10,662 votantes directos" in t92)
-VOTOS = {2017: 8221, 2021: 16828, 2022: 12541, 2023: 9156, 2025: 10662}
+VOTOS = {2017: 8221, 2020: 9956, 2021: 16828, 2022: 12541, 2023: 9156, 2025: 10662}
 FUENTE_VOTOS = {
     2017: ("Alcaldia de Envigado, Planeacion: Informe de Priorizacion Participativa del Presupuesto (11-oct-2017), pp. 7 y 12", U17, F17),
+    2020: ("Alcaldia de Envigado, Planeacion: 'Proyectos priorizados 2021' (doc 4306), p. 1: «Sumamos 9.956 votos en PPP» (votacion virtual en mi.envigado.gov.co; proyectos para el año 2021)", U20, F20),
     2021: ("Portal de la Alcaldia, noticia del %s: «%s»" % (NOT[2021][2], NOT[2021][3]), NOT[2021][1], NOT[2021][0]),
     2022: ("Portal de la Alcaldia, noticia del %s: «%s»" % (NOT[2022][2], NOT[2022][3]), NOT[2022][1], NOT[2022][0]),
     2023: ("Portal de la Alcaldia, noticia del %s: «%s»" % (NOT[2023][2], NOT[2023][3]), NOT[2023][1], NOT[2023][0]),
@@ -212,6 +243,7 @@ FUENTE_VOTOS = {
 }
 ip = lambda v, p: 100.0 * v / p
 punt1 = lambda x: min(100.0, max(0.0, 100.0 * (x - LB_I1) / (REF_I1 - LB_I1)))
+check("Votos 2021 / 2020 = +69 % (la noticia de 2021 dice 'incrementar en un 69 %' la participacion respecto al año anterior)", round(100 * (16828 / 9956 - 1)) == 69, f"{100 * (16828 / 9956 - 1):.2f}")
 IPCM = {a: ip(VOTOS[a], POB[a]) for a in VOTOS}
 P1 = {a: punt1(IPCM[a]) for a in VOTOS}
 SIN_ACOTAR = {a: 100.0 * (IPCM[a] - LB_I1) / (REF_I1 - LB_I1) for a in VOTOS}
@@ -274,15 +306,17 @@ wb.close()
 check("Poblacion total DANE (PPED 2018-2025 y retroproyeccion 2017) = TerriData 'Descripcion general' (misma serie VP)",
       all(POB_TOT_DANE[a] == POB[a] for a in range(2017, 2026)))
 
-ALERTA_UNIDAD = ("ALERTA de unidad: 2017 y 2021-2023 son 'votos' (las noticias hablan de votos) y 2025 son 'votantes directos' del informe de gestion; "
+ALERTA_UNIDAD = ("ALERTA de unidad: 2017 y 2020-2023 son 'votos' (los documentos hablan de votos) y 2025 son 'votantes directos' del informe de gestion; "
                  "pueden votar los mayores de 14 anios, pero el IPCM oficial y la LB usan la poblacion total.")
 NOTA_BASE = ("IPCM = votos / poblacion DANE VP del mismo anio x 100 (D61); puntaje = min(100, max(0, 100*(IPCM - 3,68)/(7 - 3,68))). LB 3,68 = 8.221/223.456 con la poblacion DANE VP (D69; "
              "la cifra oficial de 2017 es 3,62: ver PC.I1.OFICIAL); referente 7 % = tope de la escala oficial del IPCM (D32). Convencion: el anio es el de la votacion; "
-             "los proyectos se ejecutan en t+1 (Acuerdo 038/2016, art. 15A). ")
+             "los proyectos se ejecutan en t+1 (Acuerdo 038/2016, art. 15A). " + NORMA_POB)
 REF_TXT = "LB 3,68 (2017, D69) -> referente 7 % (tope de la escala oficial del IPCM; D32)"
 NOTAS_I1 = {
     2017: " Linea base: puntaje 0 por construccion. Votacion de 2017 para la vigencia 2018 (informe de 2017, p. 7: 'proyectos a ejecutar en el 2018'). Cifra oficial 3,62 % (Alcaldia, poblacion propia no publicada).",
-    2021: " La noticia titula 'vigencia 2021-2022' y dice que los proyectos son 'para el ano 2022'. Con la poblacion de 14 anios y mas el IPCM pasaria de 7 % (ver PC.I1.POB14).",
+    2020: (" Votacion de 2020 para la vigencia 2021 (doc 4306: 'para el año 2021'): 9.956 votos, la votacion mas alta hasta entonces. Reemplaza a los 5.100 votos parciales de 360 Radio (no usados). "
+           "Coherente con la noticia de 2021 (+69 %: 16.828/9.956 = 1,69)."),
+    2021: " La noticia titula 'vigencia 2021-2022' y dice que los proyectos son 'para el año 2022'. +69 % frente a 2020. Con la poblacion de 14 anios y mas el IPCM pasaria de 7 % (ver PC.I1.POB14).",
     2022: " Noticia del 13-sep-2022: proyectos de la vigencia 2023.",
     2023: (" Noticia del 11-sep-2023: proyectos de la vigencia 2024. IPCM por debajo de la LB: el puntaje sin acotar seria %.2f y se acota en 0. El 0 de 2017 es por definicion de la LB "
            "(sin acotar seria %.2f, por redondeo de la LB)." % (SIN_ACOTAR[2023], SIN_ACOTAR[2017])),
@@ -304,8 +338,6 @@ for a in range(2017, 2026):
     else:
         extra = {
             2019: "Si hubo votacion en 2019 (vigencia 2020), pero no se encontro cifra publicada de votos.",
-            2020: ("Votacion de 2020 (vigencia 2021) sin cifra final publicada. Solo se hallaron 5.100 votos parciales (360 Radio), que no se usan. Indicio no usado: la noticia de 2021 dice que la participacion "
-                   "de 2021 subio 69 % frente al ano anterior, lo que implicaria cerca de 9.960 votos en 2020 (calculo propio, no es una cifra publicada)."),
             2024: "Votacion de 2024 (vigencia 2025) sin cifra de votos publicada en las fuentes revisadas.",
         }[a]
         fila_nd("Participacion en la votacion del presupuesto participativo (IPCM)", "PC.I1", a, PESOS["I1"], REF_TXT,
@@ -325,6 +357,32 @@ for a in sorted(set(VOTOS) & set(POB14)):
          f"Sensibilidad (no entra al puntaje): pueden votar los mayores de 14 anios. Poblacion total {fint(POB[a])}; de 14+ {fint(POB14[a])} ({100 * POB14[a] / POB[a]:.1f} %). "
          + ("Con esta poblacion 2021 PASARIA DEL 7 % (referente del IPCM); el puntaje de I1 se mantiene con la poblacion total para ser coherente con la LB y el IPCM oficial. " if a == 2021 else
             "El IPCM oficial y la LB usan poblacion total; la comparacion con el referente 7 % se hace con IPCM total.") + (" " + ALERTA_UNIDAD if a == 2025 else ""), dec=3)
+PZD_ARCH = {2: "pze_z2_compressed.pdf", 3: "pze_z3_compressed.pdf", 4: "pze_z4_compressed.pdf", 5: "pze_z5.pdf", 6: "pze_z6.pdf", 7: "pze_z7.pdf", 8: "pze_z8.pdf",
+            9: "pze_z9.pdf", 10: "pze_z10.pdf", 11: "pze_z11_compressed.pdf", 12: "pze_z12_compressed.pdf", 13: "pze_z13_compressed.pdf"}
+VOTOS_ZONA_2022 = [866, 1508, 687, 562, 2383, 2701, 1449, 1281, 146, 238, 396, 324]     # posiciones 1 a 12 = zonas 2 a 13 (verificado abajo)
+PZD_VOTOS, PZD_PAG, PZD_URL, PZD_FECHA = {}, {}, [], []
+for z, arch in PZD_ARCH.items():
+    f_, u_, _ = man("planes_zonales_2023", arch)
+    rd = pypdf.PdfReader(str(RAW / "planes_zonales_2023" / arch))
+    portada = re.search(r"Zona (\d+)", norm(rd.pages[0].extract_text() or "")).group(1)
+    check(f"PZD {arch}: la portada dice 'Zona {z}'", int(portada) == z)
+    for i_, pg_ in enumerate(rd.pages):
+        m_ = re.search(r"Votos en presupuesto participativo N[uú]mero (\d+)", norm(pg_.extract_text() or ""))
+        if m_:
+            PZD_VOTOS[z], PZD_PAG[z] = int(m_.group(1)), i_ + 1
+            break
+    PZD_URL.append(u_)
+    PZD_FECHA.append(f_)
+check("PZD 2023-2030: votos por zona de las zonas 2 a 13 = 866, 1.508, 687, 562, 2.383, 2.701, 1.449, 1.281, 146, 238, 396, 324 (posiciones 1-12 = zonas 2-13; archivo pze_zN = Zona N)",
+      [PZD_VOTOS[z] for z in range(2, 14)] == VOTOS_ZONA_2022, str(PZD_VOTOS))
+check("PZD: los votos por zona suman 12.541 = total de la votacion de 2022 (noticia del 13-sep-2022)", sum(PZD_VOTOS.values()) == 12541 == VOTOS[2022], str(sum(PZD_VOTOS.values())))
+check("PZD: las 12 zonas (2 a 13) tienen votos en 2022 (minimo 146)", min(PZD_VOTOS.values()) == 146 and len(PZD_VOTOS) == 12)
+fila("Respaldo: votos de PP por zona, votacion de 2022", "PC.I1.ZONAS", "respaldo", 2022, sum(PZD_VOTOS.values()), VOTOS[2022], 100.0 * sum(PZD_VOTOS.values()) / VOTOS[2022], None, "", "Suma por zona = total de la votacion",
+     "Planes Zonales de Desarrollo 2023-2030 (Planeacion), tabla de indicadores de resultado 'Votos en presupuesto participativo' de cada zona (archivos pze_z2 a pze_z13; fuente citada en varios: Proyecto Planes Zonales 2022 DAP-INER)",
+     " ; ".join(PZD_URL), "; ".join(sorted(set(PZD_FECHA))) + " (manifiesto planes_zonales_2023)", "con dato",
+     "Votos por zona (zona: votos; pagina del PDF): " + "; ".join(f"Z{z}: {PZD_VOTOS[z]} (p. {PZD_PAG[z]})" for z in range(2, 14)) + f". Suma = {sum(PZD_VOTOS.values())} = total de 2022 (noticia del 13-sep-2022). "
+     "MAPEO: el listado recibido va de 'Z1' a 'Z12' (12 posiciones); en los PDF la portada de pze_z2 a pze_z13 dice 'Zona 2' a 'Zona 13', y el valor de cada archivo coincide con la posicion siguiente "
+     "(posicion 1 = Zona 2, ..., posicion 12 = Zona 13). La zona 1 (industrial) no tiene plan zonal ni votos. Es solo respaldo: no cambia el puntaje de I1. El valor del PZD no declara el anio, pero la suma coincide con 2022. " + NORMA_ZONAS, dec=2)
 check("Sensibilidad 14+: 2021 supera el 7 %", ip(VOTOS[2021], POB14[2021]) > 7.0, f"{ip(VOTOS[2021], POB14[2021]):.3f}")
 
 # ================================================================== I2: cobertura territorial (zonas 2 a 13 / 12; D41)
@@ -353,7 +411,29 @@ with open(CRUCE_PP, encoding="utf-8-sig", newline="") as f:
     for r in csv.DictReader(f, delimiter=";"):
         ZONAS_PP[int(r["anio"])].add(int(r["zona"]))
 check("Respaldo I2: en cada anio 2020-2025 las zonas con proyectos de PP = {2..13}", all(ZONAS_PP[a] == set(range(2, 14)) for a in PERIODO), str({a: len(ZONAS_PP[a]) for a in PERIODO}))
+FICHAS = RAW / "pc_cobertura_zonal" / "fichas_espacios_zonales_2020_lista.csv"
+fz = defaultdict(int)
+with open(FICHAS, encoding="utf-8-sig", newline="") as f:
+    fich = list(csv.DictReader(f, delimiter=";"))
+for r_ in fich:
+    if r_["zona_en_el_nombre"].strip():
+        fz[int(r_["zona_en_el_nombre"])] += 1
+check("Fichas de espacios zonales 2020: 93 fichas; las zonas 2 a 13 tienen al menos una ficha con la zona en el nombre (la zona 1 no)", len(fich) == 93 and set(fz) == set(range(2, 14)), f"{len(fich)} fichas; zonas {dict(sorted(fz.items()))}; sin zona en el nombre: {sum(1 for r_ in fich if not r_['zona_en_el_nombre'].strip())}")
+EZ_F, EZ_U, _ = man("pc_cobertura_zonal", "pdf-espacios-zonales.pdf")
+t_ez = pdf_pag(RAW / "pc_cobertura_zonal" / "pdf-espacios-zonales.pdf", 1)
+zez = {int(m_.group(1)) for m_ in re.finditer(r"\b(\d{1,2}) (?:Lunes|Martes|Mi[eé]rcoles|Jueves|Viernes|S[aá]bado|Domingo) \d{1,2}/\d{2}/20", t_ez)}   # la zona 5 trae un error de digitacion en el anio ('29/07/202 4')
+check("Programacion de los espacios zonales de deliberacion 2021 (doc 11085): zonas 2 a 13, julio-agosto de 2021", zez == set(range(2, 14)) and "21/07/2021" in t_ez, str(sorted(zez)))
+NO_EFECTIVA = ("ALERTA (D90): la cobertura documental es de 12/12 zonas, pero no se mide la actividad efectiva de cada año: son documentos por zona (fichas, programacion, socializacion y votacion), "
+               "sin actas de asistencia. ")
 FU_I2 = {
+    2020: ("Alcaldia de Envigado, fichas de los espacios zonales de deliberacion 2020: 93 fichas, con ficha en las zonas 2 a 13 (lista de las 93 fichas elaborada por el observatorio a partir de su inventario de archivos)",
+           "ver url_origen de cada ficha en data_raw_IIC/07_revision_nov2026/pc_cobertura_zonal/fichas_espacios_zonales_2020_lista.csv (ejemplo: " + fich[0]["url_origen"] + ")",
+           man("pc_cobertura_zonal", "fichas_espacios_zonales_2020_lista.csv")[0] + " (lista de fichas; ficha = documento publicado por el portal)"),
+    2021: ("Alcaldia de Envigado, 'Agendate y participa de la programacion de los Espacios Zonales de Deliberacion' (doc 11085): zonas 2 a 13, 21-jul a ago-2021",
+           EZ_U, EZ_F + " (manifiesto pc_cobertura_zonal)"),
+    2022: ("Alcaldia de Envigado, noticia 'Espacios Zonales de Socializacion y de las Votaciones' (1-sep-2022: agenda por zonas del 25-ago al 6-sep-2022, con punto de votacion en cada espacio) y votos por zona de la votacion de 2022 en los Planes Zonales de Desarrollo (12 zonas con votos; PC.I1.ZONAS)",
+           man("noticias_alcaldia", "api_espacios-zonales-de-socializacion-y-de-las-votaciones.json")[1].replace("/api/v1/contents/", "/noticias/") + " ; " + " ; ".join(PZD_URL[:2]) + " ; (demas PZD en PC.I1.ZONAS)",
+           man("noticias_alcaldia", "api_espacios-zonales-de-socializacion-y-de-las-votaciones.json")[0] + " (noticia) ; " + "; ".join(sorted(set(PZD_FECHA))) + " (PZD)"),
     2024: ("Alcaldia de Envigado: asambleas zonales de formulacion del PDM 2024-2027 (anteproyecto 115749, p. 53; zonas 2 a 13 segun outputs/indicadores/soporte_conteos.csv) y asambleas de PP: Plan Indicativo de Productos "
            "(evaluacion definitiva 2T-2026), hoja Plan-Indicativo-Productos, consecutivo 531 = 12 asambleas",
            RC["115749_anteproyecto29022024.pdf"][1] + " ; " + PI_URL,
@@ -361,11 +441,15 @@ FU_I2 = {
     2025: ("Alcaldia de Envigado, informe de gestion por dependencias 2025, p. 92 del PDF ('12 asambleas zonales ... cubriendo la totalidad de las zonas'); plan indicativo, consecutivo 531 = 12",
            U25 + " ; " + PI_URL, F25 + " (informe) ; " + PI_FECHA + " (plan indicativo)"),
 }
-NOTA_I2 = ("Zonas con actividad participativa / 12 (zonas 2 a 13; la zona 1, industrial y sin comite zonal, se excluye del numerador y del denominador: D41). ")
+NOTA_I2 = ("Zonas con actividad participativa / 12 (zonas 2 a 13; la zona 1, industrial y sin comite zonal, se excluye del numerador y del denominador: D41). " + NORMA_ZONAS)
 for a in PERIODO:
     if a in FU_I2:
         fu, en, fe = FU_I2[a]
         nota = NOTA_I2 + ({
+            2020: NO_EFECTIVA + "Evidencia: 93 fichas de los espacios zonales de deliberacion de 2020; las zonas 2 a 13 tienen ficha con la zona en el nombre (6 fichas no traen la zona en el nombre). Respaldo PC.I2.RESP: PP 12/12.",
+            2021: NO_EFECTIVA + "Evidencia: programacion de los espacios zonales de deliberacion de 2021 (21-jul a ago-2021, una fecha por zona 2 a 13). Respaldo PC.I2.RESP: PP 12/12.",
+            2022: NO_EFECTIVA + "Evidencia: agenda de socializacion y votacion por zonas (25-ago a 6-sep-2022) y votos por zona en los Planes Zonales de Desarrollo (las 12 zonas con votos, minimo 146; PC.I1.ZONAS); "
+                  "los talleres de los planes zonales (2022-2023) se citan como contexto. Respaldo PC.I2.RESP: PP 12/12.",
             2024: "En 2024 hay lista por zona de las 13 asambleas de formulacion del PDM (29-ene a 17-feb-2024; zonas 2 a 13 con asamblea) y, como respaldo, el plan indicativo reporta 12 asambleas zonales de PP (consecutivo 531), cuya asignacion a las zonas 2-13 es una inferencia del equipo (agregado anual).",
             2025: ("ALERTA (D73): agregado reportado por la Alcaldia, sin lista por zona; respaldo PP 12/12; se solicita la lista de asambleas por zona. El informe dice 12 asambleas zonales en agosto de 2025 "
                    "que cubren la totalidad de las zonas; plan indicativo, consecutivo 531 = 12; no hay actas por zona publicadas."),
@@ -373,7 +457,7 @@ for a in PERIODO:
         fila("Cobertura territorial de la participacion", "PC.I2", "principal", a, 12, 12, 100.0, 100.0, PESOS["I2"], "12 zonas (2 a 13; D41)", fu, en, fe, "con dato", nota)
     else:
         fila_nd("Cobertura territorial de la participacion", "PC.I2", a, PESOS["I2"], "12 zonas (2 a 13; D41)",
-                "no hay publicacion de actividades participativas por zona en " + str(a), "Informes de gestion y portal de la Alcaldia: sin lista de zonas", "", "2026-11-18",
+                "no hay documento por zona de espacios zonales o actividad participativa en " + str(a) + " (D90: 2023 queda N/D)", "Informes de gestion y portal de la Alcaldia: sin documentos por zona de 2023", "", "2026-11-18",
                 nota=NOTA_I2 + "El respaldo PC.I2.RESP (zonas con proyectos de PP) existe, pero no entra al indice. Solicitar a Planeacion las actividades participativas por zona con acta o asistencia.")
 for a in PERIODO:
     zs = sorted(ZONAS_PP[a] - {1})
@@ -486,11 +570,11 @@ NOTA_I4 = "Procesos con resultados publicados / 3 procesos fijos (votacion de PP
 REF_I4 = "3 procesos fijos (D29)"
 FU_I4 = "Portal de la Alcaldia (www.envigado.gov.co), documentos del inventario del repositorio y listados EFPC; detalle en PC.I4.VOT, PC.I4.RCA y PC.I4.RPP"
 NOTAS_I4 = {
-    2020: "La rendicion de cuentas del Alcalde de 2020 no se encontro: la pagina 'Rendicion de Cuentas 2020' (docs 6384 y 6385) es de la Secretaria de Salud (doc 6385 archivado y verificado: 'Secretaria de Salud de Envigado, Rendicion de cuentas 2020'). No se cuenta (0). Si se localiza, I4 2020 seria 3/3.",
+    2020: "La rendicion de cuentas del Alcalde de 2020 no se encontro: la pagina 'Rendicion de Cuentas 2020' (docs 6384 y 6385) es de la Secretaria de Salud (doc 6385 archivado y verificado: 'Secretaria de Salud de Envigado, Rendicion de cuentas 2020'). Fuente nueva (D91): el periodico de rendicion de cuentas 2020 del Alcalde (doc 57151, archivado como 2020periodicorendicioncuentas.pdf, 36 pp.) existe, pero NO trae preguntas y respuestas (assert: ninguna aparicion de 'pregunta'), por lo que la rendicion de 2020 no cuenta como proceso con resultados publicados. No se cuenta (0). D91: I4 2020 se mantiene en 2/3. Si se localiza, I4 2020 seria 3/3.",
     2022: "Rendicion del Alcalde confirmada: doc 92036, pp. 8-11, 'Respuestas a preguntas'.",
     2025: ("RANGO (D70, D74): al indice va el minimo, 2/3 = 66,67; maximo 3/3 (PC.I4.MAX); brecha 1/3. La busqueda en el portal del 18-nov-2026 no encontro la rendicion de PP de la vigencia 2025 "
            "(las convocatorias halladas son de feb-2024, vigencia 2023). La rendicion de la vigencia 2024 se hizo en feb-2025 (fichas publicadas el 28-feb-2025). El plan indicativo, consecutivo 528, marca AVANCE 2026 = 1, "
-           "aunque su observacion dice que la rendicion 'se realizara en el ultimo trimestre del ano' (contradiccion de la fuente). Se actualiza cuando se publique."),
+           "aunque su observacion dice que la rendicion 'se realizará en el ultimo trimestre del año' (contradiccion de la fuente). Se actualiza cuando se publique."),
 }
 for a in PERIODO:
     ob = f"{I4MIN[a]}/3"
@@ -526,9 +610,9 @@ for a in PERIODO:
              "1 = publicado." + (" " + NOTAS_I4[2022] if a == 2022 else "") + (" Solo el doc 23449 esta archivado; el 40433 (informe de respuestas, jul-2022) se cita del inventario." if a == 2021 else ""), raw={"valor": "1"})
     else:
         arch = rc_arch(ARCH_RCA[a])
-        fila(NM["RCA"], "PC.I4.RCA", "detalle", a, None, None, None, None, "", REF_I4, f"Portal de la Alcaldia: no se encontro la rendicion de cuentas del Alcalde de 2020; archivado el doc 6385 para documentar que es de Salud: {arch}",
-             "https://www.envigado.gov.co/rendicion-de-cuentas-2020-822054 ; " + RC[arch][1], RC_FECHA + " (archivado; manifiesto rendicion_cuentas)",
-             "sin documento encontrado", "0 = no encontrado. " + NOTAS_I4[2020], raw={"valor": "0"})
+        fila(NM["RCA"], "PC.I4.RCA", "detalle", a, None, None, None, None, "", REF_I4, f"Portal de la Alcaldia: no se encontro la rendicion de cuentas del Alcalde de 2020; archivado el doc 6385 para documentar que es de Salud: {arch}; y el periodico de rendicion 2020 (doc 57151, sin preguntas y respuestas): {PER20}",
+             "https://www.envigado.gov.co/rendicion-de-cuentas-2020-822054 ; " + RC[arch][1] + " ; " + RC[PER20][1], RC_FECHA + " (archivado; manifiesto rendicion_cuentas)",
+             "documento publicado sin preguntas y respuestas", "0 = no encontrado. " + NOTAS_I4[2020], raw={"valor": "0"})
     if a == 2025:
         fila(NM["RPP"], "PC.I4.RPP", "detalle", a, None, None, None, None, "", REF_I4, "Plan indicativo de productos, consecutivo 528 (eventos de rendicion publica de cuentas de PP); busqueda en el portal del 18-nov-2026: no hay rendicion de PP de la vigencia 2025", PI_URL, PI_FECHA,
              "pendiente", "pendiente: al indice cuenta 0 (minimo) y al maximo 1 (D70, D74). " + NOTAS_I4[2025], raw={"valor": "pendiente"})
@@ -553,8 +637,8 @@ COMP = {
     "I3": {a: (100.0 * REAL25 / PROG25 if a == 2025 else None) for a in PERIODO},
     "I4": {a: 100.0 * I4MIN[a] / 3 for a in PERIODO},
 }
-MOT = {"I1": {2020: "sin cifra de votos de la votacion de 2020", 2021: None, 2022: None, 2023: None, 2024: "sin cifra de votos de la votacion de 2024", 2025: None},
-       "I2": {a: "sin dato por zona" for a in PERIODO}, "I3": {a: "sin programacion publicada" for a in PERIODO}, "I4": {}}
+MOT = {"I1": {2020: None, 2021: None, 2022: None, 2023: None, 2024: "sin cifra de votos de la votacion de 2024", 2025: None},
+       "I2": {a: "sin documento por zona en 2023" for a in PERIODO}, "I3": {a: "sin programacion publicada" for a in PERIODO}, "I4": {}}
 MOT["I1"][2019] = "sin cifra de votos"
 ISPC, FALTAN = {}, {}
 for a in PERIODO:
@@ -580,24 +664,24 @@ check("ISPC 2025 = 61,62 +/- 0,01 (Naranja; D72)", ISPC[2025] is not None and ab
 check("ISPC 2025 con I4 = 100 (calculado) = 69,95 +/- 0,01", abs(ISPC[2025] + PESOS["I4"] * (100 - COMP["I4"][2025]) - 69.95) <= 0.01, fmt(ISPC[2025] + PESOS["I4"] * (100 - COMP["I4"][2025])))
 check("Pesos suman 1", abs(sum(PESOS.values()) - 1) < 1e-12)
 check("ISPC solo calculable en 2025; 2020-2024 N/D", [a for a in PERIODO if ISPC[a] is not None] == [2025])
-check("Componentes faltantes: 2020 = I1, I2, I3; 2021-2023 = I2, I3; 2024 = I1, I3",
-      FALTAN[2020] == ["I1", "I2", "I3"] and FALTAN[2021] == ["I2", "I3"] and FALTAN[2022] == ["I2", "I3"] and FALTAN[2023] == ["I2", "I3"] and FALTAN[2024] == ["I1", "I3"], str(FALTAN))
+check("Componentes faltantes: 2020-2022 = I3; 2023 = I2, I3; 2024 = I1, I3 (I3 sin dato antes de 2025)",
+      FALTAN[2020] == ["I3"] and FALTAN[2021] == ["I3"] and FALTAN[2022] == ["I3"] and FALTAN[2023] == ["I2", "I3"] and FALTAN[2024] == ["I1", "I3"], str(FALTAN))
 
 # ================================================================== brechas
 B = []
 con1 = [a for a in PERIODO_I1 if a in VOTOS]
 sin1 = [a for a in PERIODO_I1 if a not in VOTOS]
-check("Brecha I1 = 3 de 8 anios (2019, 2020 y 2024 sin dato; 2018 no aplica)", sin1 == [2019, 2020, 2024] and len(PERIODO_I1) == 8)
+check("Brecha I1 = 2 de 8 anios (2019 y 2024 sin dato; 2018 no aplica)", sin1 == [2019, 2024] and len(PERIODO_I1) == 8)
 fila("Brecha de informacion de la votacion de PP (2017-2025, sin 2018)", "PC.I1.BRECHA", "brecha", "2017-2025", len(sin1), len(PERIODO_I1), 100.0 * len(sin1) / len(PERIODO_I1), brecha=f"{len(sin1)} de {len(PERIODO_I1)} anios sin dato",
-     nota="Con dato: " + ", ".join(map(str, con1)) + "; sin dato: 2019 (sin cifra), 2020 (sin cifra final; 5.100 parciales no se usan) y 2024 (sin cifra). 2018 no cuenta: no hubo votacion (vigencia 2019). Brecha = anios sin dato / anios del periodo. "
-          "Fuera del periodo 2020-2025 del indice: 2017 y 2019.", fuente="", enlace="", fecha=FECHA_CALC)
-check("Brecha I2 = 4 de 6 (2020-2023)", sin2 == [2020, 2021, 2022, 2023])
+     nota="Con dato: " + ", ".join(map(str, con1)) + "; sin dato: 2019 (sin cifra) y 2024 (sin cifra). 2020 ya tiene dato (9.956 votos, doc 4306). 2018 no cuenta: no hubo votacion (vigencia 2019). Brecha = anios sin dato / anios del periodo. "
+          "Fuera del periodo 2020-2025 del indice: 2017 y 2019. El respaldo PC.I1.ZONAS (votos por zona de 2022) no cambia la brecha.", fuente="", enlace="", fecha=FECHA_CALC)
+check("Brecha I2 = 1 de 6 (solo 2023 sin dato; D90)", sin2 == [2023])
 fila("Brecha de informacion de la cobertura territorial (2020-2025)", "PC.I2.BRECHA", "brecha", "2020-2025", len(sin2), 6, 100.0 * len(sin2) / 6, brecha=f"{len(sin2)} de 6 anios sin dato",
-     nota="Con dato: 2024 y 2025 (2025 como agregado reportado por la Alcaldia sin lista por zona; D73); sin dato: 2020-2023 (solo respaldo PC.I2.RESP). Brecha = anios sin dato / anios del periodo.", fecha=FECHA_CALC)
+     nota="Con dato: 2020-2022 (documentos por zona, sin medir actividad efectiva; D90), 2024 y 2025 (2025 como agregado reportado por la Alcaldia sin lista por zona; D73); sin dato: 2023 (sin documento por zona; respaldo PC.I2.RESP). Brecha = anios sin dato / anios del periodo.", fecha=FECHA_CALC)
 fila("Brecha de informacion de la oferta formativa (2020-2025)", "PC.I3.BRECHA", "brecha", "2020-2025", 5, 6, 100.0 * 5 / 6, brecha="5 de 6 anios sin dato",
      nota="Con dato: 2025 (denominador reconstruido); sin dato: 2020-2024 (sin programacion publicada; respaldo de conteo en 2023 y 2024). Brecha = anios sin dato / anios del periodo.", fecha=FECHA_CALC)
-fila("Brecha de informacion de la publicacion de resultados (2020-2025)", "PC.I4.BRECHA", "brecha", "2020-2025", 0, 6, 0.0, brecha="0 de 6 anios sin dato; 2025 en rango (brecha 1/3); 2 de 18 proceso-anios sin documento",
-     nota="Todos los anios tienen dato. Procesos sin resultado publicado: rendicion del Alcalde 2020 (no encontrada) y rendicion de PP 2025 (pendiente, ultimo trimestre de 2026): 2 de 18 proceso-anios (3 procesos x 6 anios). "
+fila("Brecha de informacion de la publicacion de resultados (2020-2025)", "PC.I4.BRECHA", "brecha", "2020-2025", 0, 6, 0.0, brecha="0 de 6 anios sin dato; 2025 en rango (brecha 1/3); 2 de 18 proceso-anios sin resultado publicado (1 sin documento: rendicion de PP 2025; 1 con documento publicado sin preguntas y respuestas: rendicion del Alcalde 2020)",
+     nota="Todos los anios tienen dato. Procesos sin resultado publicado: rendicion del Alcalde 2020 (hay un documento publicado, pero sin preguntas y respuestas) y rendicion de PP 2025 (sin documento: pendiente, ultimo trimestre de 2026): 2 de 18 proceso-anios (3 procesos x 6 anios). "
           "2025 se muestra como rango 2/3 a 3/3 (D70).", fecha=FECHA_CALC)
 sinI = [a for a in PERIODO if ISPC[a] is None]
 fila("Brecha de informacion del ISPC (2020-2025)", "PC.ISPC.BRECHA", "brecha", "2020-2025", len(sinI), 6, 100.0 * len(sinI) / 6, brecha=f"{len(sinI)} de 6 anios sin indice",
